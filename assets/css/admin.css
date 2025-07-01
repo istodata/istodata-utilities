@@ -1,0 +1,66 @@
+/* ISTODATA Utilities Admin Styles */
+
+#wp-version-message, .rank-math-blog-title, .rank-math-blog-list, .rank-math-widget-footer, .ewww-image-optimizer-review, 
+[data-notice="webp-converter-for-media"], [data-notice_id="experiment_promotion"], [data-notice_id="site_mailer_promotion"], [data-notice_id="rate_us_feedback"],
+.notice-success.wpcf7r-notice, #yoast-seo-dashboard-widget .wordpress-feed,  #vc_license-activation-notice, .pll-notice, .notice-elementskit-lite-go-pro-noti2ce,
+#metform-unsupported-metform-pro-version, #pixelwars_core__add_dashboard_widget, #wpcode-notice-global-suggest_plugins, .wpcode-notice-top-area,
+.pa-new-feature-notice, #vc_license-activation-notice, .akismet-right-now, .updated.wpb-notice
+{display:none!important;}
+
+#dashboard_right_now .main {
+    padding: 0 12px 0;
+}
+
+
+.nav-tab-wrapper {
+    border-bottom: 1px solid #ccd0d4;
+    margin: 16px 0;
+}
+
+.nav-tab {
+    background: #f1f1f1;
+    border: 1px solid #ccd0d4;
+    color: #0073aa;
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 2px -1px 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.71428571;
+    border-radius: 3px 3px 0 0;
+}
+
+.nav-tab:hover {
+    background-color: #fff;
+    color: #0073aa;
+}
+
+.nav-tab-active {
+    background: #fff;
+    border-bottom: 1px solid #fff;
+    color: #000;
+}
+
+.form-table th {
+    width: 230px;
+}
+
+.istodata-tab-content {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-top: none;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.istodata-tab-content label {
+    font-weight: 600;
+}
+.istodata-tab-content .form-table td {
+	padding: 10px;
+}
+
+.storage-table th {
+	padding: 10px 10px 10px 0;
+}
