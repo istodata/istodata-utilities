@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Utilities
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 1.8.5
+Version: 1.8.6
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '1.8.5');
+define('IU_PLUGIN_VERSION', '1.8.6');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
