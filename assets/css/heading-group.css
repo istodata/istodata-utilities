@@ -1,0 +1,82 @@
+.iu-heading-group{
+  --iu-hg-gap-oh: 8px;
+  --iu-hg-gap-ht: 8px;
+  --iu-hg-anim-dist: 8px;
+  --iu-hg-anim-x: 0px;
+  --iu-hg-anim-y: 8px;
+  --iu-hg-text-margin-left: 0;
+  --iu-hg-text-margin-right: auto;
+}
+.iu-heading-group .iu-overline{
+  display:inline-block;
+  margin-bottom:var(--iu-hg-gap-oh);
+}
+.iu-heading-group .iu-heading{ margin:0; }
+.iu-heading-group .iu-text{
+  margin:0;
+  margin-top:var(--iu-hg-gap-ht);
+  margin-left:var(--iu-hg-text-margin-left);
+  margin-right:var(--iu-hg-text-margin-right);
+}
+.iu-heading-group .iu-text > :first-child{
+  margin-top:0;
+}
+.iu-heading-group .iu-text > :last-child{
+  margin-bottom:0;
+}
+
+/* Staggered animation support (leveraging Elementor Motion Effects visibility) */
+@keyframes iu-hg-fade-up {
+  0% { opacity:0; transform: translate(var(--iu-hg-anim-x,0px), var(--iu-hg-anim-y,8px)); }
+  100% { opacity:1; transform: none; }
+}
+.iu-heading-group--stagger > *{
+  opacity:0;
+  transform: translate(var(--iu-hg-anim-x,0px), var(--iu-hg-anim-y,8px));
+  animation-name: iu-hg-fade-up;
+  animation-duration: var(--iu-hg-anim-dur, 1400ms);
+  animation-timing-function: ease;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+.iu-heading-group--stagger.iu-hg-play > *{ animation-play-state: running; }
+.iu-heading-group--stagger .iu-overline{ animation-delay: var(--iu-hg-anim-delay-overline, 100ms); }
+.iu-heading-group--stagger .iu-heading{ animation-delay: var(--iu-hg-anim-delay-heading, 300ms); }
+.iu-heading-group--stagger .iu-text{ animation-delay: var(--iu-hg-anim-delay-text, 500ms); }
+
+/* Direction classes set offsets via variables */
+.iu-hg-dir-fade > *{ --iu-hg-anim-x: 0px; --iu-hg-anim-y: 0px; }
+.iu-hg-dir-up   > *{ --iu-hg-anim-x: 0px; --iu-hg-anim-y: var(--iu-hg-anim-dist, 8px); }
+.iu-hg-dir-down > *{ --iu-hg-anim-x: 0px; --iu-hg-anim-y: calc(var(--iu-hg-anim-dist, 8px) * -1); }
+.iu-hg-dir-left > *{ --iu-hg-anim-x: calc(var(--iu-hg-anim-dist, 8px) * -1); --iu-hg-anim-y: 0px; }
+.iu-hg-dir-right> *{ --iu-hg-anim-x: var(--iu-hg-anim-dist, 8px); --iu-hg-anim-y: 0px; }
+.elementor-editor-active .iu-heading-group--stagger > *{
+  opacity:1 !important;
+  transform:none !important;
+  animation:none !important;
+}
+
+/* Disable on devices */
+@media (max-width: 767px) {
+  .iu-heading-group--stagger.iu-hg-off-mobile > *{
+    opacity:1 !important;
+    transform:none !important;
+    animation:none !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .iu-heading-group--stagger.iu-hg-off-tablet > *{
+    opacity:1 !important;
+    transform:none !important;
+    animation:none !important;
+  }
+}
+
+/* Respect user preference to reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .iu-heading-group--stagger > *{
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

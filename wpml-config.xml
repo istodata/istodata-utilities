@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wpml-config>
+    <custom-fields>
+        <custom-field action="copy">_isto_gallery_ids</custom-field>
+    </custom-fields>
+</wpml-config>

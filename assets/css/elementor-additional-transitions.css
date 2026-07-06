@@ -1,0 +1,128 @@
+:root {
+    --circle-top-left-out: circle(0% at top left);
+    --circle-bottom-left-in: circle(150% at bottom left);
+}
+
+.wipeUp {
+    animation-name: animationWipeUp;
+}
+
+.wipeUp.animated {
+    animation-duration: 1s;
+}
+
+.wipeUp.animated-slow {
+    animation-duration: 1.5s;
+}
+
+@keyframes animationWipeUp {
+    from {
+        clip-path: inset(100% 0 0 0);
+    }
+
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+.wipeDown {
+    animation-name: animationWipeDown;
+}
+
+.wipeDown.animated {
+    animation-duration: 1.2s;
+}
+
+.wipeDown.animated-slow {
+    animation-duration: 1.6s;
+}
+
+@keyframes animationWipeDown {
+    from {
+        clip-path: inset(0 0 100% 0);
+    }
+
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+.wipeLeft {
+    animation-name: animationWipeLeft;
+}
+
+.wipeLeft.animated {
+    animation-duration: 1s;
+}
+
+.wipeLeft.animated-slow {
+    animation-duration: 1.5s;
+}
+
+@keyframes animationWipeLeft {
+    from {
+        clip-path: inset(0 100% 0 0);
+    }
+
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+.wipeRight {
+    animation-name: animationWipeRight;
+}
+
+.wipeRight.animated {
+    animation-duration: 1s;
+}
+
+.wipeRight.animated-slow {
+    animation-duration: 1.5s;
+}
+
+@keyframes animationWipeRight {
+    from {
+        clip-path: inset(0 0 0 100%);
+    }
+
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+.circleSwoopIn {
+    animation-name: animationCircleSwoopIn;
+}
+
+.circleSwoopIn.animated {
+    animation-duration: 1.2s;
+}
+
+@keyframes animationCircleSwoopIn {
+    from {
+        clip-path: var(--circle-top-left-out);
+    }
+
+    to {
+        clip-path: var(--circle-bottom-left-in);
+    }
+}
+
+.circleSwoopOut {
+    animation-name: animationCircleSwoopOut;
+}
+
+.circleSwoopOut.animated {
+    animation-duration: 1.2s;
+}
+
+@keyframes animationCircleSwoopOut {
+    from {
+        clip-path: var(--circle-bottom-left-in);
+    }
+
+    to {
+        clip-path: var(--circle-top-left-out);
+    }
+}

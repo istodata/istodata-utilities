@@ -1,0 +1,41 @@
+.iu-typed-wrapper .iu-typed__icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  transform: translateY(var(--iu-typed-icon-ty, 0)) rotate(var(--iu-typed-icon-rot, 0deg));
+  vertical-align: var(--iu-typed-icon-va, 0px);
+  transition: color .3s ease;
+}
+.iu-typed-wrapper,
+.iu-typed-wrapper a,
+.iu-typed-wrapper span{
+  transition: color .3s ease;
+}
+.iu-typed-wrapper .iu-typed__icon svg{
+  width: 100%;
+  height: 100%;
+  display:block;
+  fill: currentColor;
+  /* Hover transform transition (duration configurable via CSS var) */
+  transition: transform var(--iu-typed-icon-tr-dur, .25s) ease-in-out;
+}
+.iu-typed-wrapper .iu-typed__icon svg *{
+  transition: fill .3s ease, stroke .3s ease;
+}
+.iu-typed-wrapper .iu-typed__icon svg [fill]:not([fill="none"]) {
+  fill: currentColor !important;
+}
+.iu-typed-wrapper .iu-typed__icon svg [stroke]:not([stroke="none"]) {
+  stroke: currentColor !important;
+}
+.iu-typed-wrapper .iu-typed__icon i{
+  display:inline-block;
+  line-height:1;
+  font-size: inherit;
+}
+
+/* Icon hover translation: apply when hovering links (matches widget item structure) */
+.iu-typed-wrapper a:hover .iu-typed__icon svg{
+  transform: translate(var(--iu-typed-icon-hover-tx, 0), var(--iu-typed-icon-hover-ty, 0));
+}

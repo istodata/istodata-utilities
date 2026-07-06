@@ -1,14 +1,209 @@
-/* ISTODATA Utilities Admin Styles */
+/* ===============================
+   WordPress Core Notices
+================================= */
+#wp-version-message,
+#dashboard_right_now .sub,
+#dashboard_objectcache .handle-settings,
+#setting-error-tgmpa,
+#setting-error-qtt,
 
-#wp-version-message, .rank-math-blog-title, .rank-math-blog-list, .rank-math-widget-footer, .ewww-image-optimizer-review, 
-[data-notice="webp-converter-for-media"], [data-notice_id="experiment_promotion"], [data-notice_id="site_mailer_promotion"], [data-notice_id="rate_us_feedback"],
-.notice-success.wpcf7r-notice, #yoast-seo-dashboard-widget .wordpress-feed,  #vc_license-activation-notice, .pll-notice, .notice-elementskit-lite-go-pro-noti2ce,
-#metform-unsupported-metform-pro-version, #pixelwars_core__add_dashboard_widget, #wpcode-notice-global-suggest_plugins, .wpcode-notice-top-area,
-.pa-new-feature-notice, #vc_license-activation-notice, .akismet-right-now, .updated.wpb-notice
-{display:none!important;}
+/* ===============================
+   Elementor Notices
+================================= */
+#e-image-ai-media-library,
+[data-notice_id="experiment_promotion"],
+[data-notice_id="site_mailer_promotion"],
+[data-notice_id="rate_us_feedback"],
+[data-notice_id="ally_pages_promotion"],
+[data-notice_id^="tracker_last_update_2025-07-07"],
+[data-notice_id="plugin_image_optimization"],
+[data-notice_id="send_app_promotion"],
+
+/* ===============================
+   Rank Math
+================================= */
+.rank-math-blog-title,
+.rank-math-blog-list,
+.rank-math-widget-footer,
+#rank_math_review_plugin_notice,
+#rank_math_pro_notice,
+
+/* ===============================
+   Yoast SEO
+================================= */
+#yoast-seo-dashboard-widget .wordpress-feed,
+
+/* ===============================
+   WP Rocket
+================================= */
+#rocketcdn-promote-notice,
+#rocket-notice-rocket_update_notice,
+.pluginfamily-promote-imagify,
+
+/* ===============================
+   WPML
+================================= */
+[data-id="wpml-seo-disable-head-langs"],
+[data-id="WPML_User_Languagehow_to_set_notice"],
+
+/* ===============================
+   Contact Form 7 Redirect
+================================= */
+[data-notification-id="wpcf7_redirect_logger_flag"],
+.notice-success.wpcf7r-notice,
+
+/* ===============================
+   WPBakery / Visual Composer
+================================= */
+#vc_license-activation-notice,
+.updated.wpb-notice,
+[data-wpb-expire-notice-type="not_active_license"],
+
+/* ===============================
+   Husky (woof)
+================================= */
+#pn_woof_ask_favour,
+
+/* ===============================
+   Polylang
+================================= */
+.pll-notice,
+
+/* ===============================
+   ElementsKit
+================================= */
+.notice-elementskit-lite-go-pro-noti2ce,
+
+/* ===============================
+   MetForm
+================================= */
+#metform-unsupported-metform-pro-version,
+
+/* ===============================
+   Pixelwars
+================================= */
+#pixelwars_core__add_dashboard_widget,
+
+/* ===============================
+   WPCode
+================================= */
+#wpcode-notice-global-suggest_plugins,
+#wpcode-notice-global-review_request,
+.wpcode-notice-top-area,
+#wpcode-metabox-snippets,
+label[for="wpcode-metabox-snippets-hide"],
+
+/* ===============================
+   WP Compress / Akismet / PA
+================================= */
+.akismet-right-now,
+.pa-new-feature-notice,
+
+/* ===============================
+   WooCommerce
+================================= */
+#woo-store-vacation-dismiss-upsell,
+
+/* ===============================
+   WPMet / ElementsKit promo
+================================= */
+#wpmet-jhanda-10018687,
+[id^="wpmet-jhanda-"],
+
+/* ===============================
+   Woo Shortcodes Kit
+================================= */
+.wsc-pro-notice,
+
+/* ===============================
+   Cookie Notice / Compliance
+================================= */
+#cn-admin-notice,
+.cmplz-review,
+
+/* ===============================
+   EWWW
+================================= */
+#ewww-image-optimizer-review,
+
+/* ===============================
+   WPForms
+================================= */
+.wpforms-dash-widget-recommended-plugin-block,
+
+/* ===============================
+   THWC Checkout Field Editor
+================================= */
+.thwcfd-review-wrapper,
+
+/* ===============================
+   Forminator
+================================= */
+[data-notice-slug="forminator_promote_free_plan"],
+#forminator-free-usage-notice,
+.wpmudev-recommended-plugins,
+#forminator-generate-shortcode,
+
+/* ===============================
+   Freemius-powered plugins
+================================= */
+.div.fs-notice.updated,
+div.fs-notice.success,
+div.fs-notice.promotion,
+#sbi-clicksocial-notice,
+.sbi_notice,
+
+/* ===============================
+   MEC Calendar
+================================= */
+.mec-metabox-footer,
+
+/* ===============================
+   ThumbPress
+================================= */
+.thumbpress-notice,
+[data-notice-id="thumbpress-bfcm-dec-7_campaign"],
+
+/* ===============================
+   WebP Converter
+================================= */
+[data-notice="webp-converter-for-media"],
+
+/* ===============================
+   Survey / Misc Notices
+================================= */
+#image-sizes-survey-notice,
+.splw-admin-offer-banner-section,
+.splw-notice-wrapper,
+
+/* ===============================
+   Kirki Framework
+================================= */
+.kirki-performance-notice,
+
+/* ===============================
+   ThemeIsle SDK
+================================= */
+.themeisle-sdk-notice
+
+{
+  display: none !important;
+}
+
+
+
+/* ===============================
+   ISTODATA ΚΙΤ
+================================= */
 
 #dashboard_right_now .main {
     padding: 0 12px 0;
+}
+
+/* Documentation URL input width */
+#iu_documentation_url {
+    width: 100%;
+    max-width: 1320px;
 }
 
 
@@ -20,7 +215,7 @@
 .nav-tab {
     background: #f1f1f1;
     border: 1px solid #ccd0d4;
-    color: #0073aa;
+    color: #564be4;
     text-decoration: none;
     display: inline-block;
     padding: 8px 12px;
@@ -33,7 +228,7 @@
 
 .nav-tab:hover {
     background-color: #fff;
-    color: #0073aa;
+    color: #564be4;
 }
 
 .nav-tab-active {
@@ -58,9 +253,18 @@
     font-weight: 600;
 }
 .istodata-tab-content .form-table td {
-	padding: 10px;
+	padding: 10px 0;
 }
 
 .storage-table th {
 	padding: 10px 10px 10px 0;
+}
+
+#iu_storage_widget table {
+    border-color: #dadfe4;
+    border-radius: 6px;
+    padding: 6px;
+}
+#iu_storage_widget td, #iu_storage_widget th {
+    padding: 5px 10px;
 }

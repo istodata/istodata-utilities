@@ -1,0 +1,213 @@
+.iu-wpml-switcher-wrap {
+    display: flex;
+    width: 100%;
+    overflow: visible;
+}
+
+.iu-wpml-switcher {
+    --iu-wpml-trigger-color: inherit;
+    --iu-wpml-trigger-background: transparent;
+    --iu-wpml-trigger-hover-color: var(--iu-wpml-trigger-color);
+    --iu-wpml-trigger-hover-background: var(--iu-wpml-trigger-background);
+    --iu-wpml-menu-background: #ffffff;
+    --iu-wpml-item-color: #111111;
+    --iu-wpml-item-background: transparent;
+    --iu-wpml-item-hover-color: var(--iu-wpml-item-color);
+    --iu-wpml-item-hover-background: rgba(0, 0, 0, 0.06);
+    --iu-wpml-arrow-color: currentColor;
+    --iu-wpml-arrow-size: 6px;
+    --iu-wpml-arrow-right: 12px;
+    --iu-wpml-arrow-top: 50%;
+    --iu-wpml-menu-offset: 0px;
+    --iu-wpml-sticky-trigger-color: var(--iu-wpml-trigger-color);
+    --iu-wpml-sticky-trigger-background: var(--iu-wpml-trigger-background);
+    --iu-wpml-sticky-item-color: var(--iu-wpml-item-color);
+    --iu-wpml-sticky-item-background: var(--iu-wpml-item-background);
+    --iu-wpml-sticky-item-hover-color: var(--iu-wpml-item-hover-color);
+    --iu-wpml-sticky-item-hover-background: var(--iu-wpml-item-hover-background);
+    --iu-wpml-sticky-arrow-color: var(--iu-wpml-arrow-color);
+    position: relative;
+    display: inline-block;
+    min-width: 72px;
+    overflow: visible;
+}
+
+.iu-wpml-switcher__toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    padding: 10px 12px;
+    color: var(--iu-wpml-trigger-color);
+    background: var(--iu-wpml-trigger-background);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.iu-wpml-switcher--has-arrow .iu-wpml-switcher__toggle {
+    padding-right: 32px;
+}
+
+.iu-wpml-switcher__toggle:hover,
+.iu-wpml-switcher__toggle:focus,
+.iu-wpml-switcher.is-open .iu-wpml-switcher__toggle,
+.iu-wpml-switcher:hover .iu-wpml-switcher__toggle,
+.iu-wpml-switcher:focus-within .iu-wpml-switcher__toggle {
+    color: var(--iu-wpml-trigger-hover-color);
+    background: var(--iu-wpml-trigger-hover-background);
+}
+
+.iu-wpml-switcher__toggle:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.iu-wpml-switcher__toggle[disabled] {
+    cursor: default;
+}
+
+.iu-wpml-switcher__current {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.iu-wpml-switcher__menu a,
+.iu-wpml-switcher__menu span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.iu-wpml-switcher__flag {
+    display: inline-block;
+    width: 18px;
+    height: auto;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.iu-wpml-switcher__arrow {
+    position: absolute;
+    right: var(--iu-wpml-arrow-right);
+    top: var(--iu-wpml-arrow-top);
+    display: inline-block;
+    width: var(--iu-wpml-arrow-size);
+    height: var(--iu-wpml-arrow-size);
+    background-color: var(--iu-wpml-arrow-color);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpolyline points='2,3.25 5,6.25 8,3.25' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpolyline points='2,3.25 5,6.25 8,3.25' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    transform: translateY(-50%);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    pointer-events: none;
+}
+
+.iu-wpml-switcher.is-open .iu-wpml-switcher__arrow,
+.iu-wpml-switcher:hover .iu-wpml-switcher__arrow,
+.iu-wpml-switcher:focus-within .iu-wpml-switcher__arrow {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.iu-wpml-switcher__menu {
+    position: absolute;
+    left: 0;
+    top: calc(100% + var(--iu-wpml-menu-offset));
+    z-index: 999;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: var(--iu-wpml-menu-background);
+    border: 1px solid transparent;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(6px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+.iu-wpml-switcher--dir-up .iu-wpml-switcher__menu {
+    top: auto;
+    bottom: calc(100% + var(--iu-wpml-menu-offset));
+    transform: translateY(-6px);
+}
+
+.iu-wpml-switcher.is-open .iu-wpml-switcher__menu,
+.iu-wpml-switcher:hover .iu-wpml-switcher__menu,
+.iu-wpml-switcher:focus-within .iu-wpml-switcher__menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.iu-wpml-switcher__item {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+
+.iu-wpml-switcher__item > a,
+.iu-wpml-switcher__item > span {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    color: var(--iu-wpml-item-color);
+    background: var(--iu-wpml-item-background);
+    text-decoration: none;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.iu-wpml-switcher__item:hover > a,
+.iu-wpml-switcher__item:focus-within > a {
+    color: var(--iu-wpml-item-hover-color);
+    background: var(--iu-wpml-item-hover-background);
+}
+
+.iu-wpml-switcher__menu span.is-unavailable {
+    opacity: 0.72;
+    cursor: default;
+}
+
+.elementor-sticky--effects .iu-wpml-switcher__toggle {
+    color: var(--iu-wpml-sticky-trigger-color);
+    background: var(--iu-wpml-sticky-trigger-background);
+}
+
+.elementor-sticky--effects .iu-wpml-switcher__arrow {
+    --iu-wpml-arrow-color: var(--iu-wpml-sticky-arrow-color);
+}
+
+.elementor-sticky--effects .iu-wpml-switcher__item > a,
+.elementor-sticky--effects .iu-wpml-switcher__item > span {
+    color: var(--iu-wpml-sticky-item-color);
+    background: var(--iu-wpml-sticky-item-background);
+}
+
+.elementor-sticky--effects .iu-wpml-switcher__item:hover > a,
+.elementor-sticky--effects .iu-wpml-switcher__item:focus-within > a {
+    color: var(--iu-wpml-sticky-item-hover-color);
+    background: var(--iu-wpml-sticky-item-hover-background);
+}
+
+.iu-wpml-switcher-notice {
+    padding: 12px 14px;
+    border: 1px solid #d63638;
+    color: #d63638;
+    background: #fff5f5;
+}
+
+@media (max-width: 767px) {
+    .iu-wpml-switcher {
+        min-width: 64px;
+    }
+}

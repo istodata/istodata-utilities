@@ -1,0 +1,74 @@
+.iu-acf-simple-repeater {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.iu-acf-simple-repeater__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.iu-acf-simple-repeater__row {
+    overflow: hidden;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.iu-acf-simple-repeater__bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #dcdcde;
+    background: #f6f7f7;
+}
+
+.iu-acf-simple-repeater__handle {
+    cursor: move;
+    color: #646970;
+}
+
+.iu-acf-simple-repeater__summary {
+    flex: 1 1 auto;
+}
+
+.iu-acf-simple-repeater__body {
+    display: grid;
+    gap: 12px;
+    padding: 12px;
+}
+
+.iu-acf-simple-repeater__field {
+    display: grid;
+    gap: 5px;
+}
+
+.iu-acf-simple-repeater__field > span {
+    font-weight: 600;
+}
+
+.iu-acf-simple-repeater__field input[type="text"],
+.iu-acf-simple-repeater__field input[type="url"],
+.iu-acf-simple-repeater__field textarea {
+    width: 100%;
+}
+
+.iu-acf-simple-repeater__preview {
+    width: 96px;
+    min-height: 72px;
+    margin-bottom: 8px;
+}
+
+.iu-acf-simple-repeater__preview img {
+    display: block;
+    width: 96px;
+    height: 72px;
+    object-fit: cover;
+    border: 1px solid #dcdcde;
+    border-radius: 3px;
+    background: #f6f7f7;
+}
