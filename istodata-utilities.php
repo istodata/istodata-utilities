@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.19.3
+Version: 2.19.4
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.19.3');
+define('IU_PLUGIN_VERSION', '2.19.4');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -265,6 +265,7 @@ function iu_activate() {
             'remove_woocommerce_status' => false,
             'remove_elementor_overview' => false,
             'remove_elementor_accessibility' => false,
+            'remove_elementor_manage_dashboard' => true,
             'remove_qode_news' => false,
             'remove_avada_news' => false,
             'remove_premium_addons_news' => false,
@@ -374,6 +375,26 @@ function iu_activate() {
     
     // Start initial storage calculation with queue system
     iu_start_queue_storage_calculation();
+}
+
+// Enable the new Elementor Manage Dashboard cleanup once on existing installations.
+add_action('admin_init', 'iu_migrate_elementor_manage_dashboard_default');
+function iu_migrate_elementor_manage_dashboard_default() {
+    $migration_key = 'iu_migration_elementor_manage_dashboard_default';
+
+    if (get_option($migration_key, false)) {
+        return;
+    }
+
+    $settings = get_option('istodata_utilities_settings', array());
+
+    if (!isset($settings['dashboard']) || !is_array($settings['dashboard'])) {
+        $settings['dashboard'] = array();
+    }
+
+    $settings['dashboard']['remove_elementor_manage_dashboard'] = true;
+    update_option('istodata_utilities_settings', $settings);
+    update_option($migration_key, 1, false);
 }
 
 // Deactivation hook to clean up cron job
@@ -934,6 +955,13 @@ function iu_settings_page() {
                             <label><input type="checkbox" name="istodata_utilities_settings[dashboard][remove_elementor_accessibility]" value="1" 
                                          <?php checked(isset($settings['dashboard']['remove_elementor_accessibility']) ? $settings['dashboard']['remove_elementor_accessibility'] : false); ?> />
                                    Elementor Accessibility</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label><input type="checkbox" name="istodata_utilities_settings[dashboard][remove_elementor_manage_dashboard]" value="1"
+                                         <?php checked(isset($settings['dashboard']['remove_elementor_manage_dashboard']) ? $settings['dashboard']['remove_elementor_manage_dashboard'] : false); ?> />
+                                   Elementor Manage Dashboard</label>
                         </td>
                     </tr>
                     <tr>
@@ -3089,6 +3117,11 @@ function iu_dashboard_cleanup() {
         remove_meta_box('e-dashboard-ally', 'dashboard', 'normal');
         remove_meta_box('e-dashboard-ally', 'dashboard', 'side');
     }
+
+    if (!empty($dashboard['remove_elementor_manage_dashboard'])) {
+        remove_meta_box('elementor-manage-dashboard', 'dashboard', 'normal');
+        remove_meta_box('elementor-manage-dashboard', 'dashboard', 'side');
+    }
     
     if (!empty($dashboard['remove_qode_news'])) {
         remove_meta_box('qode_interactive_dashboard_widget', 'dashboard', 'side');
@@ -3256,6 +3289,17 @@ function iu_dashboard_cleanup() {
             echo '<script>
                 jQuery(document).ready(function($) {
                     $("#e-dashboard-ally, [id*=\'e-dashboard-ally\'], [class*=\'e-dashboard-ally\']").remove();
+                });
+            </script>';
+        }
+
+        if (!empty($dashboard['remove_elementor_manage_dashboard'])) {
+            echo '<style>
+                #elementor-manage-dashboard, [id*="elementor-manage-dashboard"], [class*="elementor-manage-dashboard"] { display: none !important; }
+            </style>';
+            echo '<script>
+                jQuery(document).ready(function($) {
+                    $("#elementor-manage-dashboard, [id*=\'elementor-manage-dashboard\'], [class*=\'elementor-manage-dashboard\']").remove();
                 });
             </script>';
         }
@@ -5062,6 +5106,7 @@ function iu_check_for_plugin_update($transient) {
 function iu_get_remote_version() {
     // Check cache first
     $cache_key = 'iu_remote_version_' . md5(IU_GITHUB_API_URL);
+    $fallback_key = 'iu_remote_version_fallback_' . md5(IU_GITHUB_API_URL);
     $cache_data = get_transient($cache_key);
     
     if ($cache_data !== false) {
@@ -5117,12 +5162,20 @@ function iu_get_remote_version() {
                 'download_url' => $download_url
             );
             
-            // Cache for 12 hours
-            set_transient($cache_key, $data, 12 * HOUR_IN_SECONDS);
+            // Cache successful release metadata to reduce GitHub API usage across shared-IP hosting.
+            set_transient($cache_key, $data, DAY_IN_SECONDS);
+            update_option($fallback_key, $data, false);
             return $data;
         }
     }
-    
+
+    // If GitHub is temporarily unavailable or rate-limited, reuse the last known good release metadata.
+    $fallback_data = get_option($fallback_key, false);
+    if ($fallback_data !== false) {
+        set_transient($cache_key, $fallback_data, 6 * HOUR_IN_SECONDS);
+        return $fallback_data;
+    }
+
     return false;
 }
 

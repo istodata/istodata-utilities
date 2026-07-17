@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.19.4 - 2026-07-17
+
+- New: Added a Dashboard option to remove Elementor's `elementor-manage-dashboard` widget, enabled by default for new and upgraded installations.
+- Improve: GitHub update checks now cache successful release metadata for 24 hours and reuse the last known good response if GitHub is unavailable or rate-limited.
+- Docs: Clarified release branch, title, asset, and no-hardcoded-token rules in `AGENTS.md`.
+- Version bump to 2.19.4.
+
 ## 2.19.3 - 2026-07-06
 
 - Fix: Elementor AI/Notes cleanup on profile screens now hides only the matching Elementor settings table, preserving the WordPress "Update User" submit button.

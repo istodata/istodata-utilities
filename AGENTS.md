@@ -75,14 +75,18 @@ Report the verification results and the exact absolute zip path to the user.
 Only do this after the user confirms the WordPress manual test is OK and asks for a release.
 
 1. Confirm the requested version, for example `2.19.3`.
-2. Update the plugin header version and `IU_PLUGIN_VERSION`.
-3. Move `CHANGELOG.md` entries from `Unreleased` to the release heading.
-4. Create a clean release zip in the parent plugin directory.
-5. Create tag `vX.Y.Z`.
-6. Create the GitHub release and upload the zip.
-7. Publish or keep as draft exactly as requested by the user.
+2. Make sure release work is based on the GitHub default branch `main`, not the old local `master` branch.
+3. Update the plugin header version and `IU_PLUGIN_VERSION`.
+4. Move `CHANGELOG.md` entries from `Unreleased` to the release heading.
+5. Create a clean release zip in the parent plugin directory.
+6. Create tag `vX.Y.Z`.
+7. Create the GitHub release with title `ISTODATA Kit vX.Y.Z`.
+8. Upload the asset as `istodata-utilities.zip`.
+9. Publish or keep as draft exactly as requested by the user.
 
 Prefer authenticated GitHub tooling (`gh` or the GitHub connector) when available. If authentication is missing, stop and report what is needed.
+
+Do not add hardcoded GitHub personal access tokens to the distributed plugin. Public GitHub release metadata and the `istodata-utilities.zip` asset should be accessible without authentication. If private release access is ever required, use a safer design such as an ISTODATA-owned update proxy or a per-site token stored outside the plugin package.
 
 ## Verification
 
