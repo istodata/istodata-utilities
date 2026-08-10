@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+## 2.19.6 - 2026-08-10
+
+- New: Social Share widget - optional network names can be shown beside their icons, with independent typography, color, and icon spacing controls. Disabled by default to preserve existing widget output.
+- Improve: Social Share widget - added a responsive network spacing control under Layout. The Icons spacing control now sets the icon-to-network-name distance when names are shown, while saved legacy spacing remains intact for existing widgets.
+- Fix: Social Share widget - network names now align to the start in vertical layouts and use the configured icon hover color.
+- New: Social Share widget - the main label can now include an optional leading icon with size, color, and spacing controls.
+- New: Social Share widget - added an accessible Popover layout that opens the vertically listed, named networks from the label on hover, focus, or tap, with configurable label hover color and popover background, padding, border, radius, and shadow.
+- Fix: Social Share popover now opens with a single tap on touch devices by ignoring the initial click that follows touch focus and limiting hover listeners to mouse-capable pointers.
+- Fix: WPML Language Switcher - applies the configured high z-index to the Elementor widget wrapper only while its dropdown is open, keeping it above mega menus without overlapping side carts and other overlays.
+
+## 2.19.5 - 2026-07-31
+
+- Improve: WPML Language Switcher - added a Label Source option that displays the first two uppercase characters of each language's native name, such as `ΕΛ`, `EN`, and `ES`.
+- Version bump to 2.19.5.
+
 ## 2.19.4 - 2026-07-17
 
 - New: Added a Dashboard option to remove Elementor's `elementor-manage-dashboard` widget, enabled by default for new and upgraded installations.

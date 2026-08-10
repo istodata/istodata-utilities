@@ -5,6 +5,8 @@ if (!defined('ABSPATH')) { exit; }
 use Elementor\Controls_Manager;
 use Elementor\Widget_Base;
 use Elementor\Icons_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Typography;
 
 if (!class_exists('IU_Social_Share_Widget')) {
@@ -34,6 +36,20 @@ if (!class_exists('IU_Social_Share_Widget')) {
                     defined('IU_PLUGIN_VERSION') ? IU_PLUGIN_VERSION : null
                 );
             }
+            return [ 'iu-social-share' ];
+        }
+
+        public function get_script_depends() {
+            if (!wp_script_is('iu-social-share', 'registered')) {
+                wp_register_script(
+                    'iu-social-share',
+                    IU_PLUGIN_URL . 'assets/js/social-share.js',
+                    array(),
+                    defined('IU_PLUGIN_VERSION') ? IU_PLUGIN_VERSION : null,
+                    true
+                );
+            }
+
             return [ 'iu-social-share' ];
         }
 
@@ -125,6 +141,23 @@ if (!class_exists('IU_Social_Share_Widget')) {
                 'dynamic' => [ 'active' => true ],
             ]);
 
+            $this->add_control('label_icon', [
+                'label' => __('Εικονίδιο ετικέτας', 'istodata-utilities'),
+                'type' => Controls_Manager::ICONS,
+                'condition' => [
+                    'share_label!' => '',
+                ],
+            ]);
+
+            $this->add_control('show_network_names', [
+                'label' => __('Εμφάνιση ονομάτων δικτύων', 'istodata-utilities'),
+                'type' => Controls_Manager::SWITCHER,
+                'label_on' => __('Ναι', 'istodata-utilities'),
+                'label_off' => __('Όχι', 'istodata-utilities'),
+                'return_value' => 'yes',
+                'default' => '',
+            ]);
+
             // Tooltip controls removed (no tooltips)
 
             $this->add_control('open_new', [
@@ -147,14 +180,24 @@ if (!class_exists('IU_Social_Share_Widget')) {
             $this->add_control('layout', [
                 'label' => __('Διάταξη', 'istodata-utilities'),
                 'type' => Controls_Manager::SELECT,
-                'options' => [ 'horizontal' => __('Οριζόντια', 'istodata-utilities'), 'vertical' => __('Κάθετη', 'istodata-utilities') ],
+                'options' => [ 'horizontal' => __('Οριζόντια', 'istodata-utilities'), 'vertical' => __('Κάθετη', 'istodata-utilities'), 'popover' => __('Popover', 'istodata-utilities') ],
                 'default' => 'horizontal',
                 'selectors_dictionary' => [
                     'horizontal' => 'row',
                     'vertical' => 'column',
+                    'popover' => 'column',
                 ],
                 'selectors' => [
                     '{{WRAPPER}} .iu-social-share__icons' => 'flex-direction: {{VALUE}};',
+                ],
+            ]);
+
+            $this->add_responsive_control('network_gap', [
+                'label' => __('Απόσταση δικτύων (px)', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'range' => [ 'px' => [ 'min' => 0, 'max' => 64 ] ],
+                'selectors' => [
+                    '{{WRAPPER}} .iu-social-share__icons' => 'gap: {{SIZE}}{{UNIT}};',
                 ],
             ]);
 
@@ -211,12 +254,13 @@ if (!class_exists('IU_Social_Share_Widget')) {
             ]);
 
             $this->add_responsive_control('gap', [
-                'label' => __('Απόσταση (px)', 'istodata-utilities'),
+                'label' => __('Απόσταση από το όνομα δικτύου (px)', 'istodata-utilities'),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [ 'px' => [ 'min' => 0, 'max' => 64 ] ],
                 'default' => [ 'size' => 8, 'unit' => 'px' ],
                 'selectors' => [
                     '{{WRAPPER}} .iu-social-share__icons' => '--iu-ss-gap: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .iu-social-share--has-network-names a.iu-share' => 'gap: {{SIZE}}{{UNIT}};',
                 ],
             ]);
 
@@ -233,6 +277,7 @@ if (!class_exists('IU_Social_Share_Widget')) {
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .iu-social-share a:hover .iu-share__icon' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .iu-social-share a:hover .iu-share__network-name' => 'color: {{VALUE}};',
                 ],
             ]);
 
@@ -274,9 +319,60 @@ if (!class_exists('IU_Social_Share_Widget')) {
                 ],
             ]);
 
+            $this->add_control('label_hover_color', [
+                'label' => __('Χρώμα hover', 'istodata-utilities'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .iu-social-share--popover .iu-social-share__toggle:hover' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .iu-social-share--popover .iu-social-share__toggle:focus-visible' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .iu-social-share--popover .iu-social-share__toggle:hover .iu-social-share__label-icon' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .iu-social-share--popover .iu-social-share__toggle:focus-visible .iu-social-share__label-icon' => 'color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'layout' => 'popover',
+                ],
+            ]);
+
             $this->add_group_control(Group_Control_Typography::get_type(), [
                 'name' => 'label_typography',
                 'selector' => '{{WRAPPER}} .iu-social-share__label',
+            ]);
+
+            $this->add_responsive_control('label_icon_size', [
+                'label' => __('Μέγεθος εικονιδίου (px)', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'range' => [ 'px' => [ 'min' => 8, 'max' => 128 ] ],
+                'default' => [ 'size' => 20, 'unit' => 'px' ],
+                'selectors' => [
+                    '{{WRAPPER}} .iu-social-share__label-icon' => '--iu-ss-label-icon-size: {{SIZE}}{{UNIT}}; width: var(--iu-ss-label-icon-size); height: var(--iu-ss-label-icon-size);',
+                ],
+                'condition' => [
+                    'label_icon[value]!' => '',
+                ],
+            ]);
+
+            $this->add_control('label_icon_color', [
+                'label' => __('Χρώμα εικονιδίου', 'istodata-utilities'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .iu-social-share__label-icon' => 'color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'label_icon[value]!' => '',
+                ],
+            ]);
+
+            $this->add_responsive_control('label_icon_gap', [
+                'label' => __('Απόσταση από την ετικέτα (px)', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'range' => [ 'px' => [ 'min' => 0, 'max' => 64 ] ],
+                'default' => [ 'size' => 8, 'unit' => 'px' ],
+                'selectors' => [
+                    '{{WRAPPER}} .iu-social-share__label' => '--iu-ss-label-icon-gap: {{SIZE}}{{UNIT}};',
+                ],
+                'condition' => [
+                    'label_icon[value]!' => '',
+                ],
             ]);
 
             $this->add_responsive_control('label_align', [
@@ -296,6 +392,75 @@ if (!class_exists('IU_Social_Share_Widget')) {
                 'selectors' => [
                     '{{WRAPPER}} .iu-social-share__label' => 'text-align: {{VALUE}};',
                 ],
+            ]);
+
+            $this->end_controls_section();
+
+            $this->start_controls_section('section_style_network_names', [
+                'label' => __('Ονόματα δικτύων', 'istodata-utilities'),
+                'tab'   => Controls_Manager::TAB_STYLE,
+                'condition' => [
+                    'show_network_names' => 'yes',
+                ],
+            ]);
+
+            $this->add_control('network_name_color', [
+                'label' => __('Χρώμα', 'istodata-utilities'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .iu-social-share .iu-share__network-name' => 'color: {{VALUE}};',
+                ],
+            ]);
+
+            $this->add_group_control(Group_Control_Typography::get_type(), [
+                'name' => 'network_name_typography',
+                'selector' => '{{WRAPPER}} .iu-social-share .iu-share__network-name',
+            ]);
+
+            $this->end_controls_section();
+
+            $this->start_controls_section('section_style_popover', [
+                'label' => __('Popover', 'istodata-utilities'),
+                'tab'   => Controls_Manager::TAB_STYLE,
+                'condition' => [
+                    'layout' => 'popover',
+                ],
+            ]);
+
+            $this->add_control('popover_background_color', [
+                'label' => __('Χρώμα φόντου', 'istodata-utilities'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .iu-social-share--popover .iu-social-share__icons' => 'background-color: {{VALUE}};',
+                ],
+            ]);
+
+            $this->add_responsive_control('popover_padding', [
+                'label' => __('Padding', 'istodata-utilities'),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => [ 'px', 'em', '%', 'rem' ],
+                'selectors' => [
+                    '{{WRAPPER}} .iu-social-share--popover .iu-social-share__icons' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]);
+
+            $this->add_group_control(Group_Control_Border::get_type(), [
+                'name' => 'popover_border',
+                'selector' => '{{WRAPPER}} .iu-social-share--popover .iu-social-share__icons',
+            ]);
+
+            $this->add_responsive_control('popover_border_radius', [
+                'label' => __('Στρογγύλεμα γωνιών', 'istodata-utilities'),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => [ 'px', '%', 'em', 'rem' ],
+                'selectors' => [
+                    '{{WRAPPER}} .iu-social-share--popover .iu-social-share__icons' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]);
+
+            $this->add_group_control(Group_Control_Box_Shadow::get_type(), [
+                'name' => 'popover_box_shadow',
+                'selector' => '{{WRAPPER}} .iu-social-share--popover .iu-social-share__icons',
             ]);
 
             $this->end_controls_section();
@@ -319,17 +484,28 @@ if (!class_exists('IU_Social_Share_Widget')) {
 
             $size = isset($s['icon_size']['size']) ? intval($s['icon_size']['size']) : 24;
             $share_label = isset($s['share_label']) ? trim((string) $s['share_label']) : '';
+            $layout = isset($s['layout']) ? $s['layout'] : 'horizontal';
+            $is_popover = $layout === 'popover';
+            $show_network_names = $is_popover || (!empty($s['show_network_names']) && $s['show_network_names'] === 'yes');
+            $popover_id = 'iu-social-share-popover-' . $this->get_id();
 
             // Wrapper uses CSS asset; per-instance values set via Elementor selectors
-            echo '<div class="iu-social-share">';
+            echo '<div class="iu-social-share' . ($show_network_names ? ' iu-social-share--has-network-names' : '') . ($is_popover ? ' iu-social-share--popover' : '') . '">';
 
             echo '<div class="iu-social-share__inner">';
 
-            if ($share_label !== '') {
-                echo '<div class="iu-social-share__label">' . esc_html($share_label) . '</div>';
+            if ($share_label !== '' || $is_popover) {
+                if ($is_popover) {
+                    echo '<button type="button" class="iu-social-share__label iu-social-share__toggle" aria-expanded="false" aria-controls="' . esc_attr($popover_id) . '">';
+                } else {
+                    echo '<div class="iu-social-share__label">';
+                }
+                $this->render_label_icon($s);
+                echo '<span class="iu-social-share__label-text">' . esc_html($share_label !== '' ? $share_label : __('Share', 'istodata-utilities')) . '</span>';
+                echo $is_popover ? '</button>' : '</div>';
             }
 
-            echo '<div class="iu-social-share__icons">';
+            echo '<div class="iu-social-share__icons"' . ($is_popover ? ' id="' . esc_attr($popover_id) . '" aria-hidden="true"' : '') . '>';
 
             // Render each network if enabled
             if (!empty($s['enable_facebook']) && $s['enable_facebook'] === 'yes') {
@@ -337,6 +513,7 @@ if (!class_exists('IU_Social_Share_Widget')) {
                 $label = __('Κοινοποίηση στο Facebook', 'istodata-utilities');
                 echo '<a class="iu-share iu-share--facebook" href="' . esc_url($href) . '"' . $target . $rel . ' aria-label="' . esc_attr($label) . '">';
                 $this->render_icon($s, 'facebook_icon', $size, 'F');
+                $this->render_network_name('Facebook', $show_network_names);
                 echo '</a>';
             }
 
@@ -345,6 +522,7 @@ if (!class_exists('IU_Social_Share_Widget')) {
                 $label = __('Κοινοποίηση στο LinkedIn', 'istodata-utilities');
                 echo '<a class="iu-share iu-share--linkedin" href="' . esc_url($href) . '"' . $target . $rel . ' aria-label="' . esc_attr($label) . '">';
                 $this->render_icon($s, 'linkedin_icon', $size, 'in');
+                $this->render_network_name('LinkedIn', $show_network_names);
                 echo '</a>';
             }
 
@@ -353,6 +531,7 @@ if (!class_exists('IU_Social_Share_Widget')) {
                 $label = __('Κοινοποίηση στο WhatsApp', 'istodata-utilities');
                 echo '<a class="iu-share iu-share--whatsapp" href="' . esc_url($href) . '"' . $target . $rel . ' aria-label="' . esc_attr($label) . '">';
                 $this->render_icon($s, 'whatsapp_icon', $size, 'WA');
+                $this->render_network_name('WhatsApp', $show_network_names);
                 echo '</a>';
             }
 
@@ -361,6 +540,7 @@ if (!class_exists('IU_Social_Share_Widget')) {
                 $label = __('Κοινοποίηση μέσω Email', 'istodata-utilities');
                 echo '<a class="iu-share iu-share--email" href="' . esc_url($href) . '"' . $target . $rel . ' aria-label="' . esc_attr($label) . '">';
                 $this->render_icon($s, 'email_icon', $size, '@');
+                $this->render_network_name('Email', $show_network_names);
                 echo '</a>';
             }
 
@@ -388,6 +568,27 @@ if (!class_exists('IU_Social_Share_Widget')) {
 
             // Text fallback as minimal badge
             echo '<span class="iu-share__icon" style="' . esc_attr($icon_style . 'border-radius:4px;background:#eee;color:#333;') . '">' . esc_html($fallback_text) . '</span>';
+        }
+
+        private function render_network_name($name, $show_network_names) {
+            if (!$show_network_names) {
+                return;
+            }
+
+            echo '<span class="iu-share__network-name">' . esc_html($name) . '</span>';
+        }
+
+        private function render_label_icon($settings) {
+            if (empty($settings['label_icon'])) {
+                return;
+            }
+
+            ob_start();
+            Icons_Manager::render_icon($settings['label_icon'], [ 'aria-hidden' => 'true' ]);
+            $icon_html = $this->iu_svg_normalize(ob_get_clean());
+            if (is_string($icon_html) && $icon_html !== '') {
+                echo '<span class="iu-social-share__label-icon">' . $icon_html . '</span>';
+            }
         }
 
         // Normalize SVG HTML from Icons_Manager output (strip width/height to allow CSS sizing)

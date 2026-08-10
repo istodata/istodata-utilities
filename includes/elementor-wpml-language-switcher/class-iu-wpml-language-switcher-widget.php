@@ -65,6 +65,7 @@ if (!class_exists('IU_WPML_Language_Switcher_Widget')) {
                 'options' => array(
                     'code' => __('Language Code', 'istodata-utilities'),
                     'native_name' => __('Native Name', 'istodata-utilities'),
+                    'native_name_short' => __('Native Name (First 2 Letters)', 'istodata-utilities'),
                     'translated_name' => __('Translated Name', 'istodata-utilities'),
                 ),
                 'default' => 'code',
@@ -78,7 +79,7 @@ if (!class_exists('IU_WPML_Language_Switcher_Widget')) {
                 'return_value' => 'yes',
                 'default' => '',
                 'condition' => array(
-                    'label_source!' => 'code',
+                    'label_source' => array('native_name', 'translated_name'),
                 ),
             ));
 
@@ -401,10 +402,12 @@ if (!class_exists('IU_WPML_Language_Switcher_Widget')) {
                 'min' => 0,
                 'step' => 1,
                 'selectors' => array(
-                    '{{WRAPPER}}' => 'position: relative; z-index: {{VALUE}};',
-                    '{{WRAPPER}} > .elementor-widget-container' => 'position: relative; z-index: {{VALUE}}; overflow: visible;',
-                    '{{WRAPPER}} .iu-wpml-switcher' => 'z-index: {{VALUE}};',
-                    '{{WRAPPER}} .iu-wpml-switcher__menu' => 'z-index: {{VALUE}};',
+                    '{{WRAPPER}}' => 'position: relative;',
+                    '{{WRAPPER}} > .elementor-widget-container' => 'position: relative; overflow: visible;',
+                    '{{WRAPPER}}.iu-wpml-switcher-is-open' => 'z-index: {{VALUE}};',
+                    '{{WRAPPER}}.iu-wpml-switcher-is-open > .elementor-widget-container' => 'z-index: {{VALUE}};',
+                    '{{WRAPPER}} .iu-wpml-switcher.is-open' => 'z-index: {{VALUE}};',
+                    '{{WRAPPER}} .iu-wpml-switcher.is-open .iu-wpml-switcher__menu' => 'z-index: {{VALUE}};',
                 ),
             ));
 
@@ -823,7 +826,7 @@ if (!class_exists('IU_WPML_Language_Switcher_Widget')) {
                 ),
                 array(
                     'language_code' => 'el',
-                    'native_name' => 'Ellinika',
+                    'native_name' => 'Ελληνικά',
                     'translated_name' => 'Greek',
                     'country_flag_url' => '',
                     'url' => '#',
@@ -846,17 +849,29 @@ if (!class_exists('IU_WPML_Language_Switcher_Widget')) {
 
             if ($label_source === 'native_name' && !empty($language['native_name'])) {
                 $label = (string) $language['native_name'];
+            } else if ($label_source === 'native_name_short' && !empty($language['native_name'])) {
+                $label = $this->get_native_name_initials($language['native_name']);
             } else if ($label_source === 'translated_name' && !empty($language['translated_name'])) {
                 $label = (string) $language['translated_name'];
             } else {
                 $label = $code;
             }
 
-            if ($label_source !== 'code' && !empty($settings['show_code_with_label']) && $code !== '') {
+            if (in_array($label_source, array('native_name', 'translated_name'), true) && !empty($settings['show_code_with_label']) && $code !== '') {
                 $label = $code . ' - ' . $label;
             }
 
             return $label !== '' ? $label : $code;
+        }
+
+        private function get_native_name_initials($native_name) {
+            $characters = preg_split('//u', trim((string) $native_name), -1, PREG_SPLIT_NO_EMPTY);
+            if (!is_array($characters) || empty($characters)) {
+                return '';
+            }
+
+            $initials = implode('', array_slice($characters, 0, 2));
+            return function_exists('mb_strtoupper') ? mb_strtoupper($initials, 'UTF-8') : strtoupper($initials);
         }
 
         private function get_flag_html($language, $settings) {

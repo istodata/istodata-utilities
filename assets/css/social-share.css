@@ -11,21 +11,102 @@
   max-width:100%;
 }
 .iu-social-share .iu-social-share__label{
-  display:block;
+  display:inline-flex;
+  align-items:center;
+  gap:var(--iu-ss-label-icon-gap, 8px);
   line-height:1.4;
+}
+.iu-social-share .iu-social-share__toggle{
+  appearance:none;
+  border:0;
+  background:transparent;
+  padding:0;
+  font:inherit;
+  text-align:inherit;
+  cursor:pointer;
+  transition:color var(--iu-ss-tr,.2s) ease;
+}
+.iu-social-share.iu-social-share--popover{
+  position:relative;
+  width:auto;
+}
+.iu-social-share.iu-social-share--popover .iu-social-share__inner{
+  position:relative;
+  display:inline-flex;
+}
+.iu-social-share.iu-social-share--popover .iu-social-share__icons{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:0;
+  z-index:1000;
+  min-width:max-content;
+  flex-direction:column;
+  flex-wrap:nowrap;
+  padding:12px;
+  background:#fff;
+  border:1px solid rgba(0,0,0,.12);
+  border-radius:4px;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity var(--iu-ss-tr,.2s) ease, visibility var(--iu-ss-tr,.2s) ease;
+}
+.iu-social-share.iu-social-share--popover.is-open .iu-social-share__icons{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.iu-social-share.iu-social-share--popover .iu-social-share__toggle:focus-visible{
+  outline:2px solid currentColor;
+  outline-offset:3px;
+}
+.iu-social-share .iu-social-share__label-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:var(--iu-ss-label-icon-size, 20px);
+  height:var(--iu-ss-label-icon-size, 20px);
+  line-height:1;
+}
+.iu-social-share .iu-social-share__label-icon svg{
+  width:100%;
+  height:100%;
+  display:block;
+  fill:currentColor;
+}
+.iu-social-share .iu-social-share__label-icon svg [fill]:not([fill="none"]){
+  fill:currentColor !important;
+}
+.iu-social-share .iu-social-share__label-icon svg [stroke]:not([stroke="none"]){
+  stroke:currentColor !important;
+}
+.iu-social-share .iu-social-share__label-icon i{
+  font-size:var(--iu-ss-label-icon-size, 20px);
 }
 .iu-social-share .iu-social-share__icons{
   display:flex;
   flex-wrap:wrap;
-  gap: var(--iu-ss-gap, 8px);
+  gap:var(--iu-ss-network-gap, var(--iu-ss-gap, 8px));
   flex-direction:row;
+}
+.iu-social-share.iu-social-share--has-network-names .iu-social-share__icons{
+  gap:var(--iu-ss-network-gap, 8px);
+}
+.iu-social-share.iu-social-share--has-network-names a.iu-share{
+  justify-content:flex-start;
 }
 .iu-social-share a.iu-share{
   display:inline-flex;
   align-items:center;
   justify-content:center;
+  gap:var(--iu-ss-gap, 8px);
   line-height:1;
   text-decoration:none;
+}
+.iu-social-share .iu-share__network-name{
+  line-height:1.2;
+  transition:color var(--iu-ss-tr,.2s) ease;
 }
 .iu-social-share .iu-share__icon{
   display:inline-flex;

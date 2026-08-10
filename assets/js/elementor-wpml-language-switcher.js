@@ -5,6 +5,10 @@
         return root ? root.querySelector('.iu-wpml-switcher__toggle') : null;
     }
 
+    function getWidgetWrapper(root) {
+        return root ? root.closest('.elementor-widget') : null;
+    }
+
     function setExpanded(root, expanded) {
         var button = getButton(root);
         if (button) {
@@ -26,6 +30,10 @@
 
         clearCloseTimer(root);
         root.classList.add('is-open');
+        var widgetWrapper = getWidgetWrapper(root);
+        if (widgetWrapper) {
+            widgetWrapper.classList.add('iu-wpml-switcher-is-open');
+        }
         setExpanded(root, true);
     }
 
@@ -36,6 +44,10 @@
 
         clearCloseTimer(root);
         root.classList.remove('is-open');
+        var widgetWrapper = getWidgetWrapper(root);
+        if (widgetWrapper) {
+            widgetWrapper.classList.remove('iu-wpml-switcher-is-open');
+        }
         setExpanded(root, false);
     }
 
@@ -100,6 +112,14 @@
             });
         }
     });
+
+    document.addEventListener('pointerdown', function(event) {
+        document.querySelectorAll('.iu-wpml-switcher.is-open').forEach(function(root) {
+            if (!root.contains(event.target)) {
+                closeSwitcher(root);
+            }
+        });
+    }, true);
 
     if (window.elementorFrontend && window.elementorFrontend.hooks) {
         window.elementorFrontend.hooks.addAction('frontend/element_ready/global', function($scope) {
