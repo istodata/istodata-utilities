@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## 2.19.7 - 2026-08-10
+
+- Fix: Social Share widget - custom SVG icon IDs and their internal references are now isolated per widget instance, preventing rendering conflicts when multiple widgets use the same SVG on one page.
+
 ## 2.19.6 - 2026-08-10
 
 - New: Social Share widget - optional network names can be shown beside their icons, with independent typography, color, and icon spacing controls. Disabled by default to preserve existing widget output.

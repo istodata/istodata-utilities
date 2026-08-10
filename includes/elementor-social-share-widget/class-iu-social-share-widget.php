@@ -559,7 +559,7 @@ if (!class_exists('IU_Social_Share_Widget')) {
                 ob_start();
                 Icons_Manager::render_icon($icon, [ 'aria-hidden' => 'true' ]);
                 $icon_html = ob_get_clean();
-                $icon_html = $this->iu_svg_normalize($icon_html);
+                $icon_html = $this->iu_svg_normalize($icon_html, $icon_key);
                 if (is_string($icon_html) && $icon_html !== '') {
                     echo '<span class="iu-share__icon" style="' . esc_attr($icon_style) . '">' . $icon_html . '</span>';
                     return;
@@ -585,15 +585,40 @@ if (!class_exists('IU_Social_Share_Widget')) {
 
             ob_start();
             Icons_Manager::render_icon($settings['label_icon'], [ 'aria-hidden' => 'true' ]);
-            $icon_html = $this->iu_svg_normalize(ob_get_clean());
+            $icon_html = $this->iu_svg_normalize(ob_get_clean(), 'label_icon');
             if (is_string($icon_html) && $icon_html !== '') {
                 echo '<span class="iu-social-share__label-icon">' . $icon_html . '</span>';
             }
         }
 
         // Normalize SVG HTML from Icons_Manager output (strip width/height to allow CSS sizing)
-        private function iu_svg_normalize($svg_html) {
+        private function iu_svg_normalize($svg_html, $scope = 'icon') {
             if (!is_string($svg_html) || stripos($svg_html, '<svg') === false) return $svg_html;
+
+            $scope = preg_replace('/[^A-Za-z0-9_-]/', '-', (string) $scope);
+            $element_id = preg_replace('/[^A-Za-z0-9_-]/', '-', (string) $this->get_id());
+            $id_prefix = 'iu-social-share-' . $element_id . '-' . $scope . '-';
+            $id_map = array();
+
+            preg_match_all('/\sid\s*=\s*(["\'])([^"\']+)\1/i', $svg_html, $id_matches, PREG_SET_ORDER);
+            foreach ($id_matches as $id_match) {
+                $old_id = $id_match[2];
+                if (!isset($id_map[$old_id])) {
+                    $id_map[$old_id] = $id_prefix . preg_replace('/[^A-Za-z0-9_-]/', '-', $old_id);
+                }
+            }
+
+            if (!empty($id_map)) {
+                $svg_html = preg_replace_callback('/(\sid\s*=\s*)(["\'])([^"\']+)\2/i', function($match) use ($id_map) {
+                    return isset($id_map[$match[3]]) ? $match[1] . $match[2] . $id_map[$match[3]] . $match[2] : $match[0];
+                }, $svg_html);
+
+                foreach ($id_map as $old_id => $new_id) {
+                    $svg_html = preg_replace('/url\(\s*(["\']?)#' . preg_quote($old_id, '/') . '\1\s*\)/i', 'url(#' . $new_id . ')', $svg_html);
+                    $svg_html = preg_replace('/((?:xlink:)?href\s*=\s*["\'])#' . preg_quote($old_id, '/') . '(["\'])/i', '$1#' . $new_id . '$2', $svg_html);
+                }
+            }
+
             return preg_replace_callback('/<svg\b([^>]*)>/i', function($m){
                 $attrs = $m[1];
                 // drop width/height
