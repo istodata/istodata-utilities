@@ -2,7 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2.19.8 - 2026-08-12
+
+- New: Taxonomy Links widget - links/buttons mode now supports optional default and active icons with responsive size and text spacing controls.
+- Fix: Taxonomy Links widget - icons now render at their configured size from the first paint, preventing a brief oversized flash.
 
 ## 2.19.7 - 2026-08-10
 

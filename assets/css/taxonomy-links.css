@@ -1,5 +1,7 @@
 .iu-taxonomy-links {
     --iu-tax-links-transition: 0.2s;
+    --iu-tax-links-icon-size: 16px;
+    --iu-tax-links-icon-gap: 8px;
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
@@ -21,6 +23,35 @@
 
 .iu-taxonomy-links__link:focus-visible {
     outline: none;
+}
+
+.iu-taxonomy-links__link-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: var(--iu-tax-links-icon-size);
+    height: var(--iu-tax-links-icon-size);
+    margin-right: var(--iu-tax-links-icon-gap);
+    color: currentColor;
+    line-height: 1;
+}
+
+.iu-taxonomy-links__link-icon i {
+    color: currentColor;
+    font-size: var(--iu-tax-links-icon-size);
+    line-height: 1;
+}
+
+.iu-taxonomy-links__link-icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+.iu-taxonomy-links__link-text {
+    display: inline-block;
 }
 
 .iu-taxonomy-links--dropdown {

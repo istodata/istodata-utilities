@@ -7,6 +7,7 @@ use Elementor\Group_Control_Background;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Typography;
+use Elementor\Icons_Manager;
 use Elementor\Widget_Base;
 
 if (!class_exists('IU_Taxonomy_Links_Widget')) {
@@ -126,6 +127,22 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 ),
                 'condition' => array(
                     'show_all_link' => 'yes',
+                ),
+            ));
+
+            $this->add_control('link_icon', array(
+                'label' => __('Default Icon', 'istodata-utilities'),
+                'type' => Controls_Manager::ICONS,
+                'condition' => array(
+                    'display_mode' => 'links',
+                ),
+            ));
+
+            $this->add_control('link_active_icon', array(
+                'label' => __('Active Icon', 'istodata-utilities'),
+                'type' => Controls_Manager::ICONS,
+                'condition' => array(
+                    'display_mode' => 'links',
                 ),
             ));
 
@@ -295,6 +312,42 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 'size_units' => array('px', '%', 'em', 'rem'),
                 'selectors' => array(
                     '{{WRAPPER}} .iu-taxonomy-links__link' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ),
+            ));
+
+            $this->add_responsive_control('link_icon_size', array(
+                'label' => __('Icon Size', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => array('px', 'em', 'rem'),
+                'range' => array(
+                    'px' => array('min' => 8, 'max' => 128),
+                    'em' => array('min' => 0.4, 'max' => 5, 'step' => 0.05),
+                    'rem' => array('min' => 0.4, 'max' => 5, 'step' => 0.05),
+                ),
+                'default' => array(
+                    'size' => 16,
+                    'unit' => 'px',
+                ),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links' => '--iu-tax-links-icon-size: {{SIZE}}{{UNIT}};',
+                ),
+            ));
+
+            $this->add_responsive_control('link_icon_gap', array(
+                'label' => __('Icon Gap', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => array('px', 'em', 'rem'),
+                'range' => array(
+                    'px' => array('min' => 0, 'max' => 64),
+                    'em' => array('min' => 0, 'max' => 4, 'step' => 0.05),
+                    'rem' => array('min' => 0, 'max' => 4, 'step' => 0.05),
+                ),
+                'default' => array(
+                    'size' => 8,
+                    'unit' => 'px',
+                ),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links' => '--iu-tax-links-icon-gap: {{SIZE}}{{UNIT}};',
                 ),
             ));
 
@@ -891,7 +944,9 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 }
                 $this->add_link_attributes('all_link', $all_link);
 
-                echo '<a ' . $this->get_render_attribute_string('all_link') . '>' . esc_html($all_text) . '</a>';
+                echo '<a ' . $this->get_render_attribute_string('all_link') . '>';
+                $this->render_link_label($settings, $all_text, $all_is_current, 'all_link');
+                echo '</a>';
             }
 
             foreach ($terms as $index => $term) {
@@ -910,7 +965,9 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 $this->add_render_attribute($attr_key, 'data-taxonomy', $taxonomy);
                 $this->add_render_attribute($attr_key, 'data-term-id', (string) absint($term->term_id));
 
-                echo '<a ' . $this->get_render_attribute_string($attr_key) . '>' . esc_html($term->name) . '</a>';
+                echo '<a ' . $this->get_render_attribute_string($attr_key) . '>';
+                $this->render_link_label($settings, $term->name, $current_term_id === (int) $term->term_id, 'term_link_' . $term->term_id);
+                echo '</a>';
             }
 
             echo '</div>';
@@ -1115,6 +1172,45 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
             }
         }
 
+        private function render_link_label($settings, $text, $is_current, $scope) {
+            $icon_key = '';
+
+            if ($is_current && !empty($settings['link_active_icon']['value'])) {
+                $icon_key = 'link_active_icon';
+            } elseif (!empty($settings['link_icon']['value'])) {
+                $icon_key = 'link_icon';
+            }
+
+            if ($icon_key !== '') {
+                $this->render_link_icon($settings[$icon_key], $settings, $scope);
+            }
+
+            echo '<span class="iu-taxonomy-links__link-text">' . esc_html($text) . '</span>';
+        }
+
+        private function render_link_icon($icon, $settings, $scope) {
+            if (empty($icon['value'])) {
+                return;
+            }
+
+            $icon_size = $this->get_control_css_size($settings, 'link_icon_size', '16px');
+            $icon_gap = $this->get_control_css_size($settings, 'link_icon_gap', '8px');
+            $wrapper_style = sprintf(
+                '--iu-tax-links-icon-size:%1$s;--iu-tax-links-icon-gap:%2$s;width:%1$s;height:%1$s;margin-right:%2$s;font-size:%1$s;',
+                esc_attr($icon_size),
+                esc_attr($icon_gap)
+            );
+
+            ob_start();
+            Icons_Manager::render_icon($icon, array('aria-hidden' => 'true'));
+            $icon_html = $this->iu_svg_normalize(ob_get_clean(), $scope);
+            $icon_html = $this->iu_icon_set_dimensions($icon_html, $icon_size);
+
+            if (is_string($icon_html) && $icon_html !== '') {
+                echo '<span class="iu-taxonomy-links__link-icon" style="' . $wrapper_style . '">' . $icon_html . '</span>';
+            }
+        }
+
         private function get_current_term_id($taxonomy) {
             $queried_object = get_queried_object();
 
@@ -1207,6 +1303,88 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
             }
 
             return $host . $path . $query;
+        }
+
+        private function get_control_css_size($settings, $key, $fallback) {
+            if (empty($settings[$key]) || !is_array($settings[$key])) {
+                return $fallback;
+            }
+
+            $size = isset($settings[$key]['size']) ? $settings[$key]['size'] : null;
+            $unit = isset($settings[$key]['unit']) ? $settings[$key]['unit'] : 'px';
+
+            if ($size === null || $size === '') {
+                return $fallback;
+            }
+
+            return $size . $unit;
+        }
+
+        private function iu_icon_set_dimensions($icon_html, $icon_size) {
+            if (!is_string($icon_html) || !preg_match('/<(?:svg|i)\b/i', $icon_html)) {
+                return $icon_html;
+            }
+
+            $icon_size = esc_attr($icon_size);
+
+            return preg_replace_callback('/<(svg|i)\b([^>]*)>/i', function($match) use ($icon_size) {
+                $attributes = preg_replace('/\s(?:width|height)\s*=\s*(["\']).*?\1/i', '', $match[2]);
+                $inline_style = 'display:block;width:' . $icon_size . ';height:' . $icon_size . ';font-size:' . $icon_size . ';line-height:1;color:currentColor;';
+
+                if (preg_match('/\sstyle\s*=\s*(["\'])(.*?)\1/i', $attributes, $style_match)) {
+                    $existing_style = preg_replace('/(?:^|;)\s*(?:display|width|height|font-size|line-height|color)\s*:[^;]*;?/i', ';', $style_match[2]);
+                    $existing_style = trim(preg_replace('/;{2,}/', ';', $existing_style), '; ');
+                    $replacement = ' style="' . esc_attr(($existing_style === '' ? '' : $existing_style . ';') . $inline_style) . '"';
+                    $attributes = preg_replace('/\sstyle\s*=\s*(["\']).*?\1/i', $replacement, $attributes, 1);
+                } else {
+                    $attributes .= ' style="' . $inline_style . '"';
+                }
+
+                return '<' . $match[1] . $attributes . '>';
+            }, $icon_html, 1);
+        }
+
+        private function iu_svg_normalize($svg_html, $scope = 'icon') {
+            if (!is_string($svg_html) || stripos($svg_html, '<svg') === false) {
+                return $svg_html;
+            }
+
+            $scope = preg_replace('/[^A-Za-z0-9_-]/', '-', (string) $scope);
+            $element_id = preg_replace('/[^A-Za-z0-9_-]/', '-', (string) $this->get_id());
+            $id_prefix = 'iu-taxonomy-links-' . $element_id . '-' . $scope . '-';
+            $id_map = array();
+
+            preg_match_all('/\sid\s*=\s*(["\'])([^"\']+)\1/i', $svg_html, $id_matches, PREG_SET_ORDER);
+            foreach ($id_matches as $id_match) {
+                $old_id = $id_match[2];
+                if (!isset($id_map[$old_id])) {
+                    $id_map[$old_id] = $id_prefix . preg_replace('/[^A-Za-z0-9_-]/', '-', $old_id);
+                }
+            }
+
+            if (!empty($id_map)) {
+                $svg_html = preg_replace_callback('/(\sid\s*=\s*)(["\'])([^"\']+)\2/i', function($match) use ($id_map) {
+                    return isset($id_map[$match[3]]) ? $match[1] . $match[2] . $id_map[$match[3]] . $match[2] : $match[0];
+                }, $svg_html);
+
+                foreach ($id_map as $old_id => $new_id) {
+                    $svg_html = preg_replace('/url\(\s*(["\']?)#' . preg_quote($old_id, '/') . '\1\s*\)/i', 'url(#' . $new_id . ')', $svg_html);
+                    $svg_html = preg_replace('/((?:xlink:)?href\s*=\s*["\'])#' . preg_quote($old_id, '/') . '(["\'])/i', '$1#' . $new_id . '$2', $svg_html);
+                }
+            }
+
+            return preg_replace_callback('/<svg\b([^>]*)>/i', function($match) {
+                $attrs = $match[1];
+                $attrs = preg_replace('/\swidth\s*=\s*"[^"]*"/i', '', $attrs);
+                $attrs = preg_replace('/\sheight\s*=\s*"[^"]*"/i', '', $attrs);
+                $attrs = preg_replace_callback('/\sstyle\s*=\s*"([^"]*)"/i', function($style_match) {
+                    $style = preg_replace('/(?:^|;|\s)(width|height)\s*:\s*[^;]+;?/i', ';', $style_match[1]);
+                    $style = preg_replace('/;{2,}/', ';', trim($style));
+                    $style = trim($style, '; ');
+                    return $style === '' ? '' : ' style="' . esc_attr($style) . '"';
+                }, $attrs);
+                return '<svg' . $attrs . ' width="100%" height="100%">';
+            }, $svg_html, 1);
         }
 
         private function is_editor_mode() {
