@@ -113,6 +113,7 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
 
                 echo '<div class="iu-acf-simple-repeater" data-name="' . esc_attr($field['name']) . '" data-enabled="' . esc_attr(wp_json_encode($enabled)) . '" data-max-items="' . esc_attr($max_items) . '">';
                 echo '<div class="iu-acf-simple-repeater__rows">';
+                echo '<input type="hidden" name="' . esc_attr($field['name']) . '[__empty]" value="" />';
 
                 foreach ($value as $index => $row) {
                     $this->render_row($field['name'], $index, $row, $enabled, $labels);

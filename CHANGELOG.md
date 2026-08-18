@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.20.1 - 2026-08-18
+
+- Fix: ACF Simple Repeater fields can now be saved with no items, clearing all previously stored rows.
+
 ## 2.20.0 - 2026-08-18
 
 - Tweak: Simple Repeater widget - split Title and Description styling into separate Elementor style sections for clearer typography and color controls.
