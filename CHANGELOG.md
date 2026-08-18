@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.20.2 - 2026-08-18
+
+- Version bump to 2.20.2.
+- New: ACF Post Gallery field with ordered image selection, preview, removal, and drag-and-drop sorting, plus an Elementor Dynamic Tag with an automatic field selector and fallback to the default WPML language when needed.
+
 ## 2.20.1 - 2026-08-18
 
 - Fix: ACF Simple Repeater fields can now be saved with no items, clearing all previously stored rows.

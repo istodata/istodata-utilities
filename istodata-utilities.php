@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.20.1
+Version: 2.20.2
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.20.1');
+define('IU_PLUGIN_VERSION', '2.20.2');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -46,6 +46,7 @@ if (!function_exists('iu_elem_add_bool_keys')) {
             'elementor_taxonomy_links_widget',
             'elementor_query_posts_widget',
             'acf_simple_repeater',
+            'acf_post_gallery',
             'elementor_simple_repeater_widget',
             'elementor_image_gallery',
         );
@@ -164,6 +165,10 @@ function iu_maybe_load_elementor_integration() {
         if (file_exists($gallery_tag)) {
             require_once $gallery_tag;
         }
+        $acf_gallery_tag = IU_PLUGIN_PATH . 'includes/elementor-acf-gallery-dynamic-tag.php';
+        if (file_exists($acf_gallery_tag)) {
+            require_once $acf_gallery_tag;
+        }
 
         // Optional per-element mobile animation toggle (requires WP Rocket)
         if (defined('WP_ROCKET_VERSION')) {
@@ -180,20 +185,26 @@ function iu_maybe_load_elementor_integration() {
 add_action('plugins_loaded', 'iu_maybe_load_elementor_integration', 20);
 add_action('elementor/loaded', 'iu_maybe_load_elementor_integration');
 
-function iu_maybe_load_acf_simple_repeater() {
+function iu_maybe_load_acf_fields() {
     $settings = get_option('istodata_utilities_settings', array());
     $additional = isset($settings['additional']) ? $settings['additional'] : array();
-    if (empty($additional['acf_simple_repeater'])) {
-        return;
+
+    if (!empty($additional['acf_simple_repeater'])) {
+        $field = IU_PLUGIN_PATH . 'includes/acf-simple-repeater-field.php';
+        if (file_exists($field)) {
+            require_once $field;
+        }
     }
 
-    $field = IU_PLUGIN_PATH . 'includes/acf-simple-repeater-field.php';
-    if (file_exists($field)) {
-        require_once $field;
+    if (!empty($additional['acf_post_gallery'])) {
+        $field = IU_PLUGIN_PATH . 'includes/acf-post-gallery-field.php';
+        if (file_exists($field)) {
+            require_once $field;
+        }
     }
 }
-add_action('plugins_loaded', 'iu_maybe_load_acf_simple_repeater', 25);
-add_action('acf/init', 'iu_maybe_load_acf_simple_repeater', 5);
+add_action('plugins_loaded', 'iu_maybe_load_acf_fields', 25);
+add_action('acf/init', 'iu_maybe_load_acf_fields', 5);
 
 // Simple multilingual system - no translation files needed
 
@@ -357,6 +368,7 @@ function iu_activate() {
             'elementor_taxonomy_links_widget' => false,
             'elementor_query_posts_widget' => false,
             'acf_simple_repeater' => false,
+            'acf_post_gallery' => false,
             'elementor_simple_repeater_widget' => false,
             'elementor_image_gallery' => false,
             'elementor_image_gallery_post_types' => array(),
@@ -586,6 +598,7 @@ function iu_settings_page() {
 
             if (!iu_is_acf_available()) {
                 $existing_settings['additional']['acf_simple_repeater'] = false;
+                $existing_settings['additional']['acf_post_gallery'] = false;
                 $existing_settings['additional']['elementor_simple_repeater_widget'] = false;
             }
 
@@ -1512,6 +1525,20 @@ function iu_settings_page() {
                         </tr>
                         <tr>
                             <td>
+                                <?php $acf_active = iu_is_acf_available(); ?>
+                                <label>
+                                    <input type="checkbox" name="istodata_utilities_settings[additional][acf_post_gallery]" value="1"
+                                           <?php disabled(!$acf_active); ?>
+                                           <?php checked(!empty($settings['additional']['acf_post_gallery']) && $acf_active); ?> />
+                                    ACF Post Gallery Field <span style="color: #666; font-size: 12px;">(for Elementor Dynamic Tag)</span>
+                                    <?php if (!$acf_active): ?>
+                                        <span style="color: #d63638;">(Απαιτείται ACF)</span>
+                                    <?php endif; ?>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 <label>
                                     <input type="checkbox" name="istodata_utilities_settings[additional][elementor_query_posts_widget]" value="1"
                                            <?php checked(!empty($settings['additional']['elementor_query_posts_widget'])); ?> />
@@ -1522,7 +1549,6 @@ function iu_settings_page() {
                         <tr>
                             <td>
                                 <label>
-                                    <?php $acf_active = iu_is_acf_available(); ?>
                                     <input type="checkbox" name="istodata_utilities_settings[additional][acf_simple_repeater]" value="1"
                                            <?php disabled(!$acf_active); ?>
                                            <?php checked(!empty($settings['additional']['acf_simple_repeater']) && $acf_active); ?> />
