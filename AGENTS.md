@@ -34,6 +34,14 @@ Instructions for Codex agents working on the ISTODATA Kit plugin.
 - Keep both values identical.
 - Release tags use the `vX.Y.Z` format, for example `v2.19.3`.
 
+## Backward Compatibility
+
+- For any feature, widget, shortcode, setting, field type, CSS class, control ID, or stored data structure that has already shipped in a release, preserve backward compatibility unless the user explicitly approves a breaking change.
+- Do not rename or remove saved setting keys, Elementor control IDs, ACF field keys, CSS classes, or output structure without a migration, fallback, or alias.
+- When replacing a published control with a new one, keep the old saved value working as a fallback.
+- For unreleased features or widgets still being developed before their first release, compatibility is not required unless the user says otherwise.
+- Before release, review unreleased changes and decide which behavior becomes the compatibility contract going forward.
+
 ## Local Test Zip
 
 When creating a manual test zip for upload through WordPress Admin -> Plugins -> Add Plugin:

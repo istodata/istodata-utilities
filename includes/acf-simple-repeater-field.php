@@ -15,6 +15,11 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
                 $this->defaults = array(
                     'enabled_fields' => array('title', 'text', 'image', 'link'),
                     'button_label' => __('Add Item', 'istodata-utilities'),
+                    'title_label' => __('Title', 'istodata-utilities'),
+                    'text_label' => __('Description', 'istodata-utilities'),
+                    'image_label' => __('Image', 'istodata-utilities'),
+                    'link_label' => __('Link', 'istodata-utilities'),
+                    'max_items' => 0,
                 );
 
                 parent::__construct();
@@ -42,6 +47,44 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
                     'name' => 'button_label',
                     'default_value' => $this->defaults['button_label'],
                 ));
+
+                acf_render_field_setting($field, array(
+                    'label' => __('Max Items', 'istodata-utilities'),
+                    'instructions' => __('Leave empty or set to 0 for unlimited items.', 'istodata-utilities'),
+                    'type' => 'number',
+                    'name' => 'max_items',
+                    'min' => 0,
+                    'step' => 1,
+                    'default_value' => $this->defaults['max_items'],
+                ));
+
+                acf_render_field_setting($field, array(
+                    'label' => __('Title Label', 'istodata-utilities'),
+                    'type' => 'text',
+                    'name' => 'title_label',
+                    'default_value' => $this->defaults['title_label'],
+                ));
+
+                acf_render_field_setting($field, array(
+                    'label' => __('Description Label', 'istodata-utilities'),
+                    'type' => 'text',
+                    'name' => 'text_label',
+                    'default_value' => $this->defaults['text_label'],
+                ));
+
+                acf_render_field_setting($field, array(
+                    'label' => __('Image Label', 'istodata-utilities'),
+                    'type' => 'text',
+                    'name' => 'image_label',
+                    'default_value' => $this->defaults['image_label'],
+                ));
+
+                acf_render_field_setting($field, array(
+                    'label' => __('Link Label', 'istodata-utilities'),
+                    'type' => 'text',
+                    'name' => 'link_label',
+                    'default_value' => $this->defaults['link_label'],
+                ));
             }
 
             public function input_admin_enqueue_scripts() {
@@ -64,19 +107,24 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
             public function render_field($field) {
                 $enabled = $this->get_enabled_fields($field);
                 $value = $this->normalize_value(isset($field['value']) ? $field['value'] : array(), $enabled);
+                $labels = $this->get_field_labels($field);
+                $max_items = $this->get_max_items($field);
                 $button_label = !empty($field['button_label']) ? $field['button_label'] : $this->defaults['button_label'];
 
-                echo '<div class="iu-acf-simple-repeater" data-name="' . esc_attr($field['name']) . '" data-enabled="' . esc_attr(wp_json_encode($enabled)) . '">';
+                echo '<div class="iu-acf-simple-repeater" data-name="' . esc_attr($field['name']) . '" data-enabled="' . esc_attr(wp_json_encode($enabled)) . '" data-max-items="' . esc_attr($max_items) . '">';
                 echo '<div class="iu-acf-simple-repeater__rows">';
 
                 foreach ($value as $index => $row) {
-                    $this->render_row($field['name'], $index, $row, $enabled);
+                    $this->render_row($field['name'], $index, $row, $enabled, $labels);
                 }
 
                 echo '</div>';
                 echo '<button type="button" class="button iu-acf-simple-repeater__add">' . esc_html($button_label) . '</button>';
+                if ($max_items > 0) {
+                    echo '<p class="description iu-acf-simple-repeater__limit" data-limit-text="' . esc_attr(sprintf(__('Μέγιστο όριο: %d στοιχεία.', 'istodata-utilities'), $max_items)) . '">' . esc_html(sprintf(__('Μέγιστο όριο: %d στοιχεία.', 'istodata-utilities'), $max_items)) . '</p>';
+                }
                 echo '<script type="text/html" class="iu-acf-simple-repeater__template">';
-                $this->render_row($field['name'], '__i__', array(), $enabled);
+                $this->render_row($field['name'], '__i__', array(), $enabled, $labels);
                 echo '</script>';
                 echo '</div>';
             }
@@ -84,6 +132,10 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
             public function update_value($value, $post_id, $field) {
                 $enabled = $this->get_enabled_fields($field);
                 $value = $this->normalize_value($value, $enabled);
+                $max_items = $this->get_max_items($field);
+                if ($max_items > 0) {
+                    $value = array_slice($value, 0, $max_items);
+                }
 
                 foreach ($value as $i => $row) {
                     if (in_array('title', $enabled, true)) {
@@ -117,6 +169,19 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
                 $enabled = array_values(array_intersect($allowed, $enabled));
 
                 return !empty($enabled) ? $enabled : $this->defaults['enabled_fields'];
+            }
+
+            private function get_max_items($field) {
+                return isset($field['max_items']) ? max(0, absint($field['max_items'])) : 0;
+            }
+
+            private function get_field_labels($field) {
+                return array(
+                    'title' => !empty($field['title_label']) ? (string) $field['title_label'] : $this->defaults['title_label'],
+                    'text' => !empty($field['text_label']) ? (string) $field['text_label'] : $this->defaults['text_label'],
+                    'image' => !empty($field['image_label']) ? (string) $field['image_label'] : $this->defaults['image_label'],
+                    'link' => !empty($field['link_label']) ? (string) $field['link_label'] : $this->defaults['link_label'],
+                );
             }
 
             private function normalize_value($value, $enabled) {
@@ -157,7 +222,7 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
                 return $rows;
             }
 
-            private function render_row($name, $index, $row, $enabled) {
+            private function render_row($name, $index, $row, $enabled, $labels) {
                 $title = isset($row['title']) ? $row['title'] : '';
                 $text = isset($row['text']) ? $row['text'] : '';
                 $image = isset($row['image']) ? absint($row['image']) : 0;
@@ -168,27 +233,27 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
                 echo '<div class="iu-acf-simple-repeater__bar">';
                 echo '<span class="iu-acf-simple-repeater__handle dashicons dashicons-menu" aria-hidden="true"></span>';
                 echo '<strong class="iu-acf-simple-repeater__summary">' . esc_html($title ? $title : __('Item', 'istodata-utilities')) . '</strong>';
-                echo '<button type="button" class="button-link-delete iu-acf-simple-repeater__remove">' . esc_html__('Remove', 'istodata-utilities') . '</button>';
+                echo '<button type="button" class="button-link-delete iu-acf-simple-repeater__remove">' . esc_html__('Αφαίρεση', 'istodata-utilities') . '</button>';
                 echo '</div>';
                 echo '<div class="iu-acf-simple-repeater__body">';
 
                 if (in_array('title', $enabled, true)) {
                     echo '<label class="iu-acf-simple-repeater__field">';
-                    echo '<span>' . esc_html__('Title', 'istodata-utilities') . '</span>';
+                    echo '<span>' . esc_html($labels['title']) . '</span>';
                     echo '<input type="text" class="iu-acf-simple-repeater__title" name="' . esc_attr($name) . '[' . esc_attr($index) . '][title]" value="' . esc_attr($title) . '" />';
                     echo '</label>';
                 }
 
                 if (in_array('text', $enabled, true)) {
                     echo '<label class="iu-acf-simple-repeater__field">';
-                    echo '<span>' . esc_html__('Description', 'istodata-utilities') . '</span>';
+                    echo '<span>' . esc_html($labels['text']) . '</span>';
                     echo '<textarea rows="4" name="' . esc_attr($name) . '[' . esc_attr($index) . '][text]">' . esc_textarea($text) . '</textarea>';
                     echo '</label>';
                 }
 
                 if (in_array('image', $enabled, true)) {
                     echo '<div class="iu-acf-simple-repeater__field iu-acf-simple-repeater__media">';
-                    echo '<span>' . esc_html__('Image', 'istodata-utilities') . '</span>';
+                    echo '<span>' . esc_html($labels['image']) . '</span>';
                     echo '<input type="hidden" class="iu-acf-simple-repeater__image-id" name="' . esc_attr($name) . '[' . esc_attr($index) . '][image]" value="' . esc_attr($image) . '" />';
                     echo '<div class="iu-acf-simple-repeater__preview"' . ($thumb ? '' : ' hidden') . '>';
                     echo $thumb ? '<img src="' . esc_url($thumb) . '" alt="" />' : '<img src="" alt="" />';
@@ -200,7 +265,7 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
 
                 if (in_array('link', $enabled, true)) {
                     echo '<label class="iu-acf-simple-repeater__field">';
-                    echo '<span>' . esc_html__('Link', 'istodata-utilities') . '</span>';
+                    echo '<span>' . esc_html($labels['link']) . '</span>';
                     echo '<input type="url" name="' . esc_attr($name) . '[' . esc_attr($index) . '][link]" value="' . esc_attr($link) . '" />';
                     echo '</label>';
                 }

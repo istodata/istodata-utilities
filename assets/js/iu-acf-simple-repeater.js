@@ -19,6 +19,15 @@
         $row.find('.iu-acf-simple-repeater__summary').text(title || 'Item');
     }
 
+    function updateLimitState($field){
+        var maxItems = parseInt($field.data('max-items'), 10) || 0;
+        var count = $field.find('.iu-acf-simple-repeater__row').length;
+        var reached = maxItems > 0 && count >= maxItems;
+
+        $field.find('.iu-acf-simple-repeater__add').prop('disabled', reached);
+        $field.find('.iu-acf-simple-repeater__limit').toggle(maxItems > 0);
+    }
+
     function initSortable($field){
         var $rows = $field.find('.iu-acf-simple-repeater__rows');
         if (!$rows.length || $rows.data('iu-sortable-ready')) {
@@ -37,7 +46,9 @@
 
     function init(context){
         $(context || document).find('.iu-acf-simple-repeater').each(function(){
-            initSortable($(this));
+            var $field = $(this);
+            initSortable($field);
+            updateLimitState($field);
         });
     }
 
@@ -49,12 +60,19 @@
             return;
         }
 
+        var maxItems = parseInt($field.data('max-items'), 10) || 0;
+        if (maxItems > 0 && $field.find('.iu-acf-simple-repeater__row').length >= maxItems) {
+            updateLimitState($field);
+            return;
+        }
+
         var index = $field.find('.iu-acf-simple-repeater__row').length;
         var html = template.replace(/__i__/g, index);
         var $row = $(html);
         $field.find('.iu-acf-simple-repeater__rows').append($row);
         updateSummary($row);
         initSortable($field);
+        updateLimitState($field);
     });
 
     $(document).on('click', '.iu-acf-simple-repeater__remove', function(e){
@@ -62,6 +80,7 @@
         var $field = $(this).closest('.iu-acf-simple-repeater');
         $(this).closest('.iu-acf-simple-repeater__row').remove();
         reindex($field);
+        updateLimitState($field);
     });
 
     $(document).on('input', '.iu-acf-simple-repeater__title', function(){

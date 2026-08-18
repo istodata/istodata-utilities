@@ -40,6 +40,9 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
         }
 
         protected function register_controls() {
+            $grid_layouts = array('grid', 'cards', 'list');
+            $image_layouts = array('grid', 'cards', 'list', 'logos');
+
             $this->start_controls_section('section_content', array(
                 'label' => __('Content', 'istodata-utilities'),
                 'tab' => Controls_Manager::TAB_CONTENT,
@@ -82,7 +85,7 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                     '{{WRAPPER}} .iu-simple-repeater--grid' => '--iu-simple-repeater-columns: {{VALUE}};',
                 ),
                 'condition' => array(
-                    'layout' => array('grid', 'logos'),
+                    'layout' => $image_layouts,
                 ),
             ));
 
@@ -92,7 +95,7 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                 'options' => $this->get_image_size_options(),
                 'default' => 'medium',
                 'condition' => array(
-                    'layout' => array('grid', 'logos'),
+                    'layout' => $image_layouts,
                 ),
             ));
 
@@ -123,7 +126,7 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                     '{{WRAPPER}} .iu-simple-repeater__item' => 'flex-direction: {{VALUE}};',
                 ),
                 'condition' => array(
-                    'layout' => 'grid',
+                    'layout' => $grid_layouts,
                 ),
             ));
 
@@ -141,7 +144,7 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                 ),
                 'default' => 'h3',
                 'condition' => array(
-                    'layout' => 'grid',
+                    'layout' => $grid_layouts,
                 ),
             ));
 
@@ -154,7 +157,7 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                 ),
                 'default' => 'text',
                 'condition' => array(
-                    'layout' => 'grid',
+                    'layout' => $grid_layouts,
                 ),
             ));
 
@@ -164,7 +167,7 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                 'default' => __('More', 'istodata-utilities'),
                 'dynamic' => array('active' => true),
                 'condition' => array(
-                    'layout' => 'grid',
+                    'layout' => $grid_layouts,
                     'link_type' => 'text',
                 ),
             ));
@@ -176,6 +179,9 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                 'label_off' => __('No', 'istodata-utilities'),
                 'return_value' => 'yes',
                 'default' => '',
+                'condition' => array(
+                    'layout' => array('grid', 'cards', 'list', 'logos', 'buttons'),
+                ),
             ));
 
             $this->end_controls_section();
@@ -185,8 +191,8 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                 'tab' => Controls_Manager::TAB_STYLE,
             ));
 
-            $this->add_responsive_control('gap', array(
-                'label' => __('Gap', 'istodata-utilities'),
+            $this->add_responsive_control('row_gap', array(
+                'label' => __('Row Gap', 'istodata-utilities'),
                 'type' => Controls_Manager::SLIDER,
                 'size_units' => array('px', 'em', 'rem'),
                 'range' => array(
@@ -194,9 +200,22 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                     'em' => array('min' => 0, 'max' => 5, 'step' => 0.1),
                     'rem' => array('min' => 0, 'max' => 5, 'step' => 0.1),
                 ),
-                'default' => array('size' => 24, 'unit' => 'px'),
                 'selectors' => array(
-                    '{{WRAPPER}} .iu-simple-repeater' => 'gap: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .iu-simple-repeater' => '--iu-simple-repeater-row-gap: {{SIZE}}{{UNIT}}; row-gap: {{SIZE}}{{UNIT}};',
+                ),
+            ));
+
+            $this->add_responsive_control('column_gap', array(
+                'label' => __('Column Gap', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => array('px', 'em', 'rem'),
+                'range' => array(
+                    'px' => array('min' => 0, 'max' => 80),
+                    'em' => array('min' => 0, 'max' => 5, 'step' => 0.1),
+                    'rem' => array('min' => 0, 'max' => 5, 'step' => 0.1),
+                ),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-simple-repeater' => '--iu-simple-repeater-column-gap: {{SIZE}}{{UNIT}}; column-gap: {{SIZE}}{{UNIT}};',
                 ),
             ));
 
@@ -226,7 +245,7 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                     '{{WRAPPER}} .iu-simple-repeater__item' => '--iu-simple-repeater-vertical-align: {{VALUE}};',
                 ),
                 'condition' => array(
-                    'layout' => 'grid',
+                    'layout' => $grid_layouts,
                 ),
             ));
 
@@ -244,7 +263,8 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                     '{{WRAPPER}} .iu-simple-repeater__item' => 'gap: {{SIZE}}{{UNIT}};',
                 ),
                 'condition' => array(
-                    'layout' => 'grid',
+                    'layout' => $grid_layouts,
+                    'image_position!' => '',
                 ),
             ));
 
@@ -263,7 +283,7 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                     '{{WRAPPER}} .iu-simple-repeater__accordion-item .iu-simple-repeater__content' => 'margin-top: {{SIZE}}{{UNIT}};',
                 ),
                 'condition' => array(
-                    'layout' => array('grid', 'accordion'),
+                    'layout' => array('grid', 'cards', 'list', 'accordion'),
                 ),
             ));
 
@@ -288,11 +308,93 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
 
             $this->end_controls_section();
 
+            $this->start_controls_section('section_divider_style', array(
+                'label' => __('Divider', 'istodata-utilities'),
+                'tab' => Controls_Manager::TAB_STYLE,
+            ));
+
+            $this->add_control('show_divider', array(
+                'label' => __('Show Divider', 'istodata-utilities'),
+                'type' => Controls_Manager::SWITCHER,
+                'label_on' => __('Yes', 'istodata-utilities'),
+                'label_off' => __('No', 'istodata-utilities'),
+                'return_value' => 'yes',
+                'default' => '',
+            ));
+
+            $this->add_responsive_control('divider_orientation', array(
+                'label' => __('Orientation', 'istodata-utilities'),
+                'type' => Controls_Manager::SELECT,
+                'options' => array(
+                    'horizontal' => __('Horizontal', 'istodata-utilities'),
+                    'vertical' => __('Vertical', 'istodata-utilities'),
+                ),
+                'default' => 'horizontal',
+                'selectors_dictionary' => array(
+                    'horizontal' => '--iu-simple-repeater-divider-border-top-width: var(--iu-simple-repeater-divider-thickness); --iu-simple-repeater-divider-border-left-width: 0; --iu-simple-repeater-divider-top: calc(var(--iu-simple-repeater-row-gap) / -2); --iu-simple-repeater-divider-bottom: auto; --iu-simple-repeater-divider-left: 50%; --iu-simple-repeater-divider-right: auto; --iu-simple-repeater-divider-width: var(--iu-simple-repeater-divider-length); --iu-simple-repeater-divider-height: 0; --iu-simple-repeater-divider-transform: translateX(-50%)',
+                    'vertical' => '--iu-simple-repeater-divider-border-top-width: 0; --iu-simple-repeater-divider-border-left-width: var(--iu-simple-repeater-divider-thickness); --iu-simple-repeater-divider-top: 50%; --iu-simple-repeater-divider-bottom: auto; --iu-simple-repeater-divider-left: calc(var(--iu-simple-repeater-column-gap) / -2); --iu-simple-repeater-divider-right: auto; --iu-simple-repeater-divider-width: 0; --iu-simple-repeater-divider-height: var(--iu-simple-repeater-divider-length); --iu-simple-repeater-divider-transform: translateY(-50%)',
+                ),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-simple-repeater' => '{{VALUE}};',
+                ),
+                'condition' => array(
+                    'show_divider' => 'yes',
+                ),
+            ));
+
+            $this->add_control('divider_color', array(
+                'label' => __('Color', 'istodata-utilities'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-simple-repeater--has-divider > * + *::before' => 'border-color: {{VALUE}};',
+                ),
+                'condition' => array(
+                    'show_divider' => 'yes',
+                ),
+            ));
+
+            $this->add_responsive_control('divider_thickness', array(
+                'label' => __('Thickness', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => array('px'),
+                'range' => array(
+                    'px' => array('min' => 1, 'max' => 20),
+                ),
+                'default' => array('size' => 1, 'unit' => 'px'),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-simple-repeater' => '--iu-simple-repeater-divider-thickness: {{SIZE}}{{UNIT}};',
+                ),
+                'condition' => array(
+                    'show_divider' => 'yes',
+                ),
+            ));
+
+            $this->add_responsive_control('divider_length', array(
+                'label' => __('Length', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => array('%', 'px', 'em', 'rem'),
+                'range' => array(
+                    '%' => array('min' => 1, 'max' => 100),
+                    'px' => array('min' => 1, 'max' => 1200),
+                    'em' => array('min' => 1, 'max' => 80, 'step' => 0.1),
+                    'rem' => array('min' => 1, 'max' => 80, 'step' => 0.1),
+                ),
+                'default' => array('size' => 100, 'unit' => '%'),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-simple-repeater' => '--iu-simple-repeater-divider-length: {{SIZE}}{{UNIT}};',
+                ),
+                'condition' => array(
+                    'show_divider' => 'yes',
+                ),
+            ));
+
+            $this->end_controls_section();
+
             $this->start_controls_section('section_image_style', array(
                 'label' => __('Image', 'istodata-utilities'),
                 'tab' => Controls_Manager::TAB_STYLE,
                 'condition' => array(
-                    'layout' => array('grid', 'logos'),
+                    'layout' => $image_layouts,
                 ),
             ));
 
@@ -394,21 +496,34 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
 
             $this->end_controls_section();
 
-            $this->start_controls_section('section_text_style', array(
-                'label' => __('Description', 'istodata-utilities'),
+            $this->start_controls_section('section_title_style', array(
+                'label' => __('Title', 'istodata-utilities'),
                 'tab' => Controls_Manager::TAB_STYLE,
+                'condition' => array(
+                    'layout' => array('grid', 'cards', 'list', 'accordion', 'buttons'),
+                ),
             ));
 
             $this->add_group_control(Group_Control_Typography::get_type(), array(
                 'name' => 'title_typography',
-                'selector' => '{{WRAPPER}} .iu-simple-repeater__title, {{WRAPPER}} .iu-simple-repeater__button',
+                'selector' => '{{WRAPPER}} .iu-simple-repeater__title, {{WRAPPER}} .iu-simple-repeater__accordion-title, {{WRAPPER}} .iu-simple-repeater__button',
             ));
 
             $this->add_control('title_color', array(
                 'label' => __('Title Color', 'istodata-utilities'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => array(
-                    '{{WRAPPER}} .iu-simple-repeater__title, {{WRAPPER}} .iu-simple-repeater__button' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .iu-simple-repeater__title, {{WRAPPER}} .iu-simple-repeater__accordion-title, {{WRAPPER}} .iu-simple-repeater__button' => 'color: {{VALUE}};',
+                ),
+            ));
+
+            $this->end_controls_section();
+
+            $this->start_controls_section('section_description_style', array(
+                'label' => __('Description', 'istodata-utilities'),
+                'tab' => Controls_Manager::TAB_STYLE,
+                'condition' => array(
+                    'layout' => array('grid', 'cards', 'list', 'accordion'),
                 ),
             ));
 
@@ -437,8 +552,8 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                             'terms' => array(
                                 array(
                                     'name' => 'layout',
-                                    'operator' => '===',
-                                    'value' => 'grid',
+                                    'operator' => 'in',
+                                    'value' => $grid_layouts,
                                 ),
                                 array(
                                     'name' => 'link_type',
@@ -496,9 +611,31 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
             }
 
             $layout = isset($settings['layout']) ? $settings['layout'] : 'grid';
+            if (in_array($layout, array('cards', 'list'), true)) {
+                $layout = 'grid';
+            }
+
             $classes = array('iu-simple-repeater', 'iu-simple-repeater--' . sanitize_html_class($layout));
             if (in_array($layout, array('grid', 'logos'), true)) {
                 $classes[] = 'iu-simple-repeater--grid';
+                $classes[] = 'iu-simple-repeater--columns-' . $this->get_columns_class_value(isset($settings['columns']) ? $settings['columns'] : '3');
+                $classes[] = 'iu-simple-repeater--columns-tablet-' . $this->get_columns_class_value(isset($settings['columns_tablet']) ? $settings['columns_tablet'] : '2');
+                $classes[] = 'iu-simple-repeater--columns-mobile-' . $this->get_columns_class_value(isset($settings['columns_mobile']) ? $settings['columns_mobile'] : '1');
+            }
+            if (!empty($settings['show_divider'])) {
+                $divider_orientation = $this->get_divider_orientation_class_value(isset($settings['divider_orientation']) ? $settings['divider_orientation'] : 'horizontal');
+                $divider_orientation_tablet = $this->get_divider_orientation_class_value(isset($settings['divider_orientation_tablet']) ? $settings['divider_orientation_tablet'] : $divider_orientation);
+                $divider_orientation_mobile = $this->get_divider_orientation_class_value(isset($settings['divider_orientation_mobile']) ? $settings['divider_orientation_mobile'] : $divider_orientation_tablet);
+                $classes[] = 'iu-simple-repeater--has-divider';
+                $classes[] = 'iu-simple-repeater--divider-desktop-' . $divider_orientation;
+                $classes[] = 'iu-simple-repeater--divider-tablet-' . $divider_orientation_tablet;
+                $classes[] = 'iu-simple-repeater--divider-mobile-' . $divider_orientation_mobile;
+            }
+
+            $raw_settings = $this->get_data('settings');
+            $legacy_gap_css = $this->get_legacy_gap_css($settings, is_array($raw_settings) ? $raw_settings : array());
+            if ($legacy_gap_css !== '') {
+                echo '<style>' . $legacy_gap_css . '</style>';
             }
 
             echo '<div class="' . esc_attr(implode(' ', $classes)) . '">';
@@ -663,6 +800,72 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
             }
 
             return ' target="_blank" rel="noopener noreferrer"';
+        }
+
+        private function get_legacy_gap_css($settings, $raw_settings) {
+            $selector = '.elementor-element-' . sanitize_html_class($this->get_id()) . ' .iu-simple-repeater';
+            $breakpoints = array(
+                '' => '',
+                '_tablet' => '@media (max-width: 1024px)',
+                '_mobile' => '@media (max-width: 767px)',
+            );
+            $css = '';
+
+            foreach ($breakpoints as $suffix => $media) {
+                $legacy_key = 'gap' . $suffix;
+                $legacy_setting = array_key_exists($legacy_key, $raw_settings) ? $raw_settings[$legacy_key] : (isset($settings[$legacy_key]) ? $settings[$legacy_key] : null);
+                $legacy_gap = $this->get_dimension_css_value($legacy_setting);
+                if ($legacy_gap === '') {
+                    continue;
+                }
+
+                $row_gap = $this->get_dimension_css_value(isset($settings['row_gap' . $suffix]) ? $settings['row_gap' . $suffix] : null);
+                $column_gap = $this->get_dimension_css_value(isset($settings['column_gap' . $suffix]) ? $settings['column_gap' . $suffix] : null);
+                if ($row_gap !== '' && $column_gap !== '') {
+                    continue;
+                }
+
+                $rules = array();
+                if ($row_gap === '') {
+                    $rules[] = '--iu-simple-repeater-row-gap:' . $legacy_gap;
+                    $rules[] = 'row-gap:' . $legacy_gap;
+                }
+                if ($column_gap === '') {
+                    $rules[] = '--iu-simple-repeater-column-gap:' . $legacy_gap;
+                    $rules[] = 'column-gap:' . $legacy_gap;
+                }
+
+                $rule = $selector . '{' . implode(';', $rules) . ';}';
+                $css .= $media ? $media . '{' . $rule . '}' : $rule;
+            }
+
+            return $css;
+        }
+
+        private function get_dimension_css_value($setting) {
+            if (!is_array($setting) || !isset($setting['size']) || $setting['size'] === '') {
+                return '';
+            }
+
+            $unit = isset($setting['unit']) ? $setting['unit'] : 'px';
+            if (!in_array($unit, array('px', 'em', 'rem', '%', 'vh', 'vw'), true)) {
+                $unit = 'px';
+            }
+
+            return (float) $setting['size'] . $unit;
+        }
+
+        private function get_columns_class_value($columns) {
+            $columns = absint($columns);
+            if ($columns < 1 || $columns > 6) {
+                return 1;
+            }
+
+            return $columns;
+        }
+
+        private function get_divider_orientation_class_value($orientation) {
+            return $orientation === 'vertical' ? 'vertical' : 'horizontal';
         }
 
         private function render_editor_notice($message) {

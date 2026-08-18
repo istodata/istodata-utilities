@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.20.0 - 2026-08-18
+
+- Tweak: Simple Repeater widget - split Title and Description styling into separate Elementor style sections for clearer typography and color controls.
+- Tweak: Simple Repeater widget - hide image and link controls in layouts where those controls do not apply.
+- New: Simple Repeater widget - added optional responsive horizontal or vertical dividers between items with thickness and length controls.
+- Fix: Simple Repeater widget - hide vertical grid dividers before the first item of each row.
+- Fix: Simple Repeater widget - apply responsive divider orientation correctly at each breakpoint.
+- Fix: Simple Repeater widget - isolate divider rules to their matching responsive breakpoint and inherit orientation correctly when a breakpoint value is unset.
+- New: ACF Simple Repeater field - added configurable admin labels for Title, Description, Image, and Link item fields.
+- New: ACF Simple Repeater field - added an optional maximum item limit enforced in the editor UI and on save.
+- Tweak: ACF Simple Repeater field - translated the maximum item limit note and row removal button in the admin UI.
+- Improve: Simple Repeater widget - split the general item spacing into separate responsive row and column gap controls.
+- Fix: Simple Repeater widget - preserved saved legacy Gap values after adding separate row and column gap controls.
+
 ## 2.19.8 - 2026-08-12
 
 - New: Taxonomy Links widget - links/buttons mode now supports optional default and active icons with responsive size and text spacing controls.
