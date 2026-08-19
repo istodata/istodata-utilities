@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.20.3 - 2026-08-19
+
+- New: Simple Repeater widget - added an opt-in Current Taxonomy Term data source for taxonomy archive templates.
+- Fix: Simple Repeater widget - load term repeater values directly from taxonomy meta when the ACF formatter returns no rows.
+- Fix: Simple Repeater widget - retain the current taxonomy context on the frontend when Elementor temporarily switches its render query.
+- Improve: Simple Repeater widget - added an editor-only Preview Term control for taxonomy data sources.
+
 ## 2.20.2 - 2026-08-18
 
 - Version bump to 2.20.2.

@@ -55,6 +55,27 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                 'description' => __('Use the field name of an ISTODATA Simple Repeater ACF field.', 'istodata-utilities'),
             ));
 
+            $this->add_control('data_source', array(
+                'label' => __('Data Source', 'istodata-utilities'),
+                'type' => Controls_Manager::SELECT,
+                'options' => array(
+                    'post' => __('Current Post', 'istodata-utilities'),
+                    'taxonomy_term' => __('Current Taxonomy Term', 'istodata-utilities'),
+                ),
+                'default' => 'post',
+                'description' => __('Use Current Taxonomy Term in taxonomy archive templates.', 'istodata-utilities'),
+            ));
+
+            $this->add_control('preview_term_id', array(
+                'label' => __('Preview Term', 'istodata-utilities'),
+                'type' => Controls_Manager::SELECT2,
+                'options' => $this->get_taxonomy_term_options(),
+                'description' => __('Used only in the Elementor editor preview. The frontend always uses the current taxonomy term.', 'istodata-utilities'),
+                'condition' => array(
+                    'data_source' => 'taxonomy_term',
+                ),
+            ));
+
             $this->add_control('layout', array(
                 'label' => __('Layout', 'istodata-utilities'),
                 'type' => Controls_Manager::SELECT,
@@ -603,8 +624,29 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                 return;
             }
 
-            $post_id = get_the_ID();
-            $items = function_exists('get_field') ? get_field($field_name, $post_id) : get_post_meta($post_id, $field_name, true);
+            $data_source = isset($settings['data_source']) && $settings['data_source'] === 'taxonomy_term' ? 'taxonomy_term' : 'post';
+            if ($data_source === 'taxonomy_term') {
+                $term = $this->get_current_taxonomy_term();
+                $preview_term_id = isset($settings['preview_term_id']) ? absint($settings['preview_term_id']) : 0;
+                if ($preview_term_id > 0 && $this->is_editor_edit_mode()) {
+                    $preview_term = get_term($preview_term_id);
+                    if ($preview_term instanceof \WP_Term) {
+                        $term = $preview_term;
+                    }
+                }
+                if (!($term instanceof \WP_Term)) {
+                    $this->render_editor_notice(__('Select a Preview Term for this widget.', 'istodata-utilities'));
+                    return;
+                }
+
+                $items = function_exists('get_field') ? get_field($field_name, $term) : null;
+                if (!is_array($items) || empty($items)) {
+                    $items = get_term_meta($term->term_id, $field_name, true);
+                }
+            } else {
+                $post_id = get_the_ID();
+                $items = function_exists('get_field') ? get_field($field_name, $post_id) : get_post_meta($post_id, $field_name, true);
+            }
             if (!is_array($items) || empty($items)) {
                 $this->render_editor_notice(__('No repeater items found.', 'istodata-utilities'));
                 return;
@@ -868,8 +910,70 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
             return $orientation === 'vertical' ? 'vertical' : 'horizontal';
         }
 
+        private function get_current_taxonomy_term() {
+            $term = get_queried_object();
+            if ($term instanceof \WP_Term) {
+                return $term;
+            }
+
+            $queries = array();
+            if (isset($GLOBALS['wp_query']) && $GLOBALS['wp_query'] instanceof \WP_Query) {
+                $queries[] = $GLOBALS['wp_query'];
+            }
+            if (isset($GLOBALS['wp_the_query']) && $GLOBALS['wp_the_query'] instanceof \WP_Query) {
+                $queries[] = $GLOBALS['wp_the_query'];
+            }
+
+            foreach ($queries as $query) {
+                $term = $query->get_queried_object();
+                if ($term instanceof \WP_Term) {
+                    return $term;
+                }
+
+                $term_id = $query->get_queried_object_id();
+                if ($term_id) {
+                    $term = get_term($term_id);
+                    if ($term instanceof \WP_Term) {
+                        return $term;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private function get_taxonomy_term_options() {
+            $taxonomies = get_taxonomies(array('public' => true), 'names');
+            if (empty($taxonomies)) {
+                return array();
+            }
+
+            $terms = get_terms(array(
+                'taxonomy' => array_values($taxonomies),
+                'hide_empty' => false,
+                'orderby' => 'name',
+                'order' => 'ASC',
+            ));
+            if (is_wp_error($terms)) {
+                return array();
+            }
+
+            $options = array();
+            foreach ($terms as $term) {
+                if ($term instanceof \WP_Term) {
+                    $options[$term->term_id] = $term->name . ' (' . $term->taxonomy . ')';
+                }
+            }
+
+            return $options;
+        }
+
+        private function is_editor_edit_mode() {
+            return class_exists('Elementor\\Plugin') && \Elementor\Plugin::$instance->editor && \Elementor\Plugin::$instance->editor->is_edit_mode();
+        }
+
         private function render_editor_notice($message) {
-            if (class_exists('Elementor\\Plugin') && \Elementor\Plugin::$instance->editor && \Elementor\Plugin::$instance->editor->is_edit_mode()) {
+            if ($this->is_editor_edit_mode()) {
                 echo '<div class="iu-simple-repeater__notice">' . esc_html($message) . '</div>';
             }
         }
