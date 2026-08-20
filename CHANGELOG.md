@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.20.5 - 2026-08-20
+
+- Fix: Dashboard -> WooCommerce Status is now removed after WooCommerce registers its widget, with an additional dashboard-page fallback for late loading.
+- Version bump to 2.20.5.
+
 ## 2.20.4 - 2026-08-20
 
 - Fix: Simple Repeater vertical dividers now keep the outer items visually centered with the grid columns.

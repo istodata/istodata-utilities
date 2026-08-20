@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.20.4
+Version: 2.20.5
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.20.4');
+define('IU_PLUGIN_VERSION', '2.20.5');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -3092,7 +3092,8 @@ function iu_brand_terms_custom_order($args, $taxonomies) {
 }
 
 // Basic dashboard cleanup
-add_action('wp_dashboard_setup', 'iu_dashboard_cleanup');
+// Run after plugin dashboard widgets have registered.
+add_action('wp_dashboard_setup', 'iu_dashboard_cleanup', 999);
 function iu_dashboard_cleanup() {
     $settings = get_option('istodata_utilities_settings', array());
     $dashboard = isset($settings['dashboard']) ? $settings['dashboard'] : array();
@@ -3131,6 +3132,7 @@ function iu_dashboard_cleanup() {
     
     if (!empty($dashboard['remove_woocommerce_status'])) {
         remove_meta_box('woocommerce_dashboard_status', 'dashboard', 'normal');
+        remove_meta_box('woocommerce_dashboard_status', 'dashboard', 'side');
     }
     
     // Keep Elementor's dashboard registration intact so each widget can be removed independently.
@@ -3286,6 +3288,17 @@ function iu_dashboard_cleanup() {
     
     // General widget removal hook - catches widgets that load later
     add_action('admin_head-index.php', function() use ($dashboard) {
+        if (!empty($dashboard['remove_woocommerce_status'])) {
+            echo '<style>
+                #woocommerce_dashboard_status, [id*="woocommerce_dashboard_status"] { display: none !important; }
+            </style>';
+            echo '<script>
+                jQuery(function($) {
+                    $("#woocommerce_dashboard_status, [id*=\'woocommerce_dashboard_status\']").remove();
+                });
+            </script>';
+        }
+
         if (!empty($dashboard['remove_premium_addons_news'])) {
             echo '<style>
                 #pa-stories, [id*="pa-stories"], [class*="pa-stories"] { display: none !important; }
