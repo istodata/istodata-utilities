@@ -52,6 +52,11 @@
 }
 
 @media (min-width: 1025px) {
+    .iu-simple-repeater--grid.iu-simple-repeater--has-divider.iu-simple-repeater--divider-desktop-vertical:not(.iu-simple-repeater--columns-1) {
+        box-sizing: border-box;
+        padding-inline: calc(var(--iu-simple-repeater-column-gap) / 2);
+    }
+
     .iu-simple-repeater--grid.iu-simple-repeater--divider-desktop-vertical.iu-simple-repeater--columns-1 > *::before,
 .iu-simple-repeater--grid.iu-simple-repeater--divider-desktop-vertical.iu-simple-repeater--columns-2 > :nth-child(2n+1)::before,
 .iu-simple-repeater--grid.iu-simple-repeater--divider-desktop-vertical.iu-simple-repeater--columns-3 > :nth-child(3n+1)::before,
@@ -68,6 +73,11 @@
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
+    .iu-simple-repeater--grid.iu-simple-repeater--has-divider.iu-simple-repeater--divider-tablet-vertical:not(.iu-simple-repeater--columns-tablet-1) {
+        box-sizing: border-box;
+        padding-inline: calc(var(--iu-simple-repeater-column-gap) / 2);
+    }
+
     .iu-simple-repeater--grid.iu-simple-repeater--divider-tablet-vertical.iu-simple-repeater--columns-tablet-1 > *::before,
     .iu-simple-repeater--grid.iu-simple-repeater--divider-tablet-vertical.iu-simple-repeater--columns-tablet-2 > :nth-child(2n+1)::before,
     .iu-simple-repeater--grid.iu-simple-repeater--divider-tablet-vertical.iu-simple-repeater--columns-tablet-3 > :nth-child(3n+1)::before,
@@ -84,6 +94,11 @@
 }
 
 @media (max-width: 767px) {
+    .iu-simple-repeater--grid.iu-simple-repeater--has-divider.iu-simple-repeater--divider-mobile-vertical:not(.iu-simple-repeater--columns-mobile-1) {
+        box-sizing: border-box;
+        padding-inline: calc(var(--iu-simple-repeater-column-gap) / 2);
+    }
+
     .iu-simple-repeater--grid.iu-simple-repeater--divider-mobile-vertical.iu-simple-repeater--columns-mobile-1 > *::before,
     .iu-simple-repeater--grid.iu-simple-repeater--divider-mobile-vertical.iu-simple-repeater--columns-mobile-2 > :nth-child(2n+1)::before,
     .iu-simple-repeater--grid.iu-simple-repeater--divider-mobile-vertical.iu-simple-repeater--columns-mobile-3 > :nth-child(3n+1)::before,

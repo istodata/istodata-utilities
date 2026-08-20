@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.20.4 - 2026-08-20
+
+- Fix: Simple Repeater vertical dividers now keep the outer items visually centered with the grid columns.
+
 ## 2.20.3 - 2026-08-19
 
 - New: Simple Repeater widget - added an opt-in Current Taxonomy Term data source for taxonomy archive templates.
