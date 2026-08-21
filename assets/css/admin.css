@@ -184,7 +184,13 @@ div.fs-notice.promotion,
 /* ===============================
    ThemeIsle SDK
 ================================= */
-.themeisle-sdk-notice
+.themeisle-sdk-notice,
+
+/* ===============================
+   Elementor Conversion Banner
+================================= */
+#e-conversion-banner,
+.e-conversion-banner--ready
 
 {
   display: none !important;

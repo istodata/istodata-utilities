@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.20.6 - 2026-08-21
+
+- Fix: Preserve WordPress's confirmation before an uploaded plugin replaces an existing plugin, regardless of whether ISTODATA Kit is active.
+- Tweak: Hide the Elementor Conversion Banner in the WordPress admin.
+- Version bump to 2.20.6.
+
 ## 2.20.5 - 2026-08-20
 
 - Fix: Dashboard -> WooCommerce Status is now removed after WooCommerce registers its widget, with an additional dashboard-page fallback for late loading.

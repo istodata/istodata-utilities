@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.20.5
+Version: 2.20.6
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.20.5');
+define('IU_PLUGIN_VERSION', '2.20.6');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -5109,8 +5109,6 @@ add_filter('pre_set_site_transient_update_plugins', 'iu_check_for_plugin_update'
 add_filter('plugins_api', 'iu_plugin_api_call', 10, 3);
 add_action('upgrader_process_complete', 'iu_purge_update_cache', 10, 2);
 
-// Improve update reliability
-add_filter('upgrader_package_options', 'iu_upgrader_package_options');
 add_filter('http_request_args', 'iu_http_request_args', 10, 2);
 
 // Check for plugin updates
@@ -5216,14 +5214,6 @@ function iu_get_remote_version() {
     }
 
     return false;
-}
-
-// Improve package download reliability
-function iu_upgrader_package_options($options) {
-    // Increase timeout for package downloads
-    $options['timeout'] = 300; // 5 minutes
-    $options['clear_destination'] = true;
-    return $options;
 }
 
 // Improve HTTP request reliability for GitHub API
