@@ -213,10 +213,114 @@ a.iu-simple-repeater__item {
 .iu-simple-repeater__accordion-title {
     cursor: pointer;
     font-weight: 600;
+    transition: color 300ms ease;
+}
+
+.iu-simple-repeater__accordion-title--custom-icon {
+    display: block;
+    list-style: none;
+    position: relative;
+}
+
+.iu-simple-repeater__accordion-title--custom-icon::-webkit-details-marker {
+    display: none;
+}
+
+.iu-simple-repeater__accordion-title-text {
+    display: block;
+}
+
+.iu-simple-repeater__accordion-icon {
+    color: inherit;
+    height: 1em;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: color 300ms ease, transform 300ms ease;
+    width: 1em;
+}
+
+.iu-simple-repeater__accordion-title--icon-left .iu-simple-repeater__accordion-icon {
+    left: 0;
+}
+
+.iu-simple-repeater__accordion-title--icon-right .iu-simple-repeater__accordion-icon {
+    right: 0;
+}
+
+.iu-simple-repeater__accordion-icon::before {
+    border-bottom: .12em solid currentColor;
+    border-right: .12em solid currentColor;
+    content: "";
+    height: .45em;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -65%) rotate(45deg);
+    width: .45em;
+}
+
+.iu-simple-repeater__accordion-icon--custom::before {
+    background-color: currentColor;
+    border: 0;
+    height: 100%;
+    left: 0;
+    -webkit-mask-image: var(--iu-simple-repeater-accordion-closed-icon);
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-image: var(--iu-simple-repeater-accordion-closed-icon);
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    top: 0;
+    transform: none;
+    width: 100%;
+}
+
+.iu-simple-repeater__accordion-icon--custom::before,
+.iu-simple-repeater__accordion-icon:not(.iu-simple-repeater__accordion-icon--custom)::before {
+    transition: background-color 300ms ease, border-color 300ms ease;
+}
+
+.iu-simple-repeater__accordion-item[open] .iu-simple-repeater__accordion-icon--custom::before {
+    -webkit-mask-image: var(--iu-simple-repeater-accordion-open-icon);
+    mask-image: var(--iu-simple-repeater-accordion-open-icon);
+}
+
+.iu-simple-repeater__accordion-item[open] .iu-simple-repeater__accordion-title--icon-left .iu-simple-repeater__accordion-icon:not(.iu-simple-repeater__accordion-icon--custom) {
+    transform: translateY(-50%) rotate(179deg);
+}
+
+.iu-simple-repeater__accordion-item[open] .iu-simple-repeater__accordion-title--icon-right .iu-simple-repeater__accordion-icon:not(.iu-simple-repeater__accordion-icon--custom) {
+    transform: translateY(-50%) rotate(-179deg);
+}
+
+.iu-simple-repeater__accordion-item[open] .iu-simple-repeater__accordion-title--icon-left .iu-simple-repeater__accordion-icon--rotate {
+    transform: translateY(-50%) rotate(179deg);
+}
+
+.iu-simple-repeater__accordion-item[open] .iu-simple-repeater__accordion-title--icon-right .iu-simple-repeater__accordion-icon--rotate {
+    transform: translateY(-50%) rotate(-179deg);
 }
 
 .iu-simple-repeater__accordion-title::marker {
     color: currentColor;
+}
+
+.iu-simple-repeater__accordion-panel {
+    height: 0;
+    overflow: hidden;
+    transition: height 300ms ease;
+}
+
+.iu-simple-repeater__accordion-item[open] > .iu-simple-repeater__accordion-panel {
+    height: auto;
+}
+
+.iu-simple-repeater__accordion-panel-inner {
+    min-height: 0;
+    overflow: hidden;
 }
 
 .iu-simple-repeater__accordion-item .iu-simple-repeater__text {

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.20.8 - 2026-08-21
+
+- New: Simple Repeater Accordion controls for custom closed/open SVG icons, icon position and responsive icon size.
+- New: Simple Repeater Accordion behavior controls for one open item at a time and opening the first item initially.
+- Improve: Simple Repeater Accordions now animate opening and closing, with title and icon color transitions.
+- Tweak: Simple Repeater Accordion title hover color is now grouped in the Title style section, with separate title and description padding controls.
+- Version bump to 2.20.8.
+
 ## 2.20.7 - 2026-08-21
 
 - Fix: Stale storage-queue jobs older than one hour are now cleared and end the current request flow instead of restarting recursively.

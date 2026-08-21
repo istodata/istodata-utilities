@@ -39,6 +39,20 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
             return array('iu-simple-repeater');
         }
 
+        public function get_script_depends() {
+            if (!wp_script_is('iu-simple-repeater', 'registered')) {
+                wp_register_script(
+                    'iu-simple-repeater',
+                    IU_PLUGIN_URL . 'assets/js/simple-repeater.js',
+                    array(),
+                    defined('IU_PLUGIN_VERSION') ? IU_PLUGIN_VERSION : null,
+                    true
+                );
+            }
+
+            return array('iu-simple-repeater');
+        }
+
         protected function register_controls() {
             $grid_layouts = array('grid', 'cards', 'list');
             $image_layouts = array('grid', 'cards', 'list', 'logos');
@@ -86,6 +100,31 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                     'buttons' => __('Buttons', 'istodata-utilities'),
                 ),
                 'default' => 'grid',
+            ));
+
+            $this->add_control('accordion_behavior', array(
+                'label' => __('Accordion Behavior', 'istodata-utilities'),
+                'type' => Controls_Manager::SELECT,
+                'options' => array(
+                    'multiple' => __('Multiple Open', 'istodata-utilities'),
+                    'single' => __('One Open at a Time', 'istodata-utilities'),
+                ),
+                'default' => 'multiple',
+                'condition' => array(
+                    'layout' => 'accordion',
+                ),
+            ));
+
+            $this->add_control('accordion_open_first', array(
+                'label' => __('Open First Item Initially', 'istodata-utilities'),
+                'type' => Controls_Manager::SWITCHER,
+                'label_on' => __('Yes', 'istodata-utilities'),
+                'label_off' => __('No', 'istodata-utilities'),
+                'return_value' => 'yes',
+                'default' => '',
+                'condition' => array(
+                    'layout' => 'accordion',
+                ),
             ));
 
             $this->add_responsive_control('columns', array(
@@ -538,6 +577,17 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                 ),
             ));
 
+            $this->add_control('accordion_title_hover_color', array(
+                'label' => __('Hover Color', 'istodata-utilities'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-simple-repeater__accordion-title:hover' => 'color: {{VALUE}};',
+                ),
+                'condition' => array(
+                    'layout' => 'accordion',
+                ),
+            ));
+
             $this->end_controls_section();
 
             $this->start_controls_section('section_description_style', array(
@@ -558,6 +608,75 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                 'type' => Controls_Manager::COLOR,
                 'selectors' => array(
                     '{{WRAPPER}} .iu-simple-repeater__text' => 'color: {{VALUE}};',
+                ),
+            ));
+
+            $this->end_controls_section();
+
+            $this->start_controls_section('section_accordion_style', array(
+                'label' => __('Accordion', 'istodata-utilities'),
+                'tab' => Controls_Manager::TAB_STYLE,
+                'condition' => array(
+                    'layout' => 'accordion',
+                ),
+            ));
+
+            $this->add_control('accordion_closed_icon', array(
+                'label' => __('Closed Icon', 'istodata-utilities'),
+                'type' => Controls_Manager::MEDIA,
+                'description' => __('Optional SVG icon. It follows the title color.', 'istodata-utilities'),
+            ));
+
+            $this->add_control('accordion_open_icon', array(
+                'label' => __('Open Icon', 'istodata-utilities'),
+                'type' => Controls_Manager::MEDIA,
+                'description' => __('Optional SVG icon. If empty, the closed icon is used.', 'istodata-utilities'),
+            ));
+
+            $this->add_control('accordion_icon_position', array(
+                'label' => __('Icon Position', 'istodata-utilities'),
+                'type' => Controls_Manager::CHOOSE,
+                'options' => array(
+                    'left' => array(
+                        'title' => __('Left', 'istodata-utilities'),
+                        'icon' => 'eicon-h-align-left',
+                    ),
+                    'right' => array(
+                        'title' => __('Right', 'istodata-utilities'),
+                        'icon' => 'eicon-h-align-right',
+                    ),
+                ),
+            ));
+
+            $this->add_responsive_control('accordion_icon_size', array(
+                'label' => __('Icon Size', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => array('px', 'em', 'rem'),
+                'range' => array(
+                    'px' => array('min' => 8, 'max' => 160),
+                    'em' => array('min' => 0.5, 'max' => 10, 'step' => 0.1),
+                    'rem' => array('min' => 0.5, 'max' => 10, 'step' => 0.1),
+                ),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-simple-repeater__accordion-icon' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+                ),
+            ));
+
+            $this->add_responsive_control('accordion_title_padding', array(
+                'label' => __('Title Padding', 'istodata-utilities'),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => array('px', '%', 'em', 'rem'),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-simple-repeater__accordion-title' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ),
+            ));
+
+            $this->add_responsive_control('accordion_description_padding', array(
+                'label' => __('Description Padding', 'istodata-utilities'),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => array('px', '%', 'em', 'rem'),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-simple-repeater__accordion-panel-inner .iu-simple-repeater__content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ),
             ));
 
@@ -658,6 +777,10 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
             }
 
             $classes = array('iu-simple-repeater', 'iu-simple-repeater--' . sanitize_html_class($layout));
+            if ($layout === 'accordion') {
+                $accordion_behavior = isset($settings['accordion_behavior']) && $settings['accordion_behavior'] === 'single' ? 'single' : 'multiple';
+                $classes[] = 'iu-simple-repeater--accordion-' . $accordion_behavior;
+            }
             if (in_array($layout, array('grid', 'logos'), true)) {
                 $classes[] = 'iu-simple-repeater--grid';
                 $classes[] = 'iu-simple-repeater--columns-' . $this->get_columns_class_value(isset($settings['columns']) ? $settings['columns'] : '3');
@@ -681,13 +804,17 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
             }
 
             echo '<div class="' . esc_attr(implode(' ', $classes)) . '">';
+            $accordion_item_index = 0;
             foreach ($items as $item) {
                 if (!is_array($item)) {
                     continue;
                 }
 
                 if ($layout === 'accordion') {
-                    $this->render_accordion_item($item);
+                    $this->render_accordion_item($item, $settings, $accordion_item_index === 0 && !empty($settings['accordion_open_first']));
+                    if (!empty(trim(isset($item['title']) ? $item['title'] : '')) || !empty(trim(isset($item['text']) ? $item['text'] : ''))) {
+                        $accordion_item_index++;
+                    }
                 } elseif ($layout === 'logos') {
                     $this->render_logo_item($item, $settings);
                 } elseif ($layout === 'buttons') {
@@ -723,19 +850,53 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
             echo '</' . $tag . '>';
         }
 
-        private function render_accordion_item($item) {
+        private function render_accordion_item($item, $settings, $is_initially_open = false) {
             $title = isset($item['title']) ? trim($item['title']) : '';
             $text = isset($item['text']) ? trim($item['text']) : '';
             if ($title === '' && $text === '') {
                 return;
             }
 
-            echo '<details class="iu-simple-repeater__accordion-item">';
-            echo '<summary class="iu-simple-repeater__accordion-title">' . esc_html($title ? $title : __('Item', 'istodata-utilities')) . '</summary>';
+            $closed_icon = $this->get_accordion_icon_url($settings, 'accordion_closed_icon');
+            $open_icon = $this->get_accordion_icon_url($settings, 'accordion_open_icon');
+            $icon_position = isset($settings['accordion_icon_position']) && in_array($settings['accordion_icon_position'], array('left', 'right'), true) ? $settings['accordion_icon_position'] : '';
+            $has_custom_icon = $closed_icon !== '' || $open_icon !== '' || $icon_position !== '';
+            $rotate_icon = $closed_icon !== '' && $open_icon === '';
+            if ($closed_icon === '') {
+                $closed_icon = $open_icon;
+            }
+            if ($open_icon === '') {
+                $open_icon = $closed_icon;
+            }
+
+            echo '<details class="iu-simple-repeater__accordion-item"' . ($is_initially_open ? ' open' : '') . '>';
+            if ($has_custom_icon) {
+                echo '<summary class="iu-simple-repeater__accordion-title iu-simple-repeater__accordion-title--custom-icon iu-simple-repeater__accordion-title--icon-' . esc_attr($icon_position ? $icon_position : 'left') . '">';
+                echo '<span class="iu-simple-repeater__accordion-title-text">' . esc_html($title ? $title : __('Item', 'istodata-utilities')) . '</span>';
+                $icon_style = '';
+                if ($closed_icon !== '') {
+                    $icon_style .= '--iu-simple-repeater-accordion-closed-icon:url(\'' . esc_url($closed_icon) . '\');';
+                }
+                if ($open_icon !== '') {
+                    $icon_style .= '--iu-simple-repeater-accordion-open-icon:url(\'' . esc_url($open_icon) . '\');';
+                }
+                echo '<span class="iu-simple-repeater__accordion-icon' . ($closed_icon !== '' ? ' iu-simple-repeater__accordion-icon--custom' : '') . ($rotate_icon ? ' iu-simple-repeater__accordion-icon--rotate' : '') . '" aria-hidden="true"' . ($icon_style !== '' ? ' style="' . esc_attr($icon_style) . '"' : '') . '></span>';
+                echo '</summary>';
+            } else {
+                echo '<summary class="iu-simple-repeater__accordion-title">' . esc_html($title ? $title : __('Item', 'istodata-utilities')) . '</summary>';
+            }
             if ($text !== '') {
-                echo '<div class="iu-simple-repeater__content"><div class="iu-simple-repeater__text">' . wp_kses_post(wpautop($text)) . '</div></div>';
+                echo '<div class="iu-simple-repeater__accordion-panel"><div class="iu-simple-repeater__accordion-panel-inner"><div class="iu-simple-repeater__content"><div class="iu-simple-repeater__text">' . wp_kses_post(wpautop($text)) . '</div></div></div></div>';
             }
             echo '</details>';
+        }
+
+        private function get_accordion_icon_url($settings, $setting_name) {
+            if (empty($settings[$setting_name]) || !is_array($settings[$setting_name]) || empty($settings[$setting_name]['url'])) {
+                return '';
+            }
+
+            return esc_url_raw($settings[$setting_name]['url']);
         }
 
         private function render_logo_item($item, $settings) {
