@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.20.6
+Version: 2.20.7
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.20.6');
+define('IU_PLUGIN_VERSION', '2.20.7');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -4951,10 +4951,14 @@ function iu_maybe_process_queue_batch() {
     // Set transient to prevent frequent checks (5 seconds for faster processing)
     set_transient('iu_queue_last_check', time(), 5);
     
-    // Check if queue is stale (older than 1 hour) - restart it
+    // A queue that has been pending for over an hour cannot safely be resumed in
+    // this request. Clear it and stop here; restarting it would immediately
+    // re-enter this flow through iu_start_queue_storage_calculation().
     $started_time = strtotime($queue_data['started_at']);
     if ((time() - $started_time) > 3600) {
-        iu_start_queue_storage_calculation();
+        delete_option('iu_storage_queue_status');
+        delete_transient('iu_queue_last_check');
+        error_log('ISTODATA Utilities: Cleared stale storage queue job after one hour.');
         return;
     }
     

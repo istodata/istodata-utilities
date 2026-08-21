@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.20.7 - 2026-08-21
+
+- Fix: Stale storage-queue jobs older than one hour are now cleared and end the current request flow instead of restarting recursively.
+- Version bump to 2.20.7.
+
 ## 2.20.6 - 2026-08-21
 
 - Fix: Preserve WordPress's confirmation before an uploaded plugin replaces an existing plugin, regardless of whether ISTODATA Kit is active.
