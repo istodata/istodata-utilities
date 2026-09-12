@@ -127,6 +127,19 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                 ),
             ));
 
+            $this->add_control('accordion_faq_schema', array(
+                'label' => __('Generate FAQ Schema', 'istodata-utilities'),
+                'type' => Controls_Manager::SWITCHER,
+                'label_on' => __('Yes', 'istodata-utilities'),
+                'label_off' => __('No', 'istodata-utilities'),
+                'return_value' => 'yes',
+                'default' => '',
+                'description' => __('Creates FAQ structured data from each item title and description. Do not enable this when Rank Math already creates FAQ schema for the same questions.', 'istodata-utilities'),
+                'condition' => array(
+                    'layout' => 'accordion',
+                ),
+            ));
+
             $this->add_responsive_control('columns', array(
                 'label' => __('Columns', 'istodata-utilities'),
                 'type' => Controls_Manager::SELECT,
@@ -824,6 +837,46 @@ if (!class_exists('IU_Simple_Repeater_Widget')) {
                 }
             }
             echo '</div>';
+
+            if ($layout === 'accordion' && !empty($settings['accordion_faq_schema'])) {
+                $this->render_accordion_faq_schema($items);
+            }
+        }
+
+        private function render_accordion_faq_schema($items) {
+            $questions = array();
+            foreach ($items as $item) {
+                if (!is_array($item)) {
+                    continue;
+                }
+
+                $title = isset($item['title']) ? trim(wp_strip_all_tags($item['title'])) : '';
+                $text = isset($item['text']) ? trim($item['text']) : '';
+                if ($title === '' || $text === '') {
+                    continue;
+                }
+
+                $questions[] = array(
+                    '@type' => 'Question',
+                    'name' => $title,
+                    'acceptedAnswer' => array(
+                        '@type' => 'Answer',
+                        'text' => wp_kses_post(wpautop($text)),
+                    ),
+                );
+            }
+
+            if (empty($questions)) {
+                return;
+            }
+
+            $schema = array(
+                '@context' => 'https://schema.org',
+                '@type' => 'FAQPage',
+                'mainEntity' => $questions,
+            );
+
+            echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . '</script>';
         }
 
         private function render_content_item($item, $settings, $layout) {

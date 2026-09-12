@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.20.9 - 2026-09-12
+
+- New: Simple Repeater Accordion widgets can optionally generate FAQPage structured data from their item titles and descriptions.
+- Version bump to 2.20.9.
+
 ## 2.20.8 - 2026-08-21
 
 - New: Simple Repeater Accordion controls for custom closed/open SVG icons, icon position and responsive icon size.
