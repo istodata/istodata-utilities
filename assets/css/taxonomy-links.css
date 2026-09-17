@@ -18,6 +18,7 @@
         background-color var(--iu-tax-links-transition) ease,
         border-color var(--iu-tax-links-transition) ease,
         box-shadow var(--iu-tax-links-transition) ease,
+        border-radius var(--iu-tax-links-transition) ease,
         transform var(--iu-tax-links-transition) ease;
 }
 

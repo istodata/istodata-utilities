@@ -130,6 +130,13 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 ),
             ));
 
+            $this->add_control('link_anchor', array(
+                'label' => __('Link Anchor', 'istodata-utilities'),
+                'type' => Controls_Manager::TEXT,
+                'placeholder' => '#listings',
+                'description' => __('Added to every term URL and the "All" URL. An existing URL anchor is replaced.', 'istodata-utilities'),
+            ));
+
             $this->add_control('link_icon', array(
                 'label' => __('Default Icon', 'istodata-utilities'),
                 'type' => Controls_Manager::ICONS,
@@ -383,6 +390,24 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 ),
             ));
 
+            $this->add_responsive_control('link_font_weight_normal', array(
+                'label' => __('Font Weight', 'istodata-utilities'),
+                'type' => Controls_Manager::SELECT,
+                'options' => $this->get_font_weight_options(),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__link' => 'font-weight: {{VALUE}};',
+                ),
+            ));
+
+            $this->add_responsive_control('link_border_radius_normal', array(
+                'label' => __('Border Radius', 'istodata-utilities'),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => array('px', '%', 'em', 'rem'),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__link' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ),
+            ));
+
             $this->add_group_control(Group_Control_Background::get_type(), array(
                 'name' => 'link_background',
                 'exclude' => array('image'),
@@ -413,6 +438,24 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 ),
             ));
 
+            $this->add_responsive_control('link_font_weight_hover', array(
+                'label' => __('Font Weight', 'istodata-utilities'),
+                'type' => Controls_Manager::SELECT,
+                'options' => $this->get_font_weight_options(),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__link:hover, {{WRAPPER}} .iu-taxonomy-links__link:focus-visible' => 'font-weight: {{VALUE}};',
+                ),
+            ));
+
+            $this->add_responsive_control('link_border_radius_hover', array(
+                'label' => __('Border Radius', 'istodata-utilities'),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => array('px', '%', 'em', 'rem'),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__link:hover, {{WRAPPER}} .iu-taxonomy-links__link:focus-visible' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ),
+            ));
+
             $this->add_group_control(Group_Control_Background::get_type(), array(
                 'name' => 'link_background_hover',
                 'exclude' => array('image'),
@@ -440,6 +483,24 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 'type' => Controls_Manager::COLOR,
                 'selectors' => array(
                     '{{WRAPPER}} .iu-taxonomy-links__link.is-current, {{WRAPPER}} .iu-taxonomy-links__link[aria-current="page"]' => 'color: {{VALUE}};',
+                ),
+            ));
+
+            $this->add_responsive_control('link_font_weight_active', array(
+                'label' => __('Font Weight', 'istodata-utilities'),
+                'type' => Controls_Manager::SELECT,
+                'options' => $this->get_font_weight_options(),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__link.is-current, {{WRAPPER}} .iu-taxonomy-links__link[aria-current="page"]' => 'font-weight: {{VALUE}};',
+                ),
+            ));
+
+            $this->add_responsive_control('link_border_radius_active', array(
+                'label' => __('Border Radius', 'istodata-utilities'),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => array('px', '%', 'em', 'rem'),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__link.is-current, {{WRAPPER}} .iu-taxonomy-links__link[aria-current="page"]' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ),
             ));
 
@@ -936,6 +997,7 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 $all_is_current = $this->is_all_link_current($settings, $current_term_id);
                 $all_text = !empty($settings['all_link_text']) ? $settings['all_link_text'] : __('All', 'istodata-utilities');
                 $all_link = !empty($settings['all_link']['url']) ? $settings['all_link'] : array('url' => home_url('/'));
+                $all_link['url'] = $this->append_link_anchor($all_link['url'], $settings);
 
                 $this->add_render_attribute('all_link', 'class', 'iu-taxonomy-links__link iu-taxonomy-links__link--all');
                 if ($all_is_current) {
@@ -954,6 +1016,7 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 if (is_wp_error($term_url)) {
                     continue;
                 }
+                $term_url = $this->append_link_anchor($term_url, $settings);
 
                 $attr_key = 'term_link_' . $index;
                 $this->add_render_attribute($attr_key, 'class', 'iu-taxonomy-links__link iu-taxonomy-links__link--term');
@@ -982,6 +1045,7 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
             $all_url = (!empty($settings['all_link']['url']) && filter_var($settings['all_link']['url'], FILTER_VALIDATE_URL))
                 ? $settings['all_link']['url']
                 : home_url('/');
+            $all_url = $this->append_link_anchor($all_url, $settings);
             $show_all_link = !empty($settings['show_all_link']) && $settings['show_all_link'] === 'yes';
             $placeholder = !empty($settings['dropdown_placeholder']) ? $settings['dropdown_placeholder'] : __('Select term', 'istodata-utilities');
 
@@ -1012,6 +1076,7 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 if (is_wp_error($term_url)) {
                     continue;
                 }
+                $term_url = $this->append_link_anchor($term_url, $settings);
 
                 $selected = $current_term_id === (int) $term->term_id ? ' selected="selected"' : '';
                 echo '<option value="' . esc_url($term_url) . '"' . $selected . '>' . esc_html($term->name) . '</option>';
@@ -1047,6 +1112,7 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
             $show_all_link = !empty($settings['show_all_link']) && $settings['show_all_link'] === 'yes';
             $all_text = !empty($settings['all_link_text']) ? $settings['all_link_text'] : __('All', 'istodata-utilities');
             $all_link = !empty($settings['all_link']['url']) ? $settings['all_link'] : array('url' => home_url('/'));
+            $all_link['url'] = $this->append_link_anchor($all_link['url'], $settings);
 
             echo '<div id="' . esc_attr($instance_id) . '" class="iu-taxonomy-links iu-taxonomy-links--dropdown-links" role="navigation" aria-label="' . esc_attr($nav_label) . '">';
             echo '<button id="' . esc_attr($button_id) . '" class="iu-taxonomy-links__dropdown-trigger" type="button" aria-expanded="false" aria-controls="' . esc_attr($panel_id) . '">';
@@ -1071,6 +1137,7 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 if (is_wp_error($term_url)) {
                     continue;
                 }
+                $term_url = $this->append_link_anchor($term_url, $settings);
 
                 $attr_key = 'dropdown_term_link_' . $index;
                 $this->add_render_attribute($attr_key, 'class', 'iu-taxonomy-links__dropdown-link');
@@ -1164,6 +1231,21 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
             asort($options);
 
             return $options;
+        }
+
+        private function get_font_weight_options() {
+            return array(
+                '' => __('Default', 'istodata-utilities'),
+                '100' => '100',
+                '200' => '200',
+                '300' => '300',
+                '400' => '400',
+                '500' => '500',
+                '600' => '600',
+                '700' => '700',
+                '800' => '800',
+                '900' => '900',
+            );
         }
 
         private function render_editor_notice($message) {
@@ -1283,6 +1365,17 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
             $request_uri = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '/';
 
             return home_url($request_uri);
+        }
+
+        private function append_link_anchor($url, $settings) {
+            $anchor = !empty($settings['link_anchor']) ? sanitize_text_field($settings['link_anchor']) : '';
+            $anchor = ltrim(trim($anchor), '#');
+
+            if ($anchor === '') {
+                return $url;
+            }
+
+            return preg_replace('/#.*/', '', $url) . '#' . rawurlencode($anchor);
         }
 
         private function normalize_url($url) {

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.20.10 - 2026-09-17
+
+- Improve: Taxonomy Links widget - links/buttons can now use independent responsive border radius and font weight settings for normal, hover, and active states.
+- New: Taxonomy Links widget - an optional anchor can now be appended to every term and "All" URL across all display modes.
+- Version bump to 2.20.10.
+
 ## 2.20.9 - 2026-09-12
 
 - New: Simple Repeater Accordion widgets can optionally generate FAQPage structured data from their item titles and descriptions.
