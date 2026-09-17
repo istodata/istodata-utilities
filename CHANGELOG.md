@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.20.11 - 2026-09-17
+
+- New: Taxonomy Links widget - native dropdowns now offer chevron size, closed/open colors, and independent horizontal/vertical offsets.
+- Fix: Taxonomy Links widget - native dropdown chevron offsets now override competing theme transforms in both closed and open states.
+- Version bump to 2.20.11.
+
 ## 2.20.10 - 2026-09-17
 
 - Improve: Taxonomy Links widget - links/buttons can now use independent responsive border radius and font weight settings for normal, hover, and active states.

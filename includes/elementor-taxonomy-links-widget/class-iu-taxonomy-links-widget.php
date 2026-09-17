@@ -575,6 +575,103 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 ),
             ));
 
+            $this->add_control('dropdown_chevron_heading', array(
+                'label' => __('Chevron', 'istodata-utilities'),
+                'type' => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ));
+
+            $this->add_responsive_control('dropdown_chevron_size', array(
+                'label' => __('Chevron Size', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => array('px'),
+                'range' => array(
+                    'px' => array('min' => 4, 'max' => 64),
+                ),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__select::picker-icon' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+                ),
+            ));
+
+            $this->start_controls_tabs('tabs_dropdown_chevron_states');
+
+            $this->start_controls_tab('tab_dropdown_chevron_closed', array(
+                'label' => __('Closed', 'istodata-utilities'),
+            ));
+
+            $this->add_control('dropdown_chevron_color_closed', array(
+                'label' => __('Color', 'istodata-utilities'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__select::picker-icon' => 'color: {{VALUE}};',
+                ),
+            ));
+
+            $this->add_control('dropdown_chevron_closed_offset_x', array(
+                'label' => __('Horizontal Offset', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => array('px'),
+                'range' => array(
+                    'px' => array('min' => -50, 'max' => 50),
+                ),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__select' => '--iu-tax-native-chevron-closed-x: {{SIZE}}{{UNIT}};',
+                ),
+            ));
+
+            $this->add_control('dropdown_chevron_closed_offset_y', array(
+                'label' => __('Vertical Offset', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => array('px'),
+                'range' => array(
+                    'px' => array('min' => -50, 'max' => 50),
+                ),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__select' => '--iu-tax-native-chevron-closed-y: {{SIZE}}{{UNIT}};',
+                ),
+            ));
+
+            $this->end_controls_tab();
+
+            $this->start_controls_tab('tab_dropdown_chevron_open', array(
+                'label' => __('Open', 'istodata-utilities'),
+            ));
+
+            $this->add_control('dropdown_chevron_color_open', array(
+                'label' => __('Color', 'istodata-utilities'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__select:open::picker-icon' => 'color: {{VALUE}};',
+                ),
+            ));
+
+            $this->add_control('dropdown_chevron_open_offset_x', array(
+                'label' => __('Horizontal Offset', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => array('px'),
+                'range' => array(
+                    'px' => array('min' => -50, 'max' => 50),
+                ),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__select' => '--iu-tax-native-chevron-open-x: {{SIZE}}{{UNIT}};',
+                ),
+            ));
+
+            $this->add_control('dropdown_chevron_open_offset_y', array(
+                'label' => __('Vertical Offset', 'istodata-utilities'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => array('px'),
+                'range' => array(
+                    'px' => array('min' => -50, 'max' => 50),
+                ),
+                'selectors' => array(
+                    '{{WRAPPER}} .iu-taxonomy-links__select' => '--iu-tax-native-chevron-open-y: {{SIZE}}{{UNIT}};',
+                ),
+            ));
+
+            $this->end_controls_tab();
+            $this->end_controls_tabs();
+
             $this->start_controls_tabs('tabs_dropdown_states');
 
             $this->start_controls_tab('tab_dropdown_normal', array(
@@ -1056,7 +1153,15 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 }
             }
 
-            echo '<div class="iu-taxonomy-links iu-taxonomy-links--dropdown" role="navigation" aria-label="' . esc_attr($nav_label) . '">';
+            $dropdown_classes = 'iu-taxonomy-links iu-taxonomy-links--dropdown';
+            if ($this->has_chevron_offset($settings, 'dropdown_chevron_closed_offset_x', 'dropdown_chevron_closed_offset_y')) {
+                $dropdown_classes .= ' iu-taxonomy-links--native-chevron-closed-offset';
+            }
+            if ($this->has_chevron_offset($settings, 'dropdown_chevron_open_offset_x', 'dropdown_chevron_open_offset_y')) {
+                $dropdown_classes .= ' iu-taxonomy-links--native-chevron-open-offset';
+            }
+
+            echo '<div class="' . esc_attr($dropdown_classes) . '" role="navigation" aria-label="' . esc_attr($nav_label) . '">';
             echo '<label class="screen-reader-text" for="' . esc_attr($select_id) . '">' . esc_html($nav_label) . '</label>';
             echo '<select id="' . esc_attr($select_id) . '" class="iu-taxonomy-links__select">';
 
@@ -1246,6 +1351,16 @@ if (!class_exists('IU_Taxonomy_Links_Widget')) {
                 '800' => '800',
                 '900' => '900',
             );
+        }
+
+        private function has_chevron_offset($settings, $x_key, $y_key) {
+            foreach (array($x_key, $y_key) as $key) {
+                if (!empty($settings[$key]) && is_array($settings[$key]) && array_key_exists('size', $settings[$key]) && $settings[$key]['size'] !== '') {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private function render_editor_notice($message) {

@@ -73,6 +73,23 @@
     outline: none;
 }
 
+/* Native select chevrons are customizable only in browsers supporting base-select. */
+@supports (appearance: base-select) {
+    .iu-taxonomy-links--native-chevron-closed-offset .iu-taxonomy-links__select::picker-icon {
+        transform: translate(
+            var(--iu-tax-native-chevron-closed-x, 0px),
+            var(--iu-tax-native-chevron-closed-y, 0px)
+        ) rotate(45deg) !important;
+    }
+
+    .iu-taxonomy-links--native-chevron-open-offset .iu-taxonomy-links__select:open::picker-icon {
+        transform: translate(
+            var(--iu-tax-native-chevron-open-x, 0px),
+            var(--iu-tax-native-chevron-open-y, 0px)
+        ) rotate(225deg) !important;
+    }
+}
+
 .iu-taxonomy-links--dropdown-links {
     --iu-tax-dropdown-offset: 8px;
     --iu-tax-dropdown-icon-size: 10px;
