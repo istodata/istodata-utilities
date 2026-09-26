@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.21.0 - 2026-09-26
+
+- New: Simple Repeater WPML adapter exposes individual titles and descriptions for post and taxonomy translation while preserving existing stored rows and copying numeric values, images and links.
+- Improve: WPML's manual Term translation dialog now edits repeater text per row and rejects stale submissions after the source structure changes.
+- Version bump to 2.21.0.
+
 ## 2.20.11 - 2026-09-17
 
 - New: Taxonomy Links widget - native dropdowns now offer chevron size, closed/open colors, and independent horizontal/vertical offsets.

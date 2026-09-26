@@ -1,6 +1,8 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
 
+require_once __DIR__ . '/acf-simple-repeater-wpml.php';
+
 if (!function_exists('iu_acf_simple_repeater_register_field')) {
     function iu_acf_simple_repeater_register_field() {
         if (!class_exists('acf_field') || class_exists('IU_ACF_Simple_Repeater_Field')) {
@@ -20,6 +22,7 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
                     'image_label' => __('Image', 'istodata-utilities'),
                     'link_label' => __('Link', 'istodata-utilities'),
                     'max_items' => 0,
+                    'wpml_cf_preferences' => 2,
                 );
 
                 parent::__construct();
