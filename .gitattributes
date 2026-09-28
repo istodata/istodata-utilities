@@ -1,0 +1,5 @@
+# Development checks and licensed local fixtures do not belong in plugin archives.
+/tests export-ignore
+/AGENTS.md export-ignore
+/.gitignore export-ignore
+/.gitattributes export-ignore

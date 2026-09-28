@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.21.1 - 2026-09-28
+
+- Fix: Optional Atomic Interactions breakpoint workaround for Elementor #35831, OFF by default; restores initial inline styles and cleans up interactions on breakpoint changes. Allows stable Elementor 4.3.x updates from 4.3.2 and Pro 4.3.x updates from 4.3.0, retaining API guards.
+- Improve: Administrators are informed when the enabled workaround cannot run outside the allowed Elementor version range; 4.4 and later require a fresh review.
+- Version bump to 2.21.1.
+
 ## 2.21.0 - 2026-09-26
 
 - New: Simple Repeater WPML adapter exposes individual titles and descriptions for post and taxonomy translation while preserving existing stored rows and copying numeric values, images and links.

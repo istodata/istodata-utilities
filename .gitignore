@@ -1,0 +1,2 @@
+# Licensed vendor test fixtures: provision explicitly, never distribute.
+/tests/fixtures/vendor/

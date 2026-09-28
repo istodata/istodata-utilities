@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.21.0
+Version: 2.21.1
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.21.0');
+define('IU_PLUGIN_VERSION', '2.21.1');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -22,6 +22,7 @@ define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
                 'disable_elementor_upsells',
                 'elementor_remove_profile_ai_notes',
                 'elementor_accordion_scroll_to_active',
+                'elementor_atomic_interaction_breakpoints',
                 'elementor_animations',
                 'elementor_additional_animations',
                 'elementor_disable_mobile_animations',
@@ -333,6 +334,7 @@ function iu_activate() {
             'elementor_animations' => false,
             'elementor_additional_animations' => false,
             'elementor_accordion_scroll_to_active' => false,
+            'elementor_atomic_interaction_breakpoints' => false,
             'elementor_mobile_anim_per_element' => false
         ),
         'woocommerce' => array(
@@ -1376,6 +1378,14 @@ function iu_settings_page() {
                         </tr>
                         <tr>
                             <td>
+                                <label><input type="checkbox" name="istodata_utilities_settings[optimizations][elementor_atomic_interaction_breakpoints]" value="1"
+                                             <?php checked(!empty($settings['optimizations']['elementor_atomic_interaction_breakpoints'])); ?> />
+                                       Διόρθωση breakpoints στα Atomic Interactions</label>
+                                <p class="description">Προσωρινή διόρθωση του <a href="https://github.com/elementor/elementor/issues/35831" target="_blank" rel="noopener noreferrer">#35831</a>. Επιτρέπει σταθερές ενημερώσεις Elementor 4.3.x από 4.3.2 και Pro 4.3.x από 4.3.0, με ελέγχους APIs· το 4.4 χρειάζεται επανέλεγχο. Το Trigger on παραμένει ανά interaction. Απενεργοποιήστε την επιλογή μετά την επίσημη λύση. Το editor preview δεν έχει επαληθευτεί.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 <label><input type="checkbox" name="istodata_utilities_settings[optimizations][elementor_animations]" value="1"
                                              <?php checked(!empty($settings['optimizations']['elementor_animations'])); ?> />
                                        Βελτίωση Animations</label>
@@ -2374,6 +2384,11 @@ add_action('plugins_loaded', 'iu_handle_elementor_optimizations');
 function iu_handle_elementor_optimizations() {
     $settings = get_option('istodata_utilities_settings', array());
     $optimizations = isset($settings['optimizations']) ? $settings['optimizations'] : array();
+
+    if (!empty($optimizations['elementor_atomic_interaction_breakpoints'])) {
+        require_once IU_PLUGIN_PATH . 'includes/elementor-atomic-interaction-breakpoints.php';
+        iu_init_atomic_interaction_breakpoints();
+    }
     
     if (!empty($optimizations['disable_elementor_upsells'])) {
         // Disable Elementor Upsells

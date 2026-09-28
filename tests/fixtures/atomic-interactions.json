@@ -1,0 +1,16 @@
+{
+  "elementorVersion": "4.3.2",
+  "proVersion": "4.3.0",
+  "files": [
+    {
+      "name": "interactions-pro.js",
+      "sourceName": "avra-interactions-pro-source.js",
+      "sha256": "f9506438ba40e701a3f8437822fa5b83d012317b18e7a2f6aea94553168c9b54"
+    },
+    {
+      "name": "interactions-shared.js",
+      "sourceName": "avra-interactions-shared-source.js",
+      "sha256": "3dced817c2d33dbbda03d4fc19ad32048dc409a60727ccdd1b0a8d997676a0f1"
+    }
+  ]
+}
