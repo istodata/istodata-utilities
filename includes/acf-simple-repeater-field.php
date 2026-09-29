@@ -22,6 +22,7 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
                     'image_label' => __('Image', 'istodata-utilities'),
                     'link_label' => __('Link', 'istodata-utilities'),
                     'max_items' => 0,
+                    'min_items' => 0,
                     'wpml_cf_preferences' => 2,
                 );
 
@@ -49,6 +50,16 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
                     'type' => 'text',
                     'name' => 'button_label',
                     'default_value' => $this->defaults['button_label'],
+                ));
+
+                acf_render_field_setting($field, array(
+                    'label' => __('Min Items', 'istodata-utilities'),
+                    'instructions' => __('Leave empty or set to 0 for no minimum. Must not exceed Max Items when a maximum is set.', 'istodata-utilities'),
+                    'type' => 'number',
+                    'name' => 'min_items',
+                    'min' => 0,
+                    'step' => 1,
+                    'default_value' => $this->defaults['min_items'],
                 ));
 
                 acf_render_field_setting($field, array(
@@ -112,6 +123,7 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
                 $value = $this->normalize_value(isset($field['value']) ? $field['value'] : array(), $enabled);
                 $labels = $this->get_field_labels($field);
                 $max_items = $this->get_max_items($field);
+                $min_items = $this->get_min_items($field);
                 $button_label = !empty($field['button_label']) ? $field['button_label'] : $this->defaults['button_label'];
 
                 echo '<div class="iu-acf-simple-repeater" data-name="' . esc_attr($field['name']) . '" data-enabled="' . esc_attr(wp_json_encode($enabled)) . '" data-max-items="' . esc_attr($max_items) . '">';
@@ -124,13 +136,41 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
 
                 echo '</div>';
                 echo '<button type="button" class="button iu-acf-simple-repeater__add">' . esc_html($button_label) . '</button>';
+                if ($min_items > 0 && $min_items !== $max_items) {
+                    echo '<p class="description iu-acf-simple-repeater__minimum">' . esc_html(sprintf(__('Ελάχιστο όριο: %d στοιχεία.', 'istodata-utilities'), $min_items)) . '</p>';
+                }
                 if ($max_items > 0) {
-                    echo '<p class="description iu-acf-simple-repeater__limit" data-limit-text="' . esc_attr(sprintf(__('Μέγιστο όριο: %d στοιχεία.', 'istodata-utilities'), $max_items)) . '">' . esc_html(sprintf(__('Μέγιστο όριο: %d στοιχεία.', 'istodata-utilities'), $max_items)) . '</p>';
+                    $limit_text = $min_items === $max_items
+                        ? sprintf(__('Απαιτούνται %d στοιχεία.', 'istodata-utilities'), $max_items)
+                        : sprintf(__('Μέγιστο όριο: %d στοιχεία.', 'istodata-utilities'), $max_items);
+                    echo '<p class="description iu-acf-simple-repeater__limit" data-limit-text="' . esc_attr($limit_text) . '">' . esc_html($limit_text) . '</p>';
                 }
                 echo '<script type="text/html" class="iu-acf-simple-repeater__template">';
                 $this->render_row($field['name'], '__i__', array(), $enabled, $labels);
                 echo '</script>';
                 echo '</div>';
+            }
+
+            public function validate_value($valid, $value, $field, $input) {
+                if ($valid !== true) {
+                    return $valid;
+                }
+
+                $min_items = $this->get_min_items($field);
+                $max_items = $this->get_max_items($field);
+                if ($max_items > 0 && $min_items > $max_items) {
+                    return __('Το Min Items δεν μπορεί να είναι μεγαλύτερο από το Max Items. Διορθώστε τις ρυθμίσεις του πεδίου.', 'istodata-utilities');
+                }
+                if ($min_items === 0 && empty($field['required'])) {
+                    return $valid;
+                }
+                // The __empty marker and blank rows are not actual saved items.
+                $count = count($this->normalize_value($value, $this->get_enabled_fields($field)));
+                if ($min_items > 0 && $count < $min_items) {
+                    return sprintf(__('Ελάχιστος αριθμός στοιχείων με περιεχόμενο: %d.', 'istodata-utilities'), $min_items);
+                }
+
+                return empty($field['required']) || $count > 0;
             }
 
             public function update_value($value, $post_id, $field) {
@@ -177,6 +217,10 @@ if (!function_exists('iu_acf_simple_repeater_register_field')) {
 
             private function get_max_items($field) {
                 return isset($field['max_items']) ? max(0, absint($field['max_items'])) : 0;
+            }
+
+            private function get_min_items($field) {
+                return isset($field['min_items']) ? max(0, (int) $field['min_items']) : 0;
             }
 
             private function get_field_labels($field) {

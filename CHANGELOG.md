@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.21.2 - 2026-09-29
+
+- Improve: Simple Repeater displays both configured item limits, or a single required-count hint when Min Items equals Max Items.
+- New: Simple Repeater fields support Min Items (default 0), with ACF validation of populated rows and a visible minimum count in the item editor.
+- Fix: Required Simple Repeater fields now reject empty submissions and blank rows through ACF validation; optional fields can still be cleared completely.
+- Version bump to 2.21.2.
+
 ## 2.21.1 - 2026-09-28
 
 - Fix: Optional Atomic Interactions breakpoint workaround for Elementor #35831, OFF by default; restores initial inline styles and cleans up interactions on breakpoint changes. Allows stable Elementor 4.3.x updates from 4.3.2 and Pro 4.3.x updates from 4.3.0, retaining API guards.
