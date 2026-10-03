@@ -1,0 +1,15 @@
+{
+  "anonymous_warm_loops": 150,
+  "manager_hit_loops": 0,
+  "central_menu_renders": 0,
+  "dropdown_renders": 0,
+  "opened": true,
+  "bounds": {
+    "x": 76.5,
+    "y": 161.5,
+    "width": 1287,
+    "height": 722
+  },
+  "navigation_status": 200,
+  "frontend_errors": []
+}

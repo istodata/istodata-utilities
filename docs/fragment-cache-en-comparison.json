@@ -1,0 +1,135 @@
+{
+  "same_viewport_device_page_settings_links_geometry": true,
+  "stable_uncached_hit_loops": [
+    156,
+    156,
+    0
+  ],
+  "physical_click_and_native_hover_open_all_three": true,
+  "visible_links": 22,
+  "navigation_status": [
+    200,
+    200,
+    200
+  ],
+  "candidate_uncached_hit_resources_exactly_equal": true,
+  "canonical_same_resource_paths": true,
+  "canonical_generated_css_versions_changed_on_plugin_install": [
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-apple-webkit.min.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "cf502b45ef8bcae37a65822f78546f6cc7db74faf8f48850bf8a860262817fe6"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-frontend.min.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "2a35f5001c5afeff0abd519bdfd3311b29f853feb211bb291550623a3111cab1"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-loop-grid.min.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "0818f5844f7521308a64ec2d0808726e607e50e887e02f1bb5e1025b81e909af"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-mega-menu.min.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "1354fb60a49c3f758d1167e92c1c7911f9716ad739ad5fa56f8af7eabe8c7641"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "a391a0ae393c9c0521596e9700207265bb07920920145e2c307d5399f7d7b4b6"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-accordion.min.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "52a2bbb2d85e878d1062c65b13320cc2fa46e5fa2cb470fe9213dfdb06066eaa"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-base.min.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "16310d571c80d2c3c6297c2deffb4bc26fb2f91b2b9b75339d54a999df06bdb2"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-var-10.min.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "6be4b89a21ae3dce0c4769fd2bd4d460c2e42581f9fbc93e4bf040e522db5a36"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "f51419f1b17202f30b2a9e82a6ffbf2d290abb3c40dc016483d11276072f0ac3"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-nested-tabs.min.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "a82ed2e78d7e3ced7b43b57233b22f24a7f759ad6d527a8ad739cd2cdba843fd"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-10.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "3bd173b30a15cf2e8cc0d7fd9691a848222c3907732027865131db3529be2bc6"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-32910.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "92ba28e15ad0b5eda38e3dfb5048b6b909950fa6af95fa38d17f6effd0120e8d"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-32912.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "8d57f1da9225f43767e10633eb78489e307926bbc9dbe65fddd41d01961946de"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-32977.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "8fa78b277838527aba3af24b6d739367d452a6e9a20a99686755c0a17aa03ade"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-32998.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "7518a669850571641af32e67d9594c42fc4b8dac903e885de1f88f775f415458"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-33000.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "55127a5228003ce08279152411f003d6529b95064d91306c15d756de277ecbc4"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-33004.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "2aff201cf865e8b23aa548ffd226adc32a768ff5e39383a68d8b68a3b9258b13"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-33034.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "4e29386d1da16b15ca6274bb11c8ff5f26859e78ed118aa5e57ecbd05942427f"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-33637.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "7da43bb3633e1e5600fd9faad3bdb13c436a3b0ac4efd0704919d8d083657cdc"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-38403.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "1d22c6b3e5defe6610a3ec464c46a0e0150d1141743d5fe24a73d1edddf27df9"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6416.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "9f67dda6deed5dd233efcb509addfeb408041b9bdf0b1266778637a9eeb53459"
+    },
+    {
+      "asset": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6461.css",
+      "equal_bytes_from_both_version_urls": true,
+      "sha256": "27fc236d0c9844508470193e850d1e6789a79e728f8f7711a474444bb98234c6"
+    }
+  ],
+  "css_bytes_compared_after_install": true,
+  "plugin_js_changed": false,
+  "prior_failure_instant_cause_not_recorded": true,
+  "test_correction": "wait actual title mouseover handler; assert unique visible controls and real dropdown/link visibility; reset pointer outside before identical trigger",
+  "final_candidate_uncached_hit_repeated": true,
+  "final_candidate_sha256": "abc8ddb09ffb43877e0787a3e2129da98e121a4a69d9be968d8c2b03e0bc7023"
+}

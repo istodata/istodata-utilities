@@ -1,0 +1,403 @@
+--- a/includes/elementor-fragment-cache.php
++++ b/includes/elementor-fragment-cache.php
+@@ -9,7 +9,7 @@
+ require_once __DIR__ . '/elementor-fragment-cache-diagnostics.php';
+ 
+ final class IU_Elementor_Fragment_Cache {
+-    const FORMAT = 14;
++    const FORMAT = 15;
+     const STALE_GRACE = 180;
+     const MAX_BYTES = 2097152;
+     const INDEX_PREFIX = 'iu_fragment_entry_';
+@@ -37,9 +37,10 @@
+         add_action('update_option_istodata_utilities_settings', array(__CLASS__, 'settings_changed'), 10, 2);
+         foreach (array('after_switch_theme', 'upgrader_process_complete', 'update_option_permalink_structure',
+             'update_option_home', 'update_option_siteurl', 'update_option_elementor_active_kit',
+-            'update_option_icl_sitepress_settings', 'wp_update_nav_menu', 'deleted_nav_menu') as $hook) {
++            'update_option_icl_sitepress_settings', 'wp_update_nav_menu', 'wp_update_nav_menu_item', 'deleted_nav_menu') as $hook) {
+             add_action($hook, array(__CLASS__, 'invalidate'), 10, 0);
+         }
++        add_action('before_delete_post', array(__CLASS__, 'menu_item_deleted'), 10, 2);
+         add_action('admin_menu', array(__CLASS__, 'admin_menu'));
+         add_action('admin_post_iu_fragment_purge', array(__CLASS__, 'purge'));
+         add_action('admin_bar_menu', array(__CLASS__, 'admin_bar'), 100);
+@@ -292,6 +293,14 @@
+         $language = self::language();
+         $request_ok = self::request_ok() && self::builder_tail_safe();
+         do_action('iu_elementor_fragment_gate', $language, $request_ok, $document_id, $nodes);
++        if (self::$capture && is_array($nodes)) {
++            $interactions = class_exists('Elementor\\Modules\\Interactions\\Cache\\Interactions_Postmeta')
++                ? (new \Elementor\Modules\Interactions\Cache\Interactions_Postmeta())->load_content($document_id) : array();
++            if ($interactions || self::contains_interactions($nodes)) {
++                foreach (self::$capture as &$frame) $frame['unsafe_interactions'] = true;
++                unset($frame);
++            }
++        }
+         if (!$language || !$request_ok) IU_Elementor_Fragment_Diagnostics::request_bypass($nodes, $document_id,
+             !$language ? 'language-context' : (self::$request_failure ?: 'builder-order'));
+         return is_array($nodes) && $language && $request_ok
+@@ -392,6 +401,13 @@
+         return false;
+     }
+ 
++    private static function contains_interactions($nodes) {
++        foreach ($nodes as $node) {
++            if (!empty($node['interactions']) || (!empty($node['elements']) && self::contains_interactions($node['elements']))) return true;
++        }
++        return false;
++    }
++
+     private static function fresh_entry($key) {
+         if (wp_using_ext_object_cache()) {
+             // Force a shared-cache read rather than a request-local negative
+@@ -456,7 +472,7 @@
+             self::generation_current($payload['entry']['generation'] ?? null) &&
+             (!isset($payload['media_prior']) || self::media_context() === $payload['media_prior']) &&
+             (($payload['independent_query'] ?? false) || self::displayed() === $payload['prior']) &&
+-            self::excerpt_structure(IU_Elementor_Fragment_Excerpt::profile()) === self::excerpt_structure($payload['excerpt_prior']) &&
++            self::excerpt_context_ok($payload['entry']) &&
+             (int) get_the_ID() === $payload['post_context'] && self::replay($payload['entry'])) {
+             echo $payload['entry']['html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+             do_action('iu_elementor_fragment_result', !empty($payload['stale']) ? 'stale-hit' : 'hit',
+@@ -469,6 +485,14 @@
+         if ($original) {
+             $original->print_element();
+         }
++    }
++
++    private static function excerpt_context_ok($entry) {
++        $live = IU_Elementor_Fragment_Excerpt::profile();
++        // No-effect fragments preserve earlier siblings' live filters. Mutating
++        // fragments match their actual render-slot input, not builder-time input.
++        return $live !== null && (!empty($entry['preserve_excerpt']) ||
++            (isset($entry['excerpt_before']) && self::excerpt_structure($live) === self::excerpt_structure($entry['excerpt_before'])));
+     }
+ 
+     private static function valid_entry($entry) {
+@@ -568,6 +592,22 @@
+         return $result;
+     }
+ 
++    private static function render_hooks() {
++        $snapshot = array();
++        // Deferred output callbacks cannot be reconstructed from cached HTML.
++        // Document/control initialization also registers hooks during native
++        // rendering; comparing the entire registry confuses those with output
++        // that would actually be lost at the end of this frontend request.
++        foreach (array('wp_head', 'wp_footer', 'wp_enqueue_scripts', 'wp_print_styles',
++            'wp_print_scripts', 'wp_print_footer_scripts') as $hook) {
++            $object = $GLOBALS['wp_filter'][$hook] ?? null;
++            foreach ($object->callbacks ?? array() as $priority => $callbacks) {
++                foreach ($callbacks as $id => $callback) $snapshot[$hook][$priority][$id] = $callback;
++            }
++        }
++        return $snapshot;
++    }
++
+     public static function begin($element) {
+         $build = $element->get_data('_iu_fragment_build');
+         if (!is_array($build) || empty($build['key'])) {
+@@ -580,6 +620,8 @@
+             'scripts' => array_values(array_unique(array_merge($element->get_script_depends(), $build['dependencies']['scripts'] ?? array())))), $element);
+         self::$capture[] = array('id' => $element->get_id(), 'build' => $build, 'dependencies' => $dependencies,
+             'styles' => wp_styles()->queue, 'scripts' => wp_scripts()->queue,
++            'registered_styles' => array_keys(wp_styles()->registered), 'registered_scripts' => array_keys(wp_scripts()->registered),
++            'render_hooks' => self::render_hooks(),
+             'style_extra' => self::extras(wp_styles(), array('after')),
+             'script_extra' => self::extras(wp_scripts(), array('before', 'after', 'data')),
+             'displayed' => self::displayed(), 'post_context' => (int) get_the_ID(),
+@@ -631,12 +673,12 @@
+         if (!is_array($start['dependencies']) || !is_array($start['dependencies']['styles'] ?? null) ||
+             !is_array($start['dependencies']['scripts'] ?? null)) {
+             $reason = 'dependency-manifest';
+-        } elseif (!is_string($html) || !$html || strlen($html) > self::MAX_BYTES) {
++        } elseif (!is_string($html) || strlen($html) > self::MAX_BYTES) {
+             $reason = 'html-size';
+         } elseif ((empty($start['build']['independent_query']) && $start['displayed'] !== $start['build']['prior']) ||
+             $start['post_context'] !== $start['build']['post_context']) {
+             $reason = 'intervening-query';
+-        } elseif ($excerpt === null || self::excerpt_structure($start['excerpt_prior']) !== self::excerpt_structure($start['build']['excerpt_prior'] ?? array())) {
++        } elseif ($excerpt === null || $start['excerpt_prior'] === null) {
+             $reason = 'excerpt-side-effect';
+         } elseif (isset($start['build']['media_prior']) && ($start['media_prior'] !== $start['build']['media_prior'] ||
+             self::media_context() !== $start['media_prior'])) {
+@@ -647,9 +689,23 @@
+             $reason = 'inline-style-side-effect';
+         } elseif (self::extras(wp_scripts(), array('before', 'after', 'data')) !== $start['script_extra']) {
+             $reason = 'inline-script-side-effect';
++        } elseif (array_slice(array_values(wp_styles()->queue), 0, count($start['styles'])) !== array_values($start['styles']) ||
++            array_slice(array_values(wp_scripts()->queue), 0, count($start['scripts'])) !== array_values($start['scripts'])) {
++            $reason = 'asset-queue-side-effect';
+         }
+         global $wpdb;
+         if (!$reason && !empty($start['unsafe_query'])) $reason = 'query-context';
++        if (!$reason && !empty($start['unsafe_interactions'])) $reason = 'atomic-interactions';
++        if (!$reason && self::render_hooks() !== $start['render_hooks']) $reason = 'render-hook-side-effect';
++        if (!$reason && (int) get_the_ID() !== $start['post_context']) $reason = 'post-context-side-effect';
++        if (!$reason) {
++            foreach (array_unique(array_merge($start['dependencies']['styles'], $styles)) as $handle) {
++                if (!in_array($handle, $start['registered_styles'], true) && !preg_match('/^elementor-post-[0-9]+$/', $handle)) $reason = 'asset-registration-side-effect';
++            }
++            foreach (array_unique(array_merge($start['dependencies']['scripts'], $scripts)) as $handle) {
++                if (!in_array($handle, $start['registered_scripts'], true)) $reason = 'asset-registration-side-effect';
++            }
++        }
+         if (!$reason && !empty($_SESSION)) $reason = 'session-context';
+         if (!$reason && IU_Elementor_Fragment_Excerpt::externals($excerpt) !== IU_Elementor_Fragment_Excerpt::externals($start['excerpt_prior'])) $reason = 'excerpt-side-effect';
+         if (!$reason && (!iu_elementor_fragment_enabled() || !self::generation_current($start['build']['generation']))) $reason = 'generation-changed';
+@@ -666,6 +722,7 @@
+                 'generation' => $start['build']['generation'],
+                 'scripts' => $scripts,
+                 'excerpt' => $excerpt,
++                'excerpt_before' => $start['excerpt_prior'],
+                 'preserve_excerpt' => $excerpt === $start['excerpt_prior'],
+                 'independent_query' => !empty($start['build']['independent_query']),
+                 'fresh_until' => time() + $start['build']['ttl'],
+@@ -695,6 +752,10 @@
+         if (in_array($meta_key, array('_elementor_data', '_elementor_page_settings', '_elementor_template_type'), true)) {
+             self::invalidate();
+         }
++    }
++
++    public static function menu_item_deleted($post_id, $post) {
++        if (is_object($post) && $post->post_type === 'nav_menu_item') self::invalidate();
+     }
+ 
+     public static function invalidate() {
+--- a/includes/elementor-fragment-cache-graph.php
++++ b/includes/elementor-fragment-cache-graph.php
+@@ -17,37 +17,17 @@
+     public static function clear_rejection() { self::$last_rejection = array(); }
+ 
+     public static function prototype_supported($type, $prototype) {
+-        if (!iu_elementor_feature_supported('fragment')) return false;
+-        $classes = array('heading' => 'Elementor\\Widget_Heading', 'image' => 'Elementor\\Widget_Image',
+-            'button' => 'Elementor\\Widget_Button', 'icon' => 'Elementor\\Widget_Icon', 'icon-list' => 'Elementor\\Widget_Icon_List',
+-            'divider' => 'Elementor\\Widget_Divider', 'spacer' => 'Elementor\\Widget_Spacer',
+-            'nested-tabs' => 'Elementor\\Modules\\NestedTabs\\Widgets\\NestedTabs',
+-            'mega-menu' => 'ElementorPro\\Modules\\MegaMenu\\Widgets\\Mega_Menu',
+-            'template' => 'ElementorPro\\Modules\\Library\\Widgets\\Template',
+-            'loop-grid' => 'ElementorPro\\Modules\\LoopBuilder\\Widgets\\Loop_Grid',
+-            'posts' => 'ElementorPro\\Modules\\Posts\\Widgets\\Posts', 'nav-menu' => 'ElementorPro\\Modules\\NavMenu\\Widgets\\Nav_Menu');
+-        $paths = array('nested-tabs' => 'modules/nested-tabs/widgets/nested-tabs.php',
+-            'mega-menu' => 'modules/mega-menu/widgets/mega-menu.php', 'template' => 'modules/library/widgets/template.php',
+-            'loop-grid' => 'modules/loop-builder/widgets/loop-grid.php', 'posts' => 'modules/posts/widgets/posts.php',
+-            'nav-menu' => 'modules/nav-menu/widgets/nav-menu.php');
+-        $supported = false;
+-        if (is_string($type) && is_object($prototype) && isset($classes[$type]) && get_class($prototype) === $classes[$type]) {
+-            $base = strpos($classes[$type], 'ElementorPro\\') === 0
+-                ? (defined('ELEMENTOR_PRO_PATH') ? ELEMENTOR_PRO_PATH : '')
+-                : (defined('ELEMENTOR_PATH') ? ELEMENTOR_PATH : '');
+-            $expected = $base . ($paths[$type] ?? 'includes/widgets/' . $type . '.php');
+-            $supported = $base && str_replace('\\', '/', (new ReflectionClass($prototype))->getFileName()) === str_replace('\\', '/', $expected);
+-        }
+-        return (bool) apply_filters('iu_elementor_fragment_prototype_supported', $supported, $type, $prototype);
++        // Registration and native APIs are the contract, not vendor source paths.
++        return iu_elementor_feature_supported('fragment') && is_string($type) && $type !== 'iu-fragment-proxy' &&
++            $prototype instanceof \Elementor\Widget_Base && $prototype->get_name() === $type;
+     }
+ 
+     public static function inspect($node) {
+         self::$last_rejection = array();
+-        $complex = in_array($node['widgetType'] ?? '', array('mega-menu', 'loop-grid', 'posts', 'template'), true);
+-        if ((!$complex && !in_array($node['widgetType'] ?? '', array('heading', 'image', 'button', 'icon', 'divider', 'spacer'), true)) ||
+-            !iu_elementor_feature_supported('fragment', null, $complex) ||
++        if (($node['elType'] ?? '') !== 'widget' || empty($node['widgetType']) ||
++            !iu_elementor_feature_supported('fragment') ||
+             !class_exists('Elementor\\Plugin') || !\Elementor\Plugin::$instance) {
+-            self::$last_rejection = array('reason' => 'unsupported-root-or-elementor');
++            self::$last_rejection = array('reason' => 'widget-root-or-elementor-context');
+             return null;
+         }
+         $policy = new self();
+@@ -67,10 +47,6 @@
+         foreach ($nodes as $node) {
+             if (!is_array($node) || --$this->budget < 0) return $this->fail('graph-budget');
+             $type = $node['widgetType'] ?? $node['elType'] ?? '';
+-            if (!in_array($type, array('container', 'section', 'column', 'mega-menu', 'template', 'nested-tabs',
+-                'heading', 'image', 'button', 'icon', 'icon-list', 'divider', 'spacer', 'nav-menu', 'loop-grid', 'posts'), true)) {
+-                return $this->fail('unsupported-widget:' . $type);
+-            }
+             $settings = $node['settings'] ?? array();
+             // A hit skips nested document collection. Interactions are outside
+             // this fragment policy and must retain the native render pipeline.
+@@ -79,9 +55,18 @@
+             if (in_array($type, array('loop-grid', 'posts'), true) && !$this->query_safe($settings, $type)) return false;
+             if (!in_array($type, array('container', 'section', 'column'), true)) {
+                 $prototype = \Elementor\Plugin::$instance->widgets_manager->get_widget_types($type);
+-                if (!$prototype || !self::prototype_supported($type, $prototype)) return $this->fail('unsupported-widget-implementation:' . $type);
+-                foreach ($prototype->get_style_depends() as $handle) $this->styles[$handle] = true;
+-                foreach ($prototype->get_script_depends() as $handle) $this->scripts[$handle] = true;
++                if (!$prototype || !self::prototype_supported($type, $prototype)) return $this->fail('widget-registration:' . $type);
++                try {
++                    $styles = $prototype->get_style_depends();
++                    $scripts = $prototype->get_script_depends();
++                } catch (\Throwable $error) { return $this->fail('dependency-manifest:' . $type); }
++                if (!is_array($styles) || !is_array($scripts)) return $this->fail('dependency-manifest:' . $type);
++                foreach (array_merge($styles, $scripts) as $handle) {
++                    if (!is_string($handle) || !preg_match('/^[a-zA-Z0-9_-]+$/', $handle)) return $this->fail('dependency-manifest:' . $type);
++                }
++                foreach ($styles as $handle) $this->styles[$handle] = true;
++                foreach ($scripts as $handle) $this->scripts[$handle] = true;
++                $this->signature['widget:' . $type] = array(get_class($prototype), $styles, $scripts);
+             }
+             if (in_array($type, array('template', 'loop-grid'), true)) {
+                 $id = absint($settings['template_id'] ?? 0);
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -4,6 +4,9 @@
+ 
+ ## Unreleased
+ 
++- Improve: Attempt Advanced Elements Cache for any registered Elementor widget, using its native dependencies and concrete privacy/replay checks rather than widget or vendor allowlists. Keep containers outside root caching.
++- Fix: Preserve live excerpt filters for fragments with no excerpt effect; validate mutating fragments against their actual render-slot input. Bypass unreplayed render-time handler or asset registrations.
++- Fix: Honor Advanced Elements Cache opt-in on Elementor WP Menu widgets with early widget bypass and menu-item update/deletion invalidation. Shared menu HTML retains the active-page attributes of its first request.
+ - Improve: Advanced Elements Cache uses the administrator's per-element opt-in as a declaration of shared output across pages and visitors, without blanket third-party version or callback allowlists. Preserve device/language variants and explicit private, preview, query and replay exclusions.
+ - New: Administrator-only Advanced Elements Cache status distinguishes saved activation, supported structure and recent frontend hit/miss/bypass observations, with actionable rejection reasons.
+ - Fix: Keep native preview and globally disabled cache from writing frontend cache observations.
+--- a/tests/elementor-fragment-graph.php
++++ b/tests/elementor-fragment-graph.php
+@@ -1,6 +1,6 @@
+ <?php
+ /** Arbitrary-ID graph and builder-order safety regressions; no metrica adapter. */
+-namespace Elementor { class Plugin { public static $instance; } }
++namespace Elementor { class Plugin { public static $instance; } class Widget_Base {} }
+ namespace Elementor\Modules\Interactions\Cache { class Interactions_Postmeta {
+     public function load_content($id) { return $GLOBALS['interaction_rows'][$id] ?? array(); }
+ } }
+@@ -29,10 +29,17 @@
+ $include = getenv('IU_FRAGMENT_INCLUDE') ?: dirname(__DIR__) . '/includes/elementor-fragment-cache.php';
+ require $include;
+ \Elementor\Plugin::$instance = (object) array('widgets_manager' => new class {
+-    public function get_widget_types($type) { return new class {
+-        public function get_style_depends() { return array('widget-style'); }
+-        public function get_script_depends() { return array('widget-script'); }
+-    }; }
++    public function get_widget_types($type) {
++        if (empty($GLOBALS['approved_fake_prototypes'])) return null;
++        return new class($type) extends \Elementor\Widget_Base {
++            private $type;
++            public function __construct($type) { $this->type = $type; }
++            public function get_name() { return $this->type; }
++            public function get_style_depends() { return array('widget-style'); }
++            public function get_script_depends() { return array('widget-script'); }
++        };
++    }
++
+ });
+ $image = array('id' => 'image-A', 'elType' => 'widget', 'widgetType' => 'image', 'settings' => array(
+     '__dynamic__' => array('image' => '[elementor-tag id="tag-A" name="post-featured-image" settings="%7B%7D"]')));
+@@ -85,8 +92,12 @@
+     $unsafe = $root; $unsafe['elements'][0]['settings'][$field] = $value;
+     reject_graph($unsafe, $field);
+ }
+-$unsafe = $root; $unsafe['elements'][] = array('widgetType' => 'shortcode');
+-reject_graph($unsafe, 'shortcode');
++foreach (array('text-editor', 'shortcode', 'arbitrary-custom-widget') as $type) {
++    $generic = $menu; $generic['widgetType'] = $type;
++    if (!IU_Elementor_Fragment_Graph::inspect($generic)) throw new \RuntimeException('Registered generic widget rejected: ' . $type);
++}
++$container = array('id' => 'container', 'elType' => 'container');
++reject_graph($container, 'container root');
+ $unsafe = $root; $unsafe['elements'][] = array('widgetType' => 'posts', 'settings' => array('classic_show_excerpt' => 'yes'));
+ reject_graph($unsafe, 'visible excerpt can invoke arbitrary content filters');
+ $GLOBALS['templates'][73][0]['settings']['__dynamic__']['image'] = '[elementor-tag id="tag" name="user-info" settings="%7B%7D"]';
+--- a/tests/elementor-fragment-context.php
++++ b/tests/elementor-fragment-context.php
+@@ -98,9 +98,11 @@
+ $_SERVER['HTTP_AUTHORIZATION'] = 'Bearer test';
+ expect_request(false, 'authorization header');
+ unset($_SERVER['HTTP_AUTHORIZATION']);
+-eval('namespace Elementor; class Plugin { public static $instance; }');
++eval('namespace Elementor; class Plugin { public static $instance; } class Widget_Base {}');
+ \Elementor\Plugin::$instance = (object) array('widgets_manager' => new class {
+-    public function get_widget_types($type) { return new class {
++    public function get_widget_types($type) { return new class($type) extends \Elementor\Widget_Base {
++        private $type; public function __construct($type) { $this->type=$type; }
++        public function get_name() { return $this->type; }
+         public function get_style_depends() { return array(); }
+         public function get_script_depends() { return array(); }
+     }; }
+@@ -109,9 +111,9 @@
+ $node = array('id' => 'test', 'elType' => 'widget', 'widgetType' => 'heading',
+     'settings' => array('iu_fragment_cache' => 'yes'));
+ if (!$eligible->invoke(null, $node, 1)) throw new RuntimeException('Static heading rejected');
+-foreach (array('text-editor', 'mega-menu', 'shortcode', 'loop-grid') as $type) {
++foreach (array('text-editor', 'mega-menu', 'shortcode', 'arbitrary-custom-widget') as $type) {
+     $node['widgetType'] = $type;
+-    if ($eligible->invoke(null, $node, 1)) throw new RuntimeException('Unaudited complex widget admitted: ' . $type);
++    if (!$eligible->invoke(null, $node, 1)) throw new RuntimeException('Registered generic widget rejected: ' . $type);
+ }
+ $node['widgetType'] = 'heading';
+ $node['settings']['__dynamic__'] = array('title' => '[elementor-tag]');
+--- a/tests/elementor-fragment-assets.php
++++ b/tests/elementor-fragment-assets.php
+@@ -12,7 +12,7 @@
+ function wp_cache_delete() {}
+ function set_transient($key, $entry, $ttl) { $GLOBALS['entry'] = $entry; return true; }
+ class IU_Test_Queue {
+-    public $registered = array();
++    public $registered = array('widget-heading' => true, 'root-script' => true);
+     public $queue;
+     public function __construct($handle) { $this->queue = array($handle); }
+     public function get_data() { return false; }
+@@ -78,3 +78,31 @@
+ }
+ if (!$markup->invoke(null,'<h2>Public content</h2>')) throw new RuntimeException('Public markup rejected');
+ echo "shared-markup-privacy: OK\n";
++
++// A menu after a Posts sibling can have a different render-slot input than its
++// builder-time input, while making no excerpt changes itself.
++$GLOBALS['wp_filter']['excerpt_more'] = (object) array('callbacks' => array(20 => array(array('function' => function ($s) { return $s; }, 'accepted_args' => 1))));
++unset($GLOBALS['entry']);
++ob_start(); IU_Elementor_Fragment_Cache::begin($widget); echo '<nav>Public menu</nav>'; IU_Elementor_Fragment_Cache::finish($widget); ob_end_clean();
++if (empty($GLOBALS['entry']['preserve_excerpt']) || !$GLOBALS['entry']['excerpt_before']) throw new RuntimeException('No-effect render-slot excerpt context rejected');
++unset($GLOBALS['entry']);
++ob_start(); IU_Elementor_Fragment_Cache::begin($widget); IU_Elementor_Fragment_Cache::finish($widget); ob_end_clean();
++if (!isset($GLOBALS['entry']) || $GLOBALS['entry']['html'] !== '') throw new RuntimeException('Native empty output rejected');
++unset($GLOBALS['entry']);
++ob_start(); IU_Elementor_Fragment_Cache::begin($widget); echo '<nav>Unsafe late handler</nav>';
++$GLOBALS['wp_filter']['wp_footer'] = (object) array('callbacks' => array(10 => array('new' => array('function' => function () {}, 'accepted_args' => 0))));
++IU_Elementor_Fragment_Cache::finish($widget); ob_end_clean();
++if (isset($GLOBALS['entry'])) throw new RuntimeException('Unreplayed footer registration stored');
++unset($GLOBALS['wp_filter']['wp_footer']);
++unset($GLOBALS['entry']);
++ob_start(); IU_Elementor_Fragment_Cache::begin($widget); echo '<nav>Unsafe script dequeue</nav>';
++$GLOBALS['scripts']->queue = array();
++IU_Elementor_Fragment_Cache::finish($widget); ob_end_clean();
++if (isset($GLOBALS['entry'])) throw new RuntimeException('Unreplayed dependency dequeue stored');
++$GLOBALS['scripts']->queue = array('root-script');
++unset($GLOBALS['entry']);
++ob_start(); IU_Elementor_Fragment_Cache::begin($widget); echo '<nav>Unsafe late script</nav>';
++$GLOBALS['scripts']->registered['late-script'] = true; $GLOBALS['scripts']->queue[] = 'late-script';
++IU_Elementor_Fragment_Cache::finish($widget); ob_end_clean();
++if (isset($GLOBALS['entry'])) throw new RuntimeException('Late asset registration stored');
++echo "render-slot-excerpt-and-opaque-side-effect-guards: OK\n";
+--- a/tests/elementor-fragment-replay-order.php
++++ b/tests/elementor-fragment-replay-order.php
+@@ -36,7 +36,7 @@
+     $entry = array('format' => IU_Elementor_Fragment_Cache::FORMAT, 'html' => 'cached',
+         'generation' => array('document_id' => 1, 'element_id' => 'target', 'site' => 'existing-epoch', 'element' => 'existing-epoch'),
+         'fresh_until' => time() + 3600, 'stale_until' => time() + 3780,
+-        'styles' => array(), 'scripts' => array(), 'excerpt' => array(), 'displayed' => array(20));
++        'styles' => array(), 'scripts' => array(), 'excerpt' => array(), 'excerpt_before' => array(), 'displayed' => array(20));
+     $node = array('id' => 'target', 'widgetType' => 'heading');
+     $replacement = new \ReflectionMethod('IU_Elementor_Fragment_Cache', 'replacement');
+     $proxy = $replacement->invoke(null, $node, $entry, array(10));
+@@ -66,6 +66,16 @@
+     if ($html !== 'cached' || \ElementorPro\Modules\QueryControl\Module::$ids !== array(11, 10, 20)) {
+         throw new \RuntimeException('Independent query failed to replay all IDs, including IDs present in the builder request');
+     }
++    // Earlier siblings register a live external excerpt filter after key traversal.
++    $filter = function ($excerpt) { return $excerpt; };
++    $GLOBALS['wp_filter']['excerpt_more'] = (object) array('callbacks' => array(20 => array('external' => array('function' => $filter, 'accepted_args' => 1))));
++    $live_before = IU_Elementor_Fragment_Excerpt::profile();
++    ob_start(); IU_Elementor_Fragment_Cache::output($proxy['_iu_fragment_payload']); $html = ob_get_clean();
++    if ($html !== 'cached' || IU_Elementor_Fragment_Excerpt::profile() !== $live_before) throw new \RuntimeException('No-effect hit mutated live preceding filters');
++    $mutating = $proxy['_iu_fragment_payload']; $mutating['entry']['preserve_excerpt'] = false;
++    ob_start(); IU_Elementor_Fragment_Cache::output($mutating); $html = ob_get_clean();
++    if ($html !== 'fallback') throw new \RuntimeException('Mutating fragment ignored changed render-slot input');
++    unset($GLOBALS['wp_filter']['excerpt_more']);
+     $capture = new \ReflectionProperty('IU_Elementor_Fragment_Cache', 'capture');
+     $capture->setValue(null, array(array('build' => array('independent_query' => true), 'query_ids' => array())));
+     IU_Elementor_Fragment_Cache::query_results((object) array('posts' => array((object) array('ID' => 10), (object) array('ID' => 20))), null);

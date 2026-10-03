@@ -1,0 +1,21 @@
+{
+  "generation": "729813a0b3de4094b2bdbd25bf5dd4e8",
+  "page_a": "/",
+  "page_b": "/techniki-ypostirixi/",
+  "loop_a": 150,
+  "loop_b": 0,
+  "menu_renders_b": 1,
+  "dropdown_renders_b": 0,
+  "assets_b": 87,
+  "header_sha_b": "5a6f3ee9a93a3ad8d0aaae460e011234ef8a55fb35b98a77222e8d7488065155",
+  "keys": {
+    "417d1ae": {
+      "doc": 30,
+      "key": "iu_frag_d1c16473d9a02343ba2a46147635aa0c12dd7f1786dbb5c512cc75575a814b77"
+    },
+    "c60daee": {
+      "doc": 30,
+      "key": "iu_frag_a09e85d4f0773dae8ea02ff3d1faafd0854a30c5df629f24d8c01312f6337520"
+    }
+  }
+}

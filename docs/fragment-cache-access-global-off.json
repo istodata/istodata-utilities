@@ -1,0 +1,16 @@
+[
+  {
+    "role": "anonymous",
+    "lookups": 0,
+    "storage_events": 0,
+    "loops": 150,
+    "optin_scans": 0
+  },
+  {
+    "role": "site_manager",
+    "lookups": 0,
+    "storage_events": 0,
+    "loops": 150,
+    "optin_scans": 0
+  }
+]

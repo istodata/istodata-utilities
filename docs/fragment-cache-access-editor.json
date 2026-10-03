@@ -1,0 +1,40 @@
+{
+  "explicit_ttl_seeded": true,
+  "off_panel_hidden": true,
+  "off_save_reload_preserved": [
+    {
+      "id": "417d1ae",
+      "optin": "yes",
+      "ttl": "21600"
+    },
+    {
+      "id": "c60daee",
+      "optin": "yes"
+    }
+  ],
+  "on_panel_restored": true,
+  "on_compatibility_text_absent": true,
+  "original_24h_restored": [
+    {
+      "id": "417d1ae",
+      "optin": "yes",
+      "ttl": "86400"
+    },
+    {
+      "id": "c60daee",
+      "optin": "yes",
+      "ttl": "86400"
+    }
+  ],
+  "off_repeat_preserved": [
+    {
+      "id": "417d1ae",
+      "optin": "yes"
+    },
+    {
+      "id": "c60daee",
+      "optin": "yes"
+    }
+  ],
+  "navigation_optin_off_before_after_save": true
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "builder": "anonymous",
+    "consumer": "administrator",
+    "path": "/",
+    "loops_miss": 150,
+    "loops_hit": 0,
+    "assets": 112,
+    "keys_equal": true,
+    "fragment_sha256": {
+      "417d1ae": "f0dbc2aef77d8a6cb6fbf6eec5fee8d9fb748ff2a49c82061e06e0f8b7d300f7",
+      "c60daee": "b024f41b59306a826186d87c86f2be866d6d0f0db3e43236d59b3a686e469e87"
+    },
+    "html_assets_effects_equal": true,
+    "frontend_optin_scans": 0
+  },
+  {
+    "builder": "administrator",
+    "consumer": "anonymous",
+    "path": "/",
+    "loops_miss": 150,
+    "loops_hit": 0,
+    "assets": 91,
+    "keys_equal": true,
+    "fragment_sha256": {
+      "417d1ae": "f0dbc2aef77d8a6cb6fbf6eec5fee8d9fb748ff2a49c82061e06e0f8b7d300f7",
+      "c60daee": "b024f41b59306a826186d87c86f2be866d6d0f0db3e43236d59b3a686e469e87"
+    },
+    "html_assets_effects_equal": true,
+    "frontend_optin_scans": 0
+  },
+  {
+    "builder": "subscriber",
+    "consumer": "anonymous",
+    "path": "/",
+    "loops_miss": 150,
+    "loops_hit": 0,
+    "assets": 91,
+    "keys_equal": true,
+    "fragment_sha256": {
+      "417d1ae": "f0dbc2aef77d8a6cb6fbf6eec5fee8d9fb748ff2a49c82061e06e0f8b7d300f7",
+      "c60daee": "b024f41b59306a826186d87c86f2be866d6d0f0db3e43236d59b3a686e469e87"
+    },
+    "html_assets_effects_equal": true,
+    "frontend_optin_scans": 0
+  },
+  {
+    "builder": "anonymous",
+    "consumer": "administrator",
+    "path": "/en/",
+    "loops_miss": 156,
+    "loops_hit": 0,
+    "assets": 110,
+    "keys_equal": true,
+    "fragment_sha256": {
+      "417d1ae": "e525ae57e5282abb7bd1b0b0408460b58fe090cb609b41aa0068d20416627f5e",
+      "c60daee": "f7fa434332999932f7c4415a9b6ae02c6a141c0739fa55a0df07b79b61902067"
+    },
+    "html_assets_effects_equal": true,
+    "frontend_optin_scans": 0
+  },
+  {
+    "builder": "administrator",
+    "consumer": "anonymous",
+    "path": "/en/",
+    "loops_miss": 156,
+    "loops_hit": 0,
+    "assets": 87,
+    "keys_equal": true,
+    "fragment_sha256": {
+      "417d1ae": "e525ae57e5282abb7bd1b0b0408460b58fe090cb609b41aa0068d20416627f5e",
+      "c60daee": "f7fa434332999932f7c4415a9b6ae02c6a141c0739fa55a0df07b79b61902067"
+    },
+    "html_assets_effects_equal": true,
+    "frontend_optin_scans": 0
+  },
+  {
+    "builder": "subscriber",
+    "consumer": "anonymous",
+    "path": "/en/",
+    "loops_miss": 156,
+    "loops_hit": 0,
+    "assets": 87,
+    "keys_equal": true,
+    "fragment_sha256": {
+      "417d1ae": "e525ae57e5282abb7bd1b0b0408460b58fe090cb609b41aa0068d20416627f5e",
+      "c60daee": "f7fa434332999932f7c4415a9b6ae02c6a141c0739fa55a0df07b79b61902067"
+    },
+    "html_assets_effects_equal": true,
+    "frontend_optin_scans": 0
+  }
+]

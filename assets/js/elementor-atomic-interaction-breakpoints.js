@@ -1,5 +1,5 @@
-/* Temporary internal-API workaround: tested on Elementor 4.3.2 / Pro 4.3.0;
- * stable 4.3.x patch updates allowed by PHP, with API preflight. Issue #35831. */
+/* Temporary internal-API workaround for #35831. PHP gates versions through
+ * includes/elementor-compatibility.php; this runtime retains API/shape preflight. */
 (function () {
   'use strict';
   var api = window.elementorModules && window.elementorModules.interactions;
@@ -104,14 +104,24 @@
       else if (typeof control.stop === 'function') control.stop();
     });
     controls.clear();
-    baselines.forEach(function (saved, element) {
+    var disposed = new Map(baselines), token = generation;
+    function restore(saved, element) {
       Object.keys(saved).forEach(function (property) {
         var value = saved[property];
         if (value[0]) element.style.setProperty(property, value[0], value[1]);
         else element.style.removeProperty(property);
       });
-    });
+    }
+    disposed.forEach(restore);
     baselines.clear();
+    // Motion timeline teardown queues one final render. Restore excluded
+    // elements after that frame; never overwrite a newly initialized element.
+    if (typeof window.requestAnimationFrame === 'function') window.requestAnimationFrame(function () {
+      if (token !== generation) return;
+      disposed.forEach(function (saved, element) {
+        if (!baselines.has(element)) restore(saved, element);
+      });
+    });
     initialized = false;
   }
   function run() {
@@ -164,7 +174,11 @@
         var control = animate.apply(motion, arguments);
         if (control) {
           controls.add(control);
-          if (typeof control.then === 'function') control.then(function () { controls.delete(control); }, function () { controls.delete(control); });
+          // A scroll-driven control can report completion and later be driven
+          // again by its timeline. Keep it until the subscription is disposed.
+          if (!(arguments[2] && arguments[2].autoplay === false) && typeof control.then === 'function') {
+            control.then(function () { controls.delete(control); }, function () { controls.delete(control); });
+          }
         }
         return guardedControl(control, token);
       };

@@ -1,0 +1,16 @@
+{
+  "capability_403": true,
+  "invalid_nonce_403": true,
+  "no_effect_on_rejected_requests": true,
+  "return_feedback": true,
+  "all_language_keys_changed": true,
+  "after_purge_loops": [
+    150,
+    156
+  ],
+  "following_hits_loops": [
+    0,
+    0
+  ],
+  "html_identical": true
+}

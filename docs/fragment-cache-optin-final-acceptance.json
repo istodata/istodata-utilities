@@ -1,0 +1,37 @@
+{
+  "final_candidate_accepted_on_staging": true,
+  "version": "2.22.0",
+  "zip_sha256": "abc8ddb09ffb43877e0787a3e2129da98e121a4a69d9be968d8c2b03e0bc7023",
+  "installed_files": 76,
+  "installed_matches_zip": true,
+  "production_changes": false,
+  "release_commit_push": false,
+  "stage_root_menu_cache": "OFF",
+  "stage_dropdown_optins": "ON, 86400 seconds, headers 30/33000",
+  "native_element_cache": "disable",
+  "cleanup_complete": true,
+  "tests": [
+    "six actual GR/EN cross-page cross-user pairs, outer-current-page HTML/assets/effects equality and zero hit loops",
+    "positive unknown no-op query hook accepted and HIT",
+    "non-Elementor 999.0.0 constants admitted in policy fixtures, not live vendor upgrades",
+    "real token/private-permission negatives never stored or hit",
+    "private-cookie/PHP-session/user-tag bypass; global OFF zero fragment operations/observation writes",
+    "real native page editor iframe and direct preview normal rendering, zero fragment/observation writes",
+    "real GR/EN desktop opening/navigation; physical click and hover with registered handlers; no JS/assets errors",
+    "real phone GR/EN popup opening/navigation, heavy desktop subtree absent",
+    "protected admin bar site purge and selective Tools POST",
+    "one producer for concurrent cold requests; old writer fenced after in-flight purge",
+    "real Pro excerpt replay with unknown existing callback, changed registration rejection and future removal identity",
+    "four ordinary Ivory GET searches match previous verified baseline; cache bypass",
+    "four ordinary authenticated no-probe requests with equal fragments and four final actual HIT observations",
+    "10 local regression commands, five PHP lints, actual archive inspection and installed 76-file hashes"
+  ],
+  "limits": [
+    "administrator declares page/user independence; no automatic audit of all plugin callbacks or external data",
+    "hits skip widget/loop/hooks; integrations needing per-request side effects must not opt in",
+    "public content freshness is chosen TTL/manual purge, not exhaustive content invalidation; bounded 180s stale grace",
+    "limited supported legacy structures; Atomic/unsupported widgets and replay contexts bypass",
+    "original EN failed click instant was not instrumented; no proven plugin fault, synchronized stable/uncached/HIT comparisons pass without plugin JS changes",
+    "existing native EN links to Greek routes not translated/repaired; AJAX Ivory UI not separately tested"
+  ]
+}

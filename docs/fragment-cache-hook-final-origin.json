@@ -1,0 +1,19 @@
+{
+  "tested_zip_sha256": "a90536f72f548d2b176617db7a4091de85fffcfe2387627900fd70eefd35699f",
+  "requests": [
+    {
+      "language": "el",
+      "miss_loops": 150,
+      "hit_loops": 0,
+      "dropdown_renders": 0,
+      "html_keys_equal": true
+    },
+    {
+      "language": "en",
+      "miss_loops": 156,
+      "hit_loops": 0,
+      "dropdown_renders": 0,
+      "html_keys_equal": true
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "path": "/",
+    "request": 1,
+    "status": 200,
+    "no_probe_parameters": true,
+    "observer_and_custom_fixture_absent": true,
+    "real_header_present": true
+  },
+  {
+    "path": "/",
+    "request": 2,
+    "status": 200,
+    "no_probe_parameters": true,
+    "observer_and_custom_fixture_absent": true,
+    "real_header_present": true
+  },
+  {
+    "path": "/en/",
+    "request": 1,
+    "status": 200,
+    "no_probe_parameters": true,
+    "observer_and_custom_fixture_absent": true,
+    "real_header_present": true
+  },
+  {
+    "path": "/en/",
+    "request": 2,
+    "status": 200,
+    "no_probe_parameters": true,
+    "observer_and_custom_fixture_absent": true,
+    "real_header_present": true
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "elementorVersion": "4.3.3",
+  "proVersion": "4.3.1",
+  "files": [
+    {
+      "name": "interactions-shared.js",
+      "sha256": "0d744bf1e2af311da888378dceaa9422c661418691df2e2ddca765a7668e5218"
+    },
+    {
+      "name": "interactions-pro.js",
+      "sha256": "fb9dad0942eb5aefb6baefcec70dbf188a589820c644f3d12c486de50fb41032"
+    }
+  ]
+}

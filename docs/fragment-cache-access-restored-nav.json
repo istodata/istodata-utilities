@@ -1,0 +1,36 @@
+{
+  "before_publish": [
+    {
+      "id": "26fa46c6",
+      "cache": "",
+      "ttl": "86400"
+    },
+    {
+      "id": "417d1ae",
+      "cache": "yes",
+      "ttl": "86400"
+    },
+    {
+      "id": "c60daee",
+      "cache": "yes",
+      "ttl": "86400"
+    }
+  ],
+  "after_reload": [
+    {
+      "id": "26fa46c6",
+      "cache": "",
+      "ttl": "86400"
+    },
+    {
+      "id": "417d1ae",
+      "cache": "yes",
+      "ttl": "86400"
+    },
+    {
+      "id": "c60daee",
+      "cache": "yes",
+      "ttl": "86400"
+    }
+  ]
+}

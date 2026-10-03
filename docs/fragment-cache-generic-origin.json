@@ -1,0 +1,3934 @@
+[
+  {
+    "language": "el",
+    "builder": "anonymous",
+    "consumer": "site_manager",
+    "miss_loops": 150,
+    "hit_loops": 0,
+    "miss_menu_renders": [
+      "d7ebc85",
+      "a1ff108",
+      "e62c115",
+      "c28398e",
+      "66bc2cd",
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce"
+    ],
+    "hit_menu_renders": [
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce"
+    ],
+    "hit_menu_construction": [
+      "menu-1-2ce3318",
+      "menu-2-2ce3318",
+      "menu-1-8b227b6",
+      "menu-2-8b227b6",
+      "menu-1-f4efb65",
+      "menu-2-f4efb65",
+      "menu-1-b5446ce",
+      "menu-2-b5446ce"
+    ],
+    "keys_equal": true,
+    "source_native_full_html_equal": true,
+    "consumer_equal_except_current_attributes": true,
+    "assets_equal": true,
+    "consumer_excerpt_displayed_equal": true,
+    "original_core_custom_hit_renders": [],
+    "frozen_current_attributes": [
+      "a1ff108",
+      "e62c115"
+    ],
+    "empty_native_fragments": [],
+    "resolved_menu_items": [
+      {
+        "menu_id": "menu-1-d7ebc85",
+        "items": {
+          "1": {
+            "id": 21106,
+            "title": "CONMET",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/conmet/"
+          },
+          "2": {
+            "id": 21107,
+            "title": "\u03a4\u039f\u03a0.\u0395.\u039a.",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/top-e-k/"
+          },
+          "3": {
+            "id": 21108,
+            "title": "METRIGON",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/metrigon/"
+          },
+          "4": {
+            "id": 21109,
+            "title": "Topomarket IKE",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/topomarket-ike/"
+          },
+          "5": {
+            "id": 21156,
+            "title": "METRICA Ltd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/metrica-ltd/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-d7ebc85",
+        "items": {
+          "1": {
+            "id": 21106,
+            "title": "CONMET",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/conmet/"
+          },
+          "2": {
+            "id": 21107,
+            "title": "\u03a4\u039f\u03a0.\u0395.\u039a.",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/top-e-k/"
+          },
+          "3": {
+            "id": 21108,
+            "title": "METRIGON",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/metrigon/"
+          },
+          "4": {
+            "id": 21109,
+            "title": "Topomarket IKE",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/topomarket-ike/"
+          },
+          "5": {
+            "id": 21156,
+            "title": "METRICA Ltd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/metrica-ltd/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-a1ff108",
+        "items": {
+          "1": {
+            "id": 14103,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          },
+          "2": {
+            "id": 7746,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "3": {
+            "id": 14322,
+            "title": "Service | \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "4": {
+            "id": 7739,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "5": {
+            "id": 24295,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/project-support/"
+          },
+          "6": {
+            "id": 12743,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/diktyo-hxgn-smartnet/"
+          },
+          "7": {
+            "id": 21102,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 R&D",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-a1ff108",
+        "items": {
+          "1": {
+            "id": 14103,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          },
+          "2": {
+            "id": 7746,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "3": {
+            "id": 14322,
+            "title": "Service | \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "4": {
+            "id": 7739,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "5": {
+            "id": 24295,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/project-support/"
+          },
+          "6": {
+            "id": 12743,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/diktyo-hxgn-smartnet/"
+          },
+          "7": {
+            "id": 21102,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 R&D",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-e62c115",
+        "items": {
+          "1": {
+            "id": 14103,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          },
+          "2": {
+            "id": 7746,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "3": {
+            "id": 14322,
+            "title": "Service | \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "4": {
+            "id": 7739,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "5": {
+            "id": 24295,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/project-support/"
+          },
+          "6": {
+            "id": 12743,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/diktyo-hxgn-smartnet/"
+          },
+          "7": {
+            "id": 21102,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 R&D",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-e62c115",
+        "items": {
+          "1": {
+            "id": 14103,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          },
+          "2": {
+            "id": 7746,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "3": {
+            "id": 14322,
+            "title": "Service | \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "4": {
+            "id": 7739,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "5": {
+            "id": 24295,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/project-support/"
+          },
+          "6": {
+            "id": 12743,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/diktyo-hxgn-smartnet/"
+          },
+          "7": {
+            "id": 21102,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 R&D",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-c28398e",
+        "items": {
+          "1": {
+            "id": 7734,
+            "title": "\u03a3\u03c5\u03c7\u03bd\u03ad\u03c2 \u0395\u03c1\u03c9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/faq/"
+          },
+          "2": {
+            "id": 7735,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/"
+          },
+          "3": {
+            "id": 7737,
+            "title": "BLOG | \u03a7\u03c1\u03ae\u03c3\u03b9\u03bc\u03b1 \u03ac\u03c1\u03b8\u03c1\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/blog/"
+          },
+          "4": {
+            "id": 31883,
+            "title": "\u0395\u03ba\u03b4\u03b7\u03bb\u03ce\u03c3\u03b5\u03b9\u03c2 | Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/events/"
+          },
+          "5": {
+            "id": 7738,
+            "title": "\u03a4\u03b1 \u03ad\u03c1\u03b3\u03b1 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/case-studies/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-c28398e",
+        "items": {
+          "1": {
+            "id": 7734,
+            "title": "\u03a3\u03c5\u03c7\u03bd\u03ad\u03c2 \u0395\u03c1\u03c9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/faq/"
+          },
+          "2": {
+            "id": 7735,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/"
+          },
+          "3": {
+            "id": 7737,
+            "title": "BLOG | \u03a7\u03c1\u03ae\u03c3\u03b9\u03bc\u03b1 \u03ac\u03c1\u03b8\u03c1\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/blog/"
+          },
+          "4": {
+            "id": 31883,
+            "title": "\u0395\u03ba\u03b4\u03b7\u03bb\u03ce\u03c3\u03b5\u03b9\u03c2 | Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/events/"
+          },
+          "5": {
+            "id": 7738,
+            "title": "\u03a4\u03b1 \u03ad\u03c1\u03b3\u03b1 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/case-studies/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-66bc2cd",
+        "items": {
+          "1": {
+            "id": 9020,
+            "title": "\u03a4\u03bf\u03c0\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/topografos/"
+          },
+          "2": {
+            "id": 843,
+            "title": "\u039c\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03cc\u03c2",
+            "url": "#"
+          },
+          "3": {
+            "id": 844,
+            "title": "\u03a5\u03c0\u03b5\u03cd\u03b8\u03c5\u03bd\u03bf\u03c2 \u03c0\u03c1\u03bf\u03bc\u03b7\u03b8\u03b5\u03b9\u03ce\u03bd",
+            "url": "#"
+          },
+          "4": {
+            "id": 845,
+            "title": "\u039c\u03b5\u03bb\u03b5\u03c4\u03b7\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "5": {
+            "id": 846,
+            "title": "Project Manager",
+            "url": "#"
+          },
+          "6": {
+            "id": 847,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03cc\u03c2 \u0394\u03b9\u03b5\u03c5\u03b8\u03c5\u03bd\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "7": {
+            "id": 848,
+            "title": "CEO \u03b5\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1\u03c2",
+            "url": "#"
+          },
+          "8": {
+            "id": 849,
+            "title": "\u03a5\u03b4\u03c1\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2",
+            "url": "#"
+          },
+          "9": {
+            "id": 850,
+            "title": "\u03a0\u03b5\u03c1\u03b9\u03b2\u03b1\u03bb\u03bb\u03bf\u03bd\u03c4\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2",
+            "url": "#"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-66bc2cd",
+        "items": {
+          "1": {
+            "id": 9020,
+            "title": "\u03a4\u03bf\u03c0\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/topografos/"
+          },
+          "2": {
+            "id": 843,
+            "title": "\u039c\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03cc\u03c2",
+            "url": "#"
+          },
+          "3": {
+            "id": 844,
+            "title": "\u03a5\u03c0\u03b5\u03cd\u03b8\u03c5\u03bd\u03bf\u03c2 \u03c0\u03c1\u03bf\u03bc\u03b7\u03b8\u03b5\u03b9\u03ce\u03bd",
+            "url": "#"
+          },
+          "4": {
+            "id": 845,
+            "title": "\u039c\u03b5\u03bb\u03b5\u03c4\u03b7\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "5": {
+            "id": 846,
+            "title": "Project Manager",
+            "url": "#"
+          },
+          "6": {
+            "id": 847,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03cc\u03c2 \u0394\u03b9\u03b5\u03c5\u03b8\u03c5\u03bd\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "7": {
+            "id": 848,
+            "title": "CEO \u03b5\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1\u03c2",
+            "url": "#"
+          },
+          "8": {
+            "id": 849,
+            "title": "\u03a5\u03b4\u03c1\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2",
+            "url": "#"
+          },
+          "9": {
+            "id": 850,
+            "title": "\u03a0\u03b5\u03c1\u03b9\u03b2\u03b1\u03bb\u03bb\u03bf\u03bd\u03c4\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2",
+            "url": "#"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-2ce3318",
+        "items": {
+          "1": {
+            "id": 8439,
+            "title": "\u0397 \u03b5\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairia/"
+          },
+          "2": {
+            "id": 8450,
+            "title": "\u039a\u03ad\u03bd\u03c4\u03c1\u03bf \u0388\u03c1\u03b5\u03c5\u03bd\u03b1\u03c2 &#038; \u039a\u03b1\u03b9\u03bd\u03bf\u03c4\u03bf\u03bc\u03af\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          },
+          "3": {
+            "id": 21431,
+            "title": "\u039f\u03b9 \u03c0\u03b9\u03c3\u03c4\u03bf\u03c0\u03bf\u03b9\u03ae\u03c3\u03b5\u03b9\u03c2 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/#certifications"
+          },
+          "4": {
+            "id": 8441,
+            "title": "\u0392\u03b9\u03ce\u03c3\u03b9\u03bc\u03b7 \u0391\u03bd\u03ac\u03c0\u03c4\u03c5\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairiki-koinoniki-eythyni/"
+          },
+          "5": {
+            "id": 8442,
+            "title": "\u0395\u03c5\u03ba\u03b1\u03b9\u03c1\u03af\u03b5\u03c2 \u039a\u03b1\u03c1\u03b9\u03ad\u03c1\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/eykairies-karieras/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-2ce3318",
+        "items": {
+          "1": {
+            "id": 8439,
+            "title": "\u0397 \u03b5\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairia/"
+          },
+          "2": {
+            "id": 8450,
+            "title": "\u039a\u03ad\u03bd\u03c4\u03c1\u03bf \u0388\u03c1\u03b5\u03c5\u03bd\u03b1\u03c2 &#038; \u039a\u03b1\u03b9\u03bd\u03bf\u03c4\u03bf\u03bc\u03af\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          },
+          "3": {
+            "id": 21431,
+            "title": "\u039f\u03b9 \u03c0\u03b9\u03c3\u03c4\u03bf\u03c0\u03bf\u03b9\u03ae\u03c3\u03b5\u03b9\u03c2 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/#certifications"
+          },
+          "4": {
+            "id": 8441,
+            "title": "\u0392\u03b9\u03ce\u03c3\u03b9\u03bc\u03b7 \u0391\u03bd\u03ac\u03c0\u03c4\u03c5\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairiki-koinoniki-eythyni/"
+          },
+          "5": {
+            "id": 8442,
+            "title": "\u0395\u03c5\u03ba\u03b1\u03b9\u03c1\u03af\u03b5\u03c2 \u039a\u03b1\u03c1\u03b9\u03ad\u03c1\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/eykairies-karieras/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-8b227b6",
+        "items": {
+          "1": {
+            "id": 21386,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "2": {
+            "id": 21432,
+            "title": "Service & \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "3": {
+            "id": 21387,
+            "title": "\u0394\u03af\u03ba\u03c4\u03c5\u03bf HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/diktyo-hxgn-smartnet/"
+          },
+          "4": {
+            "id": 8446,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "5": {
+            "id": 21389,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-8b227b6",
+        "items": {
+          "1": {
+            "id": 21386,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "2": {
+            "id": 21432,
+            "title": "Service & \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "3": {
+            "id": 21387,
+            "title": "\u0394\u03af\u03ba\u03c4\u03c5\u03bf HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/diktyo-hxgn-smartnet/"
+          },
+          "4": {
+            "id": 8446,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "5": {
+            "id": 21389,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-f4efb65",
+        "items": {
+          "1": {
+            "id": 8453,
+            "title": "\u03a3\u03c5\u03c7\u03bd\u03ad\u03c2 \u0395\u03c1\u03c9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/faq/"
+          },
+          "2": {
+            "id": 38757,
+            "title": "\u03a0\u03b5\u03c2 \u03bc\u03b1\u03c2 \u03c4\u03b7 \u03b3\u03bd\u03ce\u03bc\u03b7 \u03c3\u03bf\u03c5",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/share-your-experience/"
+          },
+          "3": {
+            "id": 21452,
+            "title": "\u0388\u03c1\u03b5\u03c5\u03bd\u03b1 \u0399\u03ba\u03b1\u03bd\u03bf\u03c0\u03bf\u03af\u03b7\u03c3\u03b7\u03c2 \u03c0\u03b5\u03bb\u03b1\u03c4\u03ce\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/customer-experience-survey/"
+          },
+          "4": {
+            "id": 25616,
+            "title": "\u03a6\u03cc\u03c1\u03bc\u03b1 \u03c0\u03b1\u03c1\u03b1\u03c0\u03cc\u03bd\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/forma-paraponon/"
+          },
+          "5": {
+            "id": 21371,
+            "title": "\u03a0\u03bf\u03bb\u03b9\u03c4\u03b9\u03ba\u03ae \u0399\u03b4\u03b9\u03c9\u03c4\u03b9\u03ba\u03cc\u03c4\u03b7\u03c4\u03b1\u03c2 \u03ba\u03b1\u03b9 \u03a0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c3\u03af\u03b1\u03c2 \u03a0\u03c1\u03bf\u03c3\u03c9\u03c0\u03b9\u03ba\u03ce\u03bd \u0394\u03b5\u03b4\u03bf\u03bc\u03ad\u03bd\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/privacy-policy/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-f4efb65",
+        "items": {
+          "1": {
+            "id": 8453,
+            "title": "\u03a3\u03c5\u03c7\u03bd\u03ad\u03c2 \u0395\u03c1\u03c9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/faq/"
+          },
+          "2": {
+            "id": 38757,
+            "title": "\u03a0\u03b5\u03c2 \u03bc\u03b1\u03c2 \u03c4\u03b7 \u03b3\u03bd\u03ce\u03bc\u03b7 \u03c3\u03bf\u03c5",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/share-your-experience/"
+          },
+          "3": {
+            "id": 21452,
+            "title": "\u0388\u03c1\u03b5\u03c5\u03bd\u03b1 \u0399\u03ba\u03b1\u03bd\u03bf\u03c0\u03bf\u03af\u03b7\u03c3\u03b7\u03c2 \u03c0\u03b5\u03bb\u03b1\u03c4\u03ce\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/customer-experience-survey/"
+          },
+          "4": {
+            "id": 25616,
+            "title": "\u03a6\u03cc\u03c1\u03bc\u03b1 \u03c0\u03b1\u03c1\u03b1\u03c0\u03cc\u03bd\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/forma-paraponon/"
+          },
+          "5": {
+            "id": 21371,
+            "title": "\u03a0\u03bf\u03bb\u03b9\u03c4\u03b9\u03ba\u03ae \u0399\u03b4\u03b9\u03c9\u03c4\u03b9\u03ba\u03cc\u03c4\u03b7\u03c4\u03b1\u03c2 \u03ba\u03b1\u03b9 \u03a0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c3\u03af\u03b1\u03c2 \u03a0\u03c1\u03bf\u03c3\u03c9\u03c0\u03b9\u03ba\u03ce\u03bd \u0394\u03b5\u03b4\u03bf\u03bc\u03ad\u03bd\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/privacy-policy/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-b5446ce",
+        "items": {
+          "1": {
+            "id": 7622,
+            "title": "\u0397 \u0395\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairia/"
+          },
+          "2": {
+            "id": 22,
+            "title": "\u03a0\u03a1\u039f\u03aa\u039f\u039d\u03a4\u0391 & \u039b\u03a5\u03a3\u0395\u0399\u03a3",
+            "url": "#"
+          },
+          "3": {
+            "id": 9853,
+            "title": "\u03a4\u03bf\u03c0\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/topografikos-exoplismos/"
+          },
+          "4": {
+            "id": 32800,
+            "title": "Positioning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/positioning/"
+          },
+          "5": {
+            "id": 9850,
+            "title": "Reality Capture &#038; 3D Scanning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/reality-capture/"
+          },
+          "6": {
+            "id": 9858,
+            "title": "\u03a7\u03b1\u03c1\u03c4\u03bf\u03b3\u03c1\u03ac\u03c6\u03b7\u03c3\u03b7 \u03a5\u03c0\u03cc\u03b3\u03b5\u03b9\u03c9\u03bd \u0394\u03bf\u03bc\u03ce\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/utility-detection/"
+          },
+          "7": {
+            "id": 9852,
+            "title": "\u039b\u03cd\u03c3\u03b5\u03b9\u03c2 \u03b5\u03c1\u03b3\u03bf\u03c4\u03b1\u03be\u03af\u03bf\u03c5",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/ergotaxiaka/"
+          },
+          "8": {
+            "id": 19407,
+            "title": "\u039d\u03b5\u03c1\u03cc &#038; \u0391\u03bd\u03bf\u03b9\u03c7\u03c4\u03ac \u038e\u03b4\u03b1\u03c4\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/hydrology-solutions/"
+          },
+          "9": {
+            "id": 19406,
+            "title": "\u0392\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03af\u03b1 \u039d\u03b5\u03c1\u03bf\u03cd &#038; \u039b\u03c5\u03bc\u03ac\u03c4\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/water-wastewater-solutions-2/"
+          },
+          "10": {
+            "id": 9857,
+            "title": "UAV | Drones",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/drones-aerial-mapping/"
+          },
+          "11": {
+            "id": 9854,
+            "title": "\u039c\u03b5\u03c4\u03b5\u03c9\u03c1\u03bf\u03bb\u03bf\u03b3\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/meteorology-solutions/"
+          },
+          "12": {
+            "id": 9859,
+            "title": "\u03a9\u03ba\u03b5\u03b1\u03bd\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/oceanografikos-exoplismos-ypiresies/"
+          },
+          "13": {
+            "id": 19408,
+            "title": "\u0392\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03cc\u03c2 \u0388\u03bb\u03b5\u03b3\u03c7\u03bf\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/industrial-metrology/"
+          },
+          "14": {
+            "id": 23,
+            "title": "\u039b\u03a5\u03a3\u0395\u0399\u03a3 \u0391\u039d\u0391 \u039a\u039b\u0391\u0394\u039f",
+            "url": "#"
+          },
+          "15": {
+            "id": 9839,
+            "title": "AEC \u2013 \u0391\u03c1\u03c7\u03b9\u03c4\u03b5\u03ba\u03c4\u03bf\u03bd\u03b9\u03ba\u03ae, \u039c\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03ae, \u039a\u03b1\u03c4\u03b1\u03c3\u03ba\u03b5\u03c5\u03ae",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/aec-architektoniki-michaniki-kataskevi/"
+          },
+          "16": {
+            "id": 9849,
+            "title": "\u039c\u03b5\u03b3\u03ac\u03bb\u03b5\u03c2 \u03a5\u03c0\u03bf\u03b4\u03bf\u03bc\u03ad\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/ypodomes/"
+          },
+          "17": {
+            "id": 9848,
+            "title": "\u039f.\u03a4.\u0391.",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/ypiresies-koinis-ofeleias/"
+          },
+          "18": {
+            "id": 9847,
+            "title": "\u03a0\u03b5\u03c1\u03b9\u03b2\u03ac\u03bb\u03bb\u03bf\u03bd &#038; \u0395\u03bd\u03ad\u03c1\u03b3\u03b5\u03b9\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/perivallon-energeia/"
+          },
+          "19": {
+            "id": 9846,
+            "title": "\u0394\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u0391\u03c3\u03c6\u03ac\u03bb\u03b5\u03b9\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/dimosia-dioikisi/"
+          },
+          "20": {
+            "id": 9845,
+            "title": "\u03a0\u03bf\u03bb\u03b9\u03c4\u03b9\u03c3\u03bc\u03cc\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/politismos/"
+          },
+          "21": {
+            "id": 9844,
+            "title": "\u0395\u03ba\u03c0\u03b1\u03af\u03b4\u03b5\u03c5\u03c3\u03b7 &#038; \u0388\u03c1\u03b5\u03c5\u03bd\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/ekpaidefsi-erevna/"
+          },
+          "22": {
+            "id": 9843,
+            "title": "\u0392\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/viomichania/"
+          },
+          "23": {
+            "id": 9842,
+            "title": "\u039d\u03b1\u03c5\u03c4\u03b9\u03bb\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/naftilia/"
+          },
+          "24": {
+            "id": 9841,
+            "title": "\u03a4\u03bf\u03c5\u03c1\u03b9\u03c3\u03bc\u03cc\u03c2 &#038; Real Estate",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/tourismos-real-estate/"
+          },
+          "25": {
+            "id": 24,
+            "title": "\u03a5\u03a0\u0397\u03a1\u0395\u03a3\u0399\u0395\u03a3",
+            "url": "#"
+          },
+          "26": {
+            "id": 13973,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          },
+          "27": {
+            "id": 9838,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "28": {
+            "id": 24115,
+            "title": "Service & \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "29": {
+            "id": 7697,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "30": {
+            "id": 24116,
+            "title": "\u039a\u03ad\u03bd\u03c4\u03c1\u03bf \u0388\u03c1\u03b5\u03c5\u03bd\u03b1\u03c2 &#038; \u039a\u03b1\u03b9\u03bd\u03bf\u03c4\u03bf\u03bc\u03af\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          },
+          "31": {
+            "id": 25,
+            "title": "\u0392\u03b9\u03b2\u03bb\u03b9\u03bf\u03b8\u03ae\u03ba\u03b7",
+            "url": "#"
+          },
+          "32": {
+            "id": 7708,
+            "title": "\u03a3\u03c5\u03c7\u03bd\u03ad\u03c2 \u0395\u03c1\u03c9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/faq/"
+          },
+          "33": {
+            "id": 7709,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/"
+          },
+          "34": {
+            "id": 7710,
+            "title": "\u03a7\u03c1\u03ae\u03c3\u03b9\u03bc\u03b1 \u0386\u03c1\u03b8\u03c1\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/blog/"
+          },
+          "35": {
+            "id": 31882,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/events/"
+          },
+          "36": {
+            "id": 7712,
+            "title": "\u03a4\u03b1 \u03ad\u03c1\u03b3\u03b1 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/case-studies/"
+          },
+          "37": {
+            "id": 9837,
+            "title": "\u0394\u03af\u03ba\u03c4\u03c5\u03bf \u03a3\u03c5\u03bd\u03b5\u03c1\u03b3\u03b1\u03c4\u03ce\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/synergates/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-b5446ce",
+        "items": {
+          "1": {
+            "id": 7622,
+            "title": "\u0397 \u0395\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairia/"
+          },
+          "2": {
+            "id": 22,
+            "title": "\u03a0\u03a1\u039f\u03aa\u039f\u039d\u03a4\u0391 & \u039b\u03a5\u03a3\u0395\u0399\u03a3",
+            "url": "#"
+          },
+          "3": {
+            "id": 9853,
+            "title": "\u03a4\u03bf\u03c0\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/topografikos-exoplismos/"
+          },
+          "4": {
+            "id": 32800,
+            "title": "Positioning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/positioning/"
+          },
+          "5": {
+            "id": 9850,
+            "title": "Reality Capture &#038; 3D Scanning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/reality-capture/"
+          },
+          "6": {
+            "id": 9858,
+            "title": "\u03a7\u03b1\u03c1\u03c4\u03bf\u03b3\u03c1\u03ac\u03c6\u03b7\u03c3\u03b7 \u03a5\u03c0\u03cc\u03b3\u03b5\u03b9\u03c9\u03bd \u0394\u03bf\u03bc\u03ce\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/utility-detection/"
+          },
+          "7": {
+            "id": 9852,
+            "title": "\u039b\u03cd\u03c3\u03b5\u03b9\u03c2 \u03b5\u03c1\u03b3\u03bf\u03c4\u03b1\u03be\u03af\u03bf\u03c5",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/ergotaxiaka/"
+          },
+          "8": {
+            "id": 19407,
+            "title": "\u039d\u03b5\u03c1\u03cc &#038; \u0391\u03bd\u03bf\u03b9\u03c7\u03c4\u03ac \u038e\u03b4\u03b1\u03c4\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/hydrology-solutions/"
+          },
+          "9": {
+            "id": 19406,
+            "title": "\u0392\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03af\u03b1 \u039d\u03b5\u03c1\u03bf\u03cd &#038; \u039b\u03c5\u03bc\u03ac\u03c4\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/water-wastewater-solutions-2/"
+          },
+          "10": {
+            "id": 9857,
+            "title": "UAV | Drones",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/drones-aerial-mapping/"
+          },
+          "11": {
+            "id": 9854,
+            "title": "\u039c\u03b5\u03c4\u03b5\u03c9\u03c1\u03bf\u03bb\u03bf\u03b3\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/meteorology-solutions/"
+          },
+          "12": {
+            "id": 9859,
+            "title": "\u03a9\u03ba\u03b5\u03b1\u03bd\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/oceanografikos-exoplismos-ypiresies/"
+          },
+          "13": {
+            "id": 19408,
+            "title": "\u0392\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03cc\u03c2 \u0388\u03bb\u03b5\u03b3\u03c7\u03bf\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/industrial-metrology/"
+          },
+          "14": {
+            "id": 23,
+            "title": "\u039b\u03a5\u03a3\u0395\u0399\u03a3 \u0391\u039d\u0391 \u039a\u039b\u0391\u0394\u039f",
+            "url": "#"
+          },
+          "15": {
+            "id": 9839,
+            "title": "AEC \u2013 \u0391\u03c1\u03c7\u03b9\u03c4\u03b5\u03ba\u03c4\u03bf\u03bd\u03b9\u03ba\u03ae, \u039c\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03ae, \u039a\u03b1\u03c4\u03b1\u03c3\u03ba\u03b5\u03c5\u03ae",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/aec-architektoniki-michaniki-kataskevi/"
+          },
+          "16": {
+            "id": 9849,
+            "title": "\u039c\u03b5\u03b3\u03ac\u03bb\u03b5\u03c2 \u03a5\u03c0\u03bf\u03b4\u03bf\u03bc\u03ad\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/ypodomes/"
+          },
+          "17": {
+            "id": 9848,
+            "title": "\u039f.\u03a4.\u0391.",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/ypiresies-koinis-ofeleias/"
+          },
+          "18": {
+            "id": 9847,
+            "title": "\u03a0\u03b5\u03c1\u03b9\u03b2\u03ac\u03bb\u03bb\u03bf\u03bd &#038; \u0395\u03bd\u03ad\u03c1\u03b3\u03b5\u03b9\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/perivallon-energeia/"
+          },
+          "19": {
+            "id": 9846,
+            "title": "\u0394\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u0391\u03c3\u03c6\u03ac\u03bb\u03b5\u03b9\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/dimosia-dioikisi/"
+          },
+          "20": {
+            "id": 9845,
+            "title": "\u03a0\u03bf\u03bb\u03b9\u03c4\u03b9\u03c3\u03bc\u03cc\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/politismos/"
+          },
+          "21": {
+            "id": 9844,
+            "title": "\u0395\u03ba\u03c0\u03b1\u03af\u03b4\u03b5\u03c5\u03c3\u03b7 &#038; \u0388\u03c1\u03b5\u03c5\u03bd\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/ekpaidefsi-erevna/"
+          },
+          "22": {
+            "id": 9843,
+            "title": "\u0392\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/viomichania/"
+          },
+          "23": {
+            "id": 9842,
+            "title": "\u039d\u03b1\u03c5\u03c4\u03b9\u03bb\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/naftilia/"
+          },
+          "24": {
+            "id": 9841,
+            "title": "\u03a4\u03bf\u03c5\u03c1\u03b9\u03c3\u03bc\u03cc\u03c2 &#038; Real Estate",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/tourismos-real-estate/"
+          },
+          "25": {
+            "id": 24,
+            "title": "\u03a5\u03a0\u0397\u03a1\u0395\u03a3\u0399\u0395\u03a3",
+            "url": "#"
+          },
+          "26": {
+            "id": 13973,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          },
+          "27": {
+            "id": 9838,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "28": {
+            "id": 24115,
+            "title": "Service & \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "29": {
+            "id": 7697,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "30": {
+            "id": 24116,
+            "title": "\u039a\u03ad\u03bd\u03c4\u03c1\u03bf \u0388\u03c1\u03b5\u03c5\u03bd\u03b1\u03c2 &#038; \u039a\u03b1\u03b9\u03bd\u03bf\u03c4\u03bf\u03bc\u03af\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          },
+          "31": {
+            "id": 25,
+            "title": "\u0392\u03b9\u03b2\u03bb\u03b9\u03bf\u03b8\u03ae\u03ba\u03b7",
+            "url": "#"
+          },
+          "32": {
+            "id": 7708,
+            "title": "\u03a3\u03c5\u03c7\u03bd\u03ad\u03c2 \u0395\u03c1\u03c9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/faq/"
+          },
+          "33": {
+            "id": 7709,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/"
+          },
+          "34": {
+            "id": 7710,
+            "title": "\u03a7\u03c1\u03ae\u03c3\u03b9\u03bc\u03b1 \u0386\u03c1\u03b8\u03c1\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/blog/"
+          },
+          "35": {
+            "id": 31882,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/events/"
+          },
+          "36": {
+            "id": 7712,
+            "title": "\u03a4\u03b1 \u03ad\u03c1\u03b3\u03b1 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/case-studies/"
+          },
+          "37": {
+            "id": 9837,
+            "title": "\u0394\u03af\u03ba\u03c4\u03c5\u03bf \u03a3\u03c5\u03bd\u03b5\u03c1\u03b3\u03b1\u03c4\u03ce\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/synergates/"
+          }
+        }
+      }
+    ],
+    "fragment_sha256": {
+      "d7ebc85": "42d6d037998488957eba4f05e5e6b2f4cb5d6b09927cb41bff6eb3239f34dd22",
+      "a1ff108": "786788f30ea6f364f57fa2eaa8380e2033edd2dd7eec7a6d4fbd333a835f31a3",
+      "e62c115": "4c76daa5708c7cc8e021a9f8e5fe7ffbb679d3e304afee555997b6fa73952c9e",
+      "c28398e": "788f02aad55eb9b12cf428eb0d714563b151d83b375086ebd3f69f1bf911a76a",
+      "417d1ae": "f0dbc2aef77d8a6cb6fbf6eec5fee8d9fb748ff2a49c82061e06e0f8b7d300f7",
+      "c60daee": "b024f41b59306a826186d87c86f2be866d6d0f0db3e43236d59b3a686e469e87",
+      "iu-core-proof": "4ad805b4b44dcfbbd75a647481e7844173e1a942b31d83a0f1dfb18e9f576fca",
+      "iu-custom-proof": "0cdc84c7de7e32668ab8fc05ea4892273a0baa17033b524be0c1cbc348f6fed3"
+    }
+  },
+  {
+    "language": "el",
+    "builder": "site_manager",
+    "consumer": "anonymous",
+    "miss_loops": 150,
+    "hit_loops": 0,
+    "miss_menu_renders": [
+      "d7ebc85",
+      "a1ff108",
+      "e62c115",
+      "c28398e",
+      "66bc2cd",
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce"
+    ],
+    "hit_menu_renders": [
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce"
+    ],
+    "hit_menu_construction": [
+      "menu-1-2ce3318",
+      "menu-2-2ce3318",
+      "menu-1-8b227b6",
+      "menu-2-8b227b6",
+      "menu-1-f4efb65",
+      "menu-2-f4efb65",
+      "menu-1-b5446ce",
+      "menu-2-b5446ce"
+    ],
+    "keys_equal": true,
+    "source_native_full_html_equal": true,
+    "consumer_equal_except_current_attributes": true,
+    "assets_equal": true,
+    "consumer_excerpt_displayed_equal": true,
+    "original_core_custom_hit_renders": [],
+    "frozen_current_attributes": [
+      "a1ff108",
+      "e62c115"
+    ],
+    "empty_native_fragments": [],
+    "resolved_menu_items": [
+      {
+        "menu_id": "menu-1-d7ebc85",
+        "items": {
+          "1": {
+            "id": 21106,
+            "title": "CONMET",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/conmet/"
+          },
+          "2": {
+            "id": 21107,
+            "title": "\u03a4\u039f\u03a0.\u0395.\u039a.",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/top-e-k/"
+          },
+          "3": {
+            "id": 21108,
+            "title": "METRIGON",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/metrigon/"
+          },
+          "4": {
+            "id": 21109,
+            "title": "Topomarket IKE",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/topomarket-ike/"
+          },
+          "5": {
+            "id": 21156,
+            "title": "METRICA Ltd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/metrica-ltd/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-d7ebc85",
+        "items": {
+          "1": {
+            "id": 21106,
+            "title": "CONMET",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/conmet/"
+          },
+          "2": {
+            "id": 21107,
+            "title": "\u03a4\u039f\u03a0.\u0395.\u039a.",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/top-e-k/"
+          },
+          "3": {
+            "id": 21108,
+            "title": "METRIGON",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/metrigon/"
+          },
+          "4": {
+            "id": 21109,
+            "title": "Topomarket IKE",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/topomarket-ike/"
+          },
+          "5": {
+            "id": 21156,
+            "title": "METRICA Ltd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/brand/metrica-ltd/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-a1ff108",
+        "items": {
+          "1": {
+            "id": 14103,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          },
+          "2": {
+            "id": 7746,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "3": {
+            "id": 14322,
+            "title": "Service | \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "4": {
+            "id": 7739,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "5": {
+            "id": 24295,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/project-support/"
+          },
+          "6": {
+            "id": 12743,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/diktyo-hxgn-smartnet/"
+          },
+          "7": {
+            "id": 21102,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 R&D",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-a1ff108",
+        "items": {
+          "1": {
+            "id": 14103,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          },
+          "2": {
+            "id": 7746,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "3": {
+            "id": 14322,
+            "title": "Service | \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "4": {
+            "id": 7739,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "5": {
+            "id": 24295,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/project-support/"
+          },
+          "6": {
+            "id": 12743,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/diktyo-hxgn-smartnet/"
+          },
+          "7": {
+            "id": 21102,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 R&D",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-e62c115",
+        "items": {
+          "1": {
+            "id": 14103,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          },
+          "2": {
+            "id": 7746,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "3": {
+            "id": 14322,
+            "title": "Service | \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "4": {
+            "id": 7739,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "5": {
+            "id": 24295,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/project-support/"
+          },
+          "6": {
+            "id": 12743,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/diktyo-hxgn-smartnet/"
+          },
+          "7": {
+            "id": 21102,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 R&D",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-e62c115",
+        "items": {
+          "1": {
+            "id": 14103,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          },
+          "2": {
+            "id": 7746,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "3": {
+            "id": 14322,
+            "title": "Service | \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "4": {
+            "id": 7739,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "5": {
+            "id": 24295,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/project-support/"
+          },
+          "6": {
+            "id": 12743,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/diktyo-hxgn-smartnet/"
+          },
+          "7": {
+            "id": 21102,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 R&D",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-c28398e",
+        "items": {
+          "1": {
+            "id": 7734,
+            "title": "\u03a3\u03c5\u03c7\u03bd\u03ad\u03c2 \u0395\u03c1\u03c9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/faq/"
+          },
+          "2": {
+            "id": 7735,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/"
+          },
+          "3": {
+            "id": 7737,
+            "title": "BLOG | \u03a7\u03c1\u03ae\u03c3\u03b9\u03bc\u03b1 \u03ac\u03c1\u03b8\u03c1\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/blog/"
+          },
+          "4": {
+            "id": 31883,
+            "title": "\u0395\u03ba\u03b4\u03b7\u03bb\u03ce\u03c3\u03b5\u03b9\u03c2 | Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/events/"
+          },
+          "5": {
+            "id": 7738,
+            "title": "\u03a4\u03b1 \u03ad\u03c1\u03b3\u03b1 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/case-studies/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-c28398e",
+        "items": {
+          "1": {
+            "id": 7734,
+            "title": "\u03a3\u03c5\u03c7\u03bd\u03ad\u03c2 \u0395\u03c1\u03c9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/faq/"
+          },
+          "2": {
+            "id": 7735,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/"
+          },
+          "3": {
+            "id": 7737,
+            "title": "BLOG | \u03a7\u03c1\u03ae\u03c3\u03b9\u03bc\u03b1 \u03ac\u03c1\u03b8\u03c1\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/blog/"
+          },
+          "4": {
+            "id": 31883,
+            "title": "\u0395\u03ba\u03b4\u03b7\u03bb\u03ce\u03c3\u03b5\u03b9\u03c2 | Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/events/"
+          },
+          "5": {
+            "id": 7738,
+            "title": "\u03a4\u03b1 \u03ad\u03c1\u03b3\u03b1 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/case-studies/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-66bc2cd",
+        "items": {
+          "1": {
+            "id": 9020,
+            "title": "\u03a4\u03bf\u03c0\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/topografos/"
+          },
+          "2": {
+            "id": 843,
+            "title": "\u039c\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03cc\u03c2",
+            "url": "#"
+          },
+          "3": {
+            "id": 844,
+            "title": "\u03a5\u03c0\u03b5\u03cd\u03b8\u03c5\u03bd\u03bf\u03c2 \u03c0\u03c1\u03bf\u03bc\u03b7\u03b8\u03b5\u03b9\u03ce\u03bd",
+            "url": "#"
+          },
+          "4": {
+            "id": 845,
+            "title": "\u039c\u03b5\u03bb\u03b5\u03c4\u03b7\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "5": {
+            "id": 846,
+            "title": "Project Manager",
+            "url": "#"
+          },
+          "6": {
+            "id": 847,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03cc\u03c2 \u0394\u03b9\u03b5\u03c5\u03b8\u03c5\u03bd\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "7": {
+            "id": 848,
+            "title": "CEO \u03b5\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1\u03c2",
+            "url": "#"
+          },
+          "8": {
+            "id": 849,
+            "title": "\u03a5\u03b4\u03c1\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2",
+            "url": "#"
+          },
+          "9": {
+            "id": 850,
+            "title": "\u03a0\u03b5\u03c1\u03b9\u03b2\u03b1\u03bb\u03bb\u03bf\u03bd\u03c4\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2",
+            "url": "#"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-66bc2cd",
+        "items": {
+          "1": {
+            "id": 9020,
+            "title": "\u03a4\u03bf\u03c0\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/topografos/"
+          },
+          "2": {
+            "id": 843,
+            "title": "\u039c\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03cc\u03c2",
+            "url": "#"
+          },
+          "3": {
+            "id": 844,
+            "title": "\u03a5\u03c0\u03b5\u03cd\u03b8\u03c5\u03bd\u03bf\u03c2 \u03c0\u03c1\u03bf\u03bc\u03b7\u03b8\u03b5\u03b9\u03ce\u03bd",
+            "url": "#"
+          },
+          "4": {
+            "id": 845,
+            "title": "\u039c\u03b5\u03bb\u03b5\u03c4\u03b7\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "5": {
+            "id": 846,
+            "title": "Project Manager",
+            "url": "#"
+          },
+          "6": {
+            "id": 847,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03cc\u03c2 \u0394\u03b9\u03b5\u03c5\u03b8\u03c5\u03bd\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "7": {
+            "id": 848,
+            "title": "CEO \u03b5\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1\u03c2",
+            "url": "#"
+          },
+          "8": {
+            "id": 849,
+            "title": "\u03a5\u03b4\u03c1\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2",
+            "url": "#"
+          },
+          "9": {
+            "id": 850,
+            "title": "\u03a0\u03b5\u03c1\u03b9\u03b2\u03b1\u03bb\u03bb\u03bf\u03bd\u03c4\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2",
+            "url": "#"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-2ce3318",
+        "items": {
+          "1": {
+            "id": 8439,
+            "title": "\u0397 \u03b5\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairia/"
+          },
+          "2": {
+            "id": 8450,
+            "title": "\u039a\u03ad\u03bd\u03c4\u03c1\u03bf \u0388\u03c1\u03b5\u03c5\u03bd\u03b1\u03c2 &#038; \u039a\u03b1\u03b9\u03bd\u03bf\u03c4\u03bf\u03bc\u03af\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          },
+          "3": {
+            "id": 21431,
+            "title": "\u039f\u03b9 \u03c0\u03b9\u03c3\u03c4\u03bf\u03c0\u03bf\u03b9\u03ae\u03c3\u03b5\u03b9\u03c2 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/#certifications"
+          },
+          "4": {
+            "id": 8441,
+            "title": "\u0392\u03b9\u03ce\u03c3\u03b9\u03bc\u03b7 \u0391\u03bd\u03ac\u03c0\u03c4\u03c5\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairiki-koinoniki-eythyni/"
+          },
+          "5": {
+            "id": 8442,
+            "title": "\u0395\u03c5\u03ba\u03b1\u03b9\u03c1\u03af\u03b5\u03c2 \u039a\u03b1\u03c1\u03b9\u03ad\u03c1\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/eykairies-karieras/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-2ce3318",
+        "items": {
+          "1": {
+            "id": 8439,
+            "title": "\u0397 \u03b5\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairia/"
+          },
+          "2": {
+            "id": 8450,
+            "title": "\u039a\u03ad\u03bd\u03c4\u03c1\u03bf \u0388\u03c1\u03b5\u03c5\u03bd\u03b1\u03c2 &#038; \u039a\u03b1\u03b9\u03bd\u03bf\u03c4\u03bf\u03bc\u03af\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          },
+          "3": {
+            "id": 21431,
+            "title": "\u039f\u03b9 \u03c0\u03b9\u03c3\u03c4\u03bf\u03c0\u03bf\u03b9\u03ae\u03c3\u03b5\u03b9\u03c2 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/#certifications"
+          },
+          "4": {
+            "id": 8441,
+            "title": "\u0392\u03b9\u03ce\u03c3\u03b9\u03bc\u03b7 \u0391\u03bd\u03ac\u03c0\u03c4\u03c5\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairiki-koinoniki-eythyni/"
+          },
+          "5": {
+            "id": 8442,
+            "title": "\u0395\u03c5\u03ba\u03b1\u03b9\u03c1\u03af\u03b5\u03c2 \u039a\u03b1\u03c1\u03b9\u03ad\u03c1\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/eykairies-karieras/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-8b227b6",
+        "items": {
+          "1": {
+            "id": 21386,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "2": {
+            "id": 21432,
+            "title": "Service & \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "3": {
+            "id": 21387,
+            "title": "\u0394\u03af\u03ba\u03c4\u03c5\u03bf HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/diktyo-hxgn-smartnet/"
+          },
+          "4": {
+            "id": 8446,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "5": {
+            "id": 21389,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-8b227b6",
+        "items": {
+          "1": {
+            "id": 21386,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "2": {
+            "id": 21432,
+            "title": "Service & \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "3": {
+            "id": 21387,
+            "title": "\u0394\u03af\u03ba\u03c4\u03c5\u03bf HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/diktyo-hxgn-smartnet/"
+          },
+          "4": {
+            "id": 8446,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "5": {
+            "id": 21389,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-f4efb65",
+        "items": {
+          "1": {
+            "id": 8453,
+            "title": "\u03a3\u03c5\u03c7\u03bd\u03ad\u03c2 \u0395\u03c1\u03c9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/faq/"
+          },
+          "2": {
+            "id": 38757,
+            "title": "\u03a0\u03b5\u03c2 \u03bc\u03b1\u03c2 \u03c4\u03b7 \u03b3\u03bd\u03ce\u03bc\u03b7 \u03c3\u03bf\u03c5",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/share-your-experience/"
+          },
+          "3": {
+            "id": 21452,
+            "title": "\u0388\u03c1\u03b5\u03c5\u03bd\u03b1 \u0399\u03ba\u03b1\u03bd\u03bf\u03c0\u03bf\u03af\u03b7\u03c3\u03b7\u03c2 \u03c0\u03b5\u03bb\u03b1\u03c4\u03ce\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/customer-experience-survey/"
+          },
+          "4": {
+            "id": 25616,
+            "title": "\u03a6\u03cc\u03c1\u03bc\u03b1 \u03c0\u03b1\u03c1\u03b1\u03c0\u03cc\u03bd\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/forma-paraponon/"
+          },
+          "5": {
+            "id": 21371,
+            "title": "\u03a0\u03bf\u03bb\u03b9\u03c4\u03b9\u03ba\u03ae \u0399\u03b4\u03b9\u03c9\u03c4\u03b9\u03ba\u03cc\u03c4\u03b7\u03c4\u03b1\u03c2 \u03ba\u03b1\u03b9 \u03a0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c3\u03af\u03b1\u03c2 \u03a0\u03c1\u03bf\u03c3\u03c9\u03c0\u03b9\u03ba\u03ce\u03bd \u0394\u03b5\u03b4\u03bf\u03bc\u03ad\u03bd\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/privacy-policy/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-f4efb65",
+        "items": {
+          "1": {
+            "id": 8453,
+            "title": "\u03a3\u03c5\u03c7\u03bd\u03ad\u03c2 \u0395\u03c1\u03c9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/faq/"
+          },
+          "2": {
+            "id": 38757,
+            "title": "\u03a0\u03b5\u03c2 \u03bc\u03b1\u03c2 \u03c4\u03b7 \u03b3\u03bd\u03ce\u03bc\u03b7 \u03c3\u03bf\u03c5",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/share-your-experience/"
+          },
+          "3": {
+            "id": 21452,
+            "title": "\u0388\u03c1\u03b5\u03c5\u03bd\u03b1 \u0399\u03ba\u03b1\u03bd\u03bf\u03c0\u03bf\u03af\u03b7\u03c3\u03b7\u03c2 \u03c0\u03b5\u03bb\u03b1\u03c4\u03ce\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/customer-experience-survey/"
+          },
+          "4": {
+            "id": 25616,
+            "title": "\u03a6\u03cc\u03c1\u03bc\u03b1 \u03c0\u03b1\u03c1\u03b1\u03c0\u03cc\u03bd\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/forma-paraponon/"
+          },
+          "5": {
+            "id": 21371,
+            "title": "\u03a0\u03bf\u03bb\u03b9\u03c4\u03b9\u03ba\u03ae \u0399\u03b4\u03b9\u03c9\u03c4\u03b9\u03ba\u03cc\u03c4\u03b7\u03c4\u03b1\u03c2 \u03ba\u03b1\u03b9 \u03a0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c3\u03af\u03b1\u03c2 \u03a0\u03c1\u03bf\u03c3\u03c9\u03c0\u03b9\u03ba\u03ce\u03bd \u0394\u03b5\u03b4\u03bf\u03bc\u03ad\u03bd\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/privacy-policy/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-b5446ce",
+        "items": {
+          "1": {
+            "id": 7622,
+            "title": "\u0397 \u0395\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairia/"
+          },
+          "2": {
+            "id": 22,
+            "title": "\u03a0\u03a1\u039f\u03aa\u039f\u039d\u03a4\u0391 & \u039b\u03a5\u03a3\u0395\u0399\u03a3",
+            "url": "#"
+          },
+          "3": {
+            "id": 9853,
+            "title": "\u03a4\u03bf\u03c0\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/topografikos-exoplismos/"
+          },
+          "4": {
+            "id": 32800,
+            "title": "Positioning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/positioning/"
+          },
+          "5": {
+            "id": 9850,
+            "title": "Reality Capture &#038; 3D Scanning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/reality-capture/"
+          },
+          "6": {
+            "id": 9858,
+            "title": "\u03a7\u03b1\u03c1\u03c4\u03bf\u03b3\u03c1\u03ac\u03c6\u03b7\u03c3\u03b7 \u03a5\u03c0\u03cc\u03b3\u03b5\u03b9\u03c9\u03bd \u0394\u03bf\u03bc\u03ce\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/utility-detection/"
+          },
+          "7": {
+            "id": 9852,
+            "title": "\u039b\u03cd\u03c3\u03b5\u03b9\u03c2 \u03b5\u03c1\u03b3\u03bf\u03c4\u03b1\u03be\u03af\u03bf\u03c5",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/ergotaxiaka/"
+          },
+          "8": {
+            "id": 19407,
+            "title": "\u039d\u03b5\u03c1\u03cc &#038; \u0391\u03bd\u03bf\u03b9\u03c7\u03c4\u03ac \u038e\u03b4\u03b1\u03c4\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/hydrology-solutions/"
+          },
+          "9": {
+            "id": 19406,
+            "title": "\u0392\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03af\u03b1 \u039d\u03b5\u03c1\u03bf\u03cd &#038; \u039b\u03c5\u03bc\u03ac\u03c4\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/water-wastewater-solutions-2/"
+          },
+          "10": {
+            "id": 9857,
+            "title": "UAV | Drones",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/drones-aerial-mapping/"
+          },
+          "11": {
+            "id": 9854,
+            "title": "\u039c\u03b5\u03c4\u03b5\u03c9\u03c1\u03bf\u03bb\u03bf\u03b3\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/meteorology-solutions/"
+          },
+          "12": {
+            "id": 9859,
+            "title": "\u03a9\u03ba\u03b5\u03b1\u03bd\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/oceanografikos-exoplismos-ypiresies/"
+          },
+          "13": {
+            "id": 19408,
+            "title": "\u0392\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03cc\u03c2 \u0388\u03bb\u03b5\u03b3\u03c7\u03bf\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/industrial-metrology/"
+          },
+          "14": {
+            "id": 23,
+            "title": "\u039b\u03a5\u03a3\u0395\u0399\u03a3 \u0391\u039d\u0391 \u039a\u039b\u0391\u0394\u039f",
+            "url": "#"
+          },
+          "15": {
+            "id": 9839,
+            "title": "AEC \u2013 \u0391\u03c1\u03c7\u03b9\u03c4\u03b5\u03ba\u03c4\u03bf\u03bd\u03b9\u03ba\u03ae, \u039c\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03ae, \u039a\u03b1\u03c4\u03b1\u03c3\u03ba\u03b5\u03c5\u03ae",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/aec-architektoniki-michaniki-kataskevi/"
+          },
+          "16": {
+            "id": 9849,
+            "title": "\u039c\u03b5\u03b3\u03ac\u03bb\u03b5\u03c2 \u03a5\u03c0\u03bf\u03b4\u03bf\u03bc\u03ad\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/ypodomes/"
+          },
+          "17": {
+            "id": 9848,
+            "title": "\u039f.\u03a4.\u0391.",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/ypiresies-koinis-ofeleias/"
+          },
+          "18": {
+            "id": 9847,
+            "title": "\u03a0\u03b5\u03c1\u03b9\u03b2\u03ac\u03bb\u03bb\u03bf\u03bd &#038; \u0395\u03bd\u03ad\u03c1\u03b3\u03b5\u03b9\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/perivallon-energeia/"
+          },
+          "19": {
+            "id": 9846,
+            "title": "\u0394\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u0391\u03c3\u03c6\u03ac\u03bb\u03b5\u03b9\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/dimosia-dioikisi/"
+          },
+          "20": {
+            "id": 9845,
+            "title": "\u03a0\u03bf\u03bb\u03b9\u03c4\u03b9\u03c3\u03bc\u03cc\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/politismos/"
+          },
+          "21": {
+            "id": 9844,
+            "title": "\u0395\u03ba\u03c0\u03b1\u03af\u03b4\u03b5\u03c5\u03c3\u03b7 &#038; \u0388\u03c1\u03b5\u03c5\u03bd\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/ekpaidefsi-erevna/"
+          },
+          "22": {
+            "id": 9843,
+            "title": "\u0392\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/viomichania/"
+          },
+          "23": {
+            "id": 9842,
+            "title": "\u039d\u03b1\u03c5\u03c4\u03b9\u03bb\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/naftilia/"
+          },
+          "24": {
+            "id": 9841,
+            "title": "\u03a4\u03bf\u03c5\u03c1\u03b9\u03c3\u03bc\u03cc\u03c2 &#038; Real Estate",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/tourismos-real-estate/"
+          },
+          "25": {
+            "id": 24,
+            "title": "\u03a5\u03a0\u0397\u03a1\u0395\u03a3\u0399\u0395\u03a3",
+            "url": "#"
+          },
+          "26": {
+            "id": 13973,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          },
+          "27": {
+            "id": 9838,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "28": {
+            "id": 24115,
+            "title": "Service & \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "29": {
+            "id": 7697,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "30": {
+            "id": 24116,
+            "title": "\u039a\u03ad\u03bd\u03c4\u03c1\u03bf \u0388\u03c1\u03b5\u03c5\u03bd\u03b1\u03c2 &#038; \u039a\u03b1\u03b9\u03bd\u03bf\u03c4\u03bf\u03bc\u03af\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          },
+          "31": {
+            "id": 25,
+            "title": "\u0392\u03b9\u03b2\u03bb\u03b9\u03bf\u03b8\u03ae\u03ba\u03b7",
+            "url": "#"
+          },
+          "32": {
+            "id": 7708,
+            "title": "\u03a3\u03c5\u03c7\u03bd\u03ad\u03c2 \u0395\u03c1\u03c9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/faq/"
+          },
+          "33": {
+            "id": 7709,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/"
+          },
+          "34": {
+            "id": 7710,
+            "title": "\u03a7\u03c1\u03ae\u03c3\u03b9\u03bc\u03b1 \u0386\u03c1\u03b8\u03c1\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/blog/"
+          },
+          "35": {
+            "id": 31882,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/events/"
+          },
+          "36": {
+            "id": 7712,
+            "title": "\u03a4\u03b1 \u03ad\u03c1\u03b3\u03b1 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/case-studies/"
+          },
+          "37": {
+            "id": 9837,
+            "title": "\u0394\u03af\u03ba\u03c4\u03c5\u03bf \u03a3\u03c5\u03bd\u03b5\u03c1\u03b3\u03b1\u03c4\u03ce\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/synergates/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-b5446ce",
+        "items": {
+          "1": {
+            "id": 7622,
+            "title": "\u0397 \u0395\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairia/"
+          },
+          "2": {
+            "id": 22,
+            "title": "\u03a0\u03a1\u039f\u03aa\u039f\u039d\u03a4\u0391 & \u039b\u03a5\u03a3\u0395\u0399\u03a3",
+            "url": "#"
+          },
+          "3": {
+            "id": 9853,
+            "title": "\u03a4\u03bf\u03c0\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/topografikos-exoplismos/"
+          },
+          "4": {
+            "id": 32800,
+            "title": "Positioning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/positioning/"
+          },
+          "5": {
+            "id": 9850,
+            "title": "Reality Capture &#038; 3D Scanning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/reality-capture/"
+          },
+          "6": {
+            "id": 9858,
+            "title": "\u03a7\u03b1\u03c1\u03c4\u03bf\u03b3\u03c1\u03ac\u03c6\u03b7\u03c3\u03b7 \u03a5\u03c0\u03cc\u03b3\u03b5\u03b9\u03c9\u03bd \u0394\u03bf\u03bc\u03ce\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/utility-detection/"
+          },
+          "7": {
+            "id": 9852,
+            "title": "\u039b\u03cd\u03c3\u03b5\u03b9\u03c2 \u03b5\u03c1\u03b3\u03bf\u03c4\u03b1\u03be\u03af\u03bf\u03c5",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/ergotaxiaka/"
+          },
+          "8": {
+            "id": 19407,
+            "title": "\u039d\u03b5\u03c1\u03cc &#038; \u0391\u03bd\u03bf\u03b9\u03c7\u03c4\u03ac \u038e\u03b4\u03b1\u03c4\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/hydrology-solutions/"
+          },
+          "9": {
+            "id": 19406,
+            "title": "\u0392\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03af\u03b1 \u039d\u03b5\u03c1\u03bf\u03cd &#038; \u039b\u03c5\u03bc\u03ac\u03c4\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/water-wastewater-solutions-2/"
+          },
+          "10": {
+            "id": 9857,
+            "title": "UAV | Drones",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/drones-aerial-mapping/"
+          },
+          "11": {
+            "id": 9854,
+            "title": "\u039c\u03b5\u03c4\u03b5\u03c9\u03c1\u03bf\u03bb\u03bf\u03b3\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/meteorology-solutions/"
+          },
+          "12": {
+            "id": 9859,
+            "title": "\u03a9\u03ba\u03b5\u03b1\u03bd\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/oceanografikos-exoplismos-ypiresies/"
+          },
+          "13": {
+            "id": 19408,
+            "title": "\u0392\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03cc\u03c2 \u0388\u03bb\u03b5\u03b3\u03c7\u03bf\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/industrial-metrology/"
+          },
+          "14": {
+            "id": 23,
+            "title": "\u039b\u03a5\u03a3\u0395\u0399\u03a3 \u0391\u039d\u0391 \u039a\u039b\u0391\u0394\u039f",
+            "url": "#"
+          },
+          "15": {
+            "id": 9839,
+            "title": "AEC \u2013 \u0391\u03c1\u03c7\u03b9\u03c4\u03b5\u03ba\u03c4\u03bf\u03bd\u03b9\u03ba\u03ae, \u039c\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03ae, \u039a\u03b1\u03c4\u03b1\u03c3\u03ba\u03b5\u03c5\u03ae",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/aec-architektoniki-michaniki-kataskevi/"
+          },
+          "16": {
+            "id": 9849,
+            "title": "\u039c\u03b5\u03b3\u03ac\u03bb\u03b5\u03c2 \u03a5\u03c0\u03bf\u03b4\u03bf\u03bc\u03ad\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/ypodomes/"
+          },
+          "17": {
+            "id": 9848,
+            "title": "\u039f.\u03a4.\u0391.",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/ypiresies-koinis-ofeleias/"
+          },
+          "18": {
+            "id": 9847,
+            "title": "\u03a0\u03b5\u03c1\u03b9\u03b2\u03ac\u03bb\u03bb\u03bf\u03bd &#038; \u0395\u03bd\u03ad\u03c1\u03b3\u03b5\u03b9\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/perivallon-energeia/"
+          },
+          "19": {
+            "id": 9846,
+            "title": "\u0394\u03b7\u03bc\u03cc\u03c3\u03b9\u03b1 \u0391\u03c3\u03c6\u03ac\u03bb\u03b5\u03b9\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/dimosia-dioikisi/"
+          },
+          "20": {
+            "id": 9845,
+            "title": "\u03a0\u03bf\u03bb\u03b9\u03c4\u03b9\u03c3\u03bc\u03cc\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/politismos/"
+          },
+          "21": {
+            "id": 9844,
+            "title": "\u0395\u03ba\u03c0\u03b1\u03af\u03b4\u03b5\u03c5\u03c3\u03b7 &#038; \u0388\u03c1\u03b5\u03c5\u03bd\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/ekpaidefsi-erevna/"
+          },
+          "22": {
+            "id": 9843,
+            "title": "\u0392\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/viomichania/"
+          },
+          "23": {
+            "id": 9842,
+            "title": "\u039d\u03b1\u03c5\u03c4\u03b9\u03bb\u03af\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/naftilia/"
+          },
+          "24": {
+            "id": 9841,
+            "title": "\u03a4\u03bf\u03c5\u03c1\u03b9\u03c3\u03bc\u03cc\u03c2 &#038; Real Estate",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/industry/tourismos-real-estate/"
+          },
+          "25": {
+            "id": 24,
+            "title": "\u03a5\u03a0\u0397\u03a1\u0395\u03a3\u0399\u0395\u03a3",
+            "url": "#"
+          },
+          "26": {
+            "id": 13973,
+            "title": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u039c\u03b5\u03c4\u03c1\u03ae\u03c3\u03b5\u03c9\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/hire-us/"
+          },
+          "27": {
+            "id": 9838,
+            "title": "\u0395\u03bd\u03bf\u03b9\u03ba\u03af\u03b1\u03c3\u03b7 \u0395\u03be\u03bf\u03c0\u03bb\u03b9\u03c3\u03bc\u03bf\u03cd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/enoikiasi-exoplismou/"
+          },
+          "28": {
+            "id": 24115,
+            "title": "Service & \u0394\u03b9\u03b1\u03ba\u03c1\u03b9\u03b2\u03ce\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/service/"
+          },
+          "29": {
+            "id": 7697,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03ae \u03a5\u03c0\u03bf\u03c3\u03c4\u03ae\u03c1\u03b9\u03be\u03b7",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/"
+          },
+          "30": {
+            "id": 24116,
+            "title": "\u039a\u03ad\u03bd\u03c4\u03c1\u03bf \u0388\u03c1\u03b5\u03c5\u03bd\u03b1\u03c2 &#038; \u039a\u03b1\u03b9\u03bd\u03bf\u03c4\u03bf\u03bc\u03af\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/research-innovation-center/"
+          },
+          "31": {
+            "id": 25,
+            "title": "\u0392\u03b9\u03b2\u03bb\u03b9\u03bf\u03b8\u03ae\u03ba\u03b7",
+            "url": "#"
+          },
+          "32": {
+            "id": 7708,
+            "title": "\u03a3\u03c5\u03c7\u03bd\u03ad\u03c2 \u0395\u03c1\u03c9\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/faq/"
+          },
+          "33": {
+            "id": 7709,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/"
+          },
+          "34": {
+            "id": 7710,
+            "title": "\u03a7\u03c1\u03ae\u03c3\u03b9\u03bc\u03b1 \u0386\u03c1\u03b8\u03c1\u03b1",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/blog/"
+          },
+          "35": {
+            "id": 31882,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/events/"
+          },
+          "36": {
+            "id": 7712,
+            "title": "\u03a4\u03b1 \u03ad\u03c1\u03b3\u03b1 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/case-studies/"
+          },
+          "37": {
+            "id": 9837,
+            "title": "\u0394\u03af\u03ba\u03c4\u03c5\u03bf \u03a3\u03c5\u03bd\u03b5\u03c1\u03b3\u03b1\u03c4\u03ce\u03bd",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/synergates/"
+          }
+        }
+      }
+    ],
+    "fragment_sha256": {
+      "d7ebc85": "42d6d037998488957eba4f05e5e6b2f4cb5d6b09927cb41bff6eb3239f34dd22",
+      "a1ff108": "786788f30ea6f364f57fa2eaa8380e2033edd2dd7eec7a6d4fbd333a835f31a3",
+      "e62c115": "4c76daa5708c7cc8e021a9f8e5fe7ffbb679d3e304afee555997b6fa73952c9e",
+      "c28398e": "788f02aad55eb9b12cf428eb0d714563b151d83b375086ebd3f69f1bf911a76a",
+      "417d1ae": "f0dbc2aef77d8a6cb6fbf6eec5fee8d9fb748ff2a49c82061e06e0f8b7d300f7",
+      "c60daee": "b024f41b59306a826186d87c86f2be866d6d0f0db3e43236d59b3a686e469e87",
+      "iu-core-proof": "4ad805b4b44dcfbbd75a647481e7844173e1a942b31d83a0f1dfb18e9f576fca",
+      "iu-custom-proof": "0cdc84c7de7e32668ab8fc05ea4892273a0baa17033b524be0c1cbc348f6fed3"
+    }
+  },
+  {
+    "language": "en",
+    "builder": "anonymous",
+    "consumer": "site_manager",
+    "miss_loops": 156,
+    "hit_loops": 0,
+    "miss_menu_renders": [
+      "d7ebc85",
+      "a1ff108",
+      "e62c115",
+      "c28398e",
+      "66bc2cd",
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce",
+      "b5446ce"
+    ],
+    "hit_menu_renders": [
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce",
+      "b5446ce"
+    ],
+    "hit_menu_construction": [
+      "menu-1-2ce3318",
+      "menu-2-2ce3318",
+      "menu-1-8b227b6",
+      "menu-2-8b227b6",
+      "menu-1-f4efb65",
+      "menu-2-f4efb65",
+      "menu-1-b5446ce",
+      "menu-2-b5446ce",
+      "menu-1-b5446ce",
+      "menu-2-b5446ce"
+    ],
+    "keys_equal": true,
+    "source_native_full_html_equal": true,
+    "consumer_equal_except_current_attributes": true,
+    "assets_equal": true,
+    "consumer_excerpt_displayed_equal": true,
+    "original_core_custom_hit_renders": [],
+    "frozen_current_attributes": [],
+    "empty_native_fragments": [
+      "d7ebc85"
+    ],
+    "resolved_menu_items": [
+      {
+        "menu_id": "menu-1-a1ff108",
+        "items": {
+          "1": {
+            "id": 37974,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "2": {
+            "id": 37975,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/project-support/"
+          },
+          "3": {
+            "id": 37976,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hxgn-smartnet-network/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-a1ff108",
+        "items": {
+          "1": {
+            "id": 37974,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "2": {
+            "id": 37975,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/project-support/"
+          },
+          "3": {
+            "id": 37976,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hxgn-smartnet-network/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-e62c115",
+        "items": {
+          "1": {
+            "id": 37974,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "2": {
+            "id": 37975,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/project-support/"
+          },
+          "3": {
+            "id": 37976,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hxgn-smartnet-network/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-e62c115",
+        "items": {
+          "1": {
+            "id": 37974,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "2": {
+            "id": 37975,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/project-support/"
+          },
+          "3": {
+            "id": 37976,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hxgn-smartnet-network/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-c28398e",
+        "items": {
+          "1": {
+            "id": 37971,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/download-center/"
+          },
+          "2": {
+            "id": 37972,
+            "title": "Blog",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/blog/"
+          },
+          "3": {
+            "id": 37973,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/events/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-c28398e",
+        "items": {
+          "1": {
+            "id": 37971,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/download-center/"
+          },
+          "2": {
+            "id": 37972,
+            "title": "Blog",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/blog/"
+          },
+          "3": {
+            "id": 37973,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/events/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-66bc2cd",
+        "items": {
+          "1": {
+            "id": 37960,
+            "title": "\u039c\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03cc\u03c2",
+            "url": "#"
+          },
+          "2": {
+            "id": 37961,
+            "title": "\u03a5\u03c0\u03b5\u03cd\u03b8\u03c5\u03bd\u03bf\u03c2 \u03c0\u03c1\u03bf\u03bc\u03b7\u03b8\u03b5\u03b9\u03ce\u03bd",
+            "url": "#"
+          },
+          "3": {
+            "id": 37962,
+            "title": "\u039c\u03b5\u03bb\u03b5\u03c4\u03b7\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "4": {
+            "id": 37963,
+            "title": "Project Manager",
+            "url": "#"
+          },
+          "5": {
+            "id": 37964,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03cc\u03c2 \u0394\u03b9\u03b5\u03c5\u03b8\u03c5\u03bd\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "6": {
+            "id": 37965,
+            "title": "CEO \u03b5\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1\u03c2",
+            "url": "#"
+          },
+          "7": {
+            "id": 37966,
+            "title": "\u03a5\u03b4\u03c1\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2",
+            "url": "#"
+          },
+          "8": {
+            "id": 37967,
+            "title": "\u03a0\u03b5\u03c1\u03b9\u03b2\u03b1\u03bb\u03bb\u03bf\u03bd\u03c4\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2",
+            "url": "#"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-66bc2cd",
+        "items": {
+          "1": {
+            "id": 37960,
+            "title": "\u039c\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03cc\u03c2",
+            "url": "#"
+          },
+          "2": {
+            "id": 37961,
+            "title": "\u03a5\u03c0\u03b5\u03cd\u03b8\u03c5\u03bd\u03bf\u03c2 \u03c0\u03c1\u03bf\u03bc\u03b7\u03b8\u03b5\u03b9\u03ce\u03bd",
+            "url": "#"
+          },
+          "3": {
+            "id": 37962,
+            "title": "\u039c\u03b5\u03bb\u03b5\u03c4\u03b7\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "4": {
+            "id": 37963,
+            "title": "Project Manager",
+            "url": "#"
+          },
+          "5": {
+            "id": 37964,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03cc\u03c2 \u0394\u03b9\u03b5\u03c5\u03b8\u03c5\u03bd\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "6": {
+            "id": 37965,
+            "title": "CEO \u03b5\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1\u03c2",
+            "url": "#"
+          },
+          "7": {
+            "id": 37966,
+            "title": "\u03a5\u03b4\u03c1\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2",
+            "url": "#"
+          },
+          "8": {
+            "id": 37967,
+            "title": "\u03a0\u03b5\u03c1\u03b9\u03b2\u03b1\u03bb\u03bb\u03bf\u03bd\u03c4\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2",
+            "url": "#"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-2ce3318",
+        "items": {
+          "1": {
+            "id": 37955,
+            "title": "The Company",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/the-company/"
+          },
+          "2": {
+            "id": 37956,
+            "title": "\u039f\u03b9 \u03c0\u03b9\u03c3\u03c4\u03bf\u03c0\u03bf\u03b9\u03ae\u03c3\u03b5\u03b9\u03c2 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/#certifications"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-2ce3318",
+        "items": {
+          "1": {
+            "id": 37955,
+            "title": "The Company",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/the-company/"
+          },
+          "2": {
+            "id": 37956,
+            "title": "\u039f\u03b9 \u03c0\u03b9\u03c3\u03c4\u03bf\u03c0\u03bf\u03b9\u03ae\u03c3\u03b5\u03b9\u03c2 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/#certifications"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-8b227b6",
+        "items": {
+          "1": {
+            "id": 37957,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hxgn-smartnet-network/"
+          },
+          "2": {
+            "id": 37958,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-8b227b6",
+        "items": {
+          "1": {
+            "id": 37957,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hxgn-smartnet-network/"
+          },
+          "2": {
+            "id": 37958,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-f4efb65",
+        "items": {
+          "1": {
+            "id": 37959,
+            "title": "Customer Experience Survey",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/customer-experience-survey/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-f4efb65",
+        "items": {
+          "1": {
+            "id": 37959,
+            "title": "Customer Experience Survey",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/customer-experience-survey/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-b5446ce",
+        "items": {
+          "1": {
+            "id": 37925,
+            "title": "The Company",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/the-company/"
+          },
+          "2": {
+            "id": 37926,
+            "title": "PRODUCTS &amp; SOLUTIONS",
+            "url": "#"
+          },
+          "3": {
+            "id": 37927,
+            "title": "Surveying",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/surveying/"
+          },
+          "4": {
+            "id": 37928,
+            "title": "Positioning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/positioning/"
+          },
+          "5": {
+            "id": 37929,
+            "title": "Reality Capture &amp; 3D Scanning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/reality-capture-3d-scanning/"
+          },
+          "6": {
+            "id": 37930,
+            "title": "Underground Structure Mapping",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/underground-structure-mapping/"
+          },
+          "7": {
+            "id": 37931,
+            "title": "Construction site solutions",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/construction-site-solutions/"
+          },
+          "8": {
+            "id": 37932,
+            "title": "Water &amp; Open Waters",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-open-waters/"
+          },
+          "9": {
+            "id": 37933,
+            "title": "Water &amp; Wastewater Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-wastewater-industry/"
+          },
+          "10": {
+            "id": 37934,
+            "title": "UAV | Drones",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/uav-drones/"
+          },
+          "11": {
+            "id": 37935,
+            "title": "Meteorology",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/meteorology/"
+          },
+          "12": {
+            "id": 37936,
+            "title": "Oceanography",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/oceanography/"
+          },
+          "13": {
+            "id": 37937,
+            "title": "Industrial Inspection",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/industrial-inspection/"
+          },
+          "14": {
+            "id": 37938,
+            "title": "INDUSTRIES",
+            "url": "#"
+          },
+          "15": {
+            "id": 37939,
+            "title": "AEC \u2013 Architecture, Engineering, Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/aec-architecture-engineering-construction/"
+          },
+          "16": {
+            "id": 37940,
+            "title": "Heavy Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/large-infrastructure/"
+          },
+          "17": {
+            "id": 37941,
+            "title": "Utilities",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/o-t-a/"
+          },
+          "18": {
+            "id": 37942,
+            "title": "Environment &amp; Energy",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/environment-energy/"
+          },
+          "19": {
+            "id": 37943,
+            "title": "Public Safety",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/public-safety/"
+          },
+          "20": {
+            "id": 37944,
+            "title": "Culture",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/culture/"
+          },
+          "21": {
+            "id": 37945,
+            "title": "Education &amp; Research",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/education-research/"
+          },
+          "22": {
+            "id": 37946,
+            "title": "Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/industry/"
+          },
+          "23": {
+            "id": 37947,
+            "title": "Maritime",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/maritime/"
+          },
+          "24": {
+            "id": 37948,
+            "title": "Tourism &amp; Real Estate",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/tourism-real-estate/"
+          },
+          "25": {
+            "id": 37949,
+            "title": "SERVICES",
+            "url": "#"
+          },
+          "26": {
+            "id": 37950,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "27": {
+            "id": 37951,
+            "title": "Library",
+            "url": "#"
+          },
+          "28": {
+            "id": 37952,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/download-center/"
+          },
+          "29": {
+            "id": 37953,
+            "title": "Blog",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/blog/"
+          },
+          "30": {
+            "id": 37954,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/events/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-b5446ce",
+        "items": {
+          "1": {
+            "id": 37925,
+            "title": "The Company",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/the-company/"
+          },
+          "2": {
+            "id": 37926,
+            "title": "PRODUCTS &amp; SOLUTIONS",
+            "url": "#"
+          },
+          "3": {
+            "id": 37927,
+            "title": "Surveying",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/surveying/"
+          },
+          "4": {
+            "id": 37928,
+            "title": "Positioning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/positioning/"
+          },
+          "5": {
+            "id": 37929,
+            "title": "Reality Capture &amp; 3D Scanning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/reality-capture-3d-scanning/"
+          },
+          "6": {
+            "id": 37930,
+            "title": "Underground Structure Mapping",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/underground-structure-mapping/"
+          },
+          "7": {
+            "id": 37931,
+            "title": "Construction site solutions",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/construction-site-solutions/"
+          },
+          "8": {
+            "id": 37932,
+            "title": "Water &amp; Open Waters",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-open-waters/"
+          },
+          "9": {
+            "id": 37933,
+            "title": "Water &amp; Wastewater Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-wastewater-industry/"
+          },
+          "10": {
+            "id": 37934,
+            "title": "UAV | Drones",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/uav-drones/"
+          },
+          "11": {
+            "id": 37935,
+            "title": "Meteorology",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/meteorology/"
+          },
+          "12": {
+            "id": 37936,
+            "title": "Oceanography",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/oceanography/"
+          },
+          "13": {
+            "id": 37937,
+            "title": "Industrial Inspection",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/industrial-inspection/"
+          },
+          "14": {
+            "id": 37938,
+            "title": "INDUSTRIES",
+            "url": "#"
+          },
+          "15": {
+            "id": 37939,
+            "title": "AEC \u2013 Architecture, Engineering, Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/aec-architecture-engineering-construction/"
+          },
+          "16": {
+            "id": 37940,
+            "title": "Heavy Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/large-infrastructure/"
+          },
+          "17": {
+            "id": 37941,
+            "title": "Utilities",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/o-t-a/"
+          },
+          "18": {
+            "id": 37942,
+            "title": "Environment &amp; Energy",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/environment-energy/"
+          },
+          "19": {
+            "id": 37943,
+            "title": "Public Safety",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/public-safety/"
+          },
+          "20": {
+            "id": 37944,
+            "title": "Culture",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/culture/"
+          },
+          "21": {
+            "id": 37945,
+            "title": "Education &amp; Research",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/education-research/"
+          },
+          "22": {
+            "id": 37946,
+            "title": "Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/industry/"
+          },
+          "23": {
+            "id": 37947,
+            "title": "Maritime",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/maritime/"
+          },
+          "24": {
+            "id": 37948,
+            "title": "Tourism &amp; Real Estate",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/tourism-real-estate/"
+          },
+          "25": {
+            "id": 37949,
+            "title": "SERVICES",
+            "url": "#"
+          },
+          "26": {
+            "id": 37950,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "27": {
+            "id": 37951,
+            "title": "Library",
+            "url": "#"
+          },
+          "28": {
+            "id": 37952,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/download-center/"
+          },
+          "29": {
+            "id": 37953,
+            "title": "Blog",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/blog/"
+          },
+          "30": {
+            "id": 37954,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/events/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-b5446ce",
+        "items": {
+          "1": {
+            "id": 37925,
+            "title": "The Company",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/the-company/"
+          },
+          "2": {
+            "id": 37926,
+            "title": "PRODUCTS &amp; SOLUTIONS",
+            "url": "#"
+          },
+          "3": {
+            "id": 37927,
+            "title": "Surveying",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/surveying/"
+          },
+          "4": {
+            "id": 37928,
+            "title": "Positioning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/positioning/"
+          },
+          "5": {
+            "id": 37929,
+            "title": "Reality Capture &amp; 3D Scanning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/reality-capture-3d-scanning/"
+          },
+          "6": {
+            "id": 37930,
+            "title": "Underground Structure Mapping",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/underground-structure-mapping/"
+          },
+          "7": {
+            "id": 37931,
+            "title": "Construction site solutions",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/construction-site-solutions/"
+          },
+          "8": {
+            "id": 37932,
+            "title": "Water &amp; Open Waters",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-open-waters/"
+          },
+          "9": {
+            "id": 37933,
+            "title": "Water &amp; Wastewater Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-wastewater-industry/"
+          },
+          "10": {
+            "id": 37934,
+            "title": "UAV | Drones",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/uav-drones/"
+          },
+          "11": {
+            "id": 37935,
+            "title": "Meteorology",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/meteorology/"
+          },
+          "12": {
+            "id": 37936,
+            "title": "Oceanography",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/oceanography/"
+          },
+          "13": {
+            "id": 37937,
+            "title": "Industrial Inspection",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/industrial-inspection/"
+          },
+          "14": {
+            "id": 37938,
+            "title": "INDUSTRIES",
+            "url": "#"
+          },
+          "15": {
+            "id": 37939,
+            "title": "AEC \u2013 Architecture, Engineering, Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/aec-architecture-engineering-construction/"
+          },
+          "16": {
+            "id": 37940,
+            "title": "Heavy Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/large-infrastructure/"
+          },
+          "17": {
+            "id": 37941,
+            "title": "Utilities",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/o-t-a/"
+          },
+          "18": {
+            "id": 37942,
+            "title": "Environment &amp; Energy",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/environment-energy/"
+          },
+          "19": {
+            "id": 37943,
+            "title": "Public Safety",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/public-safety/"
+          },
+          "20": {
+            "id": 37944,
+            "title": "Culture",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/culture/"
+          },
+          "21": {
+            "id": 37945,
+            "title": "Education &amp; Research",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/education-research/"
+          },
+          "22": {
+            "id": 37946,
+            "title": "Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/industry/"
+          },
+          "23": {
+            "id": 37947,
+            "title": "Maritime",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/maritime/"
+          },
+          "24": {
+            "id": 37948,
+            "title": "Tourism &amp; Real Estate",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/tourism-real-estate/"
+          },
+          "25": {
+            "id": 37949,
+            "title": "SERVICES",
+            "url": "#"
+          },
+          "26": {
+            "id": 37950,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "27": {
+            "id": 37951,
+            "title": "Library",
+            "url": "#"
+          },
+          "28": {
+            "id": 37952,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/download-center/"
+          },
+          "29": {
+            "id": 37953,
+            "title": "Blog",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/blog/"
+          },
+          "30": {
+            "id": 37954,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/events/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-b5446ce",
+        "items": {
+          "1": {
+            "id": 37925,
+            "title": "The Company",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/the-company/"
+          },
+          "2": {
+            "id": 37926,
+            "title": "PRODUCTS &amp; SOLUTIONS",
+            "url": "#"
+          },
+          "3": {
+            "id": 37927,
+            "title": "Surveying",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/surveying/"
+          },
+          "4": {
+            "id": 37928,
+            "title": "Positioning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/positioning/"
+          },
+          "5": {
+            "id": 37929,
+            "title": "Reality Capture &amp; 3D Scanning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/reality-capture-3d-scanning/"
+          },
+          "6": {
+            "id": 37930,
+            "title": "Underground Structure Mapping",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/underground-structure-mapping/"
+          },
+          "7": {
+            "id": 37931,
+            "title": "Construction site solutions",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/construction-site-solutions/"
+          },
+          "8": {
+            "id": 37932,
+            "title": "Water &amp; Open Waters",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-open-waters/"
+          },
+          "9": {
+            "id": 37933,
+            "title": "Water &amp; Wastewater Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-wastewater-industry/"
+          },
+          "10": {
+            "id": 37934,
+            "title": "UAV | Drones",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/uav-drones/"
+          },
+          "11": {
+            "id": 37935,
+            "title": "Meteorology",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/meteorology/"
+          },
+          "12": {
+            "id": 37936,
+            "title": "Oceanography",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/oceanography/"
+          },
+          "13": {
+            "id": 37937,
+            "title": "Industrial Inspection",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/industrial-inspection/"
+          },
+          "14": {
+            "id": 37938,
+            "title": "INDUSTRIES",
+            "url": "#"
+          },
+          "15": {
+            "id": 37939,
+            "title": "AEC \u2013 Architecture, Engineering, Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/aec-architecture-engineering-construction/"
+          },
+          "16": {
+            "id": 37940,
+            "title": "Heavy Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/large-infrastructure/"
+          },
+          "17": {
+            "id": 37941,
+            "title": "Utilities",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/o-t-a/"
+          },
+          "18": {
+            "id": 37942,
+            "title": "Environment &amp; Energy",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/environment-energy/"
+          },
+          "19": {
+            "id": 37943,
+            "title": "Public Safety",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/public-safety/"
+          },
+          "20": {
+            "id": 37944,
+            "title": "Culture",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/culture/"
+          },
+          "21": {
+            "id": 37945,
+            "title": "Education &amp; Research",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/education-research/"
+          },
+          "22": {
+            "id": 37946,
+            "title": "Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/industry/"
+          },
+          "23": {
+            "id": 37947,
+            "title": "Maritime",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/maritime/"
+          },
+          "24": {
+            "id": 37948,
+            "title": "Tourism &amp; Real Estate",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/tourism-real-estate/"
+          },
+          "25": {
+            "id": 37949,
+            "title": "SERVICES",
+            "url": "#"
+          },
+          "26": {
+            "id": 37950,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "27": {
+            "id": 37951,
+            "title": "Library",
+            "url": "#"
+          },
+          "28": {
+            "id": 37952,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/download-center/"
+          },
+          "29": {
+            "id": 37953,
+            "title": "Blog",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/blog/"
+          },
+          "30": {
+            "id": 37954,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/events/"
+          }
+        }
+      }
+    ],
+    "fragment_sha256": {
+      "a1ff108": "0d5b55dde136bc417f17b124cd6f56223eec0cbb3efa8a703510ca47f75af8dc",
+      "e62c115": "d250f9a714749c6543bc40af9a8b8af1ca519e1aa5feb2c4a6ac5a522d6cc166",
+      "c28398e": "f28d526c5bc50ccc3f2d6e3f39db5f37da25ba115f4ab8439a1195756db888b7",
+      "417d1ae": "e525ae57e5282abb7bd1b0b0408460b58fe090cb609b41aa0068d20416627f5e",
+      "c60daee": "f7fa434332999932f7c4415a9b6ae02c6a141c0739fa55a0df07b79b61902067",
+      "iu-core-proof": "4ad805b4b44dcfbbd75a647481e7844173e1a942b31d83a0f1dfb18e9f576fca",
+      "iu-custom-proof": "0cdc84c7de7e32668ab8fc05ea4892273a0baa17033b524be0c1cbc348f6fed3"
+    }
+  },
+  {
+    "language": "en",
+    "builder": "site_manager",
+    "consumer": "anonymous",
+    "miss_loops": 156,
+    "hit_loops": 0,
+    "miss_menu_renders": [
+      "d7ebc85",
+      "a1ff108",
+      "e62c115",
+      "c28398e",
+      "66bc2cd",
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce",
+      "b5446ce"
+    ],
+    "hit_menu_renders": [
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce",
+      "b5446ce"
+    ],
+    "hit_menu_construction": [
+      "menu-1-2ce3318",
+      "menu-2-2ce3318",
+      "menu-1-8b227b6",
+      "menu-2-8b227b6",
+      "menu-1-f4efb65",
+      "menu-2-f4efb65",
+      "menu-1-b5446ce",
+      "menu-2-b5446ce",
+      "menu-1-b5446ce",
+      "menu-2-b5446ce"
+    ],
+    "keys_equal": true,
+    "source_native_full_html_equal": true,
+    "consumer_equal_except_current_attributes": true,
+    "assets_equal": true,
+    "consumer_excerpt_displayed_equal": true,
+    "original_core_custom_hit_renders": [],
+    "frozen_current_attributes": [],
+    "empty_native_fragments": [
+      "d7ebc85"
+    ],
+    "resolved_menu_items": [
+      {
+        "menu_id": "menu-1-a1ff108",
+        "items": {
+          "1": {
+            "id": 37974,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "2": {
+            "id": 37975,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/project-support/"
+          },
+          "3": {
+            "id": 37976,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hxgn-smartnet-network/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-a1ff108",
+        "items": {
+          "1": {
+            "id": 37974,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "2": {
+            "id": 37975,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/project-support/"
+          },
+          "3": {
+            "id": 37976,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hxgn-smartnet-network/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-e62c115",
+        "items": {
+          "1": {
+            "id": 37974,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "2": {
+            "id": 37975,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/project-support/"
+          },
+          "3": {
+            "id": 37976,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hxgn-smartnet-network/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-e62c115",
+        "items": {
+          "1": {
+            "id": 37974,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "2": {
+            "id": 37975,
+            "title": "Project Support",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/project-support/"
+          },
+          "3": {
+            "id": 37976,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hxgn-smartnet-network/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-c28398e",
+        "items": {
+          "1": {
+            "id": 37971,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/download-center/"
+          },
+          "2": {
+            "id": 37972,
+            "title": "Blog",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/blog/"
+          },
+          "3": {
+            "id": 37973,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/events/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-c28398e",
+        "items": {
+          "1": {
+            "id": 37971,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/download-center/"
+          },
+          "2": {
+            "id": 37972,
+            "title": "Blog",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/blog/"
+          },
+          "3": {
+            "id": 37973,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/events/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-66bc2cd",
+        "items": {
+          "1": {
+            "id": 37960,
+            "title": "\u039c\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03cc\u03c2",
+            "url": "#"
+          },
+          "2": {
+            "id": 37961,
+            "title": "\u03a5\u03c0\u03b5\u03cd\u03b8\u03c5\u03bd\u03bf\u03c2 \u03c0\u03c1\u03bf\u03bc\u03b7\u03b8\u03b5\u03b9\u03ce\u03bd",
+            "url": "#"
+          },
+          "3": {
+            "id": 37962,
+            "title": "\u039c\u03b5\u03bb\u03b5\u03c4\u03b7\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "4": {
+            "id": 37963,
+            "title": "Project Manager",
+            "url": "#"
+          },
+          "5": {
+            "id": 37964,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03cc\u03c2 \u0394\u03b9\u03b5\u03c5\u03b8\u03c5\u03bd\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "6": {
+            "id": 37965,
+            "title": "CEO \u03b5\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1\u03c2",
+            "url": "#"
+          },
+          "7": {
+            "id": 37966,
+            "title": "\u03a5\u03b4\u03c1\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2",
+            "url": "#"
+          },
+          "8": {
+            "id": 37967,
+            "title": "\u03a0\u03b5\u03c1\u03b9\u03b2\u03b1\u03bb\u03bb\u03bf\u03bd\u03c4\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2",
+            "url": "#"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-66bc2cd",
+        "items": {
+          "1": {
+            "id": 37960,
+            "title": "\u039c\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03cc\u03c2",
+            "url": "#"
+          },
+          "2": {
+            "id": 37961,
+            "title": "\u03a5\u03c0\u03b5\u03cd\u03b8\u03c5\u03bd\u03bf\u03c2 \u03c0\u03c1\u03bf\u03bc\u03b7\u03b8\u03b5\u03b9\u03ce\u03bd",
+            "url": "#"
+          },
+          "3": {
+            "id": 37962,
+            "title": "\u039c\u03b5\u03bb\u03b5\u03c4\u03b7\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "4": {
+            "id": 37963,
+            "title": "Project Manager",
+            "url": "#"
+          },
+          "5": {
+            "id": 37964,
+            "title": "\u03a4\u03b5\u03c7\u03bd\u03b9\u03ba\u03cc\u03c2 \u0394\u03b9\u03b5\u03c5\u03b8\u03c5\u03bd\u03c4\u03ae\u03c2",
+            "url": "#"
+          },
+          "6": {
+            "id": 37965,
+            "title": "CEO \u03b5\u03c4\u03b1\u03b9\u03c1\u03b5\u03af\u03b1\u03c2",
+            "url": "#"
+          },
+          "7": {
+            "id": 37966,
+            "title": "\u03a5\u03b4\u03c1\u03bf\u03b3\u03c1\u03ac\u03c6\u03bf\u03c2",
+            "url": "#"
+          },
+          "8": {
+            "id": 37967,
+            "title": "\u03a0\u03b5\u03c1\u03b9\u03b2\u03b1\u03bb\u03bb\u03bf\u03bd\u03c4\u03bf\u03bb\u03cc\u03b3\u03bf\u03c2",
+            "url": "#"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-2ce3318",
+        "items": {
+          "1": {
+            "id": 37955,
+            "title": "The Company",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/the-company/"
+          },
+          "2": {
+            "id": 37956,
+            "title": "\u039f\u03b9 \u03c0\u03b9\u03c3\u03c4\u03bf\u03c0\u03bf\u03b9\u03ae\u03c3\u03b5\u03b9\u03c2 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/#certifications"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-2ce3318",
+        "items": {
+          "1": {
+            "id": 37955,
+            "title": "The Company",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/the-company/"
+          },
+          "2": {
+            "id": 37956,
+            "title": "\u039f\u03b9 \u03c0\u03b9\u03c3\u03c4\u03bf\u03c0\u03bf\u03b9\u03ae\u03c3\u03b5\u03b9\u03c2 \u03bc\u03b1\u03c2",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/download-center/#certifications"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-8b227b6",
+        "items": {
+          "1": {
+            "id": 37957,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hxgn-smartnet-network/"
+          },
+          "2": {
+            "id": 37958,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-8b227b6",
+        "items": {
+          "1": {
+            "id": 37957,
+            "title": "HxGN SmartNet",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hxgn-smartnet-network/"
+          },
+          "2": {
+            "id": 37958,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-f4efb65",
+        "items": {
+          "1": {
+            "id": 37959,
+            "title": "Customer Experience Survey",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/customer-experience-survey/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-f4efb65",
+        "items": {
+          "1": {
+            "id": 37959,
+            "title": "Customer Experience Survey",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/customer-experience-survey/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-b5446ce",
+        "items": {
+          "1": {
+            "id": 37925,
+            "title": "The Company",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/the-company/"
+          },
+          "2": {
+            "id": 37926,
+            "title": "PRODUCTS &amp; SOLUTIONS",
+            "url": "#"
+          },
+          "3": {
+            "id": 37927,
+            "title": "Surveying",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/surveying/"
+          },
+          "4": {
+            "id": 37928,
+            "title": "Positioning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/positioning/"
+          },
+          "5": {
+            "id": 37929,
+            "title": "Reality Capture &amp; 3D Scanning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/reality-capture-3d-scanning/"
+          },
+          "6": {
+            "id": 37930,
+            "title": "Underground Structure Mapping",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/underground-structure-mapping/"
+          },
+          "7": {
+            "id": 37931,
+            "title": "Construction site solutions",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/construction-site-solutions/"
+          },
+          "8": {
+            "id": 37932,
+            "title": "Water &amp; Open Waters",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-open-waters/"
+          },
+          "9": {
+            "id": 37933,
+            "title": "Water &amp; Wastewater Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-wastewater-industry/"
+          },
+          "10": {
+            "id": 37934,
+            "title": "UAV | Drones",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/uav-drones/"
+          },
+          "11": {
+            "id": 37935,
+            "title": "Meteorology",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/meteorology/"
+          },
+          "12": {
+            "id": 37936,
+            "title": "Oceanography",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/oceanography/"
+          },
+          "13": {
+            "id": 37937,
+            "title": "Industrial Inspection",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/industrial-inspection/"
+          },
+          "14": {
+            "id": 37938,
+            "title": "INDUSTRIES",
+            "url": "#"
+          },
+          "15": {
+            "id": 37939,
+            "title": "AEC \u2013 Architecture, Engineering, Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/aec-architecture-engineering-construction/"
+          },
+          "16": {
+            "id": 37940,
+            "title": "Heavy Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/large-infrastructure/"
+          },
+          "17": {
+            "id": 37941,
+            "title": "Utilities",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/o-t-a/"
+          },
+          "18": {
+            "id": 37942,
+            "title": "Environment &amp; Energy",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/environment-energy/"
+          },
+          "19": {
+            "id": 37943,
+            "title": "Public Safety",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/public-safety/"
+          },
+          "20": {
+            "id": 37944,
+            "title": "Culture",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/culture/"
+          },
+          "21": {
+            "id": 37945,
+            "title": "Education &amp; Research",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/education-research/"
+          },
+          "22": {
+            "id": 37946,
+            "title": "Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/industry/"
+          },
+          "23": {
+            "id": 37947,
+            "title": "Maritime",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/maritime/"
+          },
+          "24": {
+            "id": 37948,
+            "title": "Tourism &amp; Real Estate",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/tourism-real-estate/"
+          },
+          "25": {
+            "id": 37949,
+            "title": "SERVICES",
+            "url": "#"
+          },
+          "26": {
+            "id": 37950,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "27": {
+            "id": 37951,
+            "title": "Library",
+            "url": "#"
+          },
+          "28": {
+            "id": 37952,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/download-center/"
+          },
+          "29": {
+            "id": 37953,
+            "title": "Blog",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/blog/"
+          },
+          "30": {
+            "id": 37954,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/events/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-b5446ce",
+        "items": {
+          "1": {
+            "id": 37925,
+            "title": "The Company",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/the-company/"
+          },
+          "2": {
+            "id": 37926,
+            "title": "PRODUCTS &amp; SOLUTIONS",
+            "url": "#"
+          },
+          "3": {
+            "id": 37927,
+            "title": "Surveying",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/surveying/"
+          },
+          "4": {
+            "id": 37928,
+            "title": "Positioning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/positioning/"
+          },
+          "5": {
+            "id": 37929,
+            "title": "Reality Capture &amp; 3D Scanning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/reality-capture-3d-scanning/"
+          },
+          "6": {
+            "id": 37930,
+            "title": "Underground Structure Mapping",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/underground-structure-mapping/"
+          },
+          "7": {
+            "id": 37931,
+            "title": "Construction site solutions",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/construction-site-solutions/"
+          },
+          "8": {
+            "id": 37932,
+            "title": "Water &amp; Open Waters",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-open-waters/"
+          },
+          "9": {
+            "id": 37933,
+            "title": "Water &amp; Wastewater Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-wastewater-industry/"
+          },
+          "10": {
+            "id": 37934,
+            "title": "UAV | Drones",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/uav-drones/"
+          },
+          "11": {
+            "id": 37935,
+            "title": "Meteorology",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/meteorology/"
+          },
+          "12": {
+            "id": 37936,
+            "title": "Oceanography",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/oceanography/"
+          },
+          "13": {
+            "id": 37937,
+            "title": "Industrial Inspection",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/industrial-inspection/"
+          },
+          "14": {
+            "id": 37938,
+            "title": "INDUSTRIES",
+            "url": "#"
+          },
+          "15": {
+            "id": 37939,
+            "title": "AEC \u2013 Architecture, Engineering, Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/aec-architecture-engineering-construction/"
+          },
+          "16": {
+            "id": 37940,
+            "title": "Heavy Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/large-infrastructure/"
+          },
+          "17": {
+            "id": 37941,
+            "title": "Utilities",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/o-t-a/"
+          },
+          "18": {
+            "id": 37942,
+            "title": "Environment &amp; Energy",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/environment-energy/"
+          },
+          "19": {
+            "id": 37943,
+            "title": "Public Safety",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/public-safety/"
+          },
+          "20": {
+            "id": 37944,
+            "title": "Culture",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/culture/"
+          },
+          "21": {
+            "id": 37945,
+            "title": "Education &amp; Research",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/education-research/"
+          },
+          "22": {
+            "id": 37946,
+            "title": "Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/industry/"
+          },
+          "23": {
+            "id": 37947,
+            "title": "Maritime",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/maritime/"
+          },
+          "24": {
+            "id": 37948,
+            "title": "Tourism &amp; Real Estate",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/tourism-real-estate/"
+          },
+          "25": {
+            "id": 37949,
+            "title": "SERVICES",
+            "url": "#"
+          },
+          "26": {
+            "id": 37950,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "27": {
+            "id": 37951,
+            "title": "Library",
+            "url": "#"
+          },
+          "28": {
+            "id": 37952,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/download-center/"
+          },
+          "29": {
+            "id": 37953,
+            "title": "Blog",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/blog/"
+          },
+          "30": {
+            "id": 37954,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/events/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-1-b5446ce",
+        "items": {
+          "1": {
+            "id": 37925,
+            "title": "The Company",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/the-company/"
+          },
+          "2": {
+            "id": 37926,
+            "title": "PRODUCTS &amp; SOLUTIONS",
+            "url": "#"
+          },
+          "3": {
+            "id": 37927,
+            "title": "Surveying",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/surveying/"
+          },
+          "4": {
+            "id": 37928,
+            "title": "Positioning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/positioning/"
+          },
+          "5": {
+            "id": 37929,
+            "title": "Reality Capture &amp; 3D Scanning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/reality-capture-3d-scanning/"
+          },
+          "6": {
+            "id": 37930,
+            "title": "Underground Structure Mapping",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/underground-structure-mapping/"
+          },
+          "7": {
+            "id": 37931,
+            "title": "Construction site solutions",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/construction-site-solutions/"
+          },
+          "8": {
+            "id": 37932,
+            "title": "Water &amp; Open Waters",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-open-waters/"
+          },
+          "9": {
+            "id": 37933,
+            "title": "Water &amp; Wastewater Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-wastewater-industry/"
+          },
+          "10": {
+            "id": 37934,
+            "title": "UAV | Drones",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/uav-drones/"
+          },
+          "11": {
+            "id": 37935,
+            "title": "Meteorology",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/meteorology/"
+          },
+          "12": {
+            "id": 37936,
+            "title": "Oceanography",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/oceanography/"
+          },
+          "13": {
+            "id": 37937,
+            "title": "Industrial Inspection",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/industrial-inspection/"
+          },
+          "14": {
+            "id": 37938,
+            "title": "INDUSTRIES",
+            "url": "#"
+          },
+          "15": {
+            "id": 37939,
+            "title": "AEC \u2013 Architecture, Engineering, Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/aec-architecture-engineering-construction/"
+          },
+          "16": {
+            "id": 37940,
+            "title": "Heavy Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/large-infrastructure/"
+          },
+          "17": {
+            "id": 37941,
+            "title": "Utilities",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/o-t-a/"
+          },
+          "18": {
+            "id": 37942,
+            "title": "Environment &amp; Energy",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/environment-energy/"
+          },
+          "19": {
+            "id": 37943,
+            "title": "Public Safety",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/public-safety/"
+          },
+          "20": {
+            "id": 37944,
+            "title": "Culture",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/culture/"
+          },
+          "21": {
+            "id": 37945,
+            "title": "Education &amp; Research",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/education-research/"
+          },
+          "22": {
+            "id": 37946,
+            "title": "Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/industry/"
+          },
+          "23": {
+            "id": 37947,
+            "title": "Maritime",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/maritime/"
+          },
+          "24": {
+            "id": 37948,
+            "title": "Tourism &amp; Real Estate",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/tourism-real-estate/"
+          },
+          "25": {
+            "id": 37949,
+            "title": "SERVICES",
+            "url": "#"
+          },
+          "26": {
+            "id": 37950,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "27": {
+            "id": 37951,
+            "title": "Library",
+            "url": "#"
+          },
+          "28": {
+            "id": 37952,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/download-center/"
+          },
+          "29": {
+            "id": 37953,
+            "title": "Blog",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/blog/"
+          },
+          "30": {
+            "id": 37954,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/events/"
+          }
+        }
+      },
+      {
+        "menu_id": "menu-2-b5446ce",
+        "items": {
+          "1": {
+            "id": 37925,
+            "title": "The Company",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/the-company/"
+          },
+          "2": {
+            "id": 37926,
+            "title": "PRODUCTS &amp; SOLUTIONS",
+            "url": "#"
+          },
+          "3": {
+            "id": 37927,
+            "title": "Surveying",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/surveying/"
+          },
+          "4": {
+            "id": 37928,
+            "title": "Positioning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/positioning/"
+          },
+          "5": {
+            "id": 37929,
+            "title": "Reality Capture &amp; 3D Scanning",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/reality-capture-3d-scanning/"
+          },
+          "6": {
+            "id": 37930,
+            "title": "Underground Structure Mapping",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/underground-structure-mapping/"
+          },
+          "7": {
+            "id": 37931,
+            "title": "Construction site solutions",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/construction-site-solutions/"
+          },
+          "8": {
+            "id": 37932,
+            "title": "Water &amp; Open Waters",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-open-waters/"
+          },
+          "9": {
+            "id": 37933,
+            "title": "Water &amp; Wastewater Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/water-wastewater-industry/"
+          },
+          "10": {
+            "id": 37934,
+            "title": "UAV | Drones",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/uav-drones/"
+          },
+          "11": {
+            "id": 37935,
+            "title": "Meteorology",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/meteorology/"
+          },
+          "12": {
+            "id": 37936,
+            "title": "Oceanography",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/oceanography/"
+          },
+          "13": {
+            "id": 37937,
+            "title": "Industrial Inspection",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/solution/industrial-inspection/"
+          },
+          "14": {
+            "id": 37938,
+            "title": "INDUSTRIES",
+            "url": "#"
+          },
+          "15": {
+            "id": 37939,
+            "title": "AEC \u2013 Architecture, Engineering, Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/aec-architecture-engineering-construction/"
+          },
+          "16": {
+            "id": 37940,
+            "title": "Heavy Construction",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/large-infrastructure/"
+          },
+          "17": {
+            "id": 37941,
+            "title": "Utilities",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/o-t-a/"
+          },
+          "18": {
+            "id": 37942,
+            "title": "Environment &amp; Energy",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/environment-energy/"
+          },
+          "19": {
+            "id": 37943,
+            "title": "Public Safety",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/public-safety/"
+          },
+          "20": {
+            "id": 37944,
+            "title": "Culture",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/culture/"
+          },
+          "21": {
+            "id": 37945,
+            "title": "Education &amp; Research",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/education-research/"
+          },
+          "22": {
+            "id": 37946,
+            "title": "Industry",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/industry/"
+          },
+          "23": {
+            "id": 37947,
+            "title": "Maritime",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/maritime/"
+          },
+          "24": {
+            "id": 37948,
+            "title": "Tourism &amp; Real Estate",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/industry/tourism-real-estate/"
+          },
+          "25": {
+            "id": 37949,
+            "title": "SERVICES",
+            "url": "#"
+          },
+          "26": {
+            "id": 37950,
+            "title": "Hire Us",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/hire-us/"
+          },
+          "27": {
+            "id": 37951,
+            "title": "Library",
+            "url": "#"
+          },
+          "28": {
+            "id": 37952,
+            "title": "Download Center",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/download-center/"
+          },
+          "29": {
+            "id": 37953,
+            "title": "Blog",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/blog/"
+          },
+          "30": {
+            "id": 37954,
+            "title": "Events",
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/en/events/"
+          }
+        }
+      }
+    ],
+    "fragment_sha256": {
+      "a1ff108": "0d5b55dde136bc417f17b124cd6f56223eec0cbb3efa8a703510ca47f75af8dc",
+      "e62c115": "d250f9a714749c6543bc40af9a8b8af1ca519e1aa5feb2c4a6ac5a522d6cc166",
+      "c28398e": "f28d526c5bc50ccc3f2d6e3f39db5f37da25ba115f4ab8439a1195756db888b7",
+      "417d1ae": "e525ae57e5282abb7bd1b0b0408460b58fe090cb609b41aa0068d20416627f5e",
+      "c60daee": "f7fa434332999932f7c4415a9b6ae02c6a141c0739fa55a0df07b79b61902067",
+      "iu-core-proof": "4ad805b4b44dcfbbd75a647481e7844173e1a942b31d83a0f1dfb18e9f576fca",
+      "iu-custom-proof": "0cdc84c7de7e32668ab8fc05ea4892273a0baa17033b524be0c1cbc348f6fed3"
+    }
+  }
+]

@@ -1,0 +1,293 @@
+[
+    {
+        "document": 1635,
+        "published": true,
+        "types": {
+            "container": 1,
+            "image": 1
+        },
+        "queries": [],
+        "dynamic": [
+            {
+                "type": "image",
+                "fields": {
+                    "link": "[elementor-tag id=\"3c9381b\" name=\"post-url\" settings=\"%7B%7D\"]",
+                    "image": "[elementor-tag id=\"fed5513\" name=\"post-featured-image\" settings=\"%7B%7D\"]"
+                }
+            }
+        ]
+    },
+    {
+        "document": 7767,
+        "published": true,
+        "types": {
+            "container": 62,
+            "nested-tabs": 1,
+            "button": 24,
+            "heading": 35,
+            "divider": 35,
+            "icon-list": 35,
+            "loop-grid": 12
+        },
+        "queries": [
+            {
+                "id": "fc58f93",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner",
+                "post_query_include": [
+                    "terms"
+                ],
+                "post_query_include_term_ids": [
+                    48
+                ]
+            },
+            {
+                "id": "e075487",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "960f5ad",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "a4d1d3d",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "9626d68",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "b60b9f5",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "ac09830",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "154d525",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "012b646",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "4e413bb",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "4868bc5",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "fe30124",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            }
+        ],
+        "dynamic": []
+    },
+    {
+        "document": 7778,
+        "published": true,
+        "types": {
+            "container": 66,
+            "nested-tabs": 1,
+            "button": 39,
+            "heading": 26,
+            "divider": 26,
+            "icon-list": 13,
+            "posts": 13,
+            "loop-grid": 13
+        },
+        "queries": [
+            {
+                "id": "5a6bddb1",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "58cdf8d3",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner",
+                "post_query_include": [
+                    "terms"
+                ],
+                "post_query_include_term_ids": [
+                    48
+                ]
+            },
+            {
+                "id": "315ad5dc",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "5484fa4b",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "61a5abb9",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "2d0a2367",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "2a61a9f7",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "717457be",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "6fe3731c",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "5420a734",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "7da3d5c",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "92f26a9",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "24612c41",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "4598bcb0",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "695dda88",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "52480180",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "32e1af2c",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "4d80cebe",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "2788671",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "58439615",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "480bee8a",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "44439b0a",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "293239dc",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "783e3cc0",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            },
+            {
+                "id": "4149021",
+                "type": "posts",
+                "classic_show_excerpt": "",
+                "posts_ignore_sticky_posts": ""
+            },
+            {
+                "id": "d416541",
+                "type": "loop-grid",
+                "template_id": "1635",
+                "post_query_post_type": "partner"
+            }
+        ],
+        "dynamic": []
+    }
+]

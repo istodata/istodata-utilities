@@ -1,0 +1,26 @@
+{
+  "firefox": {
+    "target": 1,
+    "loops": 0,
+    "events": [
+      {
+        "id": "417d1ae",
+        "result": "hit"
+      },
+      {
+        "id": "c60daee",
+        "result": "hit"
+      }
+    ]
+  },
+  "tablet": {
+    "target": 0,
+    "loops": 0,
+    "events": []
+  },
+  "phone": {
+    "target": 0,
+    "loops": 0,
+    "events": []
+  }
+}

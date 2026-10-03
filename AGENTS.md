@@ -23,7 +23,7 @@ Instructions for Codex agents working on the ISTODATA Kit plugin.
 
 - Add unreleased work under an `## Unreleased` heading at the top of `CHANGELOG.md`.
 - When preparing a release, convert `## Unreleased` to `## X.Y.Z - YYYY-MM-DD`.
-- Include a `Version bump to X.Y.Z.` entry only when the plugin header and `IU_PLUGIN_VERSION` are actually updated.
+- Do not add version-bump bookkeeping entries to the changelog; the release heading already identifies the version.
 - Keep entries concise and grouped by practical impact: `New`, `Fix`, `Improve`, `Tweak`, `Docs`, or `Cleanup`.
 
 ## Versioning
@@ -94,9 +94,21 @@ Only do this after the user confirms the WordPress manual test is OK and asks fo
 
 Prefer authenticated GitHub tooling (`gh` or the GitHub connector) when available. If authentication is missing, stop and report what is needed.
 
+### Public Release Notes
+
+- Describe user-facing additions, fixes, improvements, and important compatibility or upgrade instructions.
+- Do not include version-bump bookkeeping entries in public release notes; the release title already identifies the version.
+- Do not include Verification sections, test counts, lint results, browser test details, ZIP checks, checksums, or other internal QA/process information in published release notes.
+- Keep performing all required verification; report results in the chat or internal documentation instead.
+
 Do not add hardcoded GitHub personal access tokens to the distributed plugin. Public GitHub release metadata and the `istodata-utilities.zip` asset should be accessible without authentication. If private release access is ever required, use a safer design such as an ISTODATA-owned update proxy or a per-site token stored outside the plugin package.
 
 ## Verification
+
+- `includes/elementor-compatibility.php` is the single source of explicitly accepted Elementor/Pro version pairs and separate tested evidence for Atomic Interactions and Fragment Cache. Runtime guards, adapters, notices, settings UI and updater gates must consume it; never add independent version rules in PHP/JS, an open-ended range or a filter that widens support. The current schema accepts exact versions only.
+- Every new Elementor/Pro version, including a patch that does not change feature code, requires review, an explicitly updated compatibility declaration and a Kit release before it can be accepted. Do not infer approval from the minor series, mocked version-policy tests or a daily monitor. Record actually tested core/Pro pairs, evidence and acceptance limits separately from approved pairs.
+- Before changing compatibility or releasing, run `php tests/elementor-compatibility.php`, `php tests/elementor-update-guard.php`, and `node tests/elementor-compatibility-drift.cjs`; inspect runtime files for old/scattered guards. Only fixtures/tests/docs may contain reference version declarations outside the registry.
+- The daily compatibility monitor is read-only. It must not change the registry, install/update/purge, commit/push, bump versions or create a release. Notify only on actionable compatibility evidence or a required user decision.
 
 - Run `php -l istodata-utilities.php` when PHP is available.
 - If PHP is not available in PATH, say so explicitly.

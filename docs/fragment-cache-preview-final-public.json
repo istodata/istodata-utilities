@@ -1,0 +1,14 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "observer_absent": true,
+    "menu_present": true
+  },
+  {
+    "path": "/en/",
+    "status": 200,
+    "observer_absent": true,
+    "menu_present": true
+  }
+]

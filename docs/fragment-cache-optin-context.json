@@ -1,0 +1,34 @@
+[
+  {
+    "mode": "private-cookie",
+    "normal_loops": 150,
+    "fragment_operations": 0,
+    "diagnostic_writes": 1,
+    "not_published_or_hit": true,
+    "rejection": []
+  },
+  {
+    "mode": "session",
+    "normal_loops": 150,
+    "fragment_operations": 0,
+    "diagnostic_writes": 1,
+    "not_published_or_hit": true,
+    "rejection": []
+  },
+  {
+    "mode": "user-dynamic",
+    "normal_loops": 150,
+    "fragment_operations": 2,
+    "diagnostic_writes": 1,
+    "not_published_or_hit": true,
+    "rejection": []
+  },
+  {
+    "mode": "global-off",
+    "normal_loops": 150,
+    "fragment_operations": 0,
+    "diagnostic_writes": 0,
+    "not_published_or_hit": true,
+    "rejection": []
+  }
+]

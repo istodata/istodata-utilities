@@ -1,0 +1,42 @@
+{
+  "candidate_sha256": "cf9a682d8fb9dc8f66dad0d6fa2bec49eaf68c9b7a162fc573a77f64e76ca5f5",
+  "accepted": false,
+  "stop_reason": "EN desktop heavy dropdown: aria-expanded remained false after click + 700 ms on a real cache hit",
+  "root_renders": 1,
+  "heavy_template_renders": 0,
+  "hit_loops": 0,
+  "production_changed": false,
+  "candidate_staging_rolled_back": true,
+  "executed": {
+    "local": [
+      "compatibility",
+      "update-guard",
+      "drift",
+      "context",
+      "graph",
+      "assets",
+      "diagnostics",
+      "bootstrap",
+      "poll",
+      "replay-order",
+      "PHP lint"
+    ],
+    "actual_staging": [
+      "real Pro excerpt replay with external callback preservation and registration-change rejection",
+      "GR anonymous/manager/subscriber cross-page miss-hit-baseline comparisons",
+      "EN anonymous-manager and manager-anonymous cross-page miss-hit-baseline comparisons",
+      "GR hit dropdown open and navigation 200 without JS errors",
+      "4 ordinary Ivory GET searches matched previous baseline"
+    ]
+  },
+  "not_completed": [
+    "EN subscriber pair",
+    "unknown hook actual staging positive control",
+    "actual token and permission negative controls",
+    "mobile UI",
+    "native editor/preview",
+    "diagnostics UI",
+    "purge and concurrent-generation tests"
+  ],
+  "correction_plan": "Repeat a focused uncached vs hit EN comparison after explicitly waiting for Elementor dropdown handler registration. If only hit fails, repair asset/init replay before repeating acceptance; do not declare success from longer delays alone."
+}

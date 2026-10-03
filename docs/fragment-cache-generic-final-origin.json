@@ -1,0 +1,37 @@
+[
+  {
+    "language": "el",
+    "miss_loops": 150,
+    "hit_loops": 0,
+    "hit_custom_render_body": 0,
+    "all_eight_stored_then_hit": true,
+    "source_html_matches_prior_native_parity": true,
+    "source_fragment_sha256": {
+      "d7ebc85": "42d6d037998488957eba4f05e5e6b2f4cb5d6b09927cb41bff6eb3239f34dd22",
+      "a1ff108": "786788f30ea6f364f57fa2eaa8380e2033edd2dd7eec7a6d4fbd333a835f31a3",
+      "e62c115": "4c76daa5708c7cc8e021a9f8e5fe7ffbb679d3e304afee555997b6fa73952c9e",
+      "c28398e": "788f02aad55eb9b12cf428eb0d714563b151d83b375086ebd3f69f1bf911a76a",
+      "417d1ae": "f0dbc2aef77d8a6cb6fbf6eec5fee8d9fb748ff2a49c82061e06e0f8b7d300f7",
+      "c60daee": "b024f41b59306a826186d87c86f2be866d6d0f0db3e43236d59b3a686e469e87",
+      "iu-core-proof": "4ad805b4b44dcfbbd75a647481e7844173e1a942b31d83a0f1dfb18e9f576fca",
+      "iu-custom-proof": "0cdc84c7de7e32668ab8fc05ea4892273a0baa17033b524be0c1cbc348f6fed3"
+    }
+  },
+  {
+    "language": "en",
+    "miss_loops": 156,
+    "hit_loops": 0,
+    "hit_custom_render_body": 0,
+    "all_eight_stored_then_hit": true,
+    "source_html_matches_prior_native_parity": true,
+    "source_fragment_sha256": {
+      "a1ff108": "0d5b55dde136bc417f17b124cd6f56223eec0cbb3efa8a703510ca47f75af8dc",
+      "e62c115": "d250f9a714749c6543bc40af9a8b8af1ca519e1aa5feb2c4a6ac5a522d6cc166",
+      "c28398e": "f28d526c5bc50ccc3f2d6e3f39db5f37da25ba115f4ab8439a1195756db888b7",
+      "417d1ae": "e525ae57e5282abb7bd1b0b0408460b58fe090cb609b41aa0068d20416627f5e",
+      "c60daee": "f7fa434332999932f7c4415a9b6ae02c6a141c0739fa55a0df07b79b61902067",
+      "iu-core-proof": "4ad805b4b44dcfbbd75a647481e7844173e1a942b31d83a0f1dfb18e9f576fca",
+      "iu-custom-proof": "0cdc84c7de7e32668ab8fc05ea4892273a0baa17033b524be0c1cbc348f6fed3"
+    }
+  }
+]

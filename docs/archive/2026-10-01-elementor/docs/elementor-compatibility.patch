@@ -1,0 +1,2807 @@
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -105,6 +105,11 @@
+ 
+ ## Verification
+ 
++- `includes/elementor-compatibility.php` is the single source of explicitly accepted Elementor/Pro version pairs and separate tested evidence for Atomic Interactions and Fragment Cache. Runtime guards, adapters, notices, settings UI and updater gates must consume it; never add independent version rules in PHP/JS, an open-ended range or a filter that widens support. The current schema accepts exact versions only.
++- Every new Elementor/Pro version, including a patch that does not change feature code, requires review, an explicitly updated compatibility declaration and a Kit release before it can be accepted. Do not infer approval from the minor series, mocked version-policy tests or a daily monitor. Record actually tested core/Pro pairs, evidence and acceptance limits separately from approved pairs.
++- Before changing compatibility or releasing, run `php tests/elementor-compatibility.php`, `php tests/elementor-update-guard.php`, and `node tests/elementor-compatibility-drift.cjs`; inspect runtime files for old/scattered guards. Only fixtures/tests/docs may contain reference version declarations outside the registry.
++- The daily compatibility monitor is read-only. It must not change the registry, install/update/purge, commit/push, bump versions or create a release. Notify only on actionable compatibility evidence or a required user decision.
++
+ - Run `php -l istodata-utilities.php` when PHP is available.
+ - If PHP is not available in PATH, say so explicitly.
+ - Check the final changed files and report unrelated pre-existing working tree changes without modifying them.
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -4,6 +4,12 @@
+ 
+ ## Unreleased
+ 
++- Improve: Centralize Elementor/Pro compatibility declarations and show accepted combinations separately from tested evidence.
++- Tweak: Atomic Interactions compatibility accepts the documented Elementor 4.3.2 / Pro 4.3.0 and tested 4.3.3 / Pro 4.3.1 pairs; each new patch requires review and a Kit compatibility update instead of automatic acceptance within 4.3.x.
++- Fix: Restore Atomic interaction styles after Motion scroll-timeline teardown when entering an excluded breakpoint.
++- Improve: Accept the tested Elementor 4.3.3 / Pro 4.3.1 pair for Fragment Cache; preserve native rendering for graphs with Atomic interactions while allowing independent static fragments alongside Atomic Widgets.
++- New: Block Elementor/Pro WordPress updates only for incompatible active Atomic or opted-in Fragment Cache features, with a protected explicit override for one specific update; keep available updates visible and bypass unsupported runtime features with notices.
++- Fix: Apply the compatibility gate to WordPress bulk and AJAX plugin updates, whose per-plugin hooks omit the update type and action.
+ - New: Optional Elementor widget fragment cache with early render bypass, 24-hour default TTL, cross-page reuse, device/WPML variants, template-source invalidation and per-element purge. Off by default; reviewed Template/Mega Menu/Loop Grid/Classic Posts graphs are supported and uncertain technical contexts bypass.
+ - Improve: Elementor Device Visibility now removes hidden widget and container branches before frontend rendering, avoiding their PHP widget work where builder content data is available.
+ - Tweak: Shortened the Atomic Interactions breakpoint fix setting description.
+--- a/istodata-utilities.php
++++ b/istodata-utilities.php
+@@ -14,6 +14,10 @@
+ define('IU_PLUGIN_VERSION', '2.21.2');
+ define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
+ define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
++
++// Load even before Elementor: the updater must enforce configured feature policies.
++require_once IU_PLUGIN_PATH . 'includes/elementor-update-guard.php';
++IU_Elementor_Update_Guard::boot();
+ 
+ // Reusable helpers for Elementor-related setting keys
+     if (!function_exists('iu_elem_opt_keys')) {
+@@ -1388,6 +1392,7 @@
+                                              <?php checked(!empty($settings['optimizations']['elementor_atomic_interaction_breakpoints'])); ?> />
+                                        Διόρθωση breakpoints στα Atomic Interactions</label>
+                                 <p class="description">Προσωρινή διόρθωση του <a href="https://github.com/elementor/elementor/issues/35831" target="_blank" rel="noopener noreferrer">#35831</a>.</p>
++                                <details><summary>Συμβατότητα Elementor / Pro</summary><p class="description"><?php echo esc_html(iu_elementor_compatibility_description('atomic')); ?></p></details>
+                             </td>
+                         </tr>
+                         <tr>
+--- a/includes/elementor-atomic-interaction-breakpoints.php
++++ b/includes/elementor-atomic-interaction-breakpoints.php
+@@ -3,16 +3,10 @@
+ if (!defined('ABSPATH')) {
+     exit;
+ }
++require_once __DIR__ . '/elementor-compatibility.php';
+ 
+ function iu_atomic_interaction_breakpoints_supported() {
+-    // Accept stable patch updates within 4.3, from the tested baseline onward.
+-    // API preflight remains mandatory; a new minor series needs a fresh review.
+-    return defined('ELEMENTOR_VERSION') && defined('ELEMENTOR_PRO_VERSION')
+-        && is_string(ELEMENTOR_VERSION) && is_string(ELEMENTOR_PRO_VERSION)
+-        && preg_match('/\A4\.3\.[0-9]+\z/', ELEMENTOR_VERSION) === 1
+-        && preg_match('/\A4\.3\.[0-9]+\z/', ELEMENTOR_PRO_VERSION) === 1
+-        && version_compare(ELEMENTOR_VERSION, '4.3.2', '>=')
+-        && version_compare(ELEMENTOR_PRO_VERSION, '4.3.0', '>=');
++    return iu_elementor_feature_supported('atomic');
+ }
+ 
+ function iu_init_atomic_interaction_breakpoints() {
+@@ -49,6 +43,6 @@
+         return;
+     }
+     echo '<div class="notice notice-warning"><p>';
+-    echo esc_html('ISTODATA Kit: Η διόρθωση breakpoints στα Atomic Interactions είναι ενεργοποιημένη, αλλά δεν εφαρμόζεται στις εγκατεστημένες εκδόσεις. Επιτρέπονται σταθερές εκδόσεις Elementor 4.3.x από 4.3.2 και Elementor Pro 4.3.x από 4.3.0, με ελέγχους APIs. Οι εκδόσεις 4.4 και νεότερες χρειάζονται επανέλεγχο. Ελέγξτε την επίσημη λύση του #35831 και απενεργοποιήστε την επιλογή όταν δεν χρειάζεται.');
++    echo esc_html('ISTODATA Kit: Η διόρθωση breakpoints στα Atomic Interactions είναι ενεργοποιημένη, αλλά δεν εφαρμόζεται στις εγκατεστημένες εκδόσεις. ' . iu_elementor_compatibility_description('atomic') . ' Ελέγξτε την επίσημη λύση του #35831 και απενεργοποιήστε την επιλογή όταν δεν χρειάζεται.');
+     echo ' <a href="https://github.com/elementor/elementor/issues/35831" target="_blank" rel="noopener noreferrer">#35831</a></p></div>';
+ }
+--- a/assets/js/elementor-atomic-interaction-breakpoints.js
++++ b/assets/js/elementor-atomic-interaction-breakpoints.js
+@@ -1,5 +1,5 @@
+-/* Temporary internal-API workaround: tested on Elementor 4.3.2 / Pro 4.3.0;
+- * stable 4.3.x patch updates allowed by PHP, with API preflight. Issue #35831. */
++/* Temporary internal-API workaround for #35831. PHP gates versions through
++ * includes/elementor-compatibility.php; this runtime retains API/shape preflight. */
+ (function () {
+   'use strict';
+   var api = window.elementorModules && window.elementorModules.interactions;
+@@ -104,14 +104,24 @@
+       else if (typeof control.stop === 'function') control.stop();
+     });
+     controls.clear();
+-    baselines.forEach(function (saved, element) {
++    var disposed = new Map(baselines), token = generation;
++    function restore(saved, element) {
+       Object.keys(saved).forEach(function (property) {
+         var value = saved[property];
+         if (value[0]) element.style.setProperty(property, value[0], value[1]);
+         else element.style.removeProperty(property);
+       });
+-    });
++    }
++    disposed.forEach(restore);
+     baselines.clear();
++    // Motion timeline teardown queues one final render. Restore excluded
++    // elements after that frame; never overwrite a newly initialized element.
++    if (typeof window.requestAnimationFrame === 'function') window.requestAnimationFrame(function () {
++      if (token !== generation) return;
++      disposed.forEach(function (saved, element) {
++        if (!baselines.has(element)) restore(saved, element);
++      });
++    });
+     initialized = false;
+   }
+   function run() {
+@@ -164,7 +174,11 @@
+         var control = animate.apply(motion, arguments);
+         if (control) {
+           controls.add(control);
+-          if (typeof control.then === 'function') control.then(function () { controls.delete(control); }, function () { controls.delete(control); });
++          // A scroll-driven control can report completion and later be driven
++          // again by its timeline. Keep it until the subscription is disposed.
++          if (!(arguments[2] && arguments[2].autoplay === false) && typeof control.then === 'function') {
++            control.then(function () { controls.delete(control); }, function () { controls.delete(control); });
++          }
+         }
+         return guardedControl(control, token);
+       };
+--- a/includes/elementor-fragment-cache.php
++++ b/includes/elementor-fragment-cache.php
+@@ -3,6 +3,7 @@
+ if (!defined('ABSPATH')) {
+     exit;
+ }
++require_once __DIR__ . '/elementor-compatibility.php';
+ require_once __DIR__ . '/elementor-fragment-cache-graph.php';
+ require_once __DIR__ . '/elementor-fragment-cache-excerpt.php';
+ 
+@@ -67,6 +68,11 @@
+             'options' => array('3600' => '1 ώρα', '21600' => '6 ώρες', '86400' => '24 ώρες', '604800' => '7 ημέρες'),
+             'default' => '86400', 'condition' => array('iu_fragment_cache' => 'yes'),
+         ));
++        $element->add_control('iu_fragment_cache_compatibility', array(
++            'type' => \Elementor\Controls_Manager::RAW_HTML,
++            'raw' => esc_html(iu_elementor_compatibility_description('fragment')),
++            'condition' => array('iu_fragment_cache' => 'yes'),
++        ));
+         $element->end_controls_section();
+     }
+ 
+@@ -132,9 +138,7 @@
+     }
+ 
+     private static function versions_supported() {
+-        $tested = defined('ELEMENTOR_VERSION') && ELEMENTOR_VERSION === '4.2.3' &&
+-            (!defined('ELEMENTOR_PRO_VERSION') || ELEMENTOR_PRO_VERSION === '4.2.2');
+-        return (bool) apply_filters('iu_elementor_fragment_versions_supported', $tested);
++        return iu_elementor_feature_supported('fragment');
+     }
+ 
+     private static function language() {
+@@ -634,6 +638,7 @@
+         }
+         echo '<div class="wrap"><h1>Elementor Fragment Cache</h1><p>' .
+             esc_html__('Η εκκαθάριση ανανεώνει το fragment στην επόμενη αίτηση. Εκκαθαρίστε χωριστά τυχόν full-page/CDN cache.', 'istodata-utilities') . '</p>';
++        echo '<p>' . esc_html(iu_elementor_compatibility_description('fragment')) . '</p>';
+         global $wpdb;
+         $pattern = $wpdb->esc_like(self::INDEX_PREFIX) . '%';
+         $names = $wpdb->get_col($wpdb->prepare(
+--- a/includes/elementor-fragment-cache-graph.php
++++ b/includes/elementor-fragment-cache-graph.php
+@@ -1,6 +1,7 @@
+ <?php
+ /** Reviewed Elementor/Pro graph policy. No site, document or element IDs. */
+ if (!defined('ABSPATH')) exit;
++require_once __DIR__ . '/elementor-compatibility.php';
+ 
+ final class IU_Elementor_Fragment_Graph {
+     private $stack = array();
+@@ -13,6 +14,7 @@
+     private $failure = '';
+ 
+     public static function prototype_supported($type, $prototype) {
++        if (!iu_elementor_feature_supported('fragment')) return false;
+         $classes = array('heading' => 'Elementor\\Widget_Heading', 'image' => 'Elementor\\Widget_Image',
+             'button' => 'Elementor\\Widget_Button', 'icon' => 'Elementor\\Widget_Icon', 'icon-list' => 'Elementor\\Widget_Icon_List',
+             'divider' => 'Elementor\\Widget_Divider', 'spacer' => 'Elementor\\Widget_Spacer',
+@@ -38,8 +40,7 @@
+ 
+     public static function inspect($node) {
+         if (!in_array($node['widgetType'] ?? '', array('mega-menu', 'loop-grid', 'posts', 'template'), true) ||
+-            !defined('ELEMENTOR_VERSION') || ELEMENTOR_VERSION !== '4.2.3' ||
+-            !defined('ELEMENTOR_PRO_VERSION') || ELEMENTOR_PRO_VERSION !== '4.2.2' ||
++            !iu_elementor_feature_supported('fragment', null, true) ||
+             !class_exists('Elementor\\Plugin') || !\Elementor\Plugin::$instance) return null;
+         $policy = new self();
+         if (!$policy->walk(array($node), false) || !$policy->hooks_safe()) {
+@@ -62,6 +63,9 @@
+                 return $this->fail('unsupported-widget:' . $type);
+             }
+             $settings = $node['settings'] ?? array();
++            // A hit skips nested document collection. Interactions are outside
++            // this fragment policy and must retain the native render pipeline.
++            if (!empty($node['interactions'])) return $this->fail('atomic-interactions');
+             if (!$this->settings_safe($settings, $loop, $type)) return false;
+             if (in_array($type, array('loop-grid', 'posts'), true) && !$this->query_safe($settings, $type)) return false;
+             if ($type === 'nav-menu') {
+@@ -90,6 +94,10 @@
+                     $raw = get_post_meta($id, '_elementor_data', true);
+                     $data = is_string($raw) ? json_decode($raw, true) : null;
+                     if (!is_array($data) || !$data || get_post_status($id) !== 'publish') return $this->fail('unresolved-template');
++                    if (class_exists('Elementor\\Modules\\Interactions\\Cache\\Interactions_Postmeta')) {
++                        $interactions = new \Elementor\Modules\Interactions\Cache\Interactions_Postmeta();
++                        if ($interactions->load_content($id)) return $this->fail('cached-atomic-interactions');
++                    }
+                     $this->signature[$identity] = hash('sha256', $raw);
+                     $this->stack[$identity] = true;
+                     if (!$this->walk($data, $mode)) return false;
+@@ -189,6 +197,15 @@
+         if ($callback instanceof Closure) return $this->wpml_wrapper_safe($callback, $hook);
+         $name = is_array($callback) ? (is_object($callback[0]) ? get_class($callback[0]) : $callback[0]) . '::' . $callback[1] : $callback;
+         if (!is_string($name)) return false;
++        if ($name === 'Elementor\\Modules\\Interactions\\Interactions_Frontend_Handler::collect_document_interactions' &&
++            $hook === 'elementor/frontend/builder_content_data') {
++            // Reviewed pass-through collector: walk() excludes both source and
++            // cached interactions in every referenced document. No rows or
++            // interaction assets are omitted by substituting this graph.
++            $file = (new ReflectionMethod($callback[0], $callback[1]))->getFileName();
++            return defined('ELEMENTOR_PATH') && str_replace('\\', '/', $file) ===
++                str_replace('\\', '/', ELEMENTOR_PATH . 'modules/interactions/interactions-frontend-handler.php');
++        }
+         if (in_array($name, array('IU_Elementor_Fragment_Cache::filter', 'IU_Elementor_Fragment_Cache::begin',
+             'IU_Elementor_Fragment_Cache::finish', 'IU_Elementor_Fragment_Cache::query_results',
+             'iu_elementor_filter_builder_content_by_device'), true)) return true;
+--- a/includes/elementor-fragment-cache-excerpt.php
++++ b/includes/elementor-fragment-cache-excerpt.php
+@@ -1,6 +1,7 @@
+ <?php
+ /** Replay the reviewed Pro Classic skin's leaked excerpt filters, without render. */
+ if (!defined('ABSPATH')) exit;
++require_once __DIR__ . '/elementor-compatibility.php';
+ 
+ final class IU_Elementor_Fragment_Excerpt {
+     public static function profile() {
+@@ -13,7 +14,7 @@
+                     if ($item['args'] !== 1) return null;
+                     if ($hook === 'excerpt_more' && $fn === 'wp_embed_excerpt_more') {
+                         $item['kind'] = 'native';
+-                    } elseif (defined('ELEMENTOR_PRO_VERSION') && ELEMENTOR_PRO_VERSION === '4.2.2' &&
++                    } elseif (iu_elementor_feature_supported('fragment', null, true) &&
+                         is_array($fn) && is_object($fn[0]) && get_class($fn[0]) === 'ElementorPro\\Modules\\Posts\\Skins\\Skin_Classic' &&
+                         $fn[1] === ($hook === 'excerpt_length' ? 'filter_excerpt_length' : 'filter_excerpt_more')) {
+                         $item['kind'] = 'classic';
+@@ -49,7 +50,7 @@
+             if (($item['kind'] ?? '') === 'native') {
+                 if ($item['hook'] !== 'excerpt_more' || !function_exists('wp_embed_excerpt_more')) return false;
+             } elseif (($item['kind'] ?? '') === 'classic') {
+-                if (!defined('ELEMENTOR_PRO_VERSION') || ELEMENTOR_PRO_VERSION !== '4.2.2') return false;
++                if (!iu_elementor_feature_supported('fragment', null, true)) return false;
+                 if ($item['hook'] === 'excerpt_length') {
+                     if (!self::length_ok($item['length'] ?? null)) return false;
+                     if (!is_array($item['parent'] ?? null) || ($item['parent']['widgetType'] ?? '') !== 'posts') return false;
+--- /dev/null
++++ b/includes/elementor-compatibility.php
+@@ -0,0 +1,149 @@
++<?php
++/** Single release-owned source of Elementor compatibility. No filter can widen it. */
++if (!defined('ABSPATH')) exit;
++
++function iu_elementor_compatibility_registry() {
++    return array(
++        'atomic' => array(
++            'label' => 'Atomic Interactions breakpoints',
++            'accepted' => array(array(
++                'core' => array('exact' => '4.3.2'),
++                'pro' => array('exact' => '4.3.0'),
++            ), array('core' => array('exact' => '4.3.3'), 'pro' => array('exact' => '4.3.1'))),
++            'tested' => array(array('core' => '4.3.2', 'pro' => '4.3.0',
++                'evidence' => 'tests/ATOMIC-INTERACTIONS.md',
++                'scope' => 'Checksum-verified vendor runtime; browser/editor acceptance pending.'),
++                array('core' => '4.3.3', 'pro' => '4.3.1',
++                    'evidence' => 'docs/elementor-kit-acceptance-staging.md',
++                    'scope' => 'Full Kit/native Motion browser ON/OFF, desktop/mobile/tablet lifecycle; vendor trigger matrix.')),
++        ),
++        'fragment' => array(
++            'label' => 'Elementor Fragment Cache',
++            'accepted' => array(
++                array('core' => array('exact' => '4.2.3'), 'pro' => array('exact' => '4.2.2')),
++                // Preserve the existing core-only static widget path. Pro adapters require Pro.
++                array('core' => array('exact' => '4.2.3'), 'pro' => null),
++                array('core' => array('exact' => '4.3.3'), 'pro' => array('exact' => '4.3.1')),
++            ),
++            'tested' => array(
++                array('core' => '4.3.3', 'pro' => '4.3.1',
++                    'evidence' => 'docs/elementor-kit-acceptance-staging.md',
++                    'scope' => 'Full Kit Greek/English save/reload, cross-page HTML/assets/effects, selective purge, UA exclusions; Atomic jointly ON.'),
++                array('core' => '4.2.3', 'pro' => '4.2.2',
++                    'evidence' => 'docs/elementor-kit-acceptance-staging.md',
++                    'scope' => 'Greek full Kit save/reload/origin cross-page; remaining acceptance pending.'),
++                array('core' => '4.2.3', 'pro' => null,
++                    'evidence' => 'tests/elementor-fragment-bootstrap.php',
++                    'scope' => 'Isolated core-only proxy bootstrap, no browser claim.'),
++            ),
++        ),
++    );
++}
++
++function iu_elementor_runtime_pair() {
++    return array('core' => defined('ELEMENTOR_VERSION') ? ELEMENTOR_VERSION : null,
++        'pro' => defined('ELEMENTOR_PRO_VERSION') ? ELEMENTOR_PRO_VERSION : null);
++}
++
++function iu_elementor_version_matches($version, $rule) {
++    if ($rule === null) return $version === null;
++    if (!is_string($version) || preg_match('/\A[0-9]+\.[0-9]+\.[0-9]+\z/', $version) !== 1) return false;
++    // Only explicit, release-owned versions are approved. An unbounded rule fails closed.
++    return is_array($rule) && array_keys($rule) === array('exact') && $version === $rule['exact'];
++}
++
++function iu_elementor_feature_supported($feature, $pair = null, $requires_pro = false) {
++    $registry = iu_elementor_compatibility_registry();
++    if (!isset($registry[$feature])) return false;
++    $pair = $pair === null ? iu_elementor_runtime_pair() : $pair;
++    if ($requires_pro && empty($pair['pro'])) return false;
++    foreach ($registry[$feature]['accepted'] as $rule) {
++        if (iu_elementor_version_matches($pair['core'] ?? null, $rule['core']) &&
++            iu_elementor_version_matches($pair['pro'] ?? null, $rule['pro'])) return true;
++    }
++    return false;
++}
++
++function iu_elementor_compatibility_description($feature) {
++    $entry = iu_elementor_compatibility_registry()[$feature];
++    $accepted = array();
++    foreach ($entry['accepted'] as $pair) {
++        $parts = array();
++        foreach (array('core' => 'Elementor', 'pro' => 'Pro') as $key => $label) {
++            $rule = $pair[$key];
++            $parts[] = $rule === null ? 'χωρίς Pro (static widgets)' : $label . ' ' .
++                ($rule['exact'] ?? 'μη έγκυρη δήλωση συμβατότητας');
++        }
++        $accepted[] = implode(' / ', $parts);
++    }
++    $tested = array();
++    foreach ($entry['tested'] as $pair) {
++        $tested[] = $pair['core'] . ' / ' . ($pair['pro'] ?? 'χωρίς Pro') . ' [' . $pair['scope'] . ']';
++    }
++    return $entry['label'] . ': αποδεκτοί συνδυασμοί ' . implode(' ή ', $accepted) .
++        '. Ελεγμένοι: ' . implode('; ', $tested) . '. Κάθε νέα έκδοση απαιτεί έλεγχο και ενημέρωση συμβατότητας του Kit.';
++}
++
++/** Saved widget opt-ins, including referenced templates, not cache entries or loaded modules. */
++function iu_elementor_fragment_has_opt_in($nodes) {
++    if (!is_array($nodes)) return false;
++    foreach ($nodes as $node) {
++        if (!is_array($node)) continue;
++        if (($node['elType'] ?? '') === 'widget' && ($node['settings']['iu_fragment_cache'] ?? '') === 'yes') return true;
++        if (iu_elementor_fragment_has_opt_in($node['elements'] ?? array())) return true;
++    }
++    return false;
++}
++
++function iu_elementor_active_features() {
++    $settings = get_option('istodata_utilities_settings', array());
++    $active = array('atomic' => !empty($settings['optimizations']['elementor_atomic_interaction_breakpoints']), 'fragment' => false);
++    if (get_option('elementor_element_cache_ttl') !== 'disable') return $active;
++    global $wpdb;
++    // Read current saved data: no persistent activation index that could miss imports or opt-out.
++    // Batch all non-trash, non-revision documents (drafts/templates may be referenced).
++    $cursor = 0;
++    do {
++        $rows = $wpdb->get_results($wpdb->prepare(
++            "SELECT m.meta_id, m.meta_value FROM {$wpdb->postmeta} m INNER JOIN {$wpdb->posts} p ON p.ID=m.post_id
++             WHERE m.meta_key=%s AND m.meta_id>%d AND p.post_type<>%s
++             AND p.post_status NOT IN ('trash','auto-draft') ORDER BY m.meta_id LIMIT 200",
++            '_elementor_data', $cursor, 'revision'
++        ));
++        foreach ((array) $rows as $row) {
++            $cursor = (int) $row->meta_id;
++            $nodes = maybe_unserialize($row->meta_value);
++            if (is_string($nodes)) $nodes = json_decode($nodes, true);
++            if (iu_elementor_fragment_has_opt_in($nodes)) { $active['fragment'] = true; return $active; }
++        }
++    } while (is_array($rows) && count($rows) === 200);
++    return $active;
++}
++
++function iu_elementor_pair_failures($pair, $active) {
++    $failures = array();
++    foreach ($active as $feature => $enabled) {
++        if ($enabled && !iu_elementor_feature_supported($feature, $pair)) $failures[] = $feature;
++    }
++    return $failures;
++}
++
++/** Derive a shared explicit pair from the registry. */
++function iu_elementor_common_pair($features) {
++    $registry = iu_elementor_compatibility_registry();
++    $versions = array('core' => array(), 'pro' => array());
++    foreach ($features as $feature) {
++        if (!isset($registry[$feature])) return null;
++        foreach ($registry[$feature]['accepted'] as $pair) {
++            foreach ($pair as $key => $rule) {
++                $version = $rule === null ? null : ($rule['exact'] ?? '');
++                if (!in_array($version, $versions[$key], true)) $versions[$key][] = $version;
++            }
++        }
++    }
++    foreach ($versions['core'] as $core) foreach ($versions['pro'] as $pro) {
++        $pair = array('core' => $core, 'pro' => $pro);
++        if (!iu_elementor_pair_failures($pair, array_fill_keys($features, true))) return $pair;
++    }
++    return null;
++}
+--- /dev/null
++++ b/includes/elementor-update-guard.php
+@@ -0,0 +1,283 @@
++<?php
++/** WordPress updater gate. Available updates remain visible. */
++if (!defined('ABSPATH')) exit;
++require_once __DIR__ . '/elementor-compatibility.php';
++
++final class IU_Elementor_Update_Guard {
++    private static $override = null;
++
++    public static function plugins() {
++        return array('elementor/elementor.php' => 'core', 'elementor-pro/elementor-pro.php' => 'pro');
++    }
++
++    public static function boot() {
++        add_filter('auto_update_plugin', array(__CLASS__, 'auto_update'), PHP_INT_MAX, 2);
++        add_filter('upgrader_pre_download', array(__CLASS__, 'pre_download'), PHP_INT_MAX, 4);
++        // Check the actual extracted version before old files are moved/deleted, including ZIP replacement.
++        add_filter('upgrader_source_selection', array(__CLASS__, 'source_selection'), PHP_INT_MAX, 4);
++        add_action('admin_notices', array(__CLASS__, 'notices'));
++        add_action('network_admin_notices', array(__CLASS__, 'notices'));
++        foreach (array_keys(self::plugins()) as $plugin) {
++            add_action('in_plugin_update_message-' . $plugin, static function ($data, $response) use ($plugin) {
++                self::update_message($plugin, $response);
++            }, 10, 2);
++        }
++        add_action('admin_menu', array(__CLASS__, 'menu'));
++        add_action('network_admin_menu', array(__CLASS__, 'menu'));
++        add_action('admin_post_iu_elementor_update_override', array(__CLASS__, 'override_update'));
++    }
++
++    public static function installed_pair() {
++        $pair = array('core' => null, 'pro' => null);
++        foreach (self::plugins() as $plugin => $key) {
++            $file = WP_PLUGIN_DIR . '/' . $plugin;
++            if (is_file($file)) {
++                // Constants/get_plugins() can remain stale after the first plugin in a bulk update.
++                $data = get_file_data($file, array('Version' => 'Version'), 'plugin');
++                $pair[$key] = $data['Version'];
++            }
++        }
++        return $pair;
++    }
++
++    public static function active_sites() {
++        if (!is_multisite()) return array(get_current_blog_id() => iu_elementor_active_features());
++        $active = array();
++        $offset = 0;
++        $kit = plugin_basename(IU_PLUGIN_PATH . 'istodata-utilities.php');
++        do {
++            // Shared plugin files affect every network, not only the current blog/network.
++            $sites = get_sites(array('number' => 200, 'offset' => $offset, 'deleted' => 0));
++            foreach ($sites as $site) {
++                $network_plugins = get_network_option($site->site_id, 'active_sitewide_plugins', array());
++                if (!isset($network_plugins[$kit]) && !in_array($kit, get_blog_option($site->blog_id, 'active_plugins', array()), true)) continue;
++                switch_to_blog($site->blog_id);
++                try { $active[$site->blog_id] = iu_elementor_active_features(); }
++                finally { restore_current_blog(); }
++            }
++            $offset += 200;
++        } while (count($sites) === 200);
++        return $active;
++    }
++
++    public static function decision($plugin, $version) {
++        if (!isset(self::plugins()[$plugin])) return array('blocked' => false, 'pair' => array(), 'failures' => array());
++        $pair = self::installed_pair();
++        // An unknown update target is not an absent Pro installation (the core-only rule).
++        $pair[self::plugins()[$plugin]] = $version ?? '';
++        $failures = array();
++        foreach (self::active_sites() as $site => $active) {
++            $failed = iu_elementor_pair_failures($pair, $active);
++            if ($failed) $failures[$site] = $failed;
++        }
++        return array('blocked' => !empty($failures), 'pair' => $pair, 'failures' => $failures);
++    }
++
++    private static function reason($decision) {
++        $parts = array('ISTODATA Kit: η ενημέρωση μπλοκάρεται για τον συνδυασμό Elementor ' .
++            ($decision['pair']['core'] ?? 'απόν') . ' / Pro ' . ($decision['pair']['pro'] ?? 'απόν') . '.');
++        foreach ($decision['failures'] as $site => $features) {
++            $parts[] = 'Site #' . $site . ': ' . implode(' ', array_map('iu_elementor_compatibility_description', $features));
++        }
++        $parts[] = 'Απενεργοποιήστε την ασύμβατη λειτουργία ή χρησιμοποιήστε ρητή παράκαμψη για αυτή την ενημέρωση. Κάθε ενδιάμεσο core/Pro βήμα ελέγχεται χωριστά.';
++        return implode(' ', $parts);
++    }
++
++    private static function available($plugin) {
++        $updates = get_site_transient('update_plugins');
++        return isset($updates->response[$plugin]) ? $updates->response[$plugin] : null;
++    }
++
++    public static function auto_update($allow, $item) {
++        if (!is_object($item) || !isset(self::plugins()[$item->plugin ?? ''])) return $allow;
++        return self::decision($item->plugin, $item->new_version ?? null)['blocked'] ? false : $allow;
++    }
++
++    public static function pre_download($reply, $package, $upgrader, $extra) {
++        // Plugin_Upgrader::bulk_upgrade() (also used by AJAX) supplies only
++        // plugin/temp_backup here; type/action are added at process_complete.
++        if (is_wp_error($reply) || (isset($extra['type']) && $extra['type'] !== 'plugin') ||
++            (isset($extra['action']) && $extra['action'] !== 'update')) return $reply;
++        $plugin = $extra['plugin'] ?? '';
++        if (!isset(self::plugins()[$plugin])) return $reply;
++        $item = self::available($plugin);
++        if (self::$override !== null && self::$override['plugin'] === $plugin &&
++            (!$item || !self::override_matches($plugin, $item->new_version ?? null, $package))) {
++            return new WP_Error('iu_elementor_override_changed', 'ISTODATA Kit: το πακέτο ή ο συνδυασμός εκδόσεων άλλαξε μετά την έγκριση.');
++        }
++        // No trusted target metadata: the source gate checks the actual ZIP instead.
++        if (!$item || ($item->package ?? '') !== $package) return $reply;
++        $decision = self::decision($plugin, $item->new_version ?? null);
++        if ($decision['blocked'] && !self::override_matches($plugin, $item->new_version ?? null, $package)) {
++            return new WP_Error('iu_elementor_incompatible', self::reason($decision));
++        }
++        return $reply;
++    }
++
++    public static function source_selection($source, $remote_source, $upgrader, $extra) {
++        if (is_wp_error($source) || (isset($extra['type']) && $extra['type'] !== 'plugin') ||
++            (!isset($extra['type']) && !isset(self::plugins()[$extra['plugin'] ?? '']))) return $source;
++        global $wp_filesystem;
++        $plugin = $extra['plugin'] ?? '';
++        $version = null;
++        // WP_Filesystem also covers FTP/SSH transports; no direct local read assumption here.
++        foreach (self::plugins() as $candidate => $key) {
++            if ($plugin && $plugin !== $candidate) continue;
++            $file = rtrim($source, '/\\') . '/' . basename($candidate);
++            if (!$wp_filesystem->exists($file)) continue;
++            $contents = $wp_filesystem->get_contents($file);
++            if (is_string($contents) && preg_match('/^[ \t\/*#@]*Version:[ \t]*([^\r\n]+)/mi', substr($contents, 0, 8192), $matches)) {
++                $version = trim($matches[1], " \t*/");
++            }
++            $plugin = $candidate;
++            break;
++        }
++        if (!isset(self::plugins()[$plugin])) return $source;
++        $decision = self::decision($plugin, $version);
++        // Never authorize a different ZIP version, even when both versions are supported.
++        if (self::$override !== null && (self::$override['plugin'] !== $plugin || self::$override['version'] !== $version)) {
++            return new WP_Error('iu_elementor_override_changed', 'ISTODATA Kit: το πακέτο διαφέρει από τη συγκεκριμένη εγκεκριμένη ενημέρωση.');
++        }
++        if ($decision['blocked'] && !self::override_matches($plugin, $version, self::$override['package'] ?? '')) {
++            return new WP_Error('iu_elementor_incompatible', self::reason($decision));
++        }
++        return $source;
++    }
++
++    public static function can_override() {
++        return current_user_can('update_plugins') && current_user_can('manage_options') &&
++            (!is_multisite() || (is_super_admin() && current_user_can('manage_network_plugins')));
++    }
++
++    public static function fingerprint($plugin, $item) {
++        return hash('sha256', wp_json_encode(array($plugin, $item->new_version ?? null,
++            $item->package ?? null, self::installed_pair())));
++    }
++
++    /** Request-local authorization only; no option/transient/query-string bypass. */
++    public static function authorize_override($plugin, $fingerprint, $nonce, $confirmed) {
++        self::$override = null;
++        if (!self::can_override() || !$confirmed) return false;
++        $item = self::available($plugin);
++        if (!$item || !isset(self::plugins()[$plugin]) || empty($item->package) ||
++            !isset($item->new_version) || !is_string($item->new_version) || $item->new_version === '' ||
++            !is_string($fingerprint) || !hash_equals(self::fingerprint($plugin, $item), $fingerprint) ||
++            !wp_verify_nonce($nonce, 'iu_elementor_override_' . $fingerprint)) return false;
++        self::$override = array('plugin' => $plugin, 'version' => $item->new_version,
++            'package' => $item->package, 'installed' => self::installed_pair());
++        return true;
++    }
++
++    private static function override_matches($plugin, $version, $package) {
++        return self::$override !== null && self::can_override() &&
++            !(function_exists('wp_doing_cron') && wp_doing_cron()) &&
++            self::$override['plugin'] === $plugin && self::$override['version'] === $version &&
++            self::$override['package'] === $package && self::$override['installed'] === self::installed_pair();
++    }
++
++    public static function override_update() {
++        $plugin = isset($_POST['plugin']) && is_string($_POST['plugin']) ? wp_unslash($_POST['plugin']) : '';
++        $fingerprint = isset($_POST['fingerprint']) && is_string($_POST['fingerprint']) ? wp_unslash($_POST['fingerprint']) : '';
++        $nonce = isset($_POST['_wpnonce']) && is_string($_POST['_wpnonce']) ? wp_unslash($_POST['_wpnonce']) : '';
++        if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST' || !self::authorize_override($plugin, $fingerprint, $nonce, ($_POST['confirm'] ?? '') === 'yes')) {
++            wp_die('ISTODATA Kit: μη εξουσιοδοτημένη, ληγμένη ή αλλαγμένη ενημέρωση.', '', array('response' => 403));
++        }
++        require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
++        require_once ABSPATH . 'wp-admin/includes/file.php';
++        require_once ABSPATH . 'wp-admin/includes/plugin.php';
++        $skin = self::override_skin($plugin, $fingerprint);
++        $upgrader = new Plugin_Upgrader($skin);
++        iframe_header('ISTODATA Kit: ρητή παράκαμψη ενημέρωσης');
++        try { $upgrader->upgrade($plugin); }
++        finally { self::$override = null; }
++        iframe_footer();
++        exit;
++    }
++
++    public static function override_skin($plugin, $fingerprint) {
++        return new class(array('title' => 'ISTODATA Kit: ρητή παράκαμψη ενημέρωσης',
++            'url' => admin_url('admin-post.php'), 'nonce' => 'iu_elementor_override_' . $fingerprint,
++            'plugin' => $plugin)) extends Plugin_Upgrader_Skin {
++            public function request_filesystem_credentials($error = false, $context = '', $allow_relaxed_file_ownership = false) {
++                // Preserve the exact POST authorization if WordPress needs an FTP/SSH credentials round-trip.
++                // The next request rechecks capabilities, nonce, package and installed-pair fingerprint.
++                return request_filesystem_credentials($this->options['url'], '', $error,
++                    $context ?: $this->options['context'],
++                    array('action', 'plugin', 'fingerprint', 'confirm', '_wpnonce'), $allow_relaxed_file_ownership);
++            }
++        };
++    }
++
++    private static function page_url() {
++        return is_multisite() ? network_admin_url('settings.php?page=iu-elementor-compatibility') :
++            admin_url('tools.php?page=iu-elementor-compatibility');
++    }
++
++    public static function menu() {
++        if (is_network_admin()) {
++            add_submenu_page('settings.php', 'ISTODATA Elementor Compatibility', 'ISTODATA Elementor Compatibility',
++                'manage_network_plugins', 'iu-elementor-compatibility', array(__CLASS__, 'page'));
++        } elseif (!is_multisite()) {
++            add_management_page('ISTODATA Elementor Compatibility', 'ISTODATA Elementor Compatibility',
++                'manage_options', 'iu-elementor-compatibility', array(__CLASS__, 'page'));
++        }
++    }
++
++    public static function update_message($plugin, $response) {
++        if (!isset(self::plugins()[$plugin])) return;
++        $decision = self::decision($plugin, $response->new_version ?? null);
++        if ($decision['blocked']) echo '<p>' . esc_html(self::reason($decision)) . ' <a href="' . esc_url(self::page_url()) . '">Συμβατότητα / ρητή παράκαμψη</a></p>';
++    }
++
++    public static function notices() {
++        if (!current_user_can('manage_options') && !current_user_can('manage_network_plugins')) return;
++        $active = iu_elementor_active_features();
++        $failed = iu_elementor_pair_failures(iu_elementor_runtime_pair(), $active);
++        foreach ($failed as $feature) {
++            // Atomic owns its existing local notice; network admin needs this notice too.
++            if ($feature === 'atomic' && !is_network_admin()) continue;
++            echo '<div class="notice notice-warning"><p>' . esc_html('ISTODATA Kit: η ενεργή λειτουργία παρακάμπτεται στις εγκατεστημένες εκδόσεις. ' .
++                iu_elementor_compatibility_description($feature)) . '</p></div>';
++        }
++        foreach (self::plugins() as $plugin => $key) {
++            $item = self::available($plugin);
++            if (!$item) continue;
++            $decision = self::decision($plugin, $item->new_version ?? null);
++            if ($decision['blocked']) echo '<div class="notice notice-warning"><p>' . esc_html(self::reason($decision)) .
++                ' <a href="' . esc_url(self::page_url()) . '">Συμβατότητα / ρητή παράκαμψη</a></p></div>';
++        }
++    }
++
++    public static function page() {
++        if (!current_user_can(is_multisite() ? 'manage_network_plugins' : 'manage_options')) return;
++        echo '<div class="wrap"><h1>ISTODATA Elementor Compatibility</h1>';
++        foreach (array_keys(iu_elementor_compatibility_registry()) as $feature) {
++            echo '<p>' . esc_html(iu_elementor_compatibility_description($feature)) . '</p>';
++        }
++        echo '<p>' . esc_html(iu_elementor_common_pair(array('atomic', 'fragment')) !== null ? 'Υπάρχει κοινός αποδεκτός συνδυασμός.' :
++            'Δεν υπάρχει κοινός αποδεκτός συνδυασμός για ταυτόχρονη χρήση Atomic και Fragment Cache.') . '</p>';
++        foreach (self::active_sites() as $site => $active) {
++            echo '<p>' . esc_html('Site #' . $site . ': Atomic ' . ($active['atomic'] ? 'ON' : 'OFF') .
++                ', Fragment Cache ' . ($active['fragment'] ? 'ON' : 'OFF')) . '</p>';
++        }
++        echo '<p>Κάθε core/Pro ενημέρωση ελέγχεται με την τρέχουσα έκδοση του άλλου plugin. Αν δεν επιτρέπεται ενδιάμεσο βήμα, απενεργοποιήστε τη λειτουργία ή εγκρίνετε χωριστά την παράκαμψη. Η παράκαμψη αφορά μία ενημέρωση σε αυτή την αίτηση· η ασύμβατη λειτουργία παρακάμπτεται μετά την εγκατάσταση. Δεν προστατεύεται αντικατάσταση μέσω SSH ή updater που δεν εκτελεί τα WordPress hooks.</p>';
++        foreach (self::plugins() as $plugin => $key) {
++            $item = self::available($plugin);
++            if (!$item) continue;
++            $decision = self::decision($plugin, $item->new_version ?? null);
++            echo '<p>' . esc_html($plugin . ' → ' . ($item->new_version ?? '?') . ': ' .
++                ($decision['blocked'] ? self::reason($decision) : 'Δεν περιορίζεται από το Kit.')) . '</p>';
++            if (!$decision['blocked'] || !self::can_override() || empty($item->package)) continue;
++            $fingerprint = self::fingerprint($plugin, $item);
++            echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
++            echo '<input type="hidden" name="action" value="iu_elementor_update_override">';
++            echo '<input type="hidden" name="plugin" value="' . esc_attr($plugin) . '">';
++            echo '<input type="hidden" name="fingerprint" value="' . esc_attr($fingerprint) . '">';
++            wp_nonce_field('iu_elementor_override_' . $fingerprint);
++            echo '<label><input type="checkbox" name="confirm" value="yes" required> Εγκρίνω αυτή τη συγκεκριμένη ενημέρωση και την παράκαμψη της ασύμβατης λειτουργίας.</label>';
++            submit_button('Παράκαμψη και ενημέρωση ' . $plugin, 'secondary');
++            echo '</form>';
++        }
++        echo '</div>';
++    }
++}
+--- /dev/null
++++ b/tests/elementor-compatibility.php
+@@ -0,0 +1,101 @@
++<?php
++/** Isolated policy/runtime regressions; no WordPress/server mutation. */
++if (!isset($argv[1])) {
++    foreach (array('atomic', 'fragment', 'core-only', 'core-patch', 'pro-patch', 'both-patch', 'future', 'missing') as $case) {
++        passthru(escapeshellarg(PHP_BINARY) . ' -n ' . escapeshellarg(__FILE__) . ' ' . escapeshellarg($case), $status);
++        if ($status) exit($status);
++    }
++    exit;
++}
++define('ABSPATH', __DIR__);
++define('IU_PLUGIN_PATH', dirname(__DIR__) . '/');
++$pairs = array('atomic' => array('4.3.2', '4.3.0'), 'fragment' => array('4.2.3', '4.2.2'),
++    'core-only' => array('4.2.3', null), 'core-patch' => array('4.3.3', '4.3.0'),
++    'pro-patch' => array('4.3.2', '4.3.1'), 'both-patch' => array('4.3.3', '4.3.1'),
++    'future' => array('4.4.0', '4.4.0'), 'missing' => array(null, null));
++[$core, $pro] = $pairs[$argv[1]];
++if ($core !== null) define('ELEMENTOR_VERSION', $core);
++if ($pro !== null) define('ELEMENTOR_PRO_VERSION', $pro);
++function add_action() {}
++function add_filter() {}
++function do_action() {}
++function did_action() { return 0; }
++function get_locale() { return 'el'; }
++function get_option($name, $default = false) {
++    if ($name === 'istodata_utilities_settings') return array('optimizations' => array('elementor_atomic_interaction_breakpoints' => true));
++    return $name === 'elementor_element_cache_ttl' ? 'disable' : $default;
++}
++function maybe_unserialize($value) { return $value; }
++function current_user_can($cap) { return $GLOBALS['authorized'] ?? true; }
++function is_network_admin() { return false; }
++function get_current_blog_id() { return 1; }
++function get_site_transient($name) { return (object) array('response' => array()); }
++function esc_html($value) { return htmlspecialchars($value, ENT_QUOTES, 'UTF-8'); }
++function apply_filters($hook, $value) { return $hook === 'iu_elementor_fragment_versions_supported' ? true : $value; }
++function expect($value, $message) { if (!$value) throw new RuntimeException($message); }
++require IU_PLUGIN_PATH . 'includes/elementor-atomic-interaction-breakpoints.php';
++require IU_PLUGIN_PATH . 'includes/elementor-fragment-cache.php';
++
++$targets = array(
++    array('4.3.2', '4.3.0', true, false), array('4.3.100', '4.3.100', false, false),
++    array('4.3.3', '4.3.0', false, false), array('4.3.2', '4.3.1', false, false),
++    array('4.3.3', '4.3.1', true, true), array('4.3.4', '4.3.1', false, false), array('4.3.3', '4.3.2', false, false),
++    array('4.2.3', '4.2.2', false, true), array('4.2.3', null, false, true),
++    array('4.3.1', '4.3.0', false, false), array('4.3.2', '4.2.2', false, false),
++    array('4.2.3', '4.3.0', false, false), array('4.3.2', null, false, false),
++    array('4.2.4', '4.2.2', false, false), array('4.2.3', '4.2.3', false, false),
++    array('4.4.0', '4.3.0', false, false), array('4.3.2', '4.4.0', false, false),
++    array('4.3.2-beta1', '4.3.0', false, false), array('4.3.2', '4.3.0-rc1', false, false),
++    array('4.3.2.1', '4.3.0', false, false), array(4.3, '4.3.0', false, false),
++    array(null, null, false, false), array('5.0.0', '5.0.0', false, false),
++);
++foreach ($targets as [$a, $b, $atomic, $fragment]) {
++    $pair = array('core' => $a, 'pro' => $b);
++    expect(iu_elementor_feature_supported('atomic', $pair) === $atomic, 'Atomic policy drift');
++    expect(iu_elementor_feature_supported('fragment', $pair) === $fragment, 'Fragment policy drift');
++    expect(iu_elementor_feature_supported('fragment', $pair, true) === ($fragment && $b !== null), 'Pro adapter boundary');
++    foreach (array(false, true) as $atomic_on) foreach (array(false, true) as $fragment_on) {
++        $failed = iu_elementor_pair_failures($pair, array('atomic' => $atomic_on, 'fragment' => $fragment_on));
++        expect(in_array('atomic', $failed, true) === ($atomic_on && !$atomic), 'Inactive Atomic must not constrain pair');
++        expect(in_array('fragment', $failed, true) === ($fragment_on && !$fragment), 'Inactive Fragment must not constrain pair');
++    }
++}
++expect(iu_elementor_feature_supported('unknown') === false, 'Unknown features fail closed');
++foreach (iu_elementor_compatibility_registry() as $entry) foreach ($entry['accepted'] as $pair) foreach ($pair as $rule) {
++    expect($rule === null || array_keys($rule) === array('exact'), 'Approval must be explicit; no unbounded ranges');
++}
++expect(!iu_elementor_version_matches('4.3.3', array('series' => '4.3', 'min' => '4.3.2')), 'Legacy open-ended rule must fail closed');
++expect(iu_elementor_common_pair(array('atomic', 'fragment')) === array('core' => '4.3.3', 'pro' => '4.3.1'), 'Derive tested common pair');
++expect(iu_elementor_common_pair(array('atomic')) === array('core' => '4.3.2', 'pro' => '4.3.0'), 'Derive Atomic baseline from registry');
++expect(iu_atomic_interaction_breakpoints_supported() === in_array($argv[1], array('atomic', 'both-patch'), true), 'Atomic runtime consumes registry');
++$method = new ReflectionMethod('IU_Elementor_Fragment_Cache', 'versions_supported');
++$fragment_supported = in_array($argv[1], array('fragment', 'core-only', 'both-patch'), true);
++expect($method->invoke(null) === $fragment_supported, 'Fragment runtime cannot be widened by legacy filter');
++if (!$fragment_supported) {
++    $data = array(array('id' => 'x', 'elType' => 'widget', 'widgetType' => 'template',
++        'settings' => array('iu_fragment_cache' => 'yes')));
++    expect(IU_Elementor_Fragment_Cache::filter($data, 1) === $data, 'Unsupported version retains normal renderer data');
++    expect(IU_Elementor_Fragment_Graph::inspect($data[0]) === null, 'Graph adapter uses registry');
++    $manager = new class { public function register() { throw new RuntimeException('Unsupported proxy registered'); } };
++    IU_Elementor_Fragment_Cache::proxy($manager);
++    expect(IU_Elementor_Fragment_Excerpt::replay(array(array('hook' => 'excerpt_more', 'priority' => 20,
++        'args' => 1, 'kind' => 'classic'))) === false, 'Excerpt adapter fails closed');
++}
++expect(!iu_elementor_fragment_has_opt_in(array(array('settings' => array('iu_fragment_cache' => 'yes'), 'elType' => 'container'))), 'Container alone is not an active widget');
++expect(iu_elementor_fragment_has_opt_in(array(array('elType' => 'container', 'elements' => array(
++    array('elType' => 'widget', 'settings' => array('iu_fragment_cache' => 'yes')))))), 'Nested widget opt-in');
++$wpdb = new class {
++    public $posts = 'posts'; public $postmeta = 'postmeta';
++    public function prepare($sql, ...$args) { return $sql; }
++    public function get_results($sql) { return array((object) array('meta_id' => 1,
++        'meta_value' => '[{"elType":"widget","settings":{"iu_fragment_cache":"yes"}}]')); }
++};
++require IU_PLUGIN_PATH . 'includes/elementor-update-guard.php';
++ob_start(); IU_Elementor_Update_Guard::notices(); $notice = ob_get_clean();
++expect((strpos($notice, 'η ενεργή λειτουργία παρακάμπτεται') !== false) === !$fragment_supported, 'Fragment unsupported runtime notice');
++ob_start(); iu_atomic_interaction_breakpoints_notice(); $notice = ob_get_clean();
++expect(($notice !== '') === !in_array($argv[1], array('atomic', 'both-patch'), true), 'Atomic unsupported runtime notice');
++$authorized = false;
++ob_start(); IU_Elementor_Update_Guard::notices(); iu_atomic_interaction_breakpoints_notice(); $notice = ob_get_clean();
++expect($notice === '', 'Runtime notices restricted to administrators');
++echo 'PASS policy/runtime ' . $argv[1] . ' (' . count($targets) . ' pairs × four activation states)' . PHP_EOL;
+--- /dev/null
++++ b/tests/elementor-update-guard.php
+@@ -0,0 +1,252 @@
++<?php
++/** Exercise the real updater callbacks with controlled WordPress/filesystem boundaries. */
++define('ABSPATH', __DIR__ . '/');
++define('IU_PLUGIN_PATH', dirname(__DIR__) . '/');
++define('WP_PLUGIN_DIR', sys_get_temp_dir() . '/iu-update-test-' . getmypid());
++mkdir(WP_PLUGIN_DIR);
++foreach (array('elementor', 'elementor-pro') as $slug) mkdir(WP_PLUGIN_DIR . '/' . $slug);
++register_shutdown_function(function () {
++    foreach (array('elementor', 'elementor-pro') as $slug) {
++        unlink(WP_PLUGIN_DIR . '/' . $slug . '/' . $slug . '.php');
++        rmdir(WP_PLUGIN_DIR . '/' . $slug);
++    }
++    rmdir(WP_PLUGIN_DIR);
++});
++$hooks = array(); $site_id = 1; $multisite = false; $super = true; $cron = false;
++$caps = array('update_plugins' => true, 'manage_options' => true, 'manage_network_plugins' => true);
++$sites = array(); $site_options = array(); $rows = array(); $network_plugins = array(); $stack = array();
++$updates = (object) array('response' => array());
++function add_filter($hook, $fn, $priority = 10, $args = 1) { $GLOBALS['hooks'][$hook][] = array($fn, $priority, $args); }
++function add_action($hook, $fn, $priority = 10, $args = 1) { add_filter($hook, $fn, $priority, $args); }
++function is_multisite() { return $GLOBALS['multisite']; }
++function is_network_admin() { return false; }
++function is_super_admin() { return $GLOBALS['super']; }
++function wp_doing_cron() { return $GLOBALS['cron']; }
++function get_current_blog_id() { return $GLOBALS['site_id']; }
++function current_user_can($cap) { return $GLOBALS['caps'][$cap] ?? false; }
++function get_option($name, $default = false) { return $GLOBALS['site_options'][$GLOBALS['site_id']][$name] ?? $default; }
++function maybe_unserialize($value) { return $value; }
++function get_site_transient($name) { return $GLOBALS['updates']; }
++function wp_json_encode($data) { return json_encode($data); }
++function wp_verify_nonce($nonce, $action) { return $nonce === hash('sha256', $action); }
++function wp_nonce_field($action) { echo '<input name="_wpnonce" value="' . hash('sha256', $action) . '">'; }
++function wp_unslash($value) { return stripslashes($value); }
++function wp_die($message, $title = '', $args = array()) { throw new RuntimeException('Forbidden: ' . $message); }
++function admin_url($path) { return 'https://example.test/wp-admin/' . $path; }
++function network_admin_url($path) { return 'https://example.test/wp-admin/network/' . $path; }
++function esc_html($value) { return htmlspecialchars($value, ENT_QUOTES, 'UTF-8'); }
++function esc_attr($value) { return esc_html($value); }
++function esc_url($value) { return esc_html($value); }
++function submit_button($text) { echo '<button>' . esc_html($text) . '</button>'; }
++class Plugin_Upgrader_Skin {
++    public $options;
++    public function __construct($options) { $this->options = $options + array('context' => false); }
++}
++function request_filesystem_credentials($url, $type, $error, $context, $fields, $relaxed) {
++    $GLOBALS['credential_form'] = array($url, $fields);
++    return false;
++}
++function plugin_basename($path) { return 'istodata-utilities/istodata-utilities.php'; }
++function get_blog_option($id, $name, $default) { return $GLOBALS['site_options'][$id][$name] ?? $default; }
++function get_network_option($id, $name, $default) { return $GLOBALS['network_plugins'][$id] ?? $default; }
++function get_sites($args) { return array_slice($GLOBALS['sites'], $args['offset'], $args['number']); }
++function switch_to_blog($id) { $GLOBALS['stack'][] = $GLOBALS['site_id']; $GLOBALS['site_id'] = $id; }
++function restore_current_blog() { $GLOBALS['site_id'] = array_pop($GLOBALS['stack']); }
++function get_file_data($file, $headers, $context) {
++    preg_match('/Version: (.*)/', file_get_contents($file), $m);
++    return array('Version' => trim($m[1]));
++}
++class WP_Error { public $code; public $message; public function __construct($code, $message) { $this->code = $code; $this->message = $message; } }
++function is_wp_error($value) { return $value instanceof WP_Error; }
++function check($value, $message) { if (!$value) throw new RuntimeException($message); }
++$wpdb = new class {
++    public $posts = 'posts'; public $postmeta = 'postmeta';
++    public function prepare($sql, ...$args) {
++        check(strpos($sql, "p.post_status NOT IN ('trash','auto-draft')") !== false &&
++            strpos($sql, 'p.post_type<>%s') !== false, 'Ignore deleted/revision opt-ins');
++        return $args[1];
++    }
++    public function get_results($cursor) { return array_slice(array_values(array_filter($GLOBALS['rows'][$GLOBALS['site_id']] ?? array(),
++        fn($row) => $row->meta_id > $cursor)), 0, 200); }
++};
++$wp_filesystem = new class {
++    public $files = array();
++    public function exists($file) { return isset($this->files[$file]); }
++    public function get_contents($file) { return $this->files[$file]; }
++};
++require IU_PLUGIN_PATH . 'includes/elementor-update-guard.php';
++IU_Elementor_Update_Guard::boot();
++check(isset($hooks['auto_update_plugin'], $hooks['upgrader_pre_download'], $hooks['upgrader_source_selection']), 'All updater gates installed');
++check(!isset($hooks['site_transient_update_plugins'], $hooks['pre_set_site_transient_update_plugins']), 'Never hide updates');
++function installed($core, $pro) {
++    file_put_contents(WP_PLUGIN_DIR . '/elementor/elementor.php', "<?php\n/*\nVersion: $core\n*/");
++    file_put_contents(WP_PLUGIN_DIR . '/elementor-pro/elementor-pro.php', "<?php\n/*\nVersion: $pro\n*/");
++}
++function activation($atomic, $fragment, $id = 1) {
++    $GLOBALS['site_options'][$id] = array('istodata_utilities_settings' => array('optimizations' => array(
++        'elementor_atomic_interaction_breakpoints' => $atomic)), 'elementor_element_cache_ttl' => 'disable',
++        'active_plugins' => array('istodata-utilities/istodata-utilities.php'));
++    $GLOBALS['rows'][$id] = $fragment ? array((object) array('meta_id' => 1, 'meta_value' => json_encode(array(
++        array('elType' => 'widget', 'widgetType' => 'template', 'settings' => array('iu_fragment_cache' => 'yes')))))) : array();
++}
++function update_item($plugin, $version) {
++    $item = (object) array('plugin' => $plugin, 'new_version' => $version, 'package' => 'https://example.test/' . $plugin . '-' . $version . '.zip');
++    $GLOBALS['updates']->response[$plugin] = $item;
++    return $item;
++}
++function extracted($plugin, $version) {
++    $GLOBALS['wp_filesystem']->files = array('/unpacked/' . basename($plugin) => "<?php\n/*\nPlugin Name: Elementor\nVersion: $version\n*/");
++}
++$matrix = array(
++    array('4.3.3', '4.3.0', 'elementor-pro/elementor-pro.php', '4.3.1', true, true),
++    array('4.3.2', '4.3.1', 'elementor/elementor.php', '4.3.3', true, true),
++    array('4.3.3', '4.3.1', 'elementor/elementor.php', '4.3.4', false, false),
++    array('4.3.3', '4.3.1', 'elementor-pro/elementor-pro.php', '4.3.2', false, false),
++    // New patches used to pass the open-ended range; they now require a Kit compatibility release.
++    array('4.3.2', '4.3.0', 'elementor/elementor.php', '4.3.3', false, false),
++    array('4.3.2', '4.3.0', 'elementor-pro/elementor-pro.php', '4.3.1', false, false),
++    array('4.3.1', '4.3.0', 'elementor/elementor.php', '4.3.2', true, false),
++    array('4.3.2', '4.2.9', 'elementor-pro/elementor-pro.php', '4.3.0', true, false),
++    array('4.2.3', '4.2.2', 'elementor/elementor.php', '4.2.3', false, true),
++    array('4.2.3', '4.2.2', 'elementor-pro/elementor-pro.php', '4.2.2', false, true),
++    array('4.2.3', '4.2.2', 'elementor/elementor.php', '4.3.2', false, false),
++    array('4.2.3', '4.2.2', 'elementor-pro/elementor-pro.php', '4.3.0', false, false),
++    array('4.3.2', '4.3.0', 'elementor/elementor.php', '4.4.0', false, false),
++    array('4.3.2', '4.3.0', 'elementor-pro/elementor-pro.php', '4.4.0', false, false),
++    array('4.3.2', '4.3.0', 'elementor/elementor.php', '4.3.3-beta1', false, false),
++    array('4.3.2', '4.3.0', 'elementor/elementor.php', '', false, false),
++    array('4.2.3', '4.2.2', 'elementor-pro/elementor-pro.php', null, false, false),
++);
++foreach ($matrix as [$core, $pro, $plugin, $target, $atomic_supported, $fragment_supported]) {
++    installed($core, $pro);
++    $item = update_item($plugin, $target);
++    $extra = array('plugin' => $plugin, 'type' => 'plugin', 'action' => 'update');
++    extracted($plugin, $target);
++    foreach (array(false, true) as $atomic) foreach (array(false, true) as $fragment) {
++        activation($atomic, $fragment);
++        $blocked = ($atomic && !$atomic_supported) || ($fragment && !$fragment_supported);
++        check(IU_Elementor_Update_Guard::decision($plugin, $target)['blocked'] === $blocked, 'Pair/activation decision');
++        check(IU_Elementor_Update_Guard::auto_update(true, $item) === !$blocked, 'Automatic update boundary');
++        check(IU_Elementor_Update_Guard::auto_update(false, $item) === false, 'Never enable an auto update');
++        $result = IU_Elementor_Update_Guard::pre_download(false, $item->package, null, $extra);
++        check(is_wp_error($result) === $blocked, 'Manual update boundary');
++        $result = IU_Elementor_Update_Guard::source_selection('/unpacked/', '', null, $extra);
++        check(is_wp_error($result) === $blocked, 'Actual source update boundary');
++        $bulk_extra = array('plugin' => $plugin, 'temp_backup' => array('slug' => dirname($plugin)));
++        check(is_wp_error(IU_Elementor_Update_Guard::pre_download(false, $item->package, null, $bulk_extra)) === $blocked,
++            'WordPress bulk/AJAX download metadata omits type/action');
++        check(is_wp_error(IU_Elementor_Update_Guard::source_selection('/unpacked/', '', null, $bulk_extra)) === $blocked,
++            'WordPress bulk/AJAX source metadata omits type/action');
++        $result = IU_Elementor_Update_Guard::source_selection('/unpacked/', '', null, array('type' => 'plugin', 'action' => 'install'));
++        check(is_wp_error($result) === $blocked, 'Uploaded ZIP replacement boundary');
++    }
++}
++activation(false, false);
++// Loaded module, empty/default settings and disabled widget do not count as active cache.
++check(iu_elementor_active_features() === array('atomic' => false, 'fragment' => false), 'OFF/OFF defaults');
++activation(false, true);
++$site_options[1]['elementor_element_cache_ttl'] = '86400';
++check(!iu_elementor_active_features()['fragment'], 'Native cache prevents Kit cache activity');
++$site_options[1]['elementor_element_cache_ttl'] = 'disable';
++$rows[1] = array();
++for ($i = 1; $i <= 200; $i++) $rows[1][] = (object) array('meta_id' => $i, 'meta_value' => '[]');
++$rows[1][] = (object) array('meta_id' => 201, 'meta_value' => '[{"elType":"widget","settings":{"iu_fragment_cache":"yes"}}]');
++check(iu_elementor_active_features()['fragment'], 'Scan does not miss opt-in after first batch');
++$rows[1][200]->meta_value = '[{"elType":"widget","settings":{"iu_fragment_cache":""}}]';
++check(!iu_elementor_active_features()['fragment'], 'Opt-out does not leave a stale active index');
++
++// Override is explicitly bound to one target, package and installed pair, in this request only.
++installed('4.3.2', '4.3.0'); activation(true, false);
++$plugin = 'elementor/elementor.php'; $item = update_item($plugin, '4.4.0');
++$extra = array('plugin' => $plugin, 'type' => 'plugin', 'action' => 'update');
++$fingerprint = IU_Elementor_Update_Guard::fingerprint($plugin, $item);
++$nonce = hash('sha256', 'iu_elementor_override_' . $fingerprint);
++$skin = IU_Elementor_Update_Guard::override_skin($plugin, $fingerprint);
++check($skin->request_filesystem_credentials() === false &&
++    $credential_form === array(admin_url('admin-post.php'), array('action', 'plugin', 'fingerprint', 'confirm', '_wpnonce')),
++    'Filesystem credential round-trip retains exact POST grant and reauthorization');
++check(!IU_Elementor_Update_Guard::authorize_override($plugin, $fingerprint, $nonce, false), 'Confirmation required');
++check(!IU_Elementor_Update_Guard::authorize_override($plugin, $fingerprint, 'wrong', true), 'Nonce required');
++$_SERVER['REQUEST_METHOD'] = 'GET';
++$_POST = array('plugin' => $plugin, 'fingerprint' => $fingerprint, '_wpnonce' => $nonce, 'confirm' => 'yes');
++try { IU_Elementor_Update_Guard::override_update(); throw new LogicException('GET override accepted'); }
++catch (RuntimeException $error) { check(strpos($error->getMessage(), 'Forbidden:') === 0, 'Handler rejects GET'); }
++$_SERVER['REQUEST_METHOD'] = 'POST'; $_POST['_wpnonce'] = 'wrong';
++try { IU_Elementor_Update_Guard::override_update(); throw new LogicException('Bad nonce accepted'); }
++catch (RuntimeException $error) { check(strpos($error->getMessage(), 'Forbidden:') === 0, 'Handler rejects invalid nonce before updater'); }
++foreach (array('update_plugins', 'manage_options') as $cap) {
++    $caps[$cap] = false;
++    check(!IU_Elementor_Update_Guard::authorize_override($plugin, $fingerprint, $nonce, true), 'Capability required: ' . $cap);
++    $caps[$cap] = true;
++}
++check(IU_Elementor_Update_Guard::authorize_override($plugin, $fingerprint, $nonce, true), 'Authorized exact update');
++check(!is_wp_error(IU_Elementor_Update_Guard::pre_download(false, $item->package, null, $extra)), 'Explicit manual bypass');
++check(is_wp_error(IU_Elementor_Update_Guard::pre_download(false, $item->package . '?different', null, $extra)), 'Actual download URL must match override grant');
++check(IU_Elementor_Update_Guard::auto_update(true, $item) === false, 'Override never grants automatic bypass');
++$cron = true;
++check(is_wp_error(IU_Elementor_Update_Guard::pre_download(false, $item->package, null, $extra)), 'Cron cannot use manual override');
++$cron = false;
++extracted($plugin, '4.4.0');
++check(!is_wp_error(IU_Elementor_Update_Guard::source_selection('/unpacked/', '', null, $extra)), 'Exact extracted version override');
++extracted($plugin, '4.4.1');
++check(is_wp_error(IU_Elementor_Update_Guard::source_selection('/unpacked/', '', null, $extra)), 'Different extracted target rejected');
++extracted($plugin, '4.4.0');
++installed('4.3.3', '4.3.0');
++check(is_wp_error(IU_Elementor_Update_Guard::source_selection('/unpacked/', '', null, $extra)), 'Changed installed pair invalidates grant');
++check(!IU_Elementor_Update_Guard::authorize_override($plugin, $fingerprint, $nonce, true), 'Old form invalid after pair changes');
++installed('4.3.2', '4.3.0');
++$item->package .= '?new-package';
++check(!IU_Elementor_Update_Guard::authorize_override($plugin, $fingerprint, $nonce, true), 'Package change invalidates form');
++extracted($plugin, '4.4.0');
++check(is_wp_error(IU_Elementor_Update_Guard::source_selection('/unpacked/', '', null, $extra)), 'No persisted bypass after failed authorization');
++
++// Actual ZIP takes precedence over supported update metadata.
++$item = update_item($plugin, '4.3.2');
++check(!is_wp_error(IU_Elementor_Update_Guard::pre_download(false, $item->package, null, $extra)), 'Supported advertised update');
++check(is_wp_error(IU_Elementor_Update_Guard::source_selection('/unpacked/', '', null, $extra)), 'Unsupported actual ZIP blocked');
++$other = (object) array('plugin' => 'other/plugin.php', 'new_version' => '99.0.0');
++check(IU_Elementor_Update_Guard::auto_update(true, $other) === true, 'Other plugins unconstrained');
++check(IU_Elementor_Update_Guard::source_selection('/unpacked/', '', null, array('type' => 'theme')) === '/unpacked/', 'Themes unconstrained');
++$error = new WP_Error('prior', 'Prior failure');
++check(IU_Elementor_Update_Guard::pre_download($error, '', null, $extra) === $error, 'Preserve other updater failure');
++
++// Sequential/bulk updates read actual files, not stale constants or an imaginary final pair.
++define('ELEMENTOR_VERSION', '4.2.3'); define('ELEMENTOR_PRO_VERSION', '4.2.2');
++installed('4.2.3', '4.2.2');
++check(IU_Elementor_Update_Guard::decision($plugin, '4.3.2')['blocked'], 'Unsafe intermediate core pair blocked');
++check(IU_Elementor_Update_Guard::decision('elementor-pro/elementor-pro.php', '4.3.0')['blocked'], 'Unsafe intermediate Pro pair blocked');
++installed('4.3.2', '4.2.2');
++check(!IU_Elementor_Update_Guard::decision('elementor-pro/elementor-pro.php', '4.3.0')['blocked'], 'Second step reads newly installed core');
++activation(true, true);
++check(IU_Elementor_Update_Guard::decision('elementor-pro/elementor-pro.php', '4.3.0')['blocked'], 'No shared pair while both features enabled');
++
++// Network update considers sites with Kit enabled, across networks, and restores blog state.
++$multisite = true; installed('4.3.2', '4.3.0');
++$sites = array((object) array('blog_id' => 1, 'site_id' => 1), (object) array('blog_id' => 2, 'site_id' => 2));
++activation(false, false, 1); activation(true, false, 2);
++check(IU_Elementor_Update_Guard::decision($plugin, '4.4.0')['blocked'], 'Subsite protects shared plugin files');
++check($site_id === 1 && !$stack, 'Restore switched blog');
++$site_options[2]['active_plugins'] = array();
++check(!IU_Elementor_Update_Guard::decision($plugin, '4.4.0')['blocked'], 'Inactive Kit subsite does not constrain update');
++$network_plugins[2] = array('istodata-utilities/istodata-utilities.php' => 1);
++check(IU_Elementor_Update_Guard::decision($plugin, '4.4.0')['blocked'], 'Network-active Kit on another network');
++$item = update_item($plugin, '4.4.0'); $fingerprint = IU_Elementor_Update_Guard::fingerprint($plugin, $item);
++$nonce = hash('sha256', 'iu_elementor_override_' . $fingerprint);
++$super = false;
++check(!IU_Elementor_Update_Guard::authorize_override($plugin, $fingerprint, $nonce, true), 'Network requires super admin');
++$super = true; $caps['manage_network_plugins'] = false;
++check(!IU_Elementor_Update_Guard::authorize_override($plugin, $fingerprint, $nonce, true), 'Network capability required');
++$caps['manage_network_plugins'] = true;
++check(IU_Elementor_Update_Guard::authorize_override($plugin, $fingerprint, $nonce, true), 'Super admin exact update override');
++IU_Elementor_Update_Guard::authorize_override($plugin, $fingerprint, '', true);
++
++ob_start(); IU_Elementor_Update_Guard::page(); $html = ob_get_clean();
++check(strpos($html, 'Δεν υπάρχει κοινός αποδεκτός συνδυασμός') === false && strpos($html, '4.3.3') !== false && strpos($html, '4.3.1') !== false, 'Tested common pair indication');
++check(strpos($html, 'name="confirm"') !== false && strpos($html, 'name="_wpnonce"') !== false, 'Explicit protected UI');
++check(strpos($html, 'Ελεγμένοι:') !== false && strpos($html, 'αποδεκτοί συνδυασμοί') !== false, 'Separate tested and accepted versions');
++check($updates->response[$plugin] === $item, 'Update stays visible');
++// Third-party Pro update metadata need not include a plugin property for row notices.
++unset($item->plugin);
++ob_start(); $hooks['in_plugin_update_message-' . $plugin][0][0](array(), $item); $row_html = ob_get_clean();
++check(strpos($row_html, 'η ενημέρωση μπλοκάρεται') !== false, 'Plugin-row callback binds its own plugin identity');
++echo 'PASS updater: ' . (count($matrix) * 4) . " activation/target scenarios × automatic/manual/extracted/upload gates; new-patch rejection, override, sequential updates, opt-ins, multisite and UI\n";
+--- /dev/null
++++ b/tests/elementor-compatibility-drift.cjs
+@@ -0,0 +1,55 @@
++'use strict';
++// A new rule belongs in the registry. Tests/fixtures/docs may retain historical versions.
++const fs = require('node:fs');
++const path = require('node:path');
++const assert = require('node:assert/strict');
++const root = path.resolve(__dirname, '..');
++const registry = 'includes/elementor-compatibility.php';
++function scan(relative) {
++  const dir = path.join(root, relative);
++  return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
++    const file = path.posix.join(relative, entry.name);
++    return entry.isDirectory() ? scan(file) : /\.(php|js)$/.test(file) ? [file] : [];
++  });
++}
++const files = ['istodata-utilities.php', ...scan('includes'), ...scan('assets')];
++function violations(file, code) {
++  const errors = [];
++  if (file !== registry) {
++    // Comparisons, regexes and local allowlists must not reference Elementor version constants.
++    if (/ELEMENTOR_(?:PRO_)?VERSION\s*(?:===?|!==?|[<>])|(?:version_compare|preg_match)\([^;]*ELEMENTOR_(?:PRO_)?VERSION/s.test(code)) errors.push('independent version guard');
++    if (/iu_elementor_fragment_versions_supported/.test(code)) errors.push('legacy widening filter');
++    if (/elementor-(?:atomic-interaction|fragment-cache|update-guard)/.test(file)) {
++      // Retained non-Elementor dependency guards are a different API contract.
++      // Strip only their comparisons, then reject version/range literals anywhere in these consumers.
++      const otherDependencies = '(?:Search_Filter_Elementor_Extension::VERSION|SEARCH_FILTER_VERSION|IS_VERSION|ACF_VERSION|WP_ROCKET_VERSION|EWWW_IMAGE_OPTIMIZER_VERSION|RANK_MATH_VERSION|ICL_SITEPRESS_VERSION)';
++      const policyCode = code.replace(new RegExp(`${otherDependencies}\\s*(?:===?|!==?)\\s*["'][0-9]+(?:\\.[0-9]+)+["']`, 'g'), '');
++      const literals = [...policyCode.matchAll(/["'][0-9]+\.[0-9]+(?:\.[0-9x]+)*(?:[-+][^"']+)?["']/g)];
++      const duplicates = literals.filter(match => {
++        const context = policyCode.slice(Math.max(0, match.index - 450), match.index);
++        // These header reads belong to reviewed remove-CPT-base and WPML companion APIs.
++        return !(/\$header\['Version'\]/.test(context.slice(-70)) &&
++          /remove_cpt_base::remove_slug|contact-form-7-multilingual\/classes\/Locale|wp-seo-multilingual\/classes\/Shared/.test(context));
++      });
++      if (duplicates.length) errors.push('duplicate compatibility literal');
++    }
++  }
++  return errors;
++}
++const failures = files.flatMap(file => violations(file, fs.readFileSync(path.join(root, file), 'utf8')).map(reason => `${file}: ${reason}`));
++assert.deepEqual(failures, [], failures.join('\n'));
++// Prove the detector rejects realistic reintroductions; fixture exceptions are directory-scoped.
++assert.ok(violations('includes/elementor-fragment-cache.php', "ELEMENTOR_VERSION === '4.4.0'").length);
++assert.ok(violations('includes/elementor-atomic-interaction-breakpoints.php', "version_compare(ELEMENTOR_PRO_VERSION, '4.5.0', '>=')").length);
++assert.ok(violations('includes/elementor-fragment-cache.php', "apply_filters('iu_elementor_fragment_versions_supported', true)").length);
++assert.ok(violations('includes/elementor-update-guard.php', "version_compare($pair['core'], '4.5.0', '>=')").length);
++assert.ok(violations('assets/js/elementor-atomic-interaction-breakpoints.js', "const minVersion = '4.5.0';").length);
++const consumers = {
++  'includes/elementor-atomic-interaction-breakpoints.php': /iu_elementor_feature_supported\('atomic'\)/,
++  'includes/elementor-fragment-cache.php': /iu_elementor_feature_supported\('fragment'\)/,
++  'includes/elementor-fragment-cache-graph.php': /iu_elementor_feature_supported\('fragment', null, true\)/,
++  'includes/elementor-fragment-cache-excerpt.php': /iu_elementor_feature_supported\('fragment', null, true\)/,
++  'includes/elementor-update-guard.php': /iu_elementor_pair_failures/,
++};
++for (const [file, pattern] of Object.entries(consumers)) assert.match(fs.readFileSync(path.join(root, file), 'utf8'), pattern, `${file} must use the registry`);
++console.log(`PASS compatibility drift: ${files.length} runtime files; registry consumers and detector negative controls`);
+--- a/tests/ATOMIC-INTERACTIONS.md
++++ b/tests/ATOMIC-INTERACTIONS.md
+@@ -4,13 +4,14 @@
+ It is OFF when absent and OFF in activation defaults. The existing Elementor
+ settings whitelist sanitizes it to a boolean and preserves it when saving other tabs.
+ The PHP loader only attaches the plugin's JS before an enqueued, not-yet-printed
+-`elementor-interactions-pro`, on stable Elementor 4.3.x versions from 4.3.2 and
+-Pro 4.3.x versions from 4.3.0. Patch updates in that range are allowed automatically;
+-4.4 and later, earlier versions, and prereleases are rejected. This policy accepts
+-patch compatibility without claiming each future patch has been tested.
++`elementor-interactions-pro`, only for the explicitly approved Elementor 4.3.2 /
++Pro 4.3.0 and 4.3.3 / 4.3.1 pairs in `includes/elementor-compatibility.php`. The 2026-10-01 policy
++supersedes the earlier open-ended 4.3.x patch acceptance. New patches, earlier
++versions and prereleases are rejected until review and a Kit compatibility release.
+ The enqueue priority is 1000; footer priority 1 handles late enqueues. No vendor
+ runtime is shipped or loaded by the plugin. API guards remain in place for every
+-allowed version. A new minor series requires a fresh review.
++allowed version. Every new core or Pro version requires review, an updated
++registry declaration and a Kit release, even if feature code does not change.
+ 
+ ## Reproducible local runtime checks
+ 
+@@ -55,8 +56,8 @@
+ php tests/atomic-interaction-breakpoints.php
+ ```
+ 
+-The isolated PHP checks cover OFF, missing plugins, patch updates to either or
+-both plugins, the 4.4 boundary, older versions, malformed/prerelease versions, missing
++The isolated PHP checks cover OFF, missing plugins, rejection of unapproved patch
++updates to either or both plugins, the 4.4 boundary, older versions, malformed/prerelease versions, missing
+ handle, already-printed handle, admin context, supported versions, late enqueue,
+ failed attachment retry, hook priorities, payload order and duplicate guards.
+ They require PHP; they are not a WordPress settings-page/browser acceptance test.
+@@ -103,3 +104,20 @@
+ After local acceptance, coordinate installation, switch OFF WPCode 11756 while
+ switching ON this option, clean caches and verify the real frontend. Rollback is
+ OFF in Kit and re-enable the existing snippet. Until then leave it unchanged.
++
++## Full Kit acceptance update, 2026-10-01
++
++The old historical acceptance notes above describe the initial development run.
++Current version remains 2.21.2; no release was created. Exact 4.3.3/4.3.1 was
++accepted in the local unreleased registry after the full Kit staging checks in
++`../docs/elementor-kit-acceptance-staging.md`. Native Motion OFF reproduces the
++exclusion bug; ON retains desktop effects and restores excluded mobile/tablet
++baselines, including a queued scroll timeline final render. Restoration after
++that frame excludes nodes recollected by the new initializer.
++
++Both actual vendor-bundle VM suites pass 17 cases; PHP loader passes 24 cases.
++Candidate fixtures are private official extracted files, checksum-pinned by a
++manifest; set `IU_ATOMIC_CANDIDATE_FIXTURES` to that directory or use the temporary
++`iu-candidate-433-431` directory. Run `node tests/atomic-interaction-candidate.cjs`.
++No vendor packages/fixtures/tests are included in the 74-entry manual test ZIP.
++Browser custom-breakpoint/cross-browser exhaustiveness is not claimed.
+--- a/tests/atomic-interaction-breakpoints.php
++++ b/tests/atomic-interaction-breakpoints.php
+@@ -1,6 +1,7 @@
+ <?php
+ // Isolated WordPress loader/notice checks. Each case uses a new PHP process (static guards).
+ $version_cases = array(
++    'accepted-common' => array('4.3.3', '4.3.1'),
+     'elementor-patch' => array('4.3.3', '4.3.0'),
+     'pro-patch' => array('4.3.2', '4.3.1'),
+     'both-patch' => array('4.3.8', '4.3.5'),
+@@ -17,7 +18,7 @@
+     'invalid-type' => array(4.3, '4.3.0'),
+     'major' => array('5.0.0', '5.0.0'),
+ );
+-$allowed_cases = array('supported', 'late', 'elementor-patch', 'pro-patch', 'both-patch', 'large-patch');
++$allowed_cases = array('supported', 'late', 'accepted-common');
+ $rejected_cases = array_merge(array('missing'), array_diff(array_keys($version_cases), $allowed_cases));
+ if (!isset($argv[1])) {
+     foreach (array_merge(array('off', 'missing', 'no-handle', 'done', 'admin', 'supported', 'late', 'retry'), array_keys($version_cases)) as $case) {
+@@ -74,5 +75,5 @@
+ ob_start();
+ iu_atomic_interaction_breakpoints_notice();
+ $notice = ob_get_clean();
+-check(($notice !== '') === in_array($case, $rejected_cases, true), 'Only enabled version outside the accepted range produces notice');
++check(($notice !== '') === in_array($case, $rejected_cases, true), 'Enabled unapproved versions, including new patches, produce notice');
+ echo 'PASS: PHP loader ' . $case . PHP_EOL;
+--- /dev/null
++++ b/tests/elementor-kit-acceptance-harness.php
+@@ -0,0 +1,77 @@
++<?php
++/**
++ * Plugin Name: IU Saved Kit Acceptance Harness
++ * Version: 0.1.0
++ * Description: Staging-only observation of saved Kit opt-ins.
++ */
++if (!defined('ABSPATH')) exit;
++function iu_cross_probe_enabled() {
++    return ($_SERVER['HTTP_HOST'] ?? '') === 'wordpress-218158-6702910.cloudwaysapps.com' &&
++        ($_GET['iu_kit_fragment_test'] ?? '') === 'cross-page-20261001' && !is_admin() && !is_user_logged_in();
++}
++function iu_cross_media() {
++    return array('count'=>wp_increase_content_media_count(0), 'priority'=>wp_high_priority_element_flag(),
++        'content'=>doing_filter('the_content'), 'loop'=>in_the_loop(), 'main'=>is_main_query());
++}
++add_action('plugins_loaded', function () {
++    if (!iu_cross_probe_enabled()) return;
++    $GLOBALS['iu_cross'] = array('target'=>0,'nested'=>0,'loop'=>0,'loop_any'=>0,'grids'=>array(),'events'=>array(),'keys'=>array(),'reject'=>array(),'template_renders'=>array());
++    add_filter('iu_elementor_fragment_allow_query', function ($allowed, $keys) {
++        return count(array_diff($keys, array('iu_kit_fragment_test','iu_kit_request','iu_kit_generation','iu_kit_mode','iu_kit_delay'))) === 0;
++    },10,2);
++    add_filter('iu_elementor_fragment_key_context', function ($context) {
++        $context['generation']=sanitize_key($_GET['iu_kit_generation'] ?? 'default'); return $context;
++    });
++    add_filter('iu_elementor_fragment_graph_callback_allowed', function ($allowed,$callback) {
++        return $allowed || ($callback instanceof Closure && (new ReflectionFunction($callback))->getFileName() === __FILE__);
++    },10,2);
++    add_filter('elementor/frontend/builder_content_data', function ($nodes,$doc) {
++        $GLOBALS['iu_cross']['docs'][]=(int)$doc;
++        if (($_GET['iu_kit_mode'] ?? '') !== 'baseline') return $nodes;
++        $walk=function($nodes) use (&$walk) {
++            foreach ($nodes as &$node) {
++                if (($node['widgetType'] ?? '') === 'template' && in_array($node['id'],array('417d1ae','c60daee'),true)) {
++                    $node['settings']['iu_fragment_cache']='';
++                    $node['settings']['iu_fragment_cache_ttl']='86400';
++                    $GLOBALS['iu_cross']['injected'][]=$node['id'];
++                }
++                if (!empty($node['elements'])) $node['elements']=$walk($node['elements']);
++            }
++            unset($node); return $nodes;
++        }; return $walk($nodes);
++    },PHP_INT_MAX-1,2);
++    add_action('elementor/frontend/widget/before_render',function($widget) {
++        if ($widget->get_id()==='26fa46c6') { $GLOBALS['iu_cross']['target']++; $GLOBALS['iu_cross']['inside']=true; }
++        if (in_array($widget->get_id(),array('417d1ae','c60daee'),true)) $GLOBALS['iu_cross']['template_renders'][]=$widget->get_id();
++        if ($widget->get_name()==='loop-grid' && !empty($GLOBALS['iu_cross']['inside'])) $GLOBALS['iu_cross']['grids'][$widget->get_id()]=array('before'=>iu_cross_media());
++        if (in_array($widget->get_id(),array('417d1ae','c60daee'),true) && is_array($widget->get_data('_iu_fragment_build'))) {
++            $delay=min(20,absint($_GET['iu_kit_delay'] ?? 0)); if ($delay) sleep($delay);
++        }
++    },-10);
++    add_action('elementor/frontend/widget/after_render',function($widget) {
++        if ($widget->get_name()==='loop-grid' && !empty($GLOBALS['iu_cross']['inside'])) $GLOBALS['iu_cross']['grids'][$widget->get_id()]['after']=iu_cross_media();
++        if ($widget->get_id()==='26fa46c6') {
++            $GLOBALS['iu_cross']['inside']=false;
++            $GLOBALS['iu_cross']['displayed']=\ElementorPro\Modules\QueryControl\Module::get_avoid_list_ids();
++            $GLOBALS['iu_cross']['excerpt']=IU_Elementor_Fragment_Excerpt::profile();
++        }
++    },PHP_INT_MAX);
++    add_action('elementor/frontend/before_get_builder_content',function($document) {
++        if (!empty($GLOBALS['iu_cross']['inside']) && (int)$document->get_post()->ID===1635) $GLOBALS['iu_cross']['loop']++;
++        if (!empty($GLOBALS['iu_cross']['inside']) && strpos(get_class($document),'LoopBuilder\\Documents\\Loop') !== false) $GLOBALS['iu_cross']['loop_any']++;
++    });
++    add_action('elementor/frontend/before_render',function() {
++        if (!empty($GLOBALS['iu_cross']['inside'])) $GLOBALS['iu_cross']['nested']++;
++    });
++    add_action('iu_elementor_fragment_result',function($result,$build) {
++        $GLOBALS['iu_cross']['events'][]=array('id'=>$build['element_id'] ?? '', 'result'=>$result);
++    },10,2);
++    add_action('iu_elementor_fragment_before_substitution',function($node,$doc,$key) {
++        $GLOBALS['iu_cross']['keys'][$node['id']]=array('doc'=>$doc,'key'=>$key);
++    },10,3);
++    add_action('iu_elementor_fragment_graph_rejected',function($reason,$node) {
++        $GLOBALS['iu_cross']['reject'][$node['id']]=$reason;
++    },10,2);
++    add_action('shutdown',function(){ echo '\n<!-- IU_CROSS_PAGE '.wp_json_encode($GLOBALS['iu_cross']).' -->'; },PHP_INT_MAX);
++    // Actual full Kit owns module registration; this harness observes it.
++},0);
+--- /dev/null
++++ b/tests/elementor-kit-acceptance-check.py
+@@ -0,0 +1,42 @@
++"""Cross-page dropdown reuse; origin counters, normal header/assets and effects."""
++from pathlib import Path
++from urllib.request import Request,urlopen
++from uuid import uuid4
++from hashlib import sha256
++import re,json,runpy,sys
++h=runpy.run_path(str(Path(__file__).with_name('fragment-cache-staging-check.py')))
++a=runpy.run_path(str(Path(__file__).with_name('fragment-cache-assets-check.py')))
++BASE='https://wordpress-218158-6702910.cloudwaysapps.com'
++english='--en' in sys.argv
++A='/en/' if english else '/'
++B='/en/the-company/' if english else '/techniki-ypostirixi/'
++generation=uuid4().hex
++results={}
++for path,label in [(A,'a'),(B,'b'),(B,'baseline')]:
++    url=BASE+path+'?iu_kit_fragment_test=cross-page-20261001&iu_kit_request='+uuid4().hex+'&iu_kit_generation='+generation+('&iu_kit_mode=baseline' if label=='baseline' else '')
++    with urlopen(Request(url,headers={'User-Agent':h['UA']}),timeout=180) as r:
++        html=r.read().decode(); assert r.status==200 and r.headers.get('X-Cache')=='MISS'
++    p=h['TargetParser']();p.feed(html)
++    assert p.start and p.end
++    fragment=html[h['offset'](html,p.start):html.index('>',h['offset'](html,p.end))+1]
++    assets=a['AssetTags']();assets.feed(html)
++    data=json.loads(re.search(r'IU_CROSS_PAGE (.+?) -->',html).group(1))
++    results[label]=(fragment,assets.external,data)
++    print(label, 'target',data['target'],'loops',data['loop'],'templates',data['template_renders'],'events',data['events'], 'assets',len(assets.external),flush=True)
++assert results['a'][2]['loop_any']>0
++if not english: assert results['a'][2]['loop']==150
++assert results['a'][2]['keys']==results['b'][2]['keys']
++assert results['b'][2]['target']==1 and results['b'][2]['loop']==0 and results['b'][2]['template_renders']==[]
++assert [e['result'] for e in results['b'][2]['events']]==['hit','hit']
++assert results['b'][0]==results['baseline'][0], 'Header HTML differs from ordinary rendering on B'
++assert results['b'][1]==results['baseline'][1], 'Required assets differ'
++assert results['b'][2]['excerpt']==results['baseline'][2]['excerpt'], 'Excerpt side effect differs'
++assert results['b'][2]['displayed']==results['baseline'][2]['displayed'], 'Displayed ID side effect differs'
++if not english:
++    assert results['a'][0]!=results['b'][0], 'Menu page context did not change'
++    assert 'current-menu-item' in results['b'][0] and 'aria-current="page"' in results['b'][0]
++report={'generation':generation,'page_a':A,'page_b':B,'loop_a':results['a'][2]['loop_any'],'loop_b':0,'menu_renders_b':1,
++        'dropdown_renders_b':0,'assets_b':len(results['b'][1]),'header_sha_b':sha256(results['b'][0].encode()).hexdigest(),
++        'keys':results['b'][2]['keys']}
++Path('docs/kit-acceptance-cross-page-en.json' if english else 'docs/kit-acceptance-cross-page-el.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
++print('PASS: first B origin hits A dropdowns; exact normal HTML/assets and query/excerpt effects' + ('; Greek active menu verified' if not english else '; translated loops verified'))
+--- /dev/null
++++ b/tests/elementor-kit-acceptance-purge.py
+@@ -0,0 +1,22 @@
++"""Purge one dropdown after retaining a stale entry; another dropdown must stay a hit."""
++from pathlib import Path
++from urllib.request import Request,urlopen
++from uuid import uuid4
++from hashlib import sha256
++import subprocess,re,json,runpy
++h=runpy.run_path(str(Path(__file__).with_name('fragment-cache-staging-check.py')))
++r=json.loads(Path('docs/kit-acceptance-cross-page-el.json').read_text(encoding='utf-8'))
++key=r['keys']['417d1ae']['key']; assert re.fullmatch('iu_frag_[a-f0-9]{64}',key)
++for i in range(2):
++    url='https://wordpress-218158-6702910.cloudwaysapps.com'+r['page_b']+'?iu_kit_fragment_test=cross-page-20261001&iu_kit_request='+uuid4().hex+'&iu_kit_generation='+r['generation']
++    with urlopen(Request(url,headers={'User-Agent':h['UA']}),timeout=180) as response:
++        html=response.read().decode();assert response.status==200 and response.headers.get('X-Cache')=='MISS'
++    d=json.loads(re.search(r'IU_CROSS_PAGE (.+?) -->',html).group(1))
++    print(i,'loops',d['loop'],'events',d['events'],flush=True)
++    assert d['keys']['417d1ae']['key']!=key and d['keys']['c60daee']==r['keys']['c60daee']
++    assert [e['result'] for e in d['events']]==(['stored','hit'] if i==0 else ['hit','hit'])
++    assert d['loop']==(72 if i==0 else 0)
++    p=h['TargetParser']();p.feed(html)
++    fragment=html[h['offset'](html,p.start):html.index('>',h['offset'](html,p.end))+1]
++    assert sha256(fragment.encode()).hexdigest()==r['header_sha_b']
++print('PASS: per-dropdown purge defeats stale retention; other dropdown remains a hit')
+--- /dev/null
++++ b/tests/elementor-kit-live-updater.php
+@@ -0,0 +1,30 @@
++<?php
++if (get_option('home') !== 'https://wordpress-218158-6702910.cloudwaysapps.com') { echo "WRONG_TARGET\n"; return; }
++require_once ABSPATH.'wp-admin/includes/class-wp-upgrader.php';
++wp_set_current_user(1);
++if (!current_user_can('update_plugins')) { echo "NO_ADMIN_CAPABILITY\n"; return; }
++$settings=get_option('istodata_utilities_settings');
++$raw=get_post_meta(30,'_elementor_data',true);
++$before=IU_Elementor_Update_Guard::installed_pair();
++$hashes=[]; foreach(IU_Elementor_Update_Guard::plugins() as $p=>$k) $hashes[$p]=hash_file('sha256',WP_PLUGIN_DIR.'/'.$p);
++$rows=[];
++try {
++ foreach([false,true] as $atomic) foreach([false,true] as $fragment) {
++  $opt=$settings; $opt['optimizations']['elementor_atomic_interaction_breakpoints']=$atomic?1:0; update_option('istodata_utilities_settings',$opt);
++  $nodes=json_decode($raw,true);
++  $walk=function($nodes) use (&$walk,$fragment) {foreach($nodes as &$n){if(in_array($n['id']??'',['417d1ae','c60daee'],true)) $n['settings']['iu_fragment_cache']=$fragment?'yes':''; if(!empty($n['elements'])) $n['elements']=$walk($n['elements']);}unset($n);return $nodes;};
++  update_post_meta(30,'_elementor_data',wp_slash(wp_json_encode($walk($nodes))));
++  $t=get_site_transient('update_plugins'); $item=$t->response['elementor-pro/elementor-pro.php']??null;
++  if(!$item) {echo "NO_PRO_UPDATE_METADATA\n";break 2;}
++  $row=['atomic'=>$atomic,'fragment'=>$fragment,'saved_active'=>iu_elementor_active_features(), 'auto_gate'=>apply_filters('auto_update_plugin',true,$item)];
++  $u=new Plugin_Upgrader(new WP_Ajax_Upgrader_Skin()); $r=$u->bulk_upgrade(['elementor-pro/elementor-pro.php']); $v=$r['elementor-pro/elementor-pro.php']??$u->skin->result;
++  $row['bulk_ajax_result']=is_wp_error($v)?$v->get_error_code():gettype($v);
++  set_site_transient('update_plugins',$t);
++  $u=new Plugin_Upgrader(new WP_Ajax_Upgrader_Skin()); $v=$u->upgrade('elementor-pro/elementor-pro.php'); $e=$u->skin->get_errors(); $row['manual_result']=is_wp_error($v)?$v->get_error_code():($e->has_errors()?$e->get_error_code():gettype($v));
++  if($atomic||$fragment){$u=new WP_Upgrader(new WP_Ajax_Upgrader_Skin()); $v=$u->install_package(['source'=>'/home/master/applications/manqbfzxjy/tmp/iu-kit-acceptance-20261001T112014Z/vendor-elementor/elementor/','destination'=>WP_PLUGIN_DIR,'hook_extra'=>['plugin'=>'elementor/elementor.php']]); $row['actual_source']=is_wp_error($v)?$v->get_error_code():gettype($v);}
++  $rows[]=$row;
++ }
++} finally { update_option('istodata_utilities_settings',$settings); update_post_meta(30,'_elementor_data',wp_slash($raw)); }
++$after=IU_Elementor_Update_Guard::installed_pair(); $unchanged=$before===$after;
++foreach($hashes as $p=>$hash) $unchanged=$unchanged&&hash_file('sha256',WP_PLUGIN_DIR.'/'.$p)===$hash;
++echo wp_json_encode(['rows'=>$rows,'plugin_files_unchanged'=>$unchanged,'settings_restored'=>get_option('istodata_utilities_settings')===$settings&&get_post_meta(30,'_elementor_data',true)===$raw,'final_pair'=>$after])."\n";
+--- /dev/null
++++ b/tests/elementor-kit-final-state.php
+@@ -0,0 +1,7 @@
++<?php
++if(get_option('home')!=='https://wordpress-218158-6702910.cloudwaysapps.com') {echo "WRONG_TARGET";return;}
++$ttl=[];
++$e=get_transient('iu_frag_adf372bd8dd52ff33211415b32219f21cdac02166efc5f2482b7ef4e771ee76c'); $ttl[]=is_array($e)?['key'=>'iu_frag_adf372bd8dd52ff33211415b32219f21cdac02166efc5f2482b7ef4e771ee76c','fresh_remaining'=>$e['fresh_until']-time(),'stale_grace'=>$e['stale_until']-$e['fresh_until']]:['key'=>'iu_frag_adf372bd8dd52ff33211415b32219f21cdac02166efc5f2482b7ef4e771ee76c','present'=>false];
++$e=get_transient('iu_frag_3e6aeeed1a6322ec25d17b77b575d277b12b690bb2a101e26de524560b479115'); $ttl[]=is_array($e)?['key'=>'iu_frag_3e6aeeed1a6322ec25d17b77b575d277b12b690bb2a101e26de524560b479115','fresh_remaining'=>$e['fresh_until']-time(),'stale_grace'=>$e['stale_until']-$e['fresh_until']]:['key'=>'iu_frag_3e6aeeed1a6322ec25d17b77b575d277b12b690bb2a101e26de524560b479115','present'=>false];
++$saved=[];foreach([30,33000] as $id){$n=json_decode(get_post_meta($id,'_elementor_data',true),true);$walk=function($nodes) use(&$walk,$id,&$saved){foreach((array)$nodes as $n){if(in_array($n['id']??'',['417d1ae','c60daee','26fa46c6'],true)) $saved[]=['document'=>$id,'widget'=>$n['id'],'cache'=>$n['settings']['iu_fragment_cache']??null,'ttl'=>$n['settings']['iu_fragment_cache_ttl']??null];if(!empty($n['elements']))$walk($n['elements']);}};$walk($n);}
++echo wp_json_encode(['pair'=>IU_Elementor_Update_Guard::installed_pair(),'kit'=>IU_PLUGIN_VERSION,'features'=>iu_elementor_active_features(),'fragment_supported'=>iu_elementor_feature_supported('fragment'),'atomic_supported'=>iu_elementor_feature_supported('atomic'),'native_cache'=>get_option('elementor_element_cache_ttl'),'saved'=>$saved,'baseline_transient_ttl'=>$ttl])."\n";
+--- /dev/null
++++ b/docs/elementor-compatibility.md
+@@ -0,0 +1,167 @@
++# Elementor compatibility and WordPress updater gate
++
++Local unreleased work, 2026-10-01. Registry:
++`includes/elementor-compatibility.php`. The plugin version remains unchanged.
++
++## Accepted versus tested
++
++| Feature | Accepted combinations | Evidence and limits |
++|---|---|---|
++| Atomic Interactions breakpoints | Exactly 4.3.2/4.3.0 or 4.3.3/4.3.1 | Old pair vendor VM; new pair full Kit native Motion OFF/ON/resize and vendor VM. See staging report for browser limits. |
++| Fragment Cache, Pro graph/excerpt adapters | Exactly 4.2.3/4.2.2 or 4.3.3/4.3.1 | New pair full Kit Greek/English save/reload/cross-page HTML/assets/effects, selective purge, device exclusions and joint Atomic ON. Older evidence retained separately. |
++| Fragment Cache, static core-only path | Exactly core 4.2.3 with Pro absent | Existing behavior preserved; isolated proxy/bootstrap regression only, no new browser claim. Pro adapters are excluded. |
++
++The local unreleased registry now has one common accepted pair: **4.3.3/4.3.1**.
++Actual acceptance is recorded separately in `elementor-kit-acceptance-staging.md`.
++Tools → ISTODATA Elementor Compatibility derives this from the same registry.
++No wider range or new patch is inferred. The former fragment widening filter was
++removed. API/class/source-path/hook/shape guards remain; JS checks APIs while PHP
++uses the registry to decide attachment. A release requires separate authorization.
++
++Every new Elementor/Pro version, including a patch that leaves feature code
++unchanged, needs review, an explicit registry declaration and a Kit release
++before acceptance. The schema currently accepts exact versions only and rejects
++open-ended ranges. Approved combinations and actually tested evidence remain
++separate fields, even when they currently identify the same version pair.
++
++The earlier open 4.3.x policy is superseded by finite exact declarations. The
++4.3.3/4.3.1 addition follows actual vendor and full Kit staging acceptance, not
++mocked version tests. Core 4.3.4, Pro 4.3.2 and later versions remain unapproved.
++
++The daily monitor reports actionable evidence/decisions read-only;
++it never edits these declarations or performs releases. This work creates no
++automation and does not manage the existing monitor's migration.
++
++## What counts as enabled
++
++Atomic is configured ON only by
++`istodata_utilities_settings.optimizations.elementor_atomic_interaction_breakpoints`.
++Absent/false remains OFF. Fragment Cache has no global ON switch: it is ON for
++the updater if native Elementor Element Cache is explicitly `disable` and at
++least one saved widget in `_elementor_data` has `iu_fragment_cache: "yes"`.
++The scan includes nested widgets and all saved, non-trash/non-auto-draft documents,
++including drafts and referenced templates; revisions are excluded. It does not
++depend on visiting a page, existing cache entries, a purge index, or loading the
++module. Opt-out is read immediately, without a stale persistent activation index.
++
++An opted-in widget remains configured ON even if today's graph/request guard
++bypasses it, so an unsupported installed version does not silently remove update
++protection. Container-only settings do not count. Runtime opt-ins injected solely
++by another plugin/filter are outside this saved-settings contract and require
++separate coordination. The cache policy is unchanged: default OFF, cross-page
++reuse, device/language variants, default TTL 24h, manual purge, no preload.
++
++| Atomic | Fragment | Update constraint |
++|---|---|---|
++| OFF | OFF | None from Kit |
++| ON | OFF | Atomic accepted pair only |
++| OFF | ON | Fragment accepted pair only |
++| ON | ON | Both policies; exact shared pair 4.3.3/4.3.1 |
++
++## Gates, update order and override
++
++`auto_update_plugin` vetoes only incompatible active feature pairs; it preserves
++the caller's choice for supported/unrelated updates. `upgrader_pre_download`
++rejects advertised incompatible manual targets before download.
++`upgrader_source_selection` inspects the actual extracted main-file version via
++WP_Filesystem, before WordPress moves/deletes installed files. It also guards
++uploaded canonical Elementor/Pro ZIP replacements. No update-transient entries,
++packages, update badges or normal update choices are removed.
++
++The counterpart version is read from installed main-file headers on disk, not
++Elementor constants or cached `get_plugins()` data. Every step in a sequential or
++bulk update is checked against the counterpart **already installed**, not a
++projected final pair. For example, enabling Atomic on an old core/Pro pair does
++not approve an unsupported intermediate pair merely because two upgrades would
++eventually reach an explicitly accepted pair. Disable the affected feature for the
++transition, or explicitly override each blocked step. With disjoint installed/target policies, selecting a feature or newly reviewed
++compatibility is required; a supported final pair does not approve intermediate steps.
++
++The compatibility page exposes one POST form per blocked available update.
++The administrator must explicitly acknowledge the specific update. Authorization
++requires `update_plugins` AND `manage_options`, a WordPress nonce tied to a
++fingerprint of plugin, target version, package URL and installed core/Pro pair;
++multisite additionally requires super-admin and `manage_network_plugins`.
++Changed targets/packages/installed pairs invalidate the form. The actual ZIP
++version must match the grant. The grant exists only in that PHP request and is
++cleared after the one upgrade; it is never stored in options/transients or used
++for auto updates/cron. If filesystem credentials are needed, the credentials form
++preserves the exact POST fields and the next request reauthorizes them; this path
++has an isolated round-trip regression, with real transport/UI acceptance pending.
++A failed attempt can be explicitly retried; WordPress
++nonces themselves are time-limited, not single-use tokens. Upload replacements
++have the source gate but no separate uploaded-package override UI; disable the
++affected feature or use the specific available-update form.
++
++Unsupported versions installed through override or direct replacement bypass
++sensitive runtime paths using the same registry and display administrator notices.
++The updater protection requires Kit to be loaded and the normal WordPress hooks
++to run. SSH/SFTP/direct replacements and updaters bypassing those hooks cannot be
++prevented. Other plugins can override WordPress hooks; this is not a security
++boundary against arbitrary PHP code.
++
++## Multisite and performance limits
++
++When Kit is loaded, the shared plugin-file update checks settings/opt-ins on all
++non-deleted sites across networks where Kit is site- or network-active, restoring
++the original blog after each inspection. It ignores sites with inactive Kit.
++Network activation is required for dependable protection from network admin/cron
++requests where the initiating blog would otherwise not load Kit. There is no
++MU-plugin bootstrap or remote network deployment in this change.
++
++The scan is synchronous and batched (200 sites / 200 metadata rows), with no
++persistent activation index. Large multisite installations need timing acceptance;
++database availability and ordinary readable installed plugin headers are required.
++Isolated tests validate the branching/switching logic, not real network admin UI,
++filesystem-credentials prompts, every database failure mode or concurrent updates.
++
++## Executed local checks
++
++PHP is **not available in PATH**. A temporary portable PHP 8.5.11 NTS CLI from
++the official PHP Windows download was checksum-verified against its published
++SHA-256 and used with `-n`; PATH/system/server configuration was not changed.
++Subsequent explicitly authorized staging work is recorded in `elementor-kit-acceptance-staging.md`. It exposed and corrected missing bulk/AJAX hook metadata handling.
++
++```powershell
++$phpExe = Join-Path $env:TEMP 'iu-compatibility-php-8.5.11\php.exe'
++& $phpExe -n -l istodata-utilities.php
++& $phpExe -n tests/elementor-compatibility.php
++& $phpExe -n tests/elementor-update-guard.php
++& $phpExe -n tests/atomic-interaction-breakpoints.php
++& $phpExe -n tests/elementor-fragment-bootstrap.php
++& $phpExe -n tests/elementor-fragment-context.php
++& $phpExe -n tests/elementor-fragment-graph.php
++& $phpExe -n tests/elementor-fragment-assets.php
++& $phpExe -n tests/elementor-fragment-poll.php
++& $phpExe -n tests/elementor-fragment-replay-order.php
++node tests/elementor-compatibility-drift.cjs
++node tests/atomic-interaction-breakpoints.cjs
++node --check assets/js/elementor-atomic-interaction-breakpoints.js
++git diff --check
++```
++
++The new policy suite checks 23 core/Pro targets × four activation states in eight
++isolated runtime environments, including absence, prereleases, malformed versions,
++Pro adapter boundaries, unsupported-runtime fallback and restricted admin notices. The updater suite checks
++68 activation/target scenarios through auto/manual/extracted/upload callbacks,
++permissions/nonce/confirmation, changed package/target/base, cron refusal, native
++cache/opt-out/multi-batch discovery, sequential update state, multi-network
++activation and admin text/forms. The drift suite scans all runtime PHP/JS and
++checks both rejection controls and registry consumers. Existing Atomic suites
++cover 24 PHP loader cases and 17 checksum-verified vendor JS runtime cases per old/candidate suite.
++Changed/new PHP files also passed syntax checks. These are isolated regressions;
++they do not establish full WordPress browser/updater acceptance.
++
++## Staging acceptance and remaining platform limits
++
++The authorized full Kit staging acceptance passed after licence recovery on exact
++4.3.3/4.3.1. Greek/English saved controls, anonymous cross-page hits, exact normal
++HTML/assets/effects, selective purge, UA exclusions, native Atomic OFF/ON/resize
++and joint operation were checked. Normal Kit was reinstalled after registry
++approval and the temporary adapter removed. The temporary fixture was trashed,
++experiment restored and observation harness deactivated. See the staging report
++for backups, checksums, screenshots, final state and the observed updater defect.
++
++No complete auto-update cron run, real multisite network UI, filesystem credentials
++prompt or every browser/custom-breakpoint combination is claimed. The release
++remains pending a separate user request; version 2.21.2 and production are unchanged.
+--- /dev/null
++++ b/docs/elementor-kit-acceptance-staging.md
+@@ -0,0 +1,197 @@
++# Full Kit staging acceptance — passed, 2026-10-01
++
++Authorized target only: Cloud 1 / 218158, app 6702910,
++`https://wordpress-218158-6702910.cloudwaysapps.com`,
++logical root `/home/master/applications/manqbfzxjy/public_html`, verified physical
++root `/home/218158.cloudwaysapps.com/manqbfzxjy/public_html`.
++No production or other-application writes are authorized/performed.
++
++## Baseline and recovery
++
++Read-only SSH preflight: WordPress 7.1.2, PHP CLI 8.2.33, active Elementor
++4.2.3 / Pro 4.2.2 / Kit 2.21.2, Atomic OFF, native Element Cache `disable`,
++single-site. No saved fragment opt-in in header 30. Old `iu-fragment-probe` exists
++but is inactive. WordPress environment type reports the default `production`;
++target classification was independently verified from the staging hostname/app
++and exact paths, without changing that setting.
++
++Private application backup (SSH, not a Cloudways-platform snapshot):
++`/home/master/applications/manqbfzxjy/tmp/iu-kit-acceptance-20261001T112014Z/`.
++Started 11:20:14 UTC, completed 11:25:24 UTC (14:25:24 Europe/Athens).
++Directory is private (umask 077), outside the web root. Includes the full
++`public_html` tree and exported database; gzip integrity and SHA-256 verified.
++
++- `database.sql`: 338 MB, SHA-256
++  `6c5bc2e0d676fa79f28cfb642e6fe2f3fd9e0187db553b7edc68edfcc265f6d2`.
++- `public_html.tar.gz`: 3.6 GB, SHA-256
++  `d719524a47d0e2a37a273a77cb51ac16a05407fdacc900ab83f92083005a481c`.
++
++Recovery requires a separate explicit rollback decision: verify the same staging
++root/URL, restore the archived files and import this SQL into this staging DB,
++then clear only its relevant caches. No automatic rollback or production restore.
++The backup contains private site data/configuration and stays outside the repo
++and public web root. No credentials are recorded in this report.
++
++## Test Kit package
++
++Clean staged copy, 74 entries, exactly one `istodata-utilities/` root, main file
++at `istodata-utilities/istodata-utilities.php`, forward slashes, no tests/docs/
++vendor fixtures/.git/.github/.claude/nested ZIPs or temporary files. ZIP inspected
++directly and CRC verified. Header/constant version remain 2.21.2.
++
++Local upload artifact:
++`H:\Το Drive μου\Development\ISTODATA PLUGINS\istodata-utilities.zip`.
++Initial SHA-256 `381269d60475ea4a7e17c7200bdc552c57fe92a252a6c349c105b5a83f2c6fdf`. The final corrected package checksum is recorded below.
++
++## Accepted candidate and licence recovery
++
++The user restored the staging licence and explicitly requested continuation.
++Before upgrading Pro, a second private snapshot was created under the backup:
++`resume-20261001T132827Z/`.
++
++- `database.sql`: SHA-256 `02406fbbf81f1dfa1960a3b99dfbbb1be43268ab11fd5679e463f3b118a1e4f2`.
++- `current-core-pro-kit.tar.gz`: SHA-256 `ce69bcc569dc0ccab15fc0886aa4d57d91e9ae5428a78aa27249823ff7923a46`.
++
++The official extracted core 4.3.3 package was 23,603,361 bytes,
++SHA-256 `e3e1a4eb6bb458da5efcb67d3aa70e5b8a8eb8c5177c51b88876136e8a098871`.
++Official Pro 4.3.1 was 3,504,945 bytes,
++SHA-256 `85baf7fb21e03b849825dec30c9b099433c255d9898b93f51fc0a7cec10aabfe`.
++Package headers were verified. The exact nonce/fingerprint/confirmation override
++succeeded through WordPress Plugin_Upgrader with the AJAX skin. Pro was reactivated;
++`wp elementor update db` reported the database already updated. No licence keys,
++token-bearing URLs or proprietary vendor packages are distributed in the Kit ZIP.
++
++## Defects corrected during actual acceptance
++
++1. The first plugin-page AJAX core update bypassed the original updater gates.
++   WordPress bulk_upgrade's per-plugin hook_extra omits type/action. Both gates
++   now recognize canonical plugin identity when that metadata is absent, while
++   excluding explicitly different operations. The subsequent actual AJAX Pro
++   attempt visibly failed with `iu_elementor_incompatible` before downloading.
++2. Enabling native Atomic Widgets adds the vendor interaction collector to
++   builder_content_data. Static fragment graphs previously failed closed solely
++   because this pass-through collector was present. Only its reviewed exact
++   hook/class/method/vendor source path is recognized. Nodes with interactions
++   and documents with native cached interactions remain excluded, preventing
++   cached fragments from omitting native interaction collection/assets.
++3. Motion scrollOn disposal queues a final render. It could overwrite restored
++   styles after moving to an excluded breakpoint. Kit retains scroll-driven
++   controls through disposal and restores the captured baseline after that
++   queued frame, guarded by initializer generation and excluding recollected
++   elements. This preserves newly initialized interactions and other consumers.
++
++A staging-only candidate adapter was used to exercise the exact pair before
++registry acceptance. Following acceptance, the exact 4.3.3/4.3.1 pair was declared
++in the local unreleased registry. The normal full Kit ZIP was installed through
++WordPress, the adapter was retired to the private backup, and canonical registry
++support plus Greek/English cross-page tests were repeated successfully.
++No wider range, independent production exception or new patch approval exists.
++A Kit release remains a separate user-authorized step.
++
++## Full Kit acceptance evidence
++
++- Header #30 (Greek) and #33000 (English): real Template controls `417d1ae` and
++  `c60daee` saved ON, editor reloaded, default 86400-second/24-hour TTL retained.
++  The central navigation `26fa46c6` remains unopted. English Save & Close was
++  completed through the native editor; display conditions remained unchanged.
++  No content/title/translation repair was made.
++- Canonical Greek A `/` builds 150 loops and stores both dropdowns. First B
++  `/techniki-ypostirixi/` hits both, builds zero heavy loops/dropdown templates
++  and renders central navigation once. Normal B header HTML, 93 external assets,
++  displayed/query IDs and excerpt behavior match exactly. Current-menu-item and
++  aria-current remain correct. See `kit-candidate-cross-page-el.json`.
++- Canonical English A `/en/` builds 156 translated loops; B `/en/the-company/`
++  builds zero, hits both dropdowns, retains normal HTML, 89 external assets and
++  query/excerpt effects. See `kit-candidate-cross-page-en.json`. Counts are from
++  translated loop widgets, not only the Greek loop template's ID.
++- Actual per-element admin purge of Header #30 / 417d1ae: next B builds 72 loops
++  with `stored,hit`; following B builds zero with `hit,hit`. Only the purged key
++  changes, the other key remains unchanged and header HTML is identical. This
++  passed again with the final canonical Kit. No concurrent editor/source writes
++  were performed between the retained keys and this purge verification.
++- Actual Firefox desktop UA shares the normalized desktop hits; iPad and iPhone
++  UAs omit the heavy desktop header before construction, with zero fragment events
++  and loops. See `kit-candidate-device.json`. Responsive browser viewport checks
++  are separate; resizing does not claim to change browser UA.
++- Anonymous cached Greek desktop menu opens with 20 visible links. At 1440x1024,
++  bounds x=69, y=161.5, width=949, height=722, bottom=883.5 exactly match the
++  pre-Pro-upgrade baseline. Actual cached menu navigation opened Leica Infinity.
++  English cached menu opens (20 links), its native translated tabs remain present,
++  and navigation opened Measurement Services. Mobile 390x844 English hamburger
++  popup opens with the normal menu. Browser frontend error logs were empty in
++  these checked views. Editor deprecation warnings and existing English newsletter
++  missing-form content are unrelated; no all-site clean-console claim is made.
++- Atomic setting was tested OFF and ON through native Elementor document save,
++  native footer interaction JSON, shared/Pro bundles and Motion 11.13.5. OFF on
++  mobile reproduces the vendor exclusion bug. ON suppresses excluded effects;
++  desktop load/click/pointer-entry and real scroll triggers animate normally.
++  After desktop to excluded-tablet transition all six nodes restore baseline
++  opacity 0.8 and empty inline styles, including scrollOn's deferred render.
++  Pointer entry used documented native drag input; ordinary hover semantics and
++  all six triggers were additionally verified against the actual vendor bundles
++  in the controlled VM. Custom breakpoint/asynchronous/missing-API checks are VM
++  coverage, not claims of every custom configuration in the live browser.
++- Native Atomic Widgets experiment was ON during joint Atomic/Fragment testing.
++  Both features operated together in the full Kit without a separate runtime
++  fragment loader. Final canonical pair support was verified after adapter removal.
++
++Screenshots: `kit-candidate-canonical-menu.png`, `kit-candidate-english-menu.png`,
++`kit-candidate-mobile-menu.png`, `kit-candidate-english-editor.png`,
++`kit-candidate-atomic-off-mobile.png`, `kit-candidate-atomic-on-mobile.png`.
++
++## Actual updater checks and limits
++
++On the formerly unsupported 4.3.3/4.2.2 installation, actual WordPress single/bulk
++upgrader calls, extracted official source replacement and the auto_update_plugin
++filter were exercised for OFF/OFF, Atomic-only, Fragment-only and both ON.
++OFF/OFF passes the gate (the earlier download then failed at the licence endpoint);
++the three active states reject before replacement. Installed plugin hashes stayed
++unchanged during these corrected-path tests. The exact override later installed
++Pro successfully after licence recovery. Evidence: `kit-acceptance-live-updater.json`.
++No complete cron update, real multisite network UI or filesystem credential prompt
++is claimed. Permissions/stale nonce/fingerprint/upload/ordering/multisite branches
++have isolated regressions. SSH/direct file replacements cannot be gated by Kit.
++
++## Final staging state and temporary setup cleanup
++
++- Elementor 4.3.3 / Pro 4.3.1 / normal full Kit 2.21.2, active.
++- Atomic setting ON; Greek/English saved dropdown opt-ins ON, 24h default.
++- Native Element Cache remains `disable`; canonical registry supports both.
++- Temporary native test page #40121 was moved to Trash (recoverable).
++- Native Atomic Widgets experiment was restored to its original absent option
++  and inactive state. This restores temporary test setup, not plugin versions.
++- Observation harness deactivated; candidate MU adapter absent. Private backup
++  retains the retired adapter. Older inactive probes remain untouched.
++- Supported staging WP Rocket domain purge performed after setup cleanup.
++- Final anonymous Greek/English desktop and phone requests return 200, contain no
++  observation comment/admin bar/critical-error page. Greek phone excludes the heavy
++  header through its saved `iu_hide_on_phone=yes`. English has no such saved opt-in
++  and retains its existing native CSS hide_mobile/hide_tablet behavior; mobile
++  popup browser acceptance passed. No new device setting was copied between
++  languages. See `kit-candidate-final-public.json`.
++- No production changes, automatic rollback, version bump, commit, push, tag or
++  release. Existing user tabs and unrelated site content were not repaired.
++
++Final verified ZIP SHA-256:
++`f219e0744b3794c0cd6a363ce2f22250603405d14b7575f380c512a7a31ed6d0`.
++74 entries, exact plugin root/main file, no root main/nested root/backslashes/
++version folders/development metadata/nested ZIPs; CRC verified. The final ZIP
++installed on staging matches this SHA. See `kit-candidate-final-zip.json`.
++
++## Local checks and diff boundaries
++
++PHP is not in local PATH. Official checksum-verified portable PHP 8.5.11 `-n`
++passes main-file lint, 23 pairs x four activation states x eight environments,
++68 updater target/activation scenarios and 24 Atomic loader cases. Node drift
++checks 50 runtime files. Both old and candidate checksum-verified vendor JS suites
++pass 17 cases, including the deferred-render and reinitialized-element regression.
++Fragment graph (including native cached/source interactions), bootstrap, context,
++asset, replay/invalidation checks pass; excerpt replay also passes in actual
++staging WordPress PHP 8.2.33. No production PHP configuration change was made.
++
++Pre-existing `includes/elementor-device-visibility.php` was byte-compared against
++start-of-task snapshot and unchanged: SHA-256
++`4a49d9b5956aa935153a4f8d0fd98726585f2fed606152976a5dc52e61c8323c`.
++Existing fragment/device/docs/test changes and scratch files were retained.
++Task-only textual diff: `elementor-compatibility.patch`; JSON and screenshots
++remain local development evidence and are excluded from the upload ZIP.
+--- /dev/null
++++ b/docs/kit-acceptance-cross-page-el.json
+@@ -0,0 +1,21 @@
++{
++  "generation": "12413d34969849e0b7c438c6f3c80dca",
++  "page_a": "/",
++  "page_b": "/techniki-ypostirixi/",
++  "loop_a": 150,
++  "loop_b": 0,
++  "menu_renders_b": 1,
++  "dropdown_renders_b": 0,
++  "assets_b": 87,
++  "header_sha_b": "5a6f3ee9a93a3ad8d0aaae460e011234ef8a55fb35b98a77222e8d7488065155",
++  "keys": {
++    "417d1ae": {
++      "doc": 30,
++      "key": "iu_frag_adf372bd8dd52ff33211415b32219f21cdac02166efc5f2482b7ef4e771ee76c"
++    },
++    "c60daee": {
++      "doc": 30,
++      "key": "iu_frag_3e6aeeed1a6322ec25d17b77b575d277b12b690bb2a101e26de524560b479115"
++    }
++  }
++}
+--- /dev/null
++++ b/docs/kit-acceptance-final-http.json
+@@ -0,0 +1,26 @@
++[
++  {
++    "case": "desktop-el",
++    "status": 200,
++    "x_cache": "MISS",
++    "desktop_menu": true,
++    "critical_error": false,
++    "logged_in": false
++  },
++  {
++    "case": "desktop-en",
++    "status": 200,
++    "x_cache": "MISS",
++    "desktop_menu": true,
++    "critical_error": false,
++    "logged_in": false
++  },
++  {
++    "case": "phone",
++    "status": 200,
++    "x_cache": "MISS",
++    "desktop_menu": false,
++    "critical_error": false,
++    "logged_in": false
++  }
++]
+--- /dev/null
++++ b/docs/kit-acceptance-final-state.json
+@@ -0,0 +1 @@
++{"pair":{"core":"4.3.3","pro":"4.2.2"},"kit":"2.21.2","features":{"atomic":false,"fragment":true},"fragment_supported":false,"atomic_supported":false,"native_cache":"disable","saved":[{"document":30,"widget":"26fa46c6","cache":null,"ttl":null},{"document":30,"widget":"417d1ae","cache":"yes","ttl":null},{"document":30,"widget":"c60daee","cache":"yes","ttl":null},{"document":33000,"widget":"26fa46c6","cache":null,"ttl":null},{"document":33000,"widget":"417d1ae","cache":null,"ttl":null},{"document":33000,"widget":"c60daee","cache":null,"ttl":null}],"baseline_transient_ttl":[{"key":"iu_frag_adf372bd8dd52ff33211415b32219f21cdac02166efc5f2482b7ef4e771ee76c","fresh_remaining":80562,"stale_grace":180},{"key":"iu_frag_3e6aeeed1a6322ec25d17b77b575d277b12b690bb2a101e26de524560b479115","fresh_remaining":80576,"stale_grace":180}]}
+--- /dev/null
++++ b/docs/kit-acceptance-live-updater.json
+@@ -0,0 +1 @@
++{"rows":[{"atomic":false,"fragment":false,"saved_active":{"atomic":false,"fragment":false},"auto_gate":true,"bulk_ajax_result":"download_failed","manual_result":"download_failed"},{"atomic":false,"fragment":true,"saved_active":{"atomic":false,"fragment":true},"auto_gate":false,"bulk_ajax_result":"iu_elementor_incompatible","manual_result":"iu_elementor_incompatible","actual_source":"iu_elementor_incompatible"},{"atomic":true,"fragment":false,"saved_active":{"atomic":true,"fragment":false},"auto_gate":false,"bulk_ajax_result":"iu_elementor_incompatible","manual_result":"iu_elementor_incompatible","actual_source":"iu_elementor_incompatible"},{"atomic":true,"fragment":true,"saved_active":{"atomic":true,"fragment":true},"auto_gate":false,"bulk_ajax_result":"iu_elementor_incompatible","manual_result":"iu_elementor_incompatible","actual_source":"iu_elementor_incompatible"}],"plugin_files_unchanged":true,"settings_restored":true,"final_pair":{"core":"4.3.3","pro":"4.2.2"}}
+--- /dev/null
++++ b/docs/kit-acceptance-zip-verification.json
+@@ -0,0 +1,15 @@
++{
++  "path": "H:\\\u03a4\u03bf Drive \u03bc\u03bf\u03c5\\Development\\ISTODATA PLUGINS\\istodata-utilities.zip",
++  "entries": 74,
++  "sha256": "9af8b3aec9a87f3cd53b7345049ac83f5e9aa385f7d9068d6cbd588eff95f24d",
++  "checks": {
++    "correct_upload_path": true,
++    "one_root": true,
++    "main_exists": true,
++    "no_root_main": true,
++    "no_nested_main": true,
++    "forward_slashes": true,
++    "no_development": true,
++    "crc": true
++  }
++}
+--- /dev/null
++++ b/tests/atomic-interaction-breakpoints.cjs
+@@ -0,0 +1,218 @@
++const fs = require('node:fs');
++const path = require('node:path');
++const vm = require('node:vm');
++const assert = require('node:assert/strict');
++const crypto = require('node:crypto');
++const manifest = require('./fixtures/atomic-interactions.json');
++const sources = Object.fromEntries(manifest.files.map(file => {
++  const data = fs.readFileSync(path.join(__dirname, 'fixtures', 'vendor', file.name));
++  assert.equal(crypto.createHash('sha256').update(data).digest('hex'), file.sha256, 'Fixture checksum');
++  return [file.name, data.toString()];
++}));
++const patch = fs.readFileSync(path.join(__dirname, '../assets/js/elementor-atomic-interaction-breakpoints.js'), 'utf8');
++const wrap = value => ({ $$type: 'test', value });
++const interaction = (trigger = 'scrollIn', excluded = ['mobile', 'tablet'], replay = true) => ({
++  $$type: 'interaction-item', value: {
++    trigger: wrap(trigger), breakpoints: wrap({ excluded: wrap(excluded.map(wrap)) }),
++    animation: wrap({ effect: wrap('fade'), type: wrap('in'), config: wrap({ replay: wrap(replay) }),
++      timing_config: wrap({ duration: wrap({ size: 600, unit: 'ms' }) }) })
++  }
++});
++function element(empty = false) {
++  const values = empty ? {} : { opacity: '0.8', transform: 'rotate(2deg)', transition: 'color 1s' };
++  const priorities = empty ? {} : { opacity: 'important', transform: 'important' };
++  const style = new Proxy({
++    getPropertyValue: key => values[key] || '', getPropertyPriority: key => priorities[key] || '',
++    setProperty: (key, value, priority) => { values[key] = value; priorities[key] = priority || ''; },
++    removeProperty: key => { delete values[key]; delete priorities[key]; }
++  }, {
++    get: (target, key) => key in target ? target[key] : values[key] || '',
++    set: (target, key, value) => { values[key] = value; priorities[key] = ''; return true; }
++  });
++  return { style };
++}
++function harness({ width = 390, interactions = [interaction()], elements = [element()], enabled = true,
++  breakpoints = { mobile: { value: 767, direction: 'max' }, tablet: { value: 1024, direction: 'max' } },
++  alter, deferred = false, loading = false, legacy = false, lateRender = false } = {}) {
++  const listeners = {}, timers = new Map(), subscriptions = new Set(), historical = [], controls = [];
++  let timerId = 0, animated = 0, disposed = 0;
++  const frames = [];
++  const subscribe = (kind, el, callback) => {
++    const record = { kind, el, callback };
++    subscriptions.add(record); historical.push(record);
++    return () => { if (subscriptions.delete(record)) { disposed++; if (lateRender && kind === 'scroll') frames.push(() => { el.style.opacity = '1'; }); } };
++  };
++  const context = {
++    console, innerWidth: width,
++    requestAnimationFrame: callback => frames.push(callback),
++    setTimeout: callback => { timers.set(++timerId, callback); return timerId; },
++    clearTimeout: id => timers.delete(id),
++    addEventListener: (type, callback) => (listeners[type] ||= []).push(callback),
++    getComputedStyle: () => ({ transform: 'none' }),
++    ElementorInteractionsConfig: { constants: { defaultDuration: 600, defaultDelay: 0, defaultEasing: 'easeIn', slideDistance: 100 }, breakpoints },
++    document: {
++      readyState: loading ? 'loading' : 'complete',
++      addEventListener: (type, callback) => (listeners[type] ||= []).push(callback),
++      getElementById: () => legacy ? null : ({ textContent: JSON.stringify([{ elementId: 'test', interactions }]) }),
++      querySelectorAll: () => elements
++    },
++    Motion: {
++      animate: (el, frames) => {
++        animated++;
++        el.style.opacity = String(Array.isArray(frames.opacity) ? frames.opacity.at(-1) : frames.opacity || 1);
++        let finish;
++        const promise = deferred ? new Promise(resolve => { finish = resolve; }) : Promise.resolve();
++        const control = Object.assign(promise, { cancel() { control.cancelled = true; }, finish: finish || (() => {}) });
++        controls.push(control); return control;
++      },
++      inView: (el, callback) => subscribe('inView', el, callback),
++      hover: (el, callback) => subscribe('hover', el, callback),
++      press: (el, callback) => subscribe('press', el, callback),
++      scroll: (control, options) => subscribe('scroll', options.target || elements[0], control)
++    }
++  };
++  elements.forEach(el => { el.getAttribute = () => JSON.stringify(interactions); });
++  context.window = context;
++  vm.createContext(context);
++  vm.runInContext(sources['interactions-shared.js'], context);
++  const originalAPI = { ...context.elementorModules.interactions }, originalMotion = { ...context.Motion };
++  if (alter) alter(context);
++  if (enabled) vm.runInContext(patch, context);
++  function flush() { const callbacks = [...timers.values()]; timers.clear(); callbacks.forEach(callback => callback()); }
++  function resize(width) { context.innerWidth = width; (listeners.resize || []).forEach(callback => callback()); flush(); }
++  function start() { vm.runInContext(sources['interactions-pro.js'], context); }
++  function trigger(record) { return record.callback(record.el); }
++  return { context, elements, listeners, originalAPI, originalMotion, subscriptions, historical, controls,
++    flush, resize, start, trigger, frame: () => { const pending = frames.splice(0); pending.forEach(cb => cb()); }, get animated() { return animated; }, get disposed() { return disposed; } };
++}
++function restored(el, empty = false) {
++  assert.equal(el.style.opacity, empty ? '' : '0.8');
++  assert.equal(el.style.transform, empty ? '' : 'rotate(2deg)');
++  assert.equal(el.style.transition, empty ? '' : 'color 1s');
++  assert.equal(el.style.getPropertyPriority('opacity'), empty ? '' : 'important');
++  assert.equal(el.style.getPropertyPriority('transform'), empty ? '' : 'important');
++}
++let cases = 0;
++async function test(name, callback) { await callback(); cases++; console.log('PASS: ' + name); }
++(async () => {
++  await test('OFF preserves native API and reproduces vendor breakpoint bug', () => {
++    const h = harness({ enabled: false }); h.start();
++    assert.equal(h.subscriptions.size, 1);
++    assert.equal(h.context.elementorModules.interactions.skipInteraction, h.originalAPI.skipInteraction);
++  });
++  await test('excluded mobile/tablet, Desktop execution and repeated resize restore styles', async () => {
++    const h = harness(); h.start(); assert.equal(h.subscriptions.size, 0);
++    for (let i = 0; i < 15; i++) {
++      h.resize(1400); assert.equal(h.subscriptions.size, 1);
++      h.trigger([...h.subscriptions][0]); await Promise.resolve();
++      h.resize(i % 2 ? 820 : 390); assert.equal(h.subscriptions.size, 0); restored(h.elements[0]);
++    }
++    assert.equal(h.animated, 15); assert.equal(h.disposed, 15);
++    h.resize(1400); const count = h.historical.length; h.resize(1500); assert.equal(h.historical.length, count);
++  });
++  for (const trigger of ['hover', 'click', 'scrollOn', 'scrollOut', 'load']) {
++    await test(trigger + ': native registration, execution, cleanup and restoration', async () => {
++      const h = harness({ interactions: [interaction(trigger)] }); h.start(); assert.equal(h.subscriptions.size, 0);
++      h.resize(1400);
++      if (['hover', 'click', 'scrollOut'].includes(trigger)) h.trigger([...h.subscriptions][0]);
++      assert.ok(h.animated > 0); await Promise.resolve(); h.resize(390);
++      assert.equal(h.subscriptions.size, 0); restored(h.elements[0]);
++      for (let i = 0; i < 8; i++) { h.resize(1400); assert.ok(h.subscriptions.size <= 1); h.resize(820); }
++      assert.equal(h.subscriptions.size, 0); restored(h.elements[0]);
++    });
++  }
++  await test('scroll timeline deferred render restores excluded styles and preserves reinitialized elements', async () => {
++    const h = harness({ width: 1400, interactions: [interaction('scrollOn')], lateRender: true });
++    h.start(); await Promise.resolve(); h.resize(390); h.frame(); restored(h.elements[0]);
++    h.resize(1400); h.resize(390); h.resize(1400);
++    const activeOpacity = h.elements[0].style.opacity; h.elements[0].style.transform = 'scale(2)';
++    h.frame(); assert.equal(h.elements[0].style.opacity, activeOpacity); assert.equal(h.elements[0].style.transform, 'scale(2)');
++    h.resize(390); h.frame(); restored(h.elements[0]);
++  });
++  await test('custom unordered max/min breakpoints, boundaries, independent exclusions and multiple elements', () => {
++    const h = harness({ width: 500, elements: [element(), element(true)],
++      interactions: [interaction('hover', ['phone', 'wide']), interaction('click', ['desktop', 'pad'])],
++      breakpoints: { wide: { value: 1600, direction: 'min' }, pad: { value: 1100, direction: 'max' }, phone: { value: 600, direction: 'max' }, huge: { value: 2000, direction: 'min' } } });
++    h.start(); assert.equal(h.subscriptions.size, 2); assert.equal([...h.subscriptions][0].kind, 'press');
++    h.resize(600); assert.equal(h.subscriptions.size, 2);
++    h.resize(601); assert.equal(h.subscriptions.size, 2); assert.equal([...h.subscriptions][0].kind, 'hover');
++    h.resize(1100); assert.equal(h.subscriptions.size, 2);
++    h.resize(1101); assert.equal(h.subscriptions.size, 2);
++    h.resize(1600); assert.equal(h.subscriptions.size, 2); assert.equal([...h.subscriptions][0].kind, 'press');
++    h.resize(2000); assert.equal(h.subscriptions.size, 4);
++    h.resize(500); assert.equal(h.subscriptions.size, 2);
++  });
++  await test('missing/invalid/read-only APIs and duplicate workaround install are no-ops', () => {
++    for (const alter of [c => { delete c.elementorModules; },
++      c => { c.ElementorInteractionsConfig.breakpoints.mobile.value = '767'; },
++      ...['skipInteraction', 'waitForAnimateFunction', 'getAnimateFunction', 'getInViewFunction', 'getTransformBaselineFromComputedStyle'].map(key => c => { c.elementorModules.interactions[key] = null; }),
++      c => { Object.defineProperty(c.elementorModules.interactions, 'skipInteraction', { writable: false }); },
++      c => { c.elementorModules.interactions.avraBreakpointFix = true; }]) {
++      const h = harness({ enabled: false, alter });
++      const api = h.context.elementorModules && h.context.elementorModules.interactions;
++      const before = api && { ...api };
++      vm.runInContext(patch, h.context);
++      if (api) Object.keys(before).forEach(key => assert.equal(api[key], before[key]));
++      assert.equal((h.listeners.resize || []).length, 0);
++    }
++    const h = harness(); const api = { ...h.context.elementorModules.interactions };
++    vm.runInContext(patch, h.context); Object.keys(api).forEach(key => assert.equal(h.context.elementorModules.interactions[key], api[key]));
++    assert.equal(h.listeners.resize.length, 1);
++    h.start(); assert.equal(h.listeners.resize.length, 2, 'one Kit and one native resize listener');
++    for (let i = 0; i < 8; i++) { h.resize(1400); h.resize(390); }
++    assert.equal(h.listeners.resize.length, 2);
++  });
++  await test('stale trigger, exit and animation completion callbacks cannot write styles', async () => {
++    const h = harness({ width: 1400, deferred: true }); h.start();
++    const old = [...h.subscriptions][0], exit = h.trigger(old);
++    h.resize(390); restored(h.elements[0]); assert.equal(h.controls[0].cancelled, true);
++    const count = h.animated; h.trigger(old); exit(); assert.equal(h.animated, count);
++    h.controls.forEach(control => control.finish()); await Promise.resolve(); await Promise.resolve();
++    restored(h.elements[0]);
++  });
++  await test('empty initial styles are removed and once-only cleanup survives native disposal', async () => {
++    const h = harness({ width: 1400, elements: [element(true)], interactions: [interaction('scrollIn', ['mobile', 'tablet'], false)] });
++    h.start(); h.trigger([...h.subscriptions][0]); assert.equal(h.subscriptions.size, 0);
++    await Promise.resolve(); h.resize(390); assert.equal(h.disposed, 1); restored(h.elements[0], true);
++  });
++  await test('other Motion consumers keep original API, subscriptions and controls', () => {
++    const h = harness(); const el = element();
++    const api = h.context.elementorModules.interactions;
++    assert.equal(api.getAnimateFunction(), h.originalMotion.animate); assert.equal(api.getInViewFunction(), h.originalMotion.inView);
++    const stop = h.context.Motion.hover(el, () => {}); const control = h.context.Motion.animate(el, {});
++    h.start(); h.resize(1400); h.resize(390);
++    assert.equal(h.subscriptions.size, 1); assert.equal(control.cancelled, undefined);
++    ['hover', 'press', 'scroll'].forEach(key => assert.equal(h.context.Motion[key], h.originalMotion[key])); stop();
++  });
++  await test('DOMContentLoaded and legacy data-interactions use the native initializer', () => {
++    const h = harness({ loading: true, legacy: true }); h.start();
++    assert.equal(h.subscriptions.size, 0); h.listeners.DOMContentLoaded.forEach(cb => cb());
++    h.resize(1400); assert.equal(h.subscriptions.size, 1); h.resize(390); restored(h.elements[0]);
++  });
++  await test('asynchronous Motion arrival uses the native wait and complete API preflight', () => {
++    const h = harness({ alter: c => { c.Motion = undefined; } }); h.start();
++    assert.equal(h.subscriptions.size, 0);
++    h.context.Motion = { ...h.originalMotion }; h.flush(); assert.equal(h.subscriptions.size, 0);
++    h.resize(1400); assert.equal(h.subscriptions.size, 1); h.resize(390); restored(h.elements[0]);
++  });
++  await test('incomplete Motion API uses entirely native behavior without subscription wrappers', () => {
++    for (const key of ['inView', 'hover', 'press', 'scroll']) {
++      const h = harness({ alter: c => { c.Motion[key] = null; } }); h.start();
++      assert.equal(h.subscriptions.size, 0);
++      h.resize(1400); assert.equal(h.subscriptions.size, 0);
++      ['hover', 'press', 'scroll'].filter(name => name !== key).forEach(name => assert.equal(h.context.Motion[name], h.originalMotion[name]));
++    }
++    const h = harness({ alter: c => { Object.defineProperty(c.Motion, 'hover', { writable: false }); } });
++    h.start(); assert.equal(h.subscriptions.size, 1, 'unpatchable Motion keeps the native breakpoint bug');
++    h.resize(1400); assert.equal(h.subscriptions.size, 1);
++  });
++  await test('initializer failure restores styles and the original Motion subscription APIs', () => {
++    const h = harness({ width: 1400, interactions: [interaction('hover'), interaction('scrollIn')],
++      alter: c => { c.Motion.inView = () => { throw new Error('fixture initializer failure'); }; } });
++    assert.throws(() => h.start(), /fixture initializer failure/);
++    assert.equal(h.subscriptions.size, 0); restored(h.elements[0]);
++    ['hover', 'press', 'scroll'].forEach(key => assert.equal(h.context.Motion[key], h.originalMotion[key]));
++    h.resize(390); assert.equal(h.subscriptions.size, 0);
++  });
++  console.log(`PASS: ${cases} runtime cases with checksum-verified shared + Pro bundles.`);
++})().catch(error => { console.error(error); process.exitCode = 1; });
+--- /dev/null
++++ b/tests/atomic-interaction-candidate.cjs
+@@ -0,0 +1,219 @@
++const fs = require('node:fs');
++const path = require('node:path');
++const vm = require('node:vm');
++const assert = require('node:assert/strict');
++const crypto = require('node:crypto');
++const candidateDir = process.env.IU_ATOMIC_CANDIDATE_FIXTURES || path.join(require('node:os').tmpdir(), 'iu-candidate-433-431');
++const manifest = JSON.parse(fs.readFileSync(path.join(candidateDir, 'manifest.json'), 'utf8'));
++const sources = Object.fromEntries(manifest.files.map(file => {
++  const data = fs.readFileSync(path.join(candidateDir, file.name));
++  assert.equal(crypto.createHash('sha256').update(data).digest('hex'), file.sha256, 'Fixture checksum');
++  return [file.name, data.toString()];
++}));
++const patch = fs.readFileSync(path.join(__dirname, '../assets/js/elementor-atomic-interaction-breakpoints.js'), 'utf8');
++const wrap = value => ({ $$type: 'test', value });
++const interaction = (trigger = 'scrollIn', excluded = ['mobile', 'tablet'], replay = true) => ({
++  $$type: 'interaction-item', value: {
++    trigger: wrap(trigger), breakpoints: wrap({ excluded: wrap(excluded.map(wrap)) }),
++    animation: wrap({ effect: wrap('fade'), type: wrap('in'), config: wrap({ replay: wrap(replay) }),
++      timing_config: wrap({ duration: wrap({ size: 600, unit: 'ms' }) }) })
++  }
++});
++function element(empty = false) {
++  const values = empty ? {} : { opacity: '0.8', transform: 'rotate(2deg)', transition: 'color 1s' };
++  const priorities = empty ? {} : { opacity: 'important', transform: 'important' };
++  const style = new Proxy({
++    getPropertyValue: key => values[key] || '', getPropertyPriority: key => priorities[key] || '',
++    setProperty: (key, value, priority) => { values[key] = value; priorities[key] = priority || ''; },
++    removeProperty: key => { delete values[key]; delete priorities[key]; }
++  }, {
++    get: (target, key) => key in target ? target[key] : values[key] || '',
++    set: (target, key, value) => { values[key] = value; priorities[key] = ''; return true; }
++  });
++  return { style };
++}
++function harness({ width = 390, interactions = [interaction()], elements = [element()], enabled = true,
++  breakpoints = { mobile: { value: 767, direction: 'max' }, tablet: { value: 1024, direction: 'max' } },
++  alter, deferred = false, loading = false, legacy = false, lateRender = false } = {}) {
++  const listeners = {}, timers = new Map(), subscriptions = new Set(), historical = [], controls = [];
++  let timerId = 0, animated = 0, disposed = 0;
++  const frames = [];
++  const subscribe = (kind, el, callback) => {
++    const record = { kind, el, callback };
++    subscriptions.add(record); historical.push(record);
++    return () => { if (subscriptions.delete(record)) { disposed++; if (lateRender && kind === 'scroll') frames.push(() => { el.style.opacity = '1'; }); } };
++  };
++  const context = {
++    console, innerWidth: width,
++    requestAnimationFrame: callback => frames.push(callback),
++    setTimeout: callback => { timers.set(++timerId, callback); return timerId; },
++    clearTimeout: id => timers.delete(id),
++    addEventListener: (type, callback) => (listeners[type] ||= []).push(callback),
++    getComputedStyle: () => ({ transform: 'none' }),
++    ElementorInteractionsConfig: { constants: { defaultDuration: 600, defaultDelay: 0, defaultEasing: 'easeIn', slideDistance: 100 }, breakpoints },
++    document: {
++      readyState: loading ? 'loading' : 'complete',
++      addEventListener: (type, callback) => (listeners[type] ||= []).push(callback),
++      getElementById: () => legacy ? null : ({ textContent: JSON.stringify([{ elementId: 'test', interactions }]) }),
++      querySelectorAll: () => elements
++    },
++    Motion: {
++      animate: (el, frames) => {
++        animated++;
++        el.style.opacity = String(Array.isArray(frames.opacity) ? frames.opacity.at(-1) : frames.opacity || 1);
++        let finish;
++        const promise = deferred ? new Promise(resolve => { finish = resolve; }) : Promise.resolve();
++        const control = Object.assign(promise, { cancel() { control.cancelled = true; }, finish: finish || (() => {}) });
++        controls.push(control); return control;
++      },
++      inView: (el, callback) => subscribe('inView', el, callback),
++      hover: (el, callback) => subscribe('hover', el, callback),
++      press: (el, callback) => subscribe('press', el, callback),
++      scroll: (control, options) => subscribe('scroll', options.target || elements[0], control)
++    }
++  };
++  elements.forEach(el => { el.getAttribute = () => JSON.stringify(interactions); });
++  context.window = context;
++  vm.createContext(context);
++  vm.runInContext(sources['interactions-shared.js'], context);
++  const originalAPI = { ...context.elementorModules.interactions }, originalMotion = { ...context.Motion };
++  if (alter) alter(context);
++  if (enabled) vm.runInContext(patch, context);
++  function flush() { const callbacks = [...timers.values()]; timers.clear(); callbacks.forEach(callback => callback()); }
++  function resize(width) { context.innerWidth = width; (listeners.resize || []).forEach(callback => callback()); flush(); }
++  function start() { vm.runInContext(sources['interactions-pro.js'], context); }
++  function trigger(record) { return record.callback(record.el); }
++  return { context, elements, listeners, originalAPI, originalMotion, subscriptions, historical, controls,
++    flush, resize, start, trigger, frame: () => { const pending = frames.splice(0); pending.forEach(cb => cb()); }, get animated() { return animated; }, get disposed() { return disposed; } };
++}
++function restored(el, empty = false) {
++  assert.equal(el.style.opacity, empty ? '' : '0.8');
++  assert.equal(el.style.transform, empty ? '' : 'rotate(2deg)');
++  assert.equal(el.style.transition, empty ? '' : 'color 1s');
++  assert.equal(el.style.getPropertyPriority('opacity'), empty ? '' : 'important');
++  assert.equal(el.style.getPropertyPriority('transform'), empty ? '' : 'important');
++}
++let cases = 0;
++async function test(name, callback) { await callback(); cases++; console.log('PASS: ' + name); }
++(async () => {
++  await test('OFF preserves native API and reproduces vendor breakpoint bug', () => {
++    const h = harness({ enabled: false }); h.start();
++    assert.equal(h.subscriptions.size, 1);
++    assert.equal(h.context.elementorModules.interactions.skipInteraction, h.originalAPI.skipInteraction);
++  });
++  await test('excluded mobile/tablet, Desktop execution and repeated resize restore styles', async () => {
++    const h = harness(); h.start(); assert.equal(h.subscriptions.size, 0);
++    for (let i = 0; i < 15; i++) {
++      h.resize(1400); assert.equal(h.subscriptions.size, 1);
++      h.trigger([...h.subscriptions][0]); await Promise.resolve();
++      h.resize(i % 2 ? 820 : 390); assert.equal(h.subscriptions.size, 0); restored(h.elements[0]);
++    }
++    assert.equal(h.animated, 15); assert.equal(h.disposed, 15);
++    h.resize(1400); const count = h.historical.length; h.resize(1500); assert.equal(h.historical.length, count);
++  });
++  for (const trigger of ['hover', 'click', 'scrollOn', 'scrollOut', 'load']) {
++    await test(trigger + ': native registration, execution, cleanup and restoration', async () => {
++      const h = harness({ interactions: [interaction(trigger)] }); h.start(); assert.equal(h.subscriptions.size, 0);
++      h.resize(1400);
++      if (['hover', 'click', 'scrollOut'].includes(trigger)) h.trigger([...h.subscriptions][0]);
++      assert.ok(h.animated > 0); await Promise.resolve(); h.resize(390);
++      assert.equal(h.subscriptions.size, 0); restored(h.elements[0]);
++      for (let i = 0; i < 8; i++) { h.resize(1400); assert.ok(h.subscriptions.size <= 1); h.resize(820); }
++      assert.equal(h.subscriptions.size, 0); restored(h.elements[0]);
++    });
++  }
++  await test('scroll timeline deferred render restores excluded styles and preserves reinitialized elements', async () => {
++    const h = harness({ width: 1400, interactions: [interaction('scrollOn')], lateRender: true });
++    h.start(); await Promise.resolve(); h.resize(390); h.frame(); restored(h.elements[0]);
++    h.resize(1400); h.resize(390); h.resize(1400);
++    const activeOpacity = h.elements[0].style.opacity; h.elements[0].style.transform = 'scale(2)';
++    h.frame(); assert.equal(h.elements[0].style.opacity, activeOpacity); assert.equal(h.elements[0].style.transform, 'scale(2)');
++    h.resize(390); h.frame(); restored(h.elements[0]);
++  });
++  await test('custom unordered max/min breakpoints, boundaries, independent exclusions and multiple elements', () => {
++    const h = harness({ width: 500, elements: [element(), element(true)],
++      interactions: [interaction('hover', ['phone', 'wide']), interaction('click', ['desktop', 'pad'])],
++      breakpoints: { wide: { value: 1600, direction: 'min' }, pad: { value: 1100, direction: 'max' }, phone: { value: 600, direction: 'max' }, huge: { value: 2000, direction: 'min' } } });
++    h.start(); assert.equal(h.subscriptions.size, 2); assert.equal([...h.subscriptions][0].kind, 'press');
++    h.resize(600); assert.equal(h.subscriptions.size, 2);
++    h.resize(601); assert.equal(h.subscriptions.size, 2); assert.equal([...h.subscriptions][0].kind, 'hover');
++    h.resize(1100); assert.equal(h.subscriptions.size, 2);
++    h.resize(1101); assert.equal(h.subscriptions.size, 2);
++    h.resize(1600); assert.equal(h.subscriptions.size, 2); assert.equal([...h.subscriptions][0].kind, 'press');
++    h.resize(2000); assert.equal(h.subscriptions.size, 4);
++    h.resize(500); assert.equal(h.subscriptions.size, 2);
++  });
++  await test('missing/invalid/read-only APIs and duplicate workaround install are no-ops', () => {
++    for (const alter of [c => { delete c.elementorModules; },
++      c => { c.ElementorInteractionsConfig.breakpoints.mobile.value = '767'; },
++      ...['skipInteraction', 'waitForAnimateFunction', 'getAnimateFunction', 'getInViewFunction', 'getTransformBaselineFromComputedStyle'].map(key => c => { c.elementorModules.interactions[key] = null; }),
++      c => { Object.defineProperty(c.elementorModules.interactions, 'skipInteraction', { writable: false }); },
++      c => { c.elementorModules.interactions.avraBreakpointFix = true; }]) {
++      const h = harness({ enabled: false, alter });
++      const api = h.context.elementorModules && h.context.elementorModules.interactions;
++      const before = api && { ...api };
++      vm.runInContext(patch, h.context);
++      if (api) Object.keys(before).forEach(key => assert.equal(api[key], before[key]));
++      assert.equal((h.listeners.resize || []).length, 0);
++    }
++    const h = harness(); const api = { ...h.context.elementorModules.interactions };
++    vm.runInContext(patch, h.context); Object.keys(api).forEach(key => assert.equal(h.context.elementorModules.interactions[key], api[key]));
++    assert.equal(h.listeners.resize.length, 1);
++    h.start(); assert.equal(h.listeners.resize.length, 2, 'one Kit and one native resize listener');
++    for (let i = 0; i < 8; i++) { h.resize(1400); h.resize(390); }
++    assert.equal(h.listeners.resize.length, 2);
++  });
++  await test('stale trigger, exit and animation completion callbacks cannot write styles', async () => {
++    const h = harness({ width: 1400, deferred: true }); h.start();
++    const old = [...h.subscriptions][0], exit = h.trigger(old);
++    h.resize(390); restored(h.elements[0]); assert.equal(h.controls[0].cancelled, true);
++    const count = h.animated; h.trigger(old); exit(); assert.equal(h.animated, count);
++    h.controls.forEach(control => control.finish()); await Promise.resolve(); await Promise.resolve();
++    restored(h.elements[0]);
++  });
++  await test('empty initial styles are removed and once-only cleanup survives native disposal', async () => {
++    const h = harness({ width: 1400, elements: [element(true)], interactions: [interaction('scrollIn', ['mobile', 'tablet'], false)] });
++    h.start(); h.trigger([...h.subscriptions][0]); assert.equal(h.subscriptions.size, 0);
++    await Promise.resolve(); h.resize(390); assert.equal(h.disposed, 1); restored(h.elements[0], true);
++  });
++  await test('other Motion consumers keep original API, subscriptions and controls', () => {
++    const h = harness(); const el = element();
++    const api = h.context.elementorModules.interactions;
++    assert.equal(api.getAnimateFunction(), h.originalMotion.animate); assert.equal(api.getInViewFunction(), h.originalMotion.inView);
++    const stop = h.context.Motion.hover(el, () => {}); const control = h.context.Motion.animate(el, {});
++    h.start(); h.resize(1400); h.resize(390);
++    assert.equal(h.subscriptions.size, 1); assert.equal(control.cancelled, undefined);
++    ['hover', 'press', 'scroll'].forEach(key => assert.equal(h.context.Motion[key], h.originalMotion[key])); stop();
++  });
++  await test('DOMContentLoaded and legacy data-interactions use the native initializer', () => {
++    const h = harness({ loading: true, legacy: true }); h.start();
++    assert.equal(h.subscriptions.size, 0); h.listeners.DOMContentLoaded.forEach(cb => cb());
++    h.resize(1400); assert.equal(h.subscriptions.size, 1); h.resize(390); restored(h.elements[0]);
++  });
++  await test('asynchronous Motion arrival uses the native wait and complete API preflight', () => {
++    const h = harness({ alter: c => { c.Motion = undefined; } }); h.start();
++    assert.equal(h.subscriptions.size, 0);
++    h.context.Motion = { ...h.originalMotion }; h.flush(); assert.equal(h.subscriptions.size, 0);
++    h.resize(1400); assert.equal(h.subscriptions.size, 1); h.resize(390); restored(h.elements[0]);
++  });
++  await test('incomplete Motion API uses entirely native behavior without subscription wrappers', () => {
++    for (const key of ['inView', 'hover', 'press', 'scroll']) {
++      const h = harness({ alter: c => { c.Motion[key] = null; } }); h.start();
++      assert.equal(h.subscriptions.size, 0);
++      h.resize(1400); assert.equal(h.subscriptions.size, 0);
++      ['hover', 'press', 'scroll'].filter(name => name !== key).forEach(name => assert.equal(h.context.Motion[name], h.originalMotion[name]));
++    }
++    const h = harness({ alter: c => { Object.defineProperty(c.Motion, 'hover', { writable: false }); } });
++    h.start(); assert.equal(h.subscriptions.size, 1, 'unpatchable Motion keeps the native breakpoint bug');
++    h.resize(1400); assert.equal(h.subscriptions.size, 1);
++  });
++  await test('initializer failure restores styles and the original Motion subscription APIs', () => {
++    const h = harness({ width: 1400, interactions: [interaction('hover'), interaction('scrollIn')],
++      alter: c => { c.Motion.inView = () => { throw new Error('fixture initializer failure'); }; } });
++    assert.throws(() => h.start(), /fixture initializer failure/);
++    assert.equal(h.subscriptions.size, 0); restored(h.elements[0]);
++    ['hover', 'press', 'scroll'].forEach(key => assert.equal(h.context.Motion[key], h.originalMotion[key]));
++    h.resize(390); assert.equal(h.subscriptions.size, 0);
++  });
++  console.log(`PASS: ${cases} runtime cases with checksum-verified shared + Pro bundles.`);
++})().catch(error => { console.error(error); process.exitCode = 1; });
+--- /dev/null
++++ b/tests/elementor-fragment-graph.php
+@@ -0,0 +1,118 @@
++<?php
++/** Arbitrary-ID graph and builder-order safety regressions; no metrica adapter. */
++namespace Elementor { class Plugin { public static $instance; } }
++namespace Elementor\Modules\Interactions\Cache { class Interactions_Postmeta {
++    public function load_content($id) { return $GLOBALS['interaction_rows'][$id] ?? array(); }
++} }
++namespace {
++define('ABSPATH', __DIR__ . '/');
++define('ELEMENTOR_VERSION', '4.2.3');
++define('ELEMENTOR_PRO_VERSION', '4.2.2');
++function add_action() {}
++function add_filter() {}
++function did_action() { return 0; }
++function apply_filters($hook, $value) { return $hook === 'iu_elementor_fragment_prototype_supported' ? ($GLOBALS['approved_fake_prototypes'] ?? false) : $value; }
++function do_action($hook, ...$args) { if ($hook === 'iu_elementor_fragment_graph_rejected') $GLOBALS['rejection'] = $args[0]; }
++function wp_json_encode($value) { return json_encode($value); }
++function absint($value) { return abs((int) $value); }
++function get_post_meta($id, $key, $single) { return json_encode($GLOBALS['templates'][$id] ?? null); }
++function get_post_status($id) { return $GLOBALS['statuses'][$id] ?? 'publish'; }
++function get_post_type_object($type) { return in_array($type, array('post', 'partner', 'product'), true) ? (object) array('public' => true) : null; }
++function get_option($key, $default = false) { return $default; }
++function get_locale() { return 'el'; }
++function get_queried_object_id() { return 7; }
++function is_front_page() { return true; }
++function get_the_ID() { return 7; }
++function is_ssl() { return true; }
++function iu_request_is_phone() { return strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false; }
++function wp_is_mobile() { return preg_match('/iPhone|iPad/', $_SERVER['HTTP_USER_AGENT']) === 1; }
++$include = getenv('IU_FRAGMENT_INCLUDE') ?: dirname(__DIR__) . '/includes/elementor-fragment-cache.php';
++require $include;
++\Elementor\Plugin::$instance = (object) array('widgets_manager' => new class {
++    public function get_widget_types($type) { return new class {
++        public function get_style_depends() { return array('widget-style'); }
++        public function get_script_depends() { return array('widget-script'); }
++    }; }
++});
++$image = array('id' => 'image-A', 'elType' => 'widget', 'widgetType' => 'image', 'settings' => array(
++    '__dynamic__' => array('image' => '[elementor-tag id="tag-A" name="post-featured-image" settings="%7B%7D"]')));
++$GLOBALS['templates'][73] = array($image);
++$loop = array('id' => 'loop-A', 'elType' => 'widget', 'widgetType' => 'loop-grid',
++    'settings' => array('template_id' => 73, 'post_query_post_type' => 'partner'));
++$root = array('id' => 'root-A', 'elType' => 'widget', 'widgetType' => 'mega-menu',
++    'settings' => array('iu_fragment_cache' => 'yes'), 'elements' => array($loop));
++if (IU_Elementor_Fragment_Graph::inspect($root)) throw new \RuntimeException('Unknown implementation admitted');
++$GLOBALS['approved_fake_prototypes'] = true; // Standalone schema fixtures only, never staging eligibility.
++$policy = IU_Elementor_Fragment_Graph::inspect($root);
++if (!$policy || $policy['dependencies']['scripts'] !== array('widget-script')) throw new \RuntimeException('Generic arbitrary graph rejected');
++$template = array('id' => 'dropdown-A', 'elType' => 'widget', 'widgetType' => 'template',
++    'settings' => array('template_id' => 73, 'iu_fragment_cache' => 'yes'));
++// A template's ordinary contents must not contain unresolved dynamic tags.
++$GLOBALS['templates'][74] = array($loop);
++$template['settings']['template_id'] = 74;
++if (!IU_Elementor_Fragment_Graph::inspect($template)) throw new \RuntimeException('Generic template root rejected');
++$GLOBALS['templates'][73][0]['settings']['image_size'] = 'large';
++$changed = IU_Elementor_Fragment_Graph::inspect($root);
++if ($policy['signature'] === $changed['signature']) throw new \RuntimeException('Referenced source change did not change signature');
++function reject_graph($node, $label) {
++    if (IU_Elementor_Fragment_Graph::inspect($node)) throw new \RuntimeException('Unsafe graph admitted: ' . $label);
++}
++$unsafe = $root; $unsafe['elements'][0]['interactions'] = array('items' => array('interaction'));
++reject_graph($unsafe, 'source interactions require native collection');
++$GLOBALS['interaction_rows'][73] = array('old-element' => array('interaction'));
++reject_graph($root, 'cached interactions require native collection');
++unset($GLOBALS['interaction_rows'][73]);
++foreach (array('post_query_query_id' => 'custom-query', 'post_query_orderby' => 'rand',
++    'pagination_type' => 'numbers', 'post_query_post_type' => 'product',
++    'post_query_include' => array('current_post'), 'post_query_offset' => 2) as $field => $value) {
++    $unsafe = $root; $unsafe['elements'][0]['settings'][$field] = $value;
++    reject_graph($unsafe, $field);
++}
++$unsafe = $root; $unsafe['elements'][] = array('widgetType' => 'shortcode');
++reject_graph($unsafe, 'shortcode');
++$unsafe = $root; $unsafe['elements'][] = array('widgetType' => 'posts', 'settings' => array('classic_show_excerpt' => 'yes'));
++reject_graph($unsafe, 'visible excerpt can invoke arbitrary content filters');
++$GLOBALS['templates'][73][0]['settings']['__dynamic__']['image'] = '[elementor-tag id="tag" name="user-info" settings="%7B%7D"]';
++reject_graph($root, 'personalized dynamic tag');
++$GLOBALS['templates'][73] = array($image);
++$GLOBALS['statuses'][73] = 'draft'; reject_graph($root, 'draft template'); unset($GLOBALS['statuses'][73]);
++$cycle = $loop; $cycle['widgetType'] = 'template';
++$GLOBALS['templates'][73] = array($cycle); reject_graph($root, 'template cycle');
++$GLOBALS['templates'][73] = array($image);
++$self = array('IU_Elementor_Fragment_Cache', 'filter');
++$unknown = function ($data) { return $data; };
++$GLOBALS['wp_filter']['elementor/frontend/builder_content_data'] = (object) array('callbacks' => array(
++    10 => array(array('function' => $unknown)), PHP_INT_MAX => array(array('function' => $self))));
++$tail = new \ReflectionMethod('IU_Elementor_Fragment_Cache', 'builder_tail_safe');
++if (!$tail->invoke(null)) throw new \RuntimeException('Earlier callback rejected by root substitution');
++// Without reference documents the prior callback runs on both miss and hit.
++$plain = $root; unset($plain['elements']);
++if (!IU_Elementor_Fragment_Graph::inspect($plain)) throw new \RuntimeException('Root-only earlier callback was treated as skipped');
++reject_graph($root, 'unknown skipped referenced-document callback');
++$GLOBALS['wp_filter']['elementor/frontend/builder_content_data']->callbacks[PHP_INT_MAX][] = array('function' => $unknown);
++if ($tail->invoke(null)) throw new \RuntimeException('Later proxy-shape callback admitted');
++unset($GLOBALS['wp_filter']);
++$_SERVER = array('REQUEST_URI' => '/', 'HTTP_HOST' => 'example.test', 'HTTP_USER_AGENT' => 'Desktop Chrome');
++$key = new \ReflectionMethod('IU_Elementor_Fragment_Cache', 'key');
++$first = $key->invoke(null, $plain, 123, 'el', array());
++$_SERVER['REQUEST_URI'] = '/another-page/';
++if ($first !== $key->invoke(null, $plain, 123, 'el', array())) throw new \RuntimeException('Page path fragmented shared key');
++$policies = new \ReflectionProperty('IU_Elementor_Fragment_Cache', 'policies');
++$policies->setValue(null, array('123:' . $plain['id'] => array('independent_query' => true)));
++if ($key->invoke(null, $plain, 123, 'el', array(15)) !== $key->invoke(null, $plain, 123, 'el', array(19))) {
++    throw new \RuntimeException('Irrelevant prior displayed IDs fragmented shared key');
++}
++$policies->setValue(null, array());
++$_SERVER['HTTP_USER_AGENT'] = 'Desktop Firefox';
++if ($first !== $key->invoke(null, $plain, 123, 'el', array())) throw new \RuntimeException('Desktop UA fragmented key');
++$plain['settings']['title'] = 'Filtered translation';
++if ($first === $key->invoke(null, $plain, 123, 'el', array())) throw new \RuntimeException('Filtered node missing from key');
++$plain['settings'] = array('iu_fragment_cache' => 'yes');
++$device_keys = array($first);
++foreach (array('iPhone', 'iPad') as $ua) {
++    $_SERVER['HTTP_USER_AGENT'] = $ua;
++    $device_keys[] = $key->invoke(null, $plain, 123, 'el', array());
++}
++if (count(array_unique($device_keys)) !== 3) throw new \RuntimeException('Device key collision');
++echo "generic-graph-and-builder-order: OK\n";
++}
+--- /dev/null
++++ b/tests/elementor-kit-resume-upgrade.php
+@@ -0,0 +1,9 @@
++<?php
++if(get_option('home')!=='https://wordpress-218158-6702910.cloudwaysapps.com'){echo "WRONG_TARGET\n";return;}
++wp_set_current_user(1); require_once ABSPATH.'wp-admin/includes/class-wp-upgrader.php';
++wp_update_plugins();$plugin='elementor-pro/elementor-pro.php';$t=get_site_transient('update_plugins');$item=$t->response[$plugin]??null;
++if(!$item||$item->new_version!=='4.3.1'||IU_Elementor_Update_Guard::installed_pair()!==['core'=>'4.3.3','pro'=>'4.2.2']){echo "TARGET_CHANGED\n";return;}
++$f=IU_Elementor_Update_Guard::fingerprint($plugin,$item);$ok=IU_Elementor_Update_Guard::authorize_override($plugin,$f,wp_create_nonce('iu_elementor_override_'.$f),true);
++if(!$ok){echo "OVERRIDE_DENIED\n";return;}
++$skin=new WP_Ajax_Upgrader_Skin();$u=new Plugin_Upgrader($skin);$r=$u->upgrade($plugin);$e=$skin->get_errors();
++echo wp_json_encode(['authorized_exact_override'=>$ok,'result'=>is_wp_error($r)?$r->get_error_code():($e->has_errors()?$e->get_error_code():$r),'pair'=>IU_Elementor_Update_Guard::installed_pair()])."\n";
+--- /dev/null
++++ b/tests/elementor-staging-candidate.php
+@@ -0,0 +1,9 @@
++<?php
++/** Staging-only experimental API adapter. No registry approval or update bypass. */
++if(!defined('ABSPATH')) exit;
++function iu_staging_candidate_feature_supported($feature,$pair=null,$requires_pro=false){
++ if(realpath(ABSPATH)!=='/home/218158.cloudwaysapps.com/manqbfzxjy/public_html'||get_option('home')!=='https://wordpress-218158-6702910.cloudwaysapps.com') return false;
++ $pair=$pair===null?iu_elementor_runtime_pair():$pair;
++ return in_array($feature,['atomic','fragment'],true)&&($pair['core']??null)==='4.3.3'&&($pair['pro']??null)==='4.3.1';
++}
++add_action('admin_notices',function(){if(current_user_can('manage_options'))echo '<div class="notice notice-warning"><p>STAGING TEST ONLY: experimental Atomic/Fragment API adapter for core 4.3.3 / Pro 4.3.1. This pair is not yet approved in the Kit registry.</p></div>';});
+--- /dev/null
++++ b/tests/elementor-kit-atomic-fixture.php
+@@ -0,0 +1,40 @@
++<?php
++/** Temporary native Elementor fixture, staging only. Run through wp eval-file. */
++if (realpath(ABSPATH)!=='/home/218158.cloudwaysapps.com/manqbfzxjy/public_html' || get_option('home')!=='https://wordpress-218158-6702910.cloudwaysapps.com') throw new Exception('Wrong staging');
++wp_set_current_user(1);
++use Elementor\Modules\AtomicWidgets\Elements\Atomic_Heading\Atomic_Heading;
++use Elementor\Modules\AtomicWidgets\PropTypes\Escaped_Html_Prop_Type as Html;
++use Elementor\Modules\AtomicWidgets\PropTypes\Primitives\String_Prop_Type as Str;
++use Elementor\Modules\AtomicWidgets\PropTypes\Primitives\Boolean_Prop_Type as BoolProp;
++use Elementor\Modules\Interactions\Props\Interaction_Item_Prop_Type as Item;
++use Elementor\Modules\Interactions\Props\Interaction_Breakpoints_Prop_Type as Breakpoints;
++use Elementor\Modules\Interactions\Props\Excluded_Breakpoints_Prop_Type as Excluded;
++use Elementor\Modules\Interactions\Props\Animation_Preset_Prop_Type as Animation;
++use Elementor\Modules\Interactions\Props\Animation_Config_Prop_Type as Config;
++use Elementor\Modules\Interactions\Props\Timing_Config_Prop_Type as Timing;
++use Elementor\Modules\Interactions\Props\Time_Size_Prop_Type as TimeSize;
++$nodes=[];
++foreach(['load','hover','click','scrollIn','scrollOut','scrollOn'] as $i=>$trigger){
++ $node=Atomic_Heading::generate()->settings(['title'=>Html::generate('IU QA '.$trigger),'tag'=>Str::generate('h2')])->build();
++ $node['id']='iuqa'.($i+1);
++ $node['interactions']=['version'=>1,'items'=>[Item::generate([
++  'interaction_id'=>Str::generate('iuqa-'.$trigger),'trigger'=>Str::generate($trigger),
++  'breakpoints'=>Breakpoints::generate(['excluded'=>Excluded::generate(array_map([Str::class,'generate'],['mobile','mobile_extra','tablet','tablet_extra','laptop']))]),
++  'animation'=>Animation::generate(['effect'=>Str::generate('fade'),'type'=>Str::generate('in'),
++    'config'=>Config::generate(['replay'=>BoolProp::generate(true),'easing'=>Str::generate('easeIn')]),
++    'timing_config'=>Timing::generate(['duration'=>TimeSize::generate(['size'=>600,'unit'=>'ms']),'delay'=>TimeSize::generate(['size'=>0,'unit'=>'ms'])])])
++ ])]];
++ $nodes[]=$node;
++}
++$data=[['id'=>'iuqaouter','elType'=>'container','settings'=>['content_width'=>'full'],'elements'=>$nodes]];
++$existing=get_page_by_path('iu-kit-native-atomic-acceptance-20261001');
++$id=$existing?$existing->ID:wp_insert_post(['post_type'=>'page','post_status'=>'publish','post_title'=>'IU staging native Atomic acceptance','post_name'=>'iu-kit-native-atomic-acceptance-20261001'],true);
++if(is_wp_error($id))throw new Exception($id->get_error_code());
++update_post_meta($id,'_elementor_edit_mode','builder');
++update_post_meta($id,'_elementor_template_type','wp-page');
++update_post_meta($id,'_wp_page_template','elementor_canvas');
++update_post_meta($id,'rank_math_robots',['noindex','nofollow']);
++$doc=Elementor\Plugin::$instance->documents->get($id);
++$ok=$doc->save(['elements'=>$data,'settings'=>['custom_css'=>'selector [data-id^="iuqa"] { opacity: .8; } selector [data-id="iuqaouter"] { gap: 180px; padding: 80px 30px 1200px; }']]);
++echo wp_json_encode(['id'=>$id,'saved'=>$ok,'url'=>get_permalink($id),'nodes'=>count($nodes)]);
++
+--- /dev/null
++++ b/tests/elementor-kit-candidate-check.py
+@@ -0,0 +1,42 @@
++"""Cross-page dropdown reuse; origin counters, normal header/assets and effects."""
++from pathlib import Path
++from urllib.request import Request,urlopen
++from uuid import uuid4
++from hashlib import sha256
++import re,json,runpy,sys
++h=runpy.run_path(str(Path(__file__).with_name('fragment-cache-staging-check.py')))
++a=runpy.run_path(str(Path(__file__).with_name('fragment-cache-assets-check.py')))
++BASE='https://wordpress-218158-6702910.cloudwaysapps.com'
++english='--en' in sys.argv
++A='/en/' if english else '/'
++B='/en/the-company/' if english else '/techniki-ypostirixi/'
++generation=uuid4().hex
++results={}
++for path,label in [(A,'a'),(B,'b'),(B,'baseline')]:
++    url=BASE+path+'?iu_kit_fragment_test=cross-page-20261001&iu_kit_request='+uuid4().hex+'&iu_kit_generation='+generation+('&iu_kit_mode=baseline' if label=='baseline' else '')
++    with urlopen(Request(url,headers={'User-Agent':h['UA']}),timeout=180) as r:
++        html=r.read().decode(); assert r.status==200 and r.headers.get('X-Cache')=='MISS'
++    p=h['TargetParser']();p.feed(html)
++    assert p.start and p.end
++    fragment=html[h['offset'](html,p.start):html.index('>',h['offset'](html,p.end))+1]
++    assets=a['AssetTags']();assets.feed(html)
++    data=json.loads(re.search(r'IU_CROSS_PAGE (.+?) -->',html).group(1))
++    results[label]=(fragment,assets.external,data)
++    print(label, 'target',data['target'],'loops',data['loop'],'templates',data['template_renders'],'events',data['events'], 'assets',len(assets.external),flush=True)
++assert results['a'][2]['loop_any']>0
++if not english: assert results['a'][2]['loop']==150
++assert results['a'][2]['keys']==results['b'][2]['keys']
++assert results['b'][2]['target']==1 and results['b'][2]['loop']==0 and results['b'][2]['template_renders']==[]
++assert [e['result'] for e in results['b'][2]['events']]==['hit','hit']
++assert results['b'][0]==results['baseline'][0], 'Header HTML differs from ordinary rendering on B'
++assert results['b'][1]==results['baseline'][1], 'Required assets differ'
++assert results['b'][2]['excerpt']==results['baseline'][2]['excerpt'], 'Excerpt side effect differs'
++assert results['b'][2]['displayed']==results['baseline'][2]['displayed'], 'Displayed ID side effect differs'
++if not english:
++    assert results['a'][0]!=results['b'][0], 'Menu page context did not change'
++    assert 'current-menu-item' in results['b'][0] and 'aria-current="page"' in results['b'][0]
++report={'generation':generation,'page_a':A,'page_b':B,'loop_a':results['a'][2]['loop_any'],'loop_b':0,'menu_renders_b':1,
++        'dropdown_renders_b':0,'assets_b':len(results['b'][1]),'header_sha_b':sha256(results['b'][0].encode()).hexdigest(),
++        'keys':results['b'][2]['keys']}
++Path('docs/kit-candidate-cross-page-en.json' if english else 'docs/kit-candidate-cross-page-el.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
++print('PASS: first B origin hits A dropdowns; exact normal HTML/assets and query/excerpt effects' + ('; Greek active menu verified' if not english else '; translated loops verified'))
+--- /dev/null
++++ b/tests/elementor-kit-candidate-purge.py
+@@ -0,0 +1,22 @@
++"""Purge one dropdown after retaining a stale entry; another dropdown must stay a hit."""
++from pathlib import Path
++from urllib.request import Request,urlopen
++from uuid import uuid4
++from hashlib import sha256
++import subprocess,re,json,runpy
++h=runpy.run_path(str(Path(__file__).with_name('fragment-cache-staging-check.py')))
++r=json.loads(Path('docs/kit-candidate-cross-page-el.json').read_text(encoding='utf-8'))
++key=r['keys']['417d1ae']['key']; assert re.fullmatch('iu_frag_[a-f0-9]{64}',key)
++for i in range(2):
++    url='https://wordpress-218158-6702910.cloudwaysapps.com'+r['page_b']+'?iu_kit_fragment_test=cross-page-20261001&iu_kit_request='+uuid4().hex+'&iu_kit_generation='+r['generation']
++    with urlopen(Request(url,headers={'User-Agent':h['UA']}),timeout=180) as response:
++        html=response.read().decode();assert response.status==200 and response.headers.get('X-Cache')=='MISS'
++    d=json.loads(re.search(r'IU_CROSS_PAGE (.+?) -->',html).group(1))
++    print(i,'loops',d['loop'],'events',d['events'],flush=True)
++    assert d['keys']['417d1ae']['key']!=key and d['keys']['c60daee']==r['keys']['c60daee']
++    assert [e['result'] for e in d['events']]==(['stored','hit'] if i==0 else ['hit','hit'])
++    assert d['loop']==(72 if i==0 else 0)
++    p=h['TargetParser']();p.feed(html)
++    fragment=html[h['offset'](html,p.start):html.index('>',h['offset'](html,p.end))+1]
++    assert sha256(fragment.encode()).hexdigest()==r['header_sha_b']
++print('PASS: per-dropdown purge defeats stale retention; other dropdown remains a hit')
+--- /dev/null
++++ b/tests/elementor-kit-candidate-device.py
+@@ -0,0 +1,26 @@
++"""Actual UA branches, separate from browser viewport-only checks."""
++from pathlib import Path
++from urllib.request import Request,urlopen
++from uuid import uuid4
++import json,re
++base='https://wordpress-218158-6702910.cloudwaysapps.com'
++r=json.loads(Path('docs/kit-candidate-cross-page-el.json').read_text())
++uas={
++ 'firefox':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0',
++ 'tablet':'Mozilla/5.0 (iPad; CPU OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1',
++ 'phone':'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1'}
++results={}
++for kind,ua in uas.items():
++ url=base+r['page_b']+'?iu_kit_fragment_test=cross-page-20261001&iu_kit_request='+uuid4().hex+'&iu_kit_generation='+r['generation']
++ with urlopen(Request(url,headers={'User-Agent':ua}),timeout=180) as response:
++  html=response.read().decode();assert response.status==200 and response.headers.get('X-Cache')=='MISS'
++ d=json.loads(re.search(r'IU_CROSS_PAGE (.+?) -->',html).group(1))
++ assert d['loop']==0
++ if kind=='firefox': assert [e['result'] for e in d['events']]==['hit','hit']
++ else:
++  assert d['target']==0 and not d['events'] and not d['template_renders']
++  assert 'data-id="26fa46c6"' not in html
++ results[kind]={'target':d['target'],'loops':d['loop'],'events':d['events']}
++ print(kind,results[kind],flush=True)
++Path('docs/kit-candidate-device.json').write_text(json.dumps(results,indent=2)+'\n')
++print('PASS: normalized desktop hit, native tablet/phone heavy header exclusion')
+--- /dev/null
++++ b/tests/elementor-kit-candidate-cleanup.php
+@@ -0,0 +1,31 @@
++<?php
++// Restore temporary acceptance setup only, retaining accepted plugin versions/settings.
++if (get_option('home') !== 'https://wordpress-218158-6702910.cloudwaysapps.com'
++    || realpath(ABSPATH) !== '/home/218158.cloudwaysapps.com/manqbfzxjy/public_html') {
++    throw new RuntimeException('Wrong staging target');
++}
++$fixture = get_post(40121);
++if (!$fixture || $fixture->post_name !== 'iu-kit-native-atomic-acceptance-20261001') {
++    throw new RuntimeException('Unexpected acceptance fixture');
++}
++if ($fixture->post_status !== 'trash' && !wp_trash_post($fixture->ID)) {
++    throw new RuntimeException('Fixture trash failed');
++}
++delete_option('elementor_experiment-e_atomic_elements'); // Originally absent.
++deactivate_plugins('iu-kit-acceptance-harness/acceptance-harness.php');
++if (function_exists('rocket_clean_domain')) {
++    rocket_clean_domain();
++}
++echo wp_json_encode([
++    'pair' => IU_Elementor_Update_Guard::installed_pair(),
++    'kit' => IU_PLUGIN_VERSION,
++    'features' => iu_elementor_active_features(),
++    'atomic_supported' => iu_elementor_feature_supported('atomic'),
++    'fragment_supported' => iu_elementor_feature_supported('fragment'),
++    'native_cache' => get_option('elementor_element_cache_ttl'),
++    'fixture_status' => get_post_status(40121),
++    'native_atomic_option' => get_option('elementor_experiment-e_atomic_elements', 'ABSENT'),
++    'harness_active' => is_plugin_active('iu-kit-acceptance-harness/acceptance-harness.php'),
++    'adapter_present' => file_exists(WPMU_PLUGIN_DIR . '/iu-kit-candidate-acceptance.php'),
++    'rocket_purge_available' => function_exists('rocket_clean_domain'),
++], JSON_PRETTY_PRINT) . "\n";
+--- /dev/null
++++ b/tests/elementor-kit-candidate-public.py
+@@ -0,0 +1,32 @@
++"""Final anonymous smoke after temporary observation/Atomic fixture cleanup."""
++from pathlib import Path
++from urllib.request import Request, urlopen
++from uuid import uuid4
++import json
++
++base = 'https://wordpress-218158-6702910.cloudwaysapps.com'
++uas = {
++    'desktop': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
++    'phone': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1',
++}
++results = []
++for route in ['/techniki-ypostirixi/', '/en/the-company/']:
++    for device, ua in uas.items():
++        url = base + route + '?iu_final_smoke=' + uuid4().hex
++        with urlopen(Request(url, headers={'User-Agent': ua}), timeout=180) as response:
++            html = response.read().decode()
++            status, cache = response.status, response.headers.get('X-Cache')
++        assert status == 200 and 'id="wpadminbar"' not in html
++        assert 'IU_CROSS_PAGE' not in html
++        assert 'There has been a critical error' not in html
++        desktop_header = 'data-id="26fa46c6"' in html
++        # Greek has saved iu_hide_on_phone=yes; English has only native CSS hiding.
++        # Preserve the independently saved language settings.
++        assert desktop_header == (device == 'desktop' or route.startswith('/en/'))
++        result = {'route': route, 'device': device, 'status': status,
++                  'cache': cache, 'desktop_header': desktop_header,
++                  'test_harness_comment': False}
++        results.append(result)
++        print(result, flush=True)
++Path('docs/kit-candidate-final-public.json').write_text(json.dumps(results, indent=2) + '\n', encoding='utf-8')
++print('PASS: anonymous final Greek/English desktop/phone, observation harness absent')
+--- /dev/null
++++ b/docs/kit-candidate-vendor-manifest.json
+@@ -0,0 +1,14 @@
++{
++  "elementorVersion": "4.3.3",
++  "proVersion": "4.3.1",
++  "files": [
++    {
++      "name": "interactions-shared.js",
++      "sha256": "0d744bf1e2af311da888378dceaa9422c661418691df2e2ddca765a7668e5218"
++    },
++    {
++      "name": "interactions-pro.js",
++      "sha256": "fb9dad0942eb5aefb6baefcec70dbf188a589820c644f3d12c486de50fb41032"
++    }
++  ]
++}
+--- /dev/null
++++ b/docs/kit-candidate-cross-page-el.json
+@@ -0,0 +1,21 @@
++{
++  "generation": "379962bf099047398b763ab3191f0b36",
++  "page_a": "/",
++  "page_b": "/techniki-ypostirixi/",
++  "loop_a": 150,
++  "loop_b": 0,
++  "menu_renders_b": 1,
++  "dropdown_renders_b": 0,
++  "assets_b": 93,
++  "header_sha_b": "5a6f3ee9a93a3ad8d0aaae460e011234ef8a55fb35b98a77222e8d7488065155",
++  "keys": {
++    "417d1ae": {
++      "doc": 30,
++      "key": "iu_frag_b92ee25cce157524e7c74fba28ac02a2ce851527aa9cb56d9ec7d757550f4540"
++    },
++    "c60daee": {
++      "doc": 30,
++      "key": "iu_frag_f7f9a5fcc38bc4885c66c219bc5f8cb2da513299b68b61d4ba4e0498684d15c9"
++    }
++  }
++}
+--- /dev/null
++++ b/docs/kit-candidate-cross-page-en.json
+@@ -0,0 +1,21 @@
++{
++  "generation": "63426693592740d6af2856ece484213d",
++  "page_a": "/en/",
++  "page_b": "/en/the-company/",
++  "loop_a": 156,
++  "loop_b": 0,
++  "menu_renders_b": 1,
++  "dropdown_renders_b": 0,
++  "assets_b": 89,
++  "header_sha_b": "318f7e264a2b33357ce48697a14cd097e8b98c99b1e666008d337c8d65ad7f28",
++  "keys": {
++    "417d1ae": {
++      "doc": 33000,
++      "key": "iu_frag_81610e7f6e24d788044f314dcdae07012b43a575a017e6304041a7462dacc976"
++    },
++    "c60daee": {
++      "doc": 33000,
++      "key": "iu_frag_cac4504c5546b86505d0552c8abdb9b08d3144ee9704f98b377dc2c91966a02b"
++    }
++  }
++}
+--- /dev/null
++++ b/docs/kit-candidate-device.json
+@@ -0,0 +1,26 @@
++{
++  "firefox": {
++    "target": 1,
++    "loops": 0,
++    "events": [
++      {
++        "id": "417d1ae",
++        "result": "hit"
++      },
++      {
++        "id": "c60daee",
++        "result": "hit"
++      }
++    ]
++  },
++  "tablet": {
++    "target": 0,
++    "loops": 0,
++    "events": []
++  },
++  "phone": {
++    "target": 0,
++    "loops": 0,
++    "events": []
++  }
++}
+--- /dev/null
++++ b/docs/kit-candidate-final-zip.json
+@@ -0,0 +1,10 @@
++{
++  "path": "H:\\Το Drive μου\\Development\\ISTODATA PLUGINS\\istodata-utilities.zip",
++  "entries": 74,
++  "sha256": "f219e0744b3794c0cd6a363ce2f22250603405d14b7575f380c512a7a31ed6d0",
++  "root": "istodata-utilities/",
++  "main_verified": true,
++  "forward_slashes": true,
++  "excluded_development_files": true,
++  "crc_verified": true
++}
+--- /dev/null
++++ b/docs/kit-candidate-final-public.json
+@@ -0,0 +1,34 @@
++[
++  {
++    "route": "/techniki-ypostirixi/",
++    "device": "desktop",
++    "status": 200,
++    "cache": "MISS",
++    "desktop_header": true,
++    "test_harness_comment": false
++  },
++  {
++    "route": "/techniki-ypostirixi/",
++    "device": "phone",
++    "status": 200,
++    "cache": "MISS",
++    "desktop_header": false,
++    "test_harness_comment": false
++  },
++  {
++    "route": "/en/the-company/",
++    "device": "desktop",
++    "status": 200,
++    "cache": "MISS",
++    "desktop_header": true,
++    "test_harness_comment": false
++  },
++  {
++    "route": "/en/the-company/",
++    "device": "phone",
++    "status": 200,
++    "cache": "MISS",
++    "desktop_header": true,
++    "test_harness_comment": false
++  }
++]
+--- /dev/null
++++ b/docs/kit-candidate-final-state.json
+@@ -0,0 +1,21 @@
++{
++  "pair": {
++    "core": "4.3.3",
++    "pro": "4.3.1"
++  },
++  "kit": "2.21.2",
++  "features": {
++    "atomic": true,
++    "fragment": true
++  },
++  "native_cache": "disable",
++  "fixture_status": "trash",
++  "native_atomic_option": "ABSENT",
++  "native_atomic_active": false,
++  "harness_active": false,
++  "adapter_present": false,
++  "production_changed": false,
++  "version_bumped": false,
++  "release_created": false,
++  "zip_sha256": "f219e0744b3794c0cd6a363ce2f22250603405d14b7575f380c512a7a31ed6d0"
++}

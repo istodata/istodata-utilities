@@ -1,0 +1,311 @@
+[
+  {
+    "language": "el",
+    "mobile": false,
+    "miss_events": [
+      {
+        "id": "d7ebc85",
+        "result": "stored"
+      },
+      {
+        "id": "417d1ae",
+        "result": "stored"
+      },
+      {
+        "id": "a1ff108",
+        "result": "stored"
+      },
+      {
+        "id": "c60daee",
+        "result": "stored"
+      },
+      {
+        "id": "e62c115",
+        "result": "stored"
+      },
+      {
+        "id": "c28398e",
+        "result": "stored"
+      },
+      {
+        "id": "iu-core-proof",
+        "result": "stored"
+      },
+      {
+        "id": "iu-custom-proof",
+        "result": "stored"
+      }
+    ],
+    "hit_events": [
+      {
+        "id": "d7ebc85",
+        "result": "hit"
+      },
+      {
+        "id": "417d1ae",
+        "result": "hit"
+      },
+      {
+        "id": "a1ff108",
+        "result": "hit"
+      },
+      {
+        "id": "c60daee",
+        "result": "hit"
+      },
+      {
+        "id": "e62c115",
+        "result": "hit"
+      },
+      {
+        "id": "c28398e",
+        "result": "hit"
+      },
+      {
+        "id": "iu-core-proof",
+        "result": "hit"
+      },
+      {
+        "id": "iu-custom-proof",
+        "result": "hit"
+      }
+    ],
+    "hit_original_nav_renders": [
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce"
+    ],
+    "custom_css_js_frontend_settings_verified": true,
+    "interactions": [
+      {
+        "id": "d7ebc85",
+        "outer_dropdown_opened": true,
+        "navigation": 200
+      },
+      {
+        "id": "a1ff108",
+        "outer_dropdown_opened": true,
+        "navigation": 200
+      },
+      {
+        "id": "e62c115",
+        "outer_dropdown_opened": true,
+        "navigation": 200
+      },
+      {
+        "id": "c28398e",
+        "outer_dropdown_opened": true,
+        "navigation": 200
+      }
+    ],
+    "errors": [],
+    "failedAssets": []
+  },
+  {
+    "language": "el",
+    "mobile": true,
+    "miss_events": [
+      {
+        "id": "iu-mobile-menu",
+        "result": "stored"
+      },
+      {
+        "id": "iu-core-proof",
+        "result": "stored"
+      },
+      {
+        "id": "iu-custom-proof",
+        "result": "stored"
+      }
+    ],
+    "hit_events": [
+      {
+        "id": "iu-mobile-menu",
+        "result": "hit"
+      },
+      {
+        "id": "iu-core-proof",
+        "result": "hit"
+      },
+      {
+        "id": "iu-custom-proof",
+        "result": "hit"
+      }
+    ],
+    "hit_original_nav_renders": [
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce"
+    ],
+    "custom_css_js_frontend_settings_verified": true,
+    "interactions": [
+      {
+        "id": "iu-mobile-menu",
+        "toggle": true,
+        "navigation": 200
+      },
+      {
+        "native_phone_popup_open": true
+      }
+    ],
+    "errors": [],
+    "failedAssets": []
+  },
+  {
+    "language": "en",
+    "mobile": false,
+    "miss_events": [
+      {
+        "id": "d7ebc85",
+        "result": "stored"
+      },
+      {
+        "id": "417d1ae",
+        "result": "stored"
+      },
+      {
+        "id": "a1ff108",
+        "result": "stored"
+      },
+      {
+        "id": "c60daee",
+        "result": "stored"
+      },
+      {
+        "id": "e62c115",
+        "result": "stored"
+      },
+      {
+        "id": "c28398e",
+        "result": "stored"
+      },
+      {
+        "id": "iu-core-proof",
+        "result": "stored"
+      },
+      {
+        "id": "iu-custom-proof",
+        "result": "stored"
+      }
+    ],
+    "hit_events": [
+      {
+        "id": "d7ebc85",
+        "result": "hit"
+      },
+      {
+        "id": "417d1ae",
+        "result": "hit"
+      },
+      {
+        "id": "a1ff108",
+        "result": "hit"
+      },
+      {
+        "id": "c60daee",
+        "result": "hit"
+      },
+      {
+        "id": "e62c115",
+        "result": "hit"
+      },
+      {
+        "id": "c28398e",
+        "result": "hit"
+      },
+      {
+        "id": "iu-core-proof",
+        "result": "hit"
+      },
+      {
+        "id": "iu-custom-proof",
+        "result": "hit"
+      }
+    ],
+    "hit_original_nav_renders": [
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce",
+      "b5446ce"
+    ],
+    "custom_css_js_frontend_settings_verified": true,
+    "interactions": [
+      {
+        "id": "d7ebc85",
+        "native_english_menu_empty": true
+      },
+      {
+        "id": "a1ff108",
+        "outer_dropdown_opened": true,
+        "navigation": 200
+      },
+      {
+        "id": "e62c115",
+        "outer_dropdown_opened": true,
+        "navigation": 200
+      },
+      {
+        "id": "c28398e",
+        "outer_dropdown_opened": true,
+        "navigation": 200
+      }
+    ],
+    "errors": [],
+    "failedAssets": []
+  },
+  {
+    "language": "en",
+    "mobile": true,
+    "miss_events": [
+      {
+        "id": "iu-mobile-menu",
+        "result": "stored"
+      },
+      {
+        "id": "iu-core-proof",
+        "result": "stored"
+      },
+      {
+        "id": "iu-custom-proof",
+        "result": "stored"
+      }
+    ],
+    "hit_events": [
+      {
+        "id": "iu-mobile-menu",
+        "result": "hit"
+      },
+      {
+        "id": "iu-core-proof",
+        "result": "hit"
+      },
+      {
+        "id": "iu-custom-proof",
+        "result": "hit"
+      }
+    ],
+    "hit_original_nav_renders": [
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce",
+      "b5446ce"
+    ],
+    "custom_css_js_frontend_settings_verified": true,
+    "interactions": [
+      {
+        "id": "iu-mobile-menu",
+        "toggle": true,
+        "navigation": 200
+      },
+      {
+        "native_phone_popup_open": true
+      }
+    ],
+    "errors": [],
+    "failedAssets": []
+  }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "test": "elementor-compatibility",
+    "exit": 0,
+    "output": "PASS policy/runtime atomic (23 pairs \u00d7 four activation states)\nPASS policy/runtime fragment (23 pairs \u00d7 four activation states)\nPASS policy/runtime core-only (23 pairs \u00d7 four activation states)\nPASS policy/runtime core-patch (23 pairs \u00d7 four activation states)\nPASS policy/runtime pro-patch (23 pairs \u00d7 four activation states)\nPASS policy/runtime both-patch (23 pairs \u00d7 four activation states)\nPASS policy/runtime future (23 pairs \u00d7 four activation states)\nPASS policy/runtime missing (23 pairs \u00d7 four activation states)\n"
+  },
+  {
+    "test": "elementor-update-guard",
+    "exit": 0,
+    "output": "PASS updater: 68 activation/target scenarios \u00d7 automatic/manual/extracted/upload gates; new-patch rejection, override, sequential updates, global activation, multisite and UI\n"
+  },
+  {
+    "test": "elementor-fragment-context",
+    "exit": 0,
+    "output": "context-gates: OK\nwpml-context-consistency: OK\nsearch-private-permission-query-publication-guard: OK\n"
+  },
+  {
+    "test": "elementor-fragment-graph",
+    "exit": 0,
+    "output": "generic-graph-and-builder-order: OK\n"
+  },
+  {
+    "test": "elementor-fragment-assets",
+    "exit": 0,
+    "output": "already-queued-root-assets: OK\nreplacement-lock-owner: OK\npurge-during-first-capture: OK\nshared-markup-privacy: OK\n"
+  },
+  {
+    "test": "elementor-fragment-diagnostics",
+    "exit": 0,
+    "output": "PASS admin-only diagnostics, structural rejection, configured/global distinction, OFF inactivity, throttle and 50-row bound\n"
+  },
+  {
+    "test": "elementor-fragment-bootstrap",
+    "exit": 0,
+    "output": "bootstrap-order: OK\n"
+  },
+  {
+    "test": "elementor-fragment-poll",
+    "exit": 0,
+    "output": "fresh-poll-and-stale-expiry: OK\n"
+  },
+  {
+    "test": "elementor-fragment-replay-order",
+    "exit": 0,
+    "output": "replay-order-and-content-invalidation: OK\n"
+  },
+  {
+    "lint": "istodata-utilities.php",
+    "exit": 0
+  },
+  {
+    "lint": "includes/elementor-fragment-cache.php",
+    "exit": 0
+  },
+  {
+    "lint": "includes/elementor-fragment-cache-graph.php",
+    "exit": 0
+  },
+  {
+    "lint": "includes/elementor-fragment-cache-excerpt.php",
+    "exit": 0
+  },
+  {
+    "lint": "includes/elementor-fragment-cache-diagnostics.php",
+    "exit": 0
+  },
+  {
+    "test": "drift",
+    "exit": 0,
+    "output": "PASS compatibility drift: 52 runtime files; registry consumers and detector negative controls\n"
+  }
+]

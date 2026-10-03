@@ -97,41 +97,97 @@ function iu_elementor_add_device_visibility_controls($element, $args = null) {
     $element->end_controls_section();
 }
 
-// Frontend rendering control: Widgets and Containers
+// Remove hidden branches before Elementor creates their element objects or runs widgets.
+add_filter('elementor/frontend/builder_content_data', 'iu_elementor_filter_builder_content_by_device', PHP_INT_MAX, 2);
+
+/**
+ * Filter only a frontend render copy. The same Elementor hook is also used when
+ * loading template-library data, so never change editor, preview or admin data.
+ */
+function iu_elementor_filter_builder_content_by_device($data, $post_id) {
+    if (iu_elementor_device_visibility_is_preview() ||
+        (function_exists('is_admin') && is_admin()) ||
+        (defined('REST_REQUEST') && REST_REQUEST) ||
+        !is_array($data)) {
+        return $data;
+    }
+
+    return iu_elementor_prune_hidden_elements($data, iu_request_is_phone());
+}
+
+/** Keep array order and drop an entire subtree when its widget/container is hidden. */
+function iu_elementor_prune_hidden_elements($elements, $is_phone) {
+    $visible = [];
+
+    foreach ($elements as $element) {
+        if (!is_array($element)) {
+            $visible[] = $element;
+            continue;
+        }
+
+        $type = isset($element['elType']) ? $element['elType'] : '';
+        if (('widget' === $type || 'container' === $type) &&
+            iu_elementor_device_visibility_hides($element['settings'] ?? [], $is_phone)) {
+            continue;
+        }
+
+        if (isset($element['elements']) && is_array($element['elements'])) {
+            $element['elements'] = iu_elementor_prune_hidden_elements($element['elements'], $is_phone);
+        }
+
+        // Transient render-copy marker: should_render can skip elements already
+        // examined here. It is never written back to Elementor's saved document.
+        $element['_iu_device_visibility_checked'] = true;
+        $visible[] = $element;
+    }
+
+    return $visible;
+}
+
+/** Keep should_render for direct element printing and render paths without builder_content_data. */
 add_filter('elementor/frontend/widget/should_render', 'iu_elementor_should_render_by_device', 10, 2);
 add_filter('elementor/frontend/container/should_render', 'iu_elementor_should_render_by_device', 10, 2);
+
+function iu_elementor_device_visibility_is_preview() {
+    if (function_exists('is_preview') && is_preview()) {
+        return true;
+    }
+
+    if (!class_exists('Elementor\\Plugin') || !\Elementor\Plugin::$instance) {
+        return false;
+    }
+
+    $plugin = \Elementor\Plugin::$instance;
+    return ($plugin->editor && $plugin->editor->is_edit_mode()) ||
+        ($plugin->preview && $plugin->preview->is_preview_mode());
+}
+
+function iu_elementor_device_visibility_hides($settings, $is_phone) {
+    if (!is_array($settings)) {
+        return false;
+    }
+
+    return $is_phone
+        ? (($settings['iu_hide_on_phone'] ?? null) === 'yes')
+        : (($settings['iu_hide_on_desktop_tablet'] ?? null) === 'yes');
+}
 
 /**
  * Determine if element should render based on device visibility controls.
  * Leaves everything visible in the Elementor editor for clarity.
  */
 function iu_elementor_should_render_by_device($should_render, $element) {
-    // Always render inside Elementor editor to prevent confusion
-    if (class_exists('Elementor\\Plugin') && \Elementor\Plugin::$instance->editor && \Elementor\Plugin::$instance->editor->is_edit_mode()) {
-        return true;
-    }
-
-    // Read element settings
-    $hide_mobile = $element->get_settings('iu_hide_on_phone');
-    $hide_desktop_tablet = $element->get_settings('iu_hide_on_desktop_tablet');
-
-    if (!$hide_mobile && !$hide_desktop_tablet) {
+    // A filtered element has already passed the early check. Directly printed
+    // elements without the marker still use the legacy late fallback.
+    if (iu_elementor_device_visibility_is_preview() ||
+        (method_exists($element, 'get_data') && true === $element->get_data('_iu_device_visibility_checked'))) {
         return $should_render;
     }
 
-    $is_phone = iu_request_is_phone();
-
-    // Hide on phones
-    if ($hide_mobile === 'yes' && $is_phone) {
-        return false;
-    }
-
-    // Hide on desktop & tablets (i.e., anything not identified as phone)
-    if ($hide_desktop_tablet === 'yes' && !$is_phone) {
-        return false;
-    }
-
-    return $should_render;
+    return iu_elementor_device_visibility_hides([
+        'iu_hide_on_phone' => $element->get_settings('iu_hide_on_phone'),
+        'iu_hide_on_desktop_tablet' => $element->get_settings('iu_hide_on_desktop_tablet'),
+    ], iu_request_is_phone()) ? false : $should_render;
 }
 
 /**

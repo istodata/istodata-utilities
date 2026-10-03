@@ -1,0 +1,536 @@
+[
+  {
+    "role": "anonymous",
+    "page": "/",
+    "events": [
+      {
+        "id": "d7ebc85",
+        "result": "stored"
+      },
+      {
+        "id": "417d1ae",
+        "result": "stored"
+      },
+      {
+        "id": "a1ff108",
+        "result": "stored"
+      },
+      {
+        "id": "c60daee",
+        "result": "stored"
+      },
+      {
+        "id": "e62c115",
+        "result": "excerpt-side-effect"
+      },
+      {
+        "id": "c28398e",
+        "result": "excerpt-side-effect"
+      }
+    ],
+    "keys": {
+      "d7ebc85": {
+        "doc": 30,
+        "key": "iu_frag_578e526f99c6be569d4880d7be74aa1dcbe9e2811edeff3923dcbd609243b1b8"
+      },
+      "417d1ae": {
+        "doc": 30,
+        "key": "iu_frag_f5ebb0c71811740eb1925a11f8f5bdd1d5e0b83fd22f32ffd0ce34bb857f9674"
+      },
+      "a1ff108": {
+        "doc": 30,
+        "key": "iu_frag_453aa5e9d0d013ce6e71941c531665696d9a382d901d64f9800eb90b32e99db3"
+      },
+      "c60daee": {
+        "doc": 30,
+        "key": "iu_frag_f04e6a484c44c07c3bcd57fac0b44dc845a37cddd236665beee60758f9cde74b"
+      },
+      "e62c115": {
+        "doc": 30,
+        "key": "iu_frag_f6fe76c9bc897b379e980effc345274562bdeb6e8ee3da55f4f4249e22da1eff"
+      },
+      "c28398e": {
+        "doc": 30,
+        "key": "iu_frag_816fa83158e5dae655bf2b920c207836a23b537424e4d145c26c2e8f0bef938d"
+      }
+    },
+    "nav_renders": [
+      "d7ebc85",
+      "a1ff108",
+      "e62c115",
+      "c28398e",
+      "66bc2cd",
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce"
+    ],
+    "nav_construction": [
+      "menu-1-d7ebc85",
+      "menu-2-d7ebc85",
+      "menu-1-a1ff108",
+      "menu-2-a1ff108",
+      "menu-1-e62c115",
+      "menu-2-e62c115",
+      "menu-1-c28398e",
+      "menu-2-c28398e",
+      "menu-1-66bc2cd",
+      "menu-2-66bc2cd",
+      "menu-1-2ce3318",
+      "menu-2-2ce3318",
+      "menu-1-8b227b6",
+      "menu-2-8b227b6",
+      "menu-1-f4efb65",
+      "menu-2-f4efb65",
+      "menu-1-b5446ce",
+      "menu-2-b5446ce"
+    ],
+    "loop_renders": 150,
+    "menu_excerpt_context": {
+      "d7ebc85": {
+        "builder": [
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          }
+        ],
+        "render": [
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          }
+        ]
+      },
+      "a1ff108": {
+        "builder": [
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          }
+        ],
+        "render": [
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          }
+        ]
+      },
+      "e62c115": {
+        "builder": [
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          }
+        ],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      },
+      "c28398e": {
+        "builder": [
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          }
+        ],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      },
+      "66bc2cd": {
+        "builder": [],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      },
+      "2ce3318": {
+        "builder": [],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      },
+      "8b227b6": {
+        "builder": [],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      },
+      "f4efb65": {
+        "builder": [],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      },
+      "b5446ce": {
+        "builder": [],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "role": "site_manager",
+    "page": "/techniki-ypostirixi/",
+    "events": [
+      {
+        "id": "d7ebc85",
+        "result": "hit"
+      },
+      {
+        "id": "417d1ae",
+        "result": "hit"
+      },
+      {
+        "id": "a1ff108",
+        "result": "hit"
+      },
+      {
+        "id": "c60daee",
+        "result": "hit"
+      },
+      {
+        "id": "e62c115",
+        "result": "excerpt-side-effect"
+      },
+      {
+        "id": "c28398e",
+        "result": "excerpt-side-effect"
+      }
+    ],
+    "keys": {
+      "d7ebc85": {
+        "doc": 30,
+        "key": "iu_frag_578e526f99c6be569d4880d7be74aa1dcbe9e2811edeff3923dcbd609243b1b8"
+      },
+      "417d1ae": {
+        "doc": 30,
+        "key": "iu_frag_f5ebb0c71811740eb1925a11f8f5bdd1d5e0b83fd22f32ffd0ce34bb857f9674"
+      },
+      "a1ff108": {
+        "doc": 30,
+        "key": "iu_frag_453aa5e9d0d013ce6e71941c531665696d9a382d901d64f9800eb90b32e99db3"
+      },
+      "c60daee": {
+        "doc": 30,
+        "key": "iu_frag_f04e6a484c44c07c3bcd57fac0b44dc845a37cddd236665beee60758f9cde74b"
+      },
+      "e62c115": {
+        "doc": 30,
+        "key": "iu_frag_f6fe76c9bc897b379e980effc345274562bdeb6e8ee3da55f4f4249e22da1eff"
+      },
+      "c28398e": {
+        "doc": 30,
+        "key": "iu_frag_816fa83158e5dae655bf2b920c207836a23b537424e4d145c26c2e8f0bef938d"
+      }
+    },
+    "nav_renders": [
+      "e62c115",
+      "c28398e",
+      "2ce3318",
+      "8b227b6",
+      "f4efb65",
+      "b5446ce"
+    ],
+    "nav_construction": [
+      "menu-1-e62c115",
+      "menu-2-e62c115",
+      "menu-1-c28398e",
+      "menu-2-c28398e",
+      "menu-1-2ce3318",
+      "menu-2-2ce3318",
+      "menu-1-8b227b6",
+      "menu-2-8b227b6",
+      "menu-1-f4efb65",
+      "menu-2-f4efb65",
+      "menu-1-b5446ce",
+      "menu-2-b5446ce"
+    ],
+    "loop_renders": 0,
+    "menu_excerpt_context": {
+      "e62c115": {
+        "builder": [
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          }
+        ],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      },
+      "c28398e": {
+        "builder": [
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          }
+        ],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      },
+      "2ce3318": {
+        "builder": [],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      },
+      "8b227b6": {
+        "builder": [],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      },
+      "f4efb65": {
+        "builder": [],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      },
+      "b5446ce": {
+        "builder": [],
+        "render": [
+          {
+            "hook": "excerpt_length",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "native"
+          },
+          {
+            "hook": "excerpt_more",
+            "priority": 20,
+            "args": 1,
+            "kind": "classic"
+          }
+        ]
+      }
+    }
+  }
+]

@@ -1,0 +1,74 @@
+{
+  "same_key": true,
+  "producer_loops": 150,
+  "concurrent_consumer_loops": 0,
+  "duplicate_widget_renders": 0,
+  "producer_events": [
+    {
+      "id": "d7ebc85",
+      "result": "stored"
+    },
+    {
+      "id": "417d1ae",
+      "result": "stored"
+    },
+    {
+      "id": "a1ff108",
+      "result": "stored"
+    },
+    {
+      "id": "c60daee",
+      "result": "stored"
+    },
+    {
+      "id": "e62c115",
+      "result": "stored"
+    },
+    {
+      "id": "c28398e",
+      "result": "stored"
+    },
+    {
+      "id": "iu-core-proof",
+      "result": "stored"
+    },
+    {
+      "id": "iu-custom-proof",
+      "result": "stored"
+    }
+  ],
+  "consumer_events": [
+    {
+      "id": "d7ebc85",
+      "result": "hit"
+    },
+    {
+      "id": "417d1ae",
+      "result": "hit"
+    },
+    {
+      "id": "a1ff108",
+      "result": "hit"
+    },
+    {
+      "id": "c60daee",
+      "result": "hit"
+    },
+    {
+      "id": "e62c115",
+      "result": "hit"
+    },
+    {
+      "id": "c28398e",
+      "result": "hit"
+    },
+    {
+      "id": "iu-core-proof",
+      "result": "hit"
+    },
+    {
+      "id": "iu-custom-proof",
+      "result": "hit"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "anonymous_warm_loops": 156,
+  "manager_hit_loops": 0,
+  "central_menu_renders": 1,
+  "dropdown_renders": 0,
+  "opened": true,
+  "bounds": {
+    "x": 76.5,
+    "y": 161.5,
+    "width": 1287,
+    "height": 773
+  },
+  "navigation_status": 200,
+  "frontend_errors": [],
+  "destination": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/topografia/",
+  "native_fragment_same_url": true
+}

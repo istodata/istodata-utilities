@@ -1,0 +1,16 @@
+[
+  {
+    "language": "el",
+    "phone_menu_open": true,
+    "navigation": 200,
+    "heavy_widget_loops_cache_operations": 0,
+    "errors": []
+  },
+  {
+    "language": "en",
+    "phone_menu_open": true,
+    "navigation": 200,
+    "heavy_widget_loops_cache_operations": 0,
+    "errors": []
+  }
+]

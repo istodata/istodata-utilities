@@ -1,0 +1,232 @@
+{
+    "home": "https:\/\/wordpress-218158-6702910.cloudwaysapps.com",
+    "kit": "2.22.0",
+    "pair": [
+        "4.3.3",
+        "4.3.1"
+    ],
+    "native_cache": "disable",
+    "saved": [
+        {
+            "document": 30,
+            "id": "d7ebc85",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 30,
+            "id": "417d1ae",
+            "type": "template",
+            "ttl": "604800"
+        },
+        {
+            "document": 30,
+            "id": "a1ff108",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 30,
+            "id": "c60daee",
+            "type": "template",
+            "ttl": "604800"
+        },
+        {
+            "document": 30,
+            "id": "e62c115",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 30,
+            "id": "c28398e",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 33000,
+            "id": "d7ebc85",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 33000,
+            "id": "417d1ae",
+            "type": "template",
+            "ttl": "604800"
+        },
+        {
+            "document": 33000,
+            "id": "a1ff108",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 33000,
+            "id": "c60daee",
+            "type": "template",
+            "ttl": "604800"
+        },
+        {
+            "document": 33000,
+            "id": "e62c115",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 33000,
+            "id": "c28398e",
+            "type": "nav-menu",
+            "ttl": "604800"
+        }
+    ],
+    "root_cache": {
+        "30": "",
+        "33000": ""
+    },
+    "features": {
+        "atomic": true,
+        "fragment": true
+    },
+    "real_frontend_observations": [
+        {
+            "document_id": 33000,
+            "element_id": "c28398e",
+            "state": "hit",
+            "detail": {
+                "reason": "hit"
+            },
+            "language": "en",
+            "device": "desktop\/tablet",
+            "observed_at": 1790959229
+        },
+        {
+            "document_id": 33000,
+            "element_id": "c60daee",
+            "state": "hit",
+            "detail": {
+                "reason": "hit"
+            },
+            "language": "en",
+            "device": "desktop\/tablet",
+            "observed_at": 1790959229
+        },
+        {
+            "document_id": 33000,
+            "element_id": "e62c115",
+            "state": "hit",
+            "detail": {
+                "reason": "hit"
+            },
+            "language": "en",
+            "device": "desktop\/tablet",
+            "observed_at": 1790959229
+        },
+        {
+            "document_id": 33000,
+            "element_id": "a1ff108",
+            "state": "hit",
+            "detail": {
+                "reason": "hit"
+            },
+            "language": "en",
+            "device": "desktop\/tablet",
+            "observed_at": 1790959229
+        },
+        {
+            "document_id": 33000,
+            "element_id": "417d1ae",
+            "state": "hit",
+            "detail": {
+                "reason": "hit"
+            },
+            "language": "en",
+            "device": "desktop\/tablet",
+            "observed_at": 1790959229
+        },
+        {
+            "document_id": 33000,
+            "element_id": "d7ebc85",
+            "state": "hit",
+            "detail": {
+                "reason": "hit"
+            },
+            "language": "en",
+            "device": "desktop\/tablet",
+            "observed_at": 1790959229
+        },
+        {
+            "document_id": 30,
+            "element_id": "c28398e",
+            "state": "hit",
+            "detail": {
+                "reason": "hit"
+            },
+            "language": "el",
+            "device": "desktop\/tablet",
+            "observed_at": 1790959168
+        },
+        {
+            "document_id": 30,
+            "element_id": "e62c115",
+            "state": "hit",
+            "detail": {
+                "reason": "hit"
+            },
+            "language": "el",
+            "device": "desktop\/tablet",
+            "observed_at": 1790959168
+        },
+        {
+            "document_id": 30,
+            "element_id": "c60daee",
+            "state": "hit",
+            "detail": {
+                "reason": "hit"
+            },
+            "language": "el",
+            "device": "desktop\/tablet",
+            "observed_at": 1790959168
+        },
+        {
+            "document_id": 30,
+            "element_id": "a1ff108",
+            "state": "hit",
+            "detail": {
+                "reason": "hit"
+            },
+            "language": "el",
+            "device": "desktop\/tablet",
+            "observed_at": 1790959168
+        },
+        {
+            "document_id": 30,
+            "element_id": "417d1ae",
+            "state": "hit",
+            "detail": {
+                "reason": "hit"
+            },
+            "language": "el",
+            "device": "desktop\/tablet",
+            "observed_at": 1790959168
+        },
+        {
+            "document_id": 30,
+            "element_id": "d7ebc85",
+            "state": "hit",
+            "detail": {
+                "reason": "hit"
+            },
+            "language": "el",
+            "device": "desktop\/tablet",
+            "observed_at": 1790959168
+        }
+    ],
+    "own_menu_edit_cleanup_pending": false,
+    "zip_sha256": "0edbc0289d047cdd14d9dd7210d0703f40231eea333488e5fb4e7558cf3336c2",
+    "verified_files": 76,
+    "installed_matches_zip": true,
+    "observer_absent": true,
+    "temporary_users_absent": true,
+    "private_sessions_absent": true
+}

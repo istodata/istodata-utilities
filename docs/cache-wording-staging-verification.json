@@ -1,0 +1,11 @@
+{
+    "verified_files": 74,
+    "zip_sha256": "6ef15361dfdb40539c7e04371a306ba2765afe5054a9b652dc3da6e59da5d8d3",
+    "settings_unchanged": true,
+    "kit_version": "2.21.2",
+    "panel": "Advanced Element Cache",
+    "switch": "Cache this element",
+    "description": "Εφαρμόζει τις ρυθμίσεις ορατότητας συσκευών. Μην ενεργοποιείτε για στοιχεία που αλλάζουν ανά σελίδα ή επισκέπτη.",
+    "admin_bar": "Εκκαθάριση Elements Cache",
+    "native_cache": "disable"
+}

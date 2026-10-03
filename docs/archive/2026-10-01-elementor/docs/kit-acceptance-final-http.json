@@ -1,0 +1,26 @@
+[
+  {
+    "case": "desktop-el",
+    "status": 200,
+    "x_cache": "MISS",
+    "desktop_menu": true,
+    "critical_error": false,
+    "logged_in": false
+  },
+  {
+    "case": "desktop-en",
+    "status": 200,
+    "x_cache": "MISS",
+    "desktop_menu": true,
+    "critical_error": false,
+    "logged_in": false
+  },
+  {
+    "case": "phone",
+    "status": 200,
+    "x_cache": "MISS",
+    "desktop_menu": false,
+    "critical_error": false,
+    "logged_in": false
+  }
+]

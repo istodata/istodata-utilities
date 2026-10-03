@@ -1,0 +1,14 @@
+[
+  {
+    "page": "/techniki-ypostirixi/",
+    "ordinary_manager_gets": 2,
+    "no_probe_parameters_or_observer_marker": true,
+    "fragments_equal": true
+  },
+  {
+    "page": "/en/the-company/",
+    "ordinary_manager_gets": 2,
+    "no_probe_parameters_or_observer_marker": true,
+    "fragments_equal": true
+  }
+]

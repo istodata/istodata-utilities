@@ -1,0 +1,21 @@
+{
+  "pair": {
+    "core": "4.3.3",
+    "pro": "4.3.1"
+  },
+  "kit": "2.21.2",
+  "features": {
+    "atomic": true,
+    "fragment": true
+  },
+  "native_cache": "disable",
+  "fixture_status": "trash",
+  "native_atomic_option": "ABSENT",
+  "native_atomic_active": false,
+  "harness_active": false,
+  "adapter_present": false,
+  "production_changed": false,
+  "version_bumped": false,
+  "release_created": false,
+  "zip_sha256": "f219e0744b3794c0cd6a363ce2f22250603405d14b7575f380c512a7a31ed6d0"
+}

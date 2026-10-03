@@ -1,0 +1,38 @@
+[
+  {
+    "original": "tests/fragment-cache-hook-diagnostics.cjs",
+    "sha256": "1BF2F3127BA613E0EF906C756CD627247C94572EC2A4803DCD2740B5BF3213E1"
+  },
+  {
+    "original": "tests/fragment-cache-hook-final.py",
+    "sha256": "4BA0ECDBA245DB1DA1395BA1B0828D495B5ECFC294048C3C3B268D26AD87AA32"
+  },
+  {
+    "original": "tests/fragment-cache-hook-harness.php",
+    "sha256": "CDBFE18ECA8C515DCF5E4D97E4474B53EEBAD1BFD3674D16115F1B23AFA52535"
+  },
+  {
+    "original": "tests/fragment-cache-hook-menu-en.cjs",
+    "sha256": "63A0ABBB1A41A17E6A2C7506A08E225714EBBCCA8598450249424B2D163F566A"
+  },
+  {
+    "original": "tests/fragment-cache-hook-menu.cjs",
+    "sha256": "16A31E59451E3FDCF04F91C301E12F126BFCCF753C16B3A52790DCA700440636"
+  },
+  {
+    "original": "tests/fragment-cache-hook-mobile.cjs",
+    "sha256": "3C72E544455F05B307047A9C16E5B2D334BF527568331AC032AD7B58E4152C00"
+  },
+  {
+    "original": "tests/fragment-cache-hook-origin.py",
+    "sha256": "60B2CE6F40B1C87A7415EAC0BE1E744DB55F7AFA004BFF03934684AF34E02D00"
+  },
+  {
+    "original": "tests/fragment-cache-hook-preview.cjs",
+    "sha256": "184278768FC0EA3987B3AED974AEB5A6E0ED803E1E87F394A6DD972D54A84A3D"
+  },
+  {
+    "original": "tests/fragment-cache-hook-search.py",
+    "sha256": "20AD085D8B7070F9DBA418CA6F4C89BEBC1B39AA9513ABDEFB95AE616E0E97D1"
+  }
+]

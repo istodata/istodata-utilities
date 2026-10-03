@@ -1,0 +1,34 @@
+[
+  {
+    "route": "/techniki-ypostirixi/",
+    "device": "desktop",
+    "status": 200,
+    "cache": "MISS",
+    "desktop_header": true,
+    "test_harness_comment": false
+  },
+  {
+    "route": "/techniki-ypostirixi/",
+    "device": "phone",
+    "status": 200,
+    "cache": "MISS",
+    "desktop_header": false,
+    "test_harness_comment": false
+  },
+  {
+    "route": "/en/the-company/",
+    "device": "desktop",
+    "status": 200,
+    "cache": "MISS",
+    "desktop_header": true,
+    "test_harness_comment": false
+  },
+  {
+    "route": "/en/the-company/",
+    "device": "phone",
+    "status": 200,
+    "cache": "MISS",
+    "desktop_header": true,
+    "test_harness_comment": false
+  }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "order": 1,
+    "priority": 10,
+    "callback": "WPML_Elementor_Translate_IDs::translate_global_widget_ids",
+    "source": "/home/218158.cloudwaysapps.com/manqbfzxjy/public_html/wp-content/plugins/sitepress-multilingual-cms/addons/wpml-page-builders/classes/Integrations/Elementor/class-wpml-elementor-translate-ids.php",
+    "line": 91
+  },
+  {
+    "order": 2,
+    "priority": 10,
+    "callback": "WPML_Elementor_Translate_IDs::translate_product_ids",
+    "source": "/home/218158.cloudwaysapps.com/manqbfzxjy/public_html/wp-content/plugins/sitepress-multilingual-cms/addons/wpml-page-builders/classes/Integrations/Elementor/class-wpml-elementor-translate-ids.php",
+    "line": 106
+  },
+  {
+    "order": 3,
+    "priority": 10,
+    "callback": "WPML_Elementor_Translate_IDs::translate_ids_in_widget_fields",
+    "source": "/home/218158.cloudwaysapps.com/manqbfzxjy/public_html/wp-content/plugins/sitepress-multilingual-cms/addons/wpml-page-builders/classes/Integrations/Elementor/class-wpml-elementor-translate-ids.php",
+    "line": 140
+  },
+  {
+    "order": 4,
+    "priority": 10,
+    "callback": "WPML\\PB\\Elementor\\Hooks\\DynamicElements::convert",
+    "source": "/home/218158.cloudwaysapps.com/manqbfzxjy/public_html/wp-content/plugins/sitepress-multilingual-cms/addons/wpml-page-builders/classes/Integrations/Elementor/Hooks/DynamicElements.php",
+    "line": 16
+  },
+  {
+    "order": 5,
+    "priority": 10,
+    "callback": "Closure",
+    "source": "/home/218158.cloudwaysapps.com/manqbfzxjy/public_html/wp-content/plugins/sitepress-multilingual-cms/vendor/wpml/wp/classes/Hooks.php",
+    "line": 27
+  },
+  {
+    "order": 6,
+    "priority": 10,
+    "callback": "WPML\\PB\\Elementor\\Hooks\\DisplayConditions::convertDisplayConditions",
+    "source": "/home/218158.cloudwaysapps.com/manqbfzxjy/public_html/wp-content/plugins/sitepress-multilingual-cms/addons/wpml-page-builders/classes/Integrations/Elementor/Hooks/DisplayConditions.php",
+    "line": 45
+  },
+  {
+    "order": 7,
+    "priority": 10,
+    "callback": "ElementorPro\\Modules\\LoopBuilder\\Module::filter_content_data",
+    "source": "/home/218158.cloudwaysapps.com/manqbfzxjy/public_html/wp-content/plugins/elementor-pro/modules/loop-builder/module.php",
+    "line": 214
+  },
+  {
+    "order": 8,
+    "priority": 9223372036854775806,
+    "callback": "Closure",
+    "source": "/home/218158.cloudwaysapps.com/manqbfzxjy/public_html/wp-content/plugins/iu-kit-fragment-harness/fragment-cache-kit-staging-harness.php",
+    "line": 65
+  },
+  {
+    "order": 9,
+    "priority": 9223372036854775807,
+    "callback": "iu_elementor_filter_builder_content_by_device",
+    "source": "/home/218158.cloudwaysapps.com/manqbfzxjy/public_html/wp-content/plugins/istodata-utilities/includes/elementor-device-visibility.php",
+    "line": 107
+  },
+  {
+    "order": 10,
+    "priority": 9223372036854775807,
+    "callback": "IU_Elementor_Fragment_Cache::filter",
+    "source": "/home/218158.cloudwaysapps.com/manqbfzxjy/public_html/wp-content/plugins/iu-kit-fragment-harness/elementor-fragment-cache.php",
+    "line": 235
+  }
+]

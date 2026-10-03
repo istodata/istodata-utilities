@@ -1,0 +1,69 @@
+[
+  {
+    "mode": "custom-token",
+    "not_published_or_hit": true,
+    "requests": [
+      {
+        "role": "anonymous",
+        "custom_result": [
+          {
+            "id": "iu-custom-proof",
+            "result": "volatile-markup"
+          }
+        ],
+        "custom_render_body": 1
+      },
+      {
+        "role": "site_manager",
+        "custom_result": [
+          {
+            "id": "iu-custom-proof",
+            "result": "volatile-markup"
+          }
+        ],
+        "custom_render_body": 1
+      }
+    ]
+  },
+  {
+    "mode": "custom-permission",
+    "not_published_or_hit": true,
+    "requests": [
+      {
+        "role": "anonymous",
+        "custom_result": [
+          {
+            "id": "iu-custom-proof",
+            "result": "query-context"
+          }
+        ],
+        "custom_render_body": 1
+      },
+      {
+        "role": "site_manager",
+        "custom_result": [
+          {
+            "id": "iu-custom-proof",
+            "result": "query-context"
+          }
+        ],
+        "custom_render_body": 1
+      }
+    ]
+  },
+  {
+    "mode": "private-cookie",
+    "cache_operations": 0,
+    "no_hits_or_publication": true
+  },
+  {
+    "mode": "session",
+    "cache_operations": 0,
+    "no_hits_or_publication": true
+  },
+  {
+    "mode": "global-off",
+    "cache_operations": 0,
+    "no_hits_or_publication": true
+  }
+]

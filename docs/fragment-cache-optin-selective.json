@@ -1,0 +1,18 @@
+{
+  "real_protected_tools_post": true,
+  "only_target_key_changed": true,
+  "other_element_language_preserved": true,
+  "partial_miss_events": [
+    {
+      "id": "417d1ae",
+      "result": "stored"
+    },
+    {
+      "id": "c60daee",
+      "result": "hit"
+    }
+  ],
+  "partial_miss_loops": 72,
+  "following_hits_zero_loops": true,
+  "html_equal": true
+}

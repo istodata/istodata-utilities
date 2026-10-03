@@ -1,0 +1,16 @@
+{
+  "old_writer_events": [
+    {
+      "id": "417d1ae",
+      "result": "generation-changed"
+    },
+    {
+      "id": "c60daee",
+      "result": "generation-changed"
+    }
+  ],
+  "old_writer_loops": 150,
+  "generation_changed": true,
+  "new_miss_loops": 150,
+  "new_hit_loops": 0
+}

@@ -1,0 +1,91 @@
+--- a/tests/elementor-fragment-context.php
++++ b/tests/elementor-fragment-context.php
+@@ -65,7 +65,13 @@
+ $_COOKIE = array('wp-wpml_current_language' => 'el');
+ expect_request(true, 'matching WPML language cookie');
+ $_COOKIE['unknown_context'] = '1';
+-expect_request(false, 'unknown cookie');
++expect_request(true, 'unclassified cookie under administrator shared-output declaration');
++$_COOKIE['PHPSESSID'] = 'private-session';
++expect_request(false, 'PHP session cookie');
++unset($_COOKIE['PHPSESSID']);
++$_SESSION = array('customer' => 23);
++expect_request(false, 'active PHP session');
++$_SESSION = array();
+ $_COOKIE = array('wp-wpml_current_language' => 'en');
+ expect_request(false, 'mismatched WPML language cookie');
+ $_COOKIE = array();
+--- a/tests/elementor-fragment-graph.php
++++ b/tests/elementor-fragment-graph.php
+@@ -42,6 +42,10 @@
+ $root = array('id' => 'root-A', 'elType' => 'widget', 'widgetType' => 'mega-menu',
+     'settings' => array('iu_fragment_cache' => 'yes'), 'elements' => array($loop));
+ if (IU_Elementor_Fragment_Graph::inspect($root)) throw new \RuntimeException('Unknown implementation admitted');
++define('ICL_SITEPRESS_VERSION', '999.0.0');
++define('IVORY_SEARCH_VERSION', '999.0.0');
++define('WP_ROCKET_VERSION', '999.0.0');
++define('ACF_VERSION', '999.0.0');
+ $GLOBALS['approved_fake_prototypes'] = true; // Standalone schema fixtures only, never staging eligibility.
+ $policy = IU_Elementor_Fragment_Graph::inspect($root);
+ if (!$policy || $policy['dependencies']['scripts'] !== array('widget-script')) throw new \RuntimeException('Generic arbitrary graph rejected');
+@@ -85,10 +89,13 @@
+     10 => array(array('function' => $unknown)), PHP_INT_MAX => array(array('function' => $self))));
+ $tail = new \ReflectionMethod('IU_Elementor_Fragment_Cache', 'builder_tail_safe');
+ if (!$tail->invoke(null)) throw new \RuntimeException('Earlier callback rejected by root substitution');
+-// Even a root-only callback could inject personal values into static settings.
++// Administrator opt-in declares shared output; unrelated hooks are not an allowlist.
+ $plain = $root; unset($plain['elements']);
+-reject_graph($plain, 'unknown earlier callback can personalize root settings');
+-reject_graph($root, 'unknown skipped referenced-document callback');
++if (!IU_Elementor_Fragment_Graph::inspect($plain) || !IU_Elementor_Fragment_Graph::inspect($root)) {
++    throw new \RuntimeException('Unclassified earlier callback blocked declared shared output');
++}
++$GLOBALS['wp_filter']['pre_get_posts'] = (object) array('callbacks' => array(10 => array(array('function' => $unknown))));
++if (!IU_Elementor_Fragment_Graph::inspect($root)) throw new \RuntimeException('Harmless unknown query callback blocked');
+ $GLOBALS['wp_filter']['elementor/frontend/builder_content_data']->callbacks[PHP_INT_MAX][] = array('function' => $unknown);
+ if ($tail->invoke(null)) throw new \RuntimeException('Later proxy-shape callback admitted');
+ unset($GLOBALS['wp_filter']);
+--- a/tests/elementor-fragment-diagnostics.php
++++ b/tests/elementor-fragment-diagnostics.php
+@@ -8,17 +8,19 @@
+ function get_post_meta(){return json_encode([['id'=>'item','widgetType'=>'heading','settings'=>['iu_fragment_cache'=>'yes']]]);}
+ function iu_elementor_fragment_enabled(){return $GLOBALS['global']??true;}
+ function iu_elementor_feature_supported(){return true;}function wp_date($f,$t){return date($f,$t);}
+-class IU_Elementor_Fragment_Graph {static function inspect(){return false;}static function rejection(){return ['reason'=>'unknown-hook:pre_get_posts','hook'=>'pre_get_posts','callback'=>'Unreviewed_Search::filter'];}}
++class IU_Elementor_Fragment_Graph {static function inspect(){return false;}static function rejection(){return ['reason'=>'dynamic-context'];}}
+ require dirname(__DIR__).'/includes/elementor-fragment-cache-diagnostics.php';
+ IU_Elementor_Fragment_Diagnostics::record(30,'item','hit');IU_Elementor_Fragment_Diagnostics::flush();
+ if(!empty($GLOBALS['options']))throw new RuntimeException('Anonymous telemetry');
+ $GLOBALS['admin']=true;$GLOBALS['options']['elementor_element_cache_ttl']='disable';
+ $r=IU_Elementor_Fragment_Diagnostics::status(30,'item');
+-if($r['static_review']!=='blocked'||strpos($r['message'],'Unreviewed_Search::filter')===false||!empty($r['observed']))throw new RuntimeException('Reason or static status');
++if($r['static_review']!=='blocked'||$r['detail']['reason']!=='dynamic-context'||!empty($r['observed']))throw new RuntimeException('Reason or static status');
+ IU_Elementor_Fragment_Diagnostics::record(30,'item','hit');IU_Elementor_Fragment_Diagnostics::flush();
+ IU_Elementor_Fragment_Diagnostics::flush();if($GLOBALS['writes']!==1)throw new RuntimeException('Repeated write spam');
+ for($i=0;$i<75;$i++)IU_Elementor_Fragment_Diagnostics::record(30,'item'.$i,'bypass');
+ IU_Elementor_Fragment_Diagnostics::flush();if(count($GLOBALS['options']['iu_fragment_diagnostics'])!==50)throw new RuntimeException('Unbounded observation');
+ $GLOBALS['global']=false;$r=IU_Elementor_Fragment_Diagnostics::status(30,'item');
+ if($r['detail']['reason']!=='global-off'||!$r['configured'])throw new RuntimeException('Configured vs global');
+-echo "PASS admin-only diagnostics, named hook rejection, configured/global distinction, throttle and 50-row bound\n";
++$writes=$GLOBALS['writes'];IU_Elementor_Fragment_Diagnostics::record(30,'disabled','bypass');IU_Elementor_Fragment_Diagnostics::flush();
++if($GLOBALS['writes']!==$writes)throw new RuntimeException('Observation write while global OFF');
++echo "PASS admin-only diagnostics, structural rejection, configured/global distinction, OFF inactivity, throttle and 50-row bound\n";
+--- a/tests/README.md
++++ b/tests/README.md
+@@ -27,10 +27,12 @@
+ Atomic browser tests require explicitly provisioned vendor fixtures; see
+ `ATOMIC-INTERACTIONS.md`. Licensed fixtures remain ignored and excluded from ZIPs.
+ 
+-`elementor-fragment-ivory-source.php` takes the path to an extracted official
+-Ivory plugin directory. Test both inspected packages and a changed-source
+-negative control (`reject` as the second argument); vendor sources stay outside
+-the repository. `fragment-cache-hook-search.py` is an origin staging check.
++Per-element opt-in declares shared output across pages and users. Third-party
++versions and unknown hooks are not blanket prerequisites. The graph/context
++tests exercise supported structures and concrete private/replay exclusions.
++`elementor-fragment-excerpt.php` and `elementor-fragment-purge.php` require a
++real authorized WordPress staging environment, not standalone PHP.
++`fragment-cache-hook-search.py` is an origin staging check.
+ 
+ ## Current staging acceptance tools
+ 

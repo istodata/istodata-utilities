@@ -1,0 +1,423 @@
+--- a/istodata-utilities.php
++++ b/istodata-utilities.php
+@@ -27,6 +27,7 @@
+                 'elementor_remove_profile_ai_notes',
+                 'elementor_accordion_scroll_to_active',
+                 'elementor_atomic_interaction_breakpoints',
++                'elementor_fragment_cache',
+                 'elementor_animations',
+                 'elementor_additional_animations',
+                 'elementor_disable_mobile_animations',
+@@ -345,6 +346,7 @@
+             'elementor_additional_animations' => false,
+             'elementor_accordion_scroll_to_active' => false,
+             'elementor_atomic_interaction_breakpoints' => false,
++            'elementor_fragment_cache' => false,
+             'elementor_mobile_anim_per_element' => false
+         ),
+         'woocommerce' => array(
+@@ -1393,6 +1395,15 @@
+                                        Διόρθωση breakpoints στα Atomic Interactions</label>
+                                 <p class="description">Προσωρινή διόρθωση του <a href="https://github.com/elementor/elementor/issues/35831" target="_blank" rel="noopener noreferrer">#35831</a>.</p>
+                                 <details><summary>Συμβατότητα Elementor / Pro</summary><p class="description"><?php echo esc_html(iu_elementor_compatibility_description('atomic')); ?></p></details>
++                            </td>
++                        </tr>
++                        <tr>
++                            <td>
++                                <label><input type="checkbox" name="istodata_utilities_settings[optimizations][elementor_fragment_cache]" value="1"
++                                             <?php checked(!empty($settings['optimizations']['elementor_fragment_cache'])); ?> />
++                                       Elementor Fragment Cache</label>
++                                <p class="description">Προαιρετική cache για widgets με ενεργό ατομικό opt-in. Default OFF. Το ίδιο περιεχόμενο χρησιμοποιείται για όλους τους επισκέπτες και σε όλες τις σελίδες. Απαιτεί απενεργοποιημένη την Elementor Element Cache. Η απενεργοποίηση διατηρεί τα opt-ins.</p>
++                                <details><summary>Συμβατότητα Elementor / Pro</summary><p class="description"><?php echo esc_html(iu_elementor_compatibility_description('fragment')); ?></p></details>
+                             </td>
+                         </tr>
+                         <tr>
+--- a/includes/elementor-compatibility.php
++++ b/includes/elementor-compatibility.php
+@@ -84,40 +84,16 @@
+         '. Ελεγμένοι: ' . implode('; ', $tested) . '. Κάθε νέα έκδοση απαιτεί έλεγχο και ενημέρωση συμβατότητας του Kit.';
+ }
+ 
+-/** Saved widget opt-ins, including referenced templates, not cache entries or loaded modules. */
+-function iu_elementor_fragment_has_opt_in($nodes) {
+-    if (!is_array($nodes)) return false;
+-    foreach ($nodes as $node) {
+-        if (!is_array($node)) continue;
+-        if (($node['elType'] ?? '') === 'widget' && ($node['settings']['iu_fragment_cache'] ?? '') === 'yes') return true;
+-        if (iu_elementor_fragment_has_opt_in($node['elements'] ?? array())) return true;
+-    }
+-    return false;
++/** Global switch alone determines updater protection; no saved-data scan. */
++function iu_elementor_fragment_enabled() {
++    $settings = get_option('istodata_utilities_settings', array());
++    return !empty($settings['optimizations']['elementor_fragment_cache']);
+ }
+ 
+ function iu_elementor_active_features() {
+     $settings = get_option('istodata_utilities_settings', array());
+-    $active = array('atomic' => !empty($settings['optimizations']['elementor_atomic_interaction_breakpoints']), 'fragment' => false);
+-    if (get_option('elementor_element_cache_ttl') !== 'disable') return $active;
+-    global $wpdb;
+-    // Read current saved data: no persistent activation index that could miss imports or opt-out.
+-    // Batch all non-trash, non-revision documents (drafts/templates may be referenced).
+-    $cursor = 0;
+-    do {
+-        $rows = $wpdb->get_results($wpdb->prepare(
+-            "SELECT m.meta_id, m.meta_value FROM {$wpdb->postmeta} m INNER JOIN {$wpdb->posts} p ON p.ID=m.post_id
+-             WHERE m.meta_key=%s AND m.meta_id>%d AND p.post_type<>%s
+-             AND p.post_status NOT IN ('trash','auto-draft') ORDER BY m.meta_id LIMIT 200",
+-            '_elementor_data', $cursor, 'revision'
+-        ));
+-        foreach ((array) $rows as $row) {
+-            $cursor = (int) $row->meta_id;
+-            $nodes = maybe_unserialize($row->meta_value);
+-            if (is_string($nodes)) $nodes = json_decode($nodes, true);
+-            if (iu_elementor_fragment_has_opt_in($nodes)) { $active['fragment'] = true; return $active; }
+-        }
+-    } while (is_array($rows) && count($rows) === 200);
+-    return $active;
++    return array('atomic' => !empty($settings['optimizations']['elementor_atomic_interaction_breakpoints']),
++        'fragment' => iu_elementor_fragment_enabled());
+ }
+ 
+ function iu_elementor_pair_failures($pair, $active) {
+--- a/includes/elementor-fragment-cache.php
++++ b/includes/elementor-fragment-cache.php
+@@ -8,7 +8,7 @@
+ require_once __DIR__ . '/elementor-fragment-cache-excerpt.php';
+ 
+ final class IU_Elementor_Fragment_Cache {
+-    const FORMAT = 12;
++    const FORMAT = 13;
+     const STALE_GRACE = 180;
+     const MAX_BYTES = 2097152;
+     const INDEX_PREFIX = 'iu_fragment_entry_';
+@@ -31,6 +31,7 @@
+         add_action('updated_post_meta', array(__CLASS__, 'meta_changed'), 10, 4);
+         add_action('added_post_meta', array(__CLASS__, 'meta_changed'), 10, 4);
+         add_action('deleted_post_meta', array(__CLASS__, 'meta_changed'), 10, 4);
++        add_action('update_option_istodata_utilities_settings', array(__CLASS__, 'settings_changed'), 10, 2);
+         foreach (array('after_switch_theme', 'upgrader_process_complete', 'update_option_permalink_structure',
+             'update_option_home', 'update_option_siteurl', 'update_option_elementor_active_kit',
+             'update_option_icl_sitepress_settings', 'wp_update_nav_menu', 'deleted_nav_menu') as $hook) {
+@@ -38,6 +39,10 @@
+         }
+         add_action('admin_menu', array(__CLASS__, 'admin_menu'));
+         add_action('admin_post_iu_fragment_purge', array(__CLASS__, 'purge'));
++        add_action('admin_bar_menu', array(__CLASS__, 'admin_bar'), 100);
++        add_action('admin_post_iu_fragment_purge_all', array(__CLASS__, 'purge_all'));
++        add_action('wp_footer', array(__CLASS__, 'purge_feedback'));
++        add_action('admin_notices', array(__CLASS__, 'purge_feedback'));
+     }
+ 
+     public static function controls() {
+@@ -48,12 +53,12 @@
+     }
+ 
+     public static function add_controls($element) {
+-        if (!method_exists($element, 'get_controls') || !method_exists($element, 'get_type') ||
++        if (!iu_elementor_fragment_enabled() || !method_exists($element, 'get_controls') || !method_exists($element, 'get_type') ||
+             $element->get_type() !== 'widget' || isset($element->get_controls()['iu_fragment_cache'])) {
+             return;
+         }
+         $element->start_controls_section('iu_fragment_cache_section', array(
+-            'label' => __('ISTODATA Fragment Cache', 'istodata-utilities'),
++            'label' => __('ISTODATA — Cache στοιχείου', 'istodata-utilities'),
+             'tab' => \Elementor\Controls_Manager::TAB_ADVANCED,
+         ));
+         $element->add_control('iu_fragment_cache', array(
+@@ -68,11 +73,6 @@
+             'options' => array('3600' => '1 ώρα', '21600' => '6 ώρες', '86400' => '24 ώρες', '604800' => '7 ημέρες'),
+             'default' => '86400', 'condition' => array('iu_fragment_cache' => 'yes'),
+         ));
+-        $element->add_control('iu_fragment_cache_compatibility', array(
+-            'type' => \Elementor\Controls_Manager::RAW_HTML,
+-            'raw' => esc_html(iu_elementor_compatibility_description('fragment')),
+-            'condition' => array('iu_fragment_cache' => 'yes'),
+-        ));
+         $element->end_controls_section();
+     }
+ 
+@@ -95,9 +95,13 @@
+     }
+ 
+     private static function request_ok() {
+-        if (!self::versions_supported()) {
+-            return false;
+-        }
++        if (!iu_elementor_fragment_enabled() || !self::versions_supported()) {
++            return false;
++        }
++        // Elementor's zero-argument preview check uses the current post. Nested
++        // templates can change that post while the preview request stays active.
++        // Never let a query-allow filter reopen caching in an editor iframe.
++        if (isset($_GET['elementor-preview'])) return false;
+         $plugin = class_exists('Elementor\\Plugin') ? \Elementor\Plugin::$instance : null;
+         if ($plugin && (($plugin->editor && $plugin->editor->is_edit_mode()) ||
+             ($plugin->preview && $plugin->preview->is_preview_mode()))) {
+@@ -115,7 +119,7 @@
+             hash_equals((string) ICL_LANGUAGE_CODE, (string) $cookies['wp-wpml_current_language'])) {
+             unset($cookies['wp-wpml_current_language']);
+         }
+-        if (is_admin() || is_user_logged_in() || !empty($cookies) || !empty($_POST) ||
++        if (!self::cookies_safe($cookies) || is_admin() || !empty($_POST) ||
+             ($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET' ||
+             !empty($_SERVER['HTTP_AUTHORIZATION']) || !empty($_SERVER['PHP_AUTH_USER']) ||
+             empty($_SERVER['HTTP_USER_AGENT']) || empty($_SERVER['REQUEST_URI']) ||
+@@ -137,6 +141,22 @@
+         return $other === 'disable';
+     }
+ 
++    private static function cookies_safe($cookies) {
++        $user = get_current_user_id();
++        foreach (array('LOGGED_IN_COOKIE' => 'logged_in', 'AUTH_COOKIE' => 'auth', 'SECURE_AUTH_COOKIE' => 'secure_auth') as $constant => $scheme) {
++            if (!defined($constant) || !isset($cookies[constant($constant)])) continue;
++            $value = $cookies[constant($constant)];
++            if (!$user || !is_string($value) || wp_validate_auth_cookie($value, $scheme) !== $user) return false;
++            unset($cookies[constant($constant)]);
++        }
++        // These core cookies contain editor preferences, not frontend content.
++        if ($user) {
++            unset($cookies['wp-settings-' . $user], $cookies['wp-settings-time-' . $user]);
++        }
++        if (defined('TEST_COOKIE') && ($cookies[TEST_COOKIE] ?? null) === 'WP Cookie check') unset($cookies[TEST_COOKIE]);
++        return !$cookies;
++    }
++
+     private static function versions_supported() {
+         return iu_elementor_feature_supported('fragment');
+     }
+@@ -158,32 +178,12 @@
+             !empty($node['settings']['__dynamic__'])) {
+             return false;
+         }
+-        $type = $node['widgetType'];
+-        // Rich text may execute shortcodes; compound widgets may query private,
+-        // random, or third-party data. Unsupported graphs need a reviewed adapter.
+-        $simple = empty($node['elements']) && in_array($type,
+-            array('heading', 'image', 'button', 'icon', 'divider', 'spacer'), true);
+-        if ($simple) {
+-            $prototype = class_exists('Elementor\\Plugin') && \Elementor\Plugin::$instance
+-                ? \Elementor\Plugin::$instance->widgets_manager->get_widget_types($type) : null;
+-            $simple = IU_Elementor_Fragment_Graph::prototype_supported($type, $prototype);
+-        }
+-        foreach (array('elementor/widget/render_content', 'elementor/frontend/widget/before_render',
+-            'elementor/frontend/widget/after_render', 'elementor/frontend/before_render',
+-            'elementor/frontend/after_render') as $hook) {
+-            $callbacks = $GLOBALS['wp_filter'][$hook]->callbacks ?? array();
+-            foreach ($callbacks as $group) {
+-                foreach ($group as $callback) {
+-                    if (!in_array($callback['function'], array(array(__CLASS__, 'begin'),
+-                        array(__CLASS__, 'finish')), true)) {
+-                        $simple = false;
+-                    }
+-                }
+-            }
+-        }
++        // The same complete graph/hook review applies to every identity, including
++        // static roots: an anonymous build must also be safe for authenticated reuse.
+         $policy = IU_Elementor_Fragment_Graph::inspect($node);
+         if ($policy) self::$policies[$document_id . ':' . $node['id']] = $policy;
+-        return (bool) apply_filters('iu_elementor_fragment_eligible', $simple || (bool) $policy, $node, $document_id);
++        $accepted = (bool) $policy;
++        return (bool) apply_filters('iu_elementor_fragment_eligible', (bool) $accepted, $node, $document_id);
+     }
+ 
+     private static function hidden_on_device($settings) {
+@@ -273,6 +273,7 @@
+     }
+ 
+     public static function filter($nodes, $document_id) {
++        if (!iu_elementor_fragment_enabled()) return $nodes;
+         $language = self::language();
+         $request_ok = self::request_ok() && self::builder_tail_safe();
+         do_action('iu_elementor_fragment_gate', $language, $request_ok, $document_id, $nodes);
+@@ -326,6 +327,7 @@
+                         $node['_iu_fragment_build'] = array('key' => $key, 'lock' => $lock,
+                             'ttl' => in_array($ttl, array(3600, 21600, 86400, 604800), true) ? $ttl : 86400,
+                             'document_id' => $document_id, 'element_id' => $node['id'], 'prior' => $prior,
++                            'generation' => self::generation($document_id, $node['id']),
+                             'post_context' => (int) get_the_ID(),
+                             'independent_query' => self::independent_query($node, $document_id), 'media_prior' => self::media_context(),
+                             'excerpt_prior' => IU_Elementor_Fragment_Excerpt::profile(),
+@@ -428,7 +430,9 @@
+         }
+         // Replay at the original render position, never during builder traversal:
+         // earlier siblings must not see IDs from a widget they have not reached.
+-        if ((!isset($payload['media_prior']) || self::media_context() === $payload['media_prior']) &&
++        if (iu_elementor_fragment_enabled() && self::public_ids($payload['entry']['displayed']) &&
++            self::generation_current($payload['entry']['generation'] ?? null) &&
++            (!isset($payload['media_prior']) || self::media_context() === $payload['media_prior']) &&
+             (($payload['independent_query'] ?? false) || self::displayed() === $payload['prior']) &&
+             self::excerpt_structure(IU_Elementor_Fragment_Excerpt::profile()) === self::excerpt_structure($payload['excerpt_prior']) &&
+             (int) get_the_ID() === $payload['post_context'] && self::replay($payload['entry'])) {
+@@ -449,6 +453,36 @@
+             !is_array($entry['displayed'] ?? null) || !is_array($entry['excerpt'] ?? null) || !is_int($entry['fresh_until'] ?? null) ||
+             !is_int($entry['stale_until'] ?? null) || $entry['stale_until'] <= time()) {
+             return false;
++        }
++        return true;
++    }
++
++    private static function public_ids($ids) {
++        foreach ($ids as $id) {
++            $post = get_post($id);
++            if (!$post || $post->post_status !== 'publish' || !empty($post->post_password)) return false;
++        }
++        return true;
++    }
++
++    private static function shared_markup_safe($html) {
++        return !preg_match('~(?:nonce|wc-cart-fragments|wp-admin|wp-login|elementor-edit-(?:area|mode|link)|e-loop-first-edit|data-(?:user|session|token)|current_user|user_login|user_email)~i', $html);
++    }
++
++    private static function generation($document_id, $element_id) {
++        return array('document_id' => $document_id, 'element_id' => $element_id,
++            'site' => (string) get_option(self::EPOCH, '0'),
++            'element' => (string) get_option('iu_fragment_epoch_' . md5($document_id . ':' . $element_id), '0'));
++    }
++
++    private static function generation_current($generation) {
++        if (!is_array($generation) || !isset($generation['document_id'], $generation['element_id'], $generation['site'], $generation['element'])) return false;
++        global $wpdb;
++        // Read the database, not this long request's stale options cache.
++        foreach (array(self::EPOCH => $generation['site'],
++            'iu_fragment_epoch_' . md5($generation['document_id'] . ':' . $generation['element_id']) => $generation['element']) as $name => $expected) {
++            $value = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", $name));
++            if ((string) ($value === null ? '0' : $value) !== $expected) return false;
+         }
+         return true;
+     }
+@@ -569,7 +603,7 @@
+         } elseif (isset($start['build']['media_prior']) && ($start['media_prior'] !== $start['build']['media_prior'] ||
+             self::media_context() !== $start['media_prior'])) {
+             $reason = 'media-context-side-effect';
+-        } elseif (preg_match('/(?:_wpnonce|data-nonce|wc-cart-fragments)/i', $html)) {
++        } elseif (!self::public_ids(array_values(array_unique($start['query_ids']))) || !self::shared_markup_safe($html)) {
+             $reason = 'volatile-markup';
+         } elseif (self::extras(wp_styles(), array('after')) !== $start['style_extra']) {
+             $reason = 'inline-style-side-effect';
+@@ -577,6 +611,7 @@
+             $reason = 'inline-script-side-effect';
+         }
+         global $wpdb;
++        if (!$reason && (!iu_elementor_fragment_enabled() || !self::generation_current($start['build']['generation']))) $reason = 'generation-changed';
+         $owner = !$reason ? $wpdb->get_var($wpdb->prepare(
+             "SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", $start['build']['lock'][0])) : null;
+         if (!$reason && ($owner !== $start['build']['lock'][1] ||
+@@ -587,6 +622,7 @@
+             $styles = array_values(array_unique(array_merge($start['dependencies']['styles'], $styles)));
+             $scripts = array_values(array_unique(array_merge($start['dependencies']['scripts'], $scripts)));
+             $entry = array('format' => self::FORMAT, 'html' => $html, 'styles' => $styles,
++                'generation' => $start['build']['generation'],
+                 'scripts' => $scripts,
+                 'excerpt' => $excerpt,
+                 'preserve_excerpt' => $excerpt === $start['excerpt_prior'],
+@@ -627,9 +663,46 @@
+         }
+     }
+ 
++    public static function settings_changed($old, $new) {
++        if (!empty($old['optimizations']['elementor_fragment_cache']) !== !empty($new['optimizations']['elementor_fragment_cache'])) {
++            // Also fences a first writer when the switch changes mid-request.
++            update_option(self::EPOCH, wp_generate_uuid4(), false);
++        }
++    }
++
+     public static function admin_menu() {
+         add_management_page('Elementor Fragment Cache', 'Elementor Fragment Cache', 'manage_options',
+             'iu-elementor-fragments', array(__CLASS__, 'admin_page'));
++    }
++
++    public static function admin_bar($bar) {
++        if (!current_user_can('manage_options')) return;
++        $return = is_admin() ? admin_url('tools.php?page=iu-elementor-fragments') : home_url(wp_unslash($_SERVER['REQUEST_URI'] ?? '/'));
++        $bar->add_node(array('id' => 'iu-fragment-purge-all',
++            'title' => __('Εκκαθάριση Fragment Cache', 'istodata-utilities'),
++            'href' => wp_nonce_url(add_query_arg(array('action' => 'iu_fragment_purge_all', 'return_to' => $return),
++                admin_url('admin-post.php')), 'iu_fragment_purge_all')));
++    }
++
++    public static function purge_all() {
++        if (!current_user_can('manage_options')) wp_die(esc_html__('Δεν επιτρέπεται.', 'istodata-utilities'), '', array('response' => 403));
++        check_admin_referer('iu_fragment_purge_all');
++        // Always advance the site generation, including while the first writer is in flight.
++        update_option(self::EPOCH, wp_generate_uuid4(), false);
++        $return = isset($_GET['return_to']) && is_string($_GET['return_to'])
++            ? wp_validate_redirect(wp_unslash($_GET['return_to']), home_url('/')) : home_url('/');
++        $feedback = wp_create_nonce('iu_fragment_purged_' . get_option(self::EPOCH));
++        wp_safe_redirect(add_query_arg('iu_fragment_purged', $feedback, $return));
++        exit;
++    }
++
++    public static function purge_feedback() {
++        if (!current_user_can('manage_options') || !isset($_GET['iu_fragment_purged']) ||
++            !is_string($_GET['iu_fragment_purged']) || !wp_verify_nonce(wp_unslash($_GET['iu_fragment_purged']),
++                'iu_fragment_purged_' . get_option(self::EPOCH))) return;
++        $class = is_admin() ? 'notice notice-success' : 'iu-fragment-purge-feedback';
++        echo '<div class="' . esc_attr($class) . '" role="status"><p>' .
++            esc_html__('Η Fragment Cache εκκαθαρίστηκε. Τα fragments θα δημιουργηθούν στην επόμενη πραγματική αίτηση.', 'istodata-utilities') . '</p></div>';
+     }
+ 
+     public static function admin_page() {
+@@ -671,7 +744,7 @@
+ 
+     public static function purge() {
+         if (!current_user_can('manage_options')) {
+-            wp_die(esc_html__('Δεν επιτρέπεται.', 'istodata-utilities'));
++            wp_die(esc_html__('Δεν επιτρέπεται.', 'istodata-utilities'), '', array('response' => 403));
+         }
+         $document_id = absint($_POST['document_id'] ?? 0);
+         $element_id = sanitize_key(wp_unslash($_POST['element_id'] ?? ''));
+--- a/includes/elementor-fragment-cache-graph.php
++++ b/includes/elementor-fragment-cache-graph.php
+@@ -39,8 +39,9 @@
+     }
+ 
+     public static function inspect($node) {
+-        if (!in_array($node['widgetType'] ?? '', array('mega-menu', 'loop-grid', 'posts', 'template'), true) ||
+-            !iu_elementor_feature_supported('fragment', null, true) ||
++        $complex = in_array($node['widgetType'] ?? '', array('mega-menu', 'loop-grid', 'posts', 'template'), true);
++        if ((!$complex && !in_array($node['widgetType'] ?? '', array('heading', 'image', 'button', 'icon', 'divider', 'spacer'), true)) ||
++            !iu_elementor_feature_supported('fragment', null, $complex) ||
+             !class_exists('Elementor\\Plugin') || !\Elementor\Plugin::$instance) return null;
+         $policy = new self();
+         if (!$policy->walk(array($node), false) || !$policy->hooks_safe()) {
+@@ -158,7 +159,8 @@
+     }
+ 
+     private function hooks_safe() {
+-        $hooks = array('elementor/widget/render_content',
++        $hooks = array('elementor/document/load/data', 'elementor/frontend/builder_content/before_enqueue_css_file',
++            'elementor/frontend/builder_content/before_print_css', 'elementor/widget/render_content',
+             'elementor/frontend/widget/before_render', 'elementor/frontend/widget/after_render',
+             'elementor/frontend/before_render', 'elementor/frontend/after_render', 'elementor/frontend/the_content',
+             'elementor/query/query_args', 'elementor/query/query_results', 'pre_get_posts', 'posts_pre_query', 'posts_clauses', 'posts_results', 'the_posts',
+@@ -178,10 +180,10 @@
+             'wp_min_priority_img_pixels', 'wp_omit_loading_attr_threshold',
+             'do_rocket_lazyload', 'do_rocket_lazyload_iframes',
+             'wp_get_attachment_metadata', 'wp_calculate_image_srcset', 'wp_calculate_image_sizes', 'nav_menu_item_title');
+-        // Root builder callbacks have already run, and their result is keyed.
+-        // Referenced documents, however, are not rendered on a root hit; their
+-        // builder callbacks need an independent compatibility review.
+-        if ($this->seen) $hooks[] = 'elementor/frontend/builder_content_data';
++        // Audit root callbacks too: an unknown earlier callback could inject
++        // user/session values into otherwise static settings and create a
++        // personalized key before we inspect the node. No such data is shared.
++        $hooks[] = 'elementor/frontend/builder_content_data';
+         foreach ($hooks as $hook) {
+             foreach (($GLOBALS['wp_filter'][$hook]->callbacks ?? array()) as $group) {
+                 foreach ($group as $callback) {
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -3,6 +3,10 @@
+ All notable changes to this project will be documented in this file.
+ 
+ ## Unreleased
++
++- Fix: Keep Elementor fragment caching bypassed throughout native preview requests, including nested templates that change the current post.
++
++- Improve: Elementor Fragment Cache now has a default-OFF global switch, shared safe frontend fragments for authenticated visitors, and a protected admin-bar site purge. Preserve widget opt-ins when OFF, hide their editor panel, and determine update protection directly from the global switch without scanning saved documents.
+ 
+ - Improve: Centralize Elementor/Pro compatibility declarations and show accepted combinations separately from tested evidence.
+ - Tweak: Atomic Interactions compatibility accepts the documented Elementor 4.3.2 / Pro 4.3.0 and tested 4.3.3 / Pro 4.3.1 pairs; each new patch requires review and a Kit compatibility update instead of automatic acceptance within 4.3.x.

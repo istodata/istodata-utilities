@@ -1,0 +1,42 @@
+[
+    {
+        "document": 33000,
+        "element": "c60daee",
+        "state": "hit",
+        "language": "en",
+        "observed_at": 1790950589,
+        "detail": {
+            "reason": "hit"
+        }
+    },
+    {
+        "document": 33000,
+        "element": "417d1ae",
+        "state": "hit",
+        "language": "en",
+        "observed_at": 1790950589,
+        "detail": {
+            "reason": "hit"
+        }
+    },
+    {
+        "document": 30,
+        "element": "c60daee",
+        "state": "hit",
+        "language": "el",
+        "observed_at": 1790950467,
+        "detail": {
+            "reason": "hit"
+        }
+    },
+    {
+        "document": 30,
+        "element": "417d1ae",
+        "state": "hit",
+        "language": "el",
+        "observed_at": 1790950467,
+        "detail": {
+            "reason": "hit"
+        }
+    }
+]

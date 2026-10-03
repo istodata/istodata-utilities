@@ -1,0 +1,57 @@
+{
+    "home": "https:\/\/wordpress-218158-6702910.cloudwaysapps.com",
+    "pair": {
+        "core": "4.3.3",
+        "pro": "4.3.1"
+    },
+    "kit": "2.22.0",
+    "ivory": "5.5.18",
+    "features": {
+        "atomic": true,
+        "fragment": true
+    },
+    "native_cache": "disable",
+    "saved": [
+        {
+            "document": 30,
+            "element": "26fa46c6",
+            "cache": null,
+            "ttl": "86400"
+        },
+        {
+            "document": 30,
+            "element": "417d1ae",
+            "cache": "yes",
+            "ttl": "86400"
+        },
+        {
+            "document": 30,
+            "element": "c60daee",
+            "cache": "yes",
+            "ttl": "86400"
+        },
+        {
+            "document": 33000,
+            "element": "26fa46c6",
+            "cache": null,
+            "ttl": "86400"
+        },
+        {
+            "document": 33000,
+            "element": "417d1ae",
+            "cache": "yes",
+            "ttl": "86400"
+        },
+        {
+            "document": 33000,
+            "element": "c60daee",
+            "cache": "yes",
+            "ttl": "86400"
+        }
+    ],
+    "settings_optins_preserved": true,
+    "observer_absent": true,
+    "temporary_users_absent": true,
+    "private_sessions_absent": true,
+    "diagnostic_rows": 5
+}

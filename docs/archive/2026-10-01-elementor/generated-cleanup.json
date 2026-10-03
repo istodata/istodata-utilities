@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-02",
+  "reason": "Deletion blocked by automatic approval policy; recoverable removal from workspace instead",
+  "generated_artifacts": [
+    {
+      "original": "tests/__pycache__",
+      "temporary_destination": "C:\\Users\\pe\\AppData\\Local\\Temp\\iu-kit-cleanup-20261002-2634844e\\__pycache__"
+    },
+    {
+      "original": "tests/.probe-package",
+      "temporary_destination": "C:\\Users\\pe\\AppData\\Local\\Temp\\iu-kit-cleanup-20261002-2634844e\\.probe-package"
+    },
+    {
+      "original": "tests/iu-fragment-probe-staging.zip",
+      "temporary_destination": "C:\\Users\\pe\\AppData\\Local\\Temp\\iu-kit-cleanup-20261002-2634844e\\iu-fragment-probe-staging.zip"
+    }
+  ]
+}

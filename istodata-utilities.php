@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.21.2
+Version: 2.22.0
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,9 +11,13 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.21.2');
+define('IU_PLUGIN_VERSION', '2.22.0');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
+
+// Load even before Elementor: the updater must enforce configured feature policies.
+require_once IU_PLUGIN_PATH . 'includes/elementor-update-guard.php';
+IU_Elementor_Update_Guard::boot();
 
 // Reusable helpers for Elementor-related setting keys
     if (!function_exists('iu_elem_opt_keys')) {
@@ -23,6 +27,7 @@ define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
                 'elementor_remove_profile_ai_notes',
                 'elementor_accordion_scroll_to_active',
                 'elementor_atomic_interaction_breakpoints',
+                'elementor_fragment_cache',
                 'elementor_animations',
                 'elementor_additional_animations',
                 'elementor_disable_mobile_animations',
@@ -90,6 +95,12 @@ function iu_maybe_load_elementor_integration() {
             }
         }
         
+        $fragment_cache = IU_PLUGIN_PATH . 'includes/elementor-fragment-cache.php';
+        if (file_exists($fragment_cache)) {
+            require_once $fragment_cache;
+            $loaded = true;
+        }
+
         // Register custom Elementor category only if at least one ISTODATA widget is enabled
         $has_iu_widget = (!empty($additional['elementor_google_maps_widget']))
                       || (!empty($additional['elementor_wpml_language_switcher']) && is_plugin_active('sitepress-multilingual-cms/sitepress.php'))
@@ -335,6 +346,7 @@ function iu_activate() {
             'elementor_additional_animations' => false,
             'elementor_accordion_scroll_to_active' => false,
             'elementor_atomic_interaction_breakpoints' => false,
+            'elementor_fragment_cache' => false,
             'elementor_mobile_anim_per_element' => false
         ),
         'woocommerce' => array(
@@ -1381,7 +1393,17 @@ function iu_settings_page() {
                                 <label><input type="checkbox" name="istodata_utilities_settings[optimizations][elementor_atomic_interaction_breakpoints]" value="1"
                                              <?php checked(!empty($settings['optimizations']['elementor_atomic_interaction_breakpoints'])); ?> />
                                        Διόρθωση breakpoints στα Atomic Interactions</label>
-                                <p class="description">Προσωρινή διόρθωση του <a href="https://github.com/elementor/elementor/issues/35831" target="_blank" rel="noopener noreferrer">#35831</a>. Επιτρέπει σταθερές ενημερώσεις Elementor 4.3.x από 4.3.2 και Pro 4.3.x από 4.3.0, με ελέγχους APIs· το 4.4 χρειάζεται επανέλεγχο. Το Trigger on παραμένει ανά interaction. Απενεργοποιήστε την επιλογή μετά την επίσημη λύση. Το editor preview δεν έχει επαληθευτεί.</p>
+                                <p class="description">Προσωρινή διόρθωση του <a href="https://github.com/elementor/elementor/issues/35831" target="_blank" rel="noopener noreferrer">#35831</a>.</p>
+                                <details><summary>Συμβατότητα Elementor / Pro</summary><p class="description"><?php echo esc_html(iu_elementor_compatibility_description('atomic')); ?></p></details>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label><input type="checkbox" name="istodata_utilities_settings[optimizations][elementor_fragment_cache]" value="1"
+                                             <?php checked(!empty($settings['optimizations']['elementor_fragment_cache'])); ?> />
+                                       Advanced Elements Cache</label>
+                                <p class="description">Προαιρετική cache ανά Elementor element, με ξεχωριστή ενεργοποίηση από το panel Advanced Element Cache. Εφαρμόζει τις ρυθμίσεις ορατότητας συσκευών και διαχωρίζει την cache ανά συσκευή και γλώσσα. Μην ενεργοποιείτε για στοιχεία που αλλάζουν ανά σελίδα ή επισκέπτη. Απαιτεί απενεργοποιημένη την Elementor Element Cache. Η απενεργοποίηση διατηρεί τις επιλογές ανά element.</p>
+                                <details><summary>Συμβατότητα Elementor / Pro</summary><p class="description"><?php echo esc_html(iu_elementor_compatibility_description('fragment')); ?></p></details>
                             </td>
                         </tr>
                         <tr>

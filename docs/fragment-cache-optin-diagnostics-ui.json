@@ -1,0 +1,26 @@
+{
+  "message": "Αποθηκευμένη επιλογή: ON. Γενικός διακόπτης: ON. Έλεγχος αποθηκευμένης δομής και τεχνικών απαιτήσεων replay, όχι έλεγχος όλων των callbacks. Η αποθηκευμένη δομή υποστηρίζεται. Η καταλληλότητα για κοινή επαναχρησιμοποίηση είναι ευθύνη του διαχειριστή· δεν αποδεικνύεται frontend HIT. Τελευταία παρατήρηση διαχειριστή: miss-stored, el / desktop/tablet, 2026-10-02 16:54:22.",
+  "report": {
+    "configured": true,
+    "global": true,
+    "static_review": "reviewed",
+    "detail": [],
+    "observed": [
+      {
+        "document_id": 30,
+        "element_id": "417d1ae",
+        "state": "miss-stored",
+        "detail": {
+          "reason": "stored"
+        },
+        "language": "el",
+        "device": "desktop/tablet",
+        "observed_at": 1790949262
+      }
+    ],
+    "message": "Αποθηκευμένη επιλογή: ON. Γενικός διακόπτης: ON. Έλεγχος αποθηκευμένης δομής και τεχνικών απαιτήσεων replay, όχι έλεγχος όλων των callbacks. Η αποθηκευμένη δομή υποστηρίζεται. Η καταλληλότητα για κοινή επαναχρησιμοποίηση είναι ευθύνη του διαχειριστή· δεν αποδεικνύεται frontend HIT. Τελευταία παρατήρηση διαχειριστή: miss-stored, el / desktop/tablet, 2026-10-02 16:54:22."
+  },
+  "invalid_nonce_status": 403,
+  "native_button": true,
+  "no_save": true
+}

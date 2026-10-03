@@ -1,2 +1,11 @@
 # Licensed vendor test fixtures: provision explicitly, never distribute.
 /tests/fixtures/vendor/
+
+# Generated test artifacts; keep sources and acceptance evidence versionable.
+__pycache__/
+*.py[cod]
+/tests/.probe-package/
+/tests/*.zip
+*.Zone.Identifier
+.DS_Store
+Thumbs.db

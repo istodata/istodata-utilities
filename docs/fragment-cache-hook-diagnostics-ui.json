@@ -1,0 +1,32 @@
+{
+  "message": "Αποθηκευμένη επιλογή: ON. Γενικός διακόπτης: ON. Στατικός έλεγχος στο context της επιθεώρησης. Οι frontend αιτήσεις μπορεί να έχουν διαφορετικούς hooks· η ένδειξη δεν αποτελεί frontend hit ή bypass. Μη ελεγμένο hook pre_get_posts (RankMath\\Admin\\Post_Filters::posts_by_seo_filters). Σε context με αυτόν τον hook δεν χρησιμοποιείται cache. Τελευταία παρατήρηση διαχειριστή: bypass, el / desktop/tablet, 2026-10-02 13:26:09. Μη ελεγμένο hook pre_get_posts (iu_unreviewed_acceptance_query). Σε context με αυτόν τον hook δεν χρησιμοποιείται cache.",
+  "report": {
+    "configured": true,
+    "global": true,
+    "static_review": "blocked",
+    "detail": {
+      "hook": "pre_get_posts",
+      "callback": "RankMath\\Admin\\Post_Filters::posts_by_seo_filters",
+      "reason": "unknown-hook:pre_get_posts"
+    },
+    "observed": [
+      {
+        "document_id": 30,
+        "element_id": "417d1ae",
+        "state": "bypass",
+        "detail": {
+          "hook": "pre_get_posts",
+          "callback": "iu_unreviewed_acceptance_query",
+          "reason": "unknown-hook:pre_get_posts"
+        },
+        "language": "el",
+        "device": "desktop/tablet",
+        "observed_at": 1790936769
+      }
+    ],
+    "message": "Αποθηκευμένη επιλογή: ON. Γενικός διακόπτης: ON. Στατικός έλεγχος στο context της επιθεώρησης. Οι frontend αιτήσεις μπορεί να έχουν διαφορετικούς hooks· η ένδειξη δεν αποτελεί frontend hit ή bypass. Μη ελεγμένο hook pre_get_posts (RankMath\\Admin\\Post_Filters::posts_by_seo_filters). Σε context με αυτόν τον hook δεν χρησιμοποιείται cache. Τελευταία παρατήρηση διαχειριστή: bypass, el / desktop/tablet, 2026-10-02 13:26:09. Μη ελεγμένο hook pre_get_posts (iu_unreviewed_acceptance_query). Σε context με αυτόν τον hook δεν χρησιμοποιείται cache."
+  },
+  "invalid_nonce_status": 403,
+  "native_button": true,
+  "no_save": true
+}

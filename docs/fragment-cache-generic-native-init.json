@@ -1,0 +1,42 @@
+[
+  {
+    "language": "el",
+    "mobile": false,
+    "anonymous_miss_body_renders": 1,
+    "authenticated_hit_body_renders": 0,
+    "native_element_ready_hook": true,
+    "no_fallback_initializer": true,
+    "css_and_click_verified": true,
+    "errors": []
+  },
+  {
+    "language": "el",
+    "mobile": true,
+    "anonymous_miss_body_renders": 1,
+    "authenticated_hit_body_renders": 0,
+    "native_element_ready_hook": true,
+    "no_fallback_initializer": true,
+    "css_and_click_verified": true,
+    "errors": []
+  },
+  {
+    "language": "en",
+    "mobile": false,
+    "anonymous_miss_body_renders": 1,
+    "authenticated_hit_body_renders": 0,
+    "native_element_ready_hook": true,
+    "no_fallback_initializer": true,
+    "css_and_click_verified": true,
+    "errors": []
+  },
+  {
+    "language": "en",
+    "mobile": true,
+    "anonymous_miss_body_renders": 1,
+    "authenticated_hit_body_renders": 0,
+    "native_element_ready_hook": true,
+    "no_fallback_initializer": true,
+    "css_and_click_verified": true,
+    "errors": []
+  }
+]

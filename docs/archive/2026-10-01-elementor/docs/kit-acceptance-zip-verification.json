@@ -1,0 +1,15 @@
+{
+  "path": "H:\\\u03a4\u03bf Drive \u03bc\u03bf\u03c5\\Development\\ISTODATA PLUGINS\\istodata-utilities.zip",
+  "entries": 74,
+  "sha256": "9af8b3aec9a87f3cd53b7345049ac83f5e9aa385f7d9068d6cbd588eff95f24d",
+  "checks": {
+    "correct_upload_path": true,
+    "one_root": true,
+    "main_exists": true,
+    "no_root_main": true,
+    "no_nested_main": true,
+    "forward_slashes": true,
+    "no_development": true,
+    "crc": true
+  }
+}

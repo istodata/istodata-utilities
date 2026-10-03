@@ -1,0 +1,22 @@
+[
+  {
+    "owner": "anonymous",
+    "consumer": "site_manager",
+    "language": "el",
+    "miss_loops": 150,
+    "hit_loops": 0,
+    "central_menu_renders": 1,
+    "dropdown_renders": 0,
+    "same_key_html_assets": true
+  },
+  {
+    "owner": "site_manager",
+    "consumer": "anonymous",
+    "language": "en",
+    "miss_loops": 156,
+    "hit_loops": 0,
+    "central_menu_renders": 1,
+    "dropdown_renders": 0,
+    "same_key_html_assets": true
+  }
+]

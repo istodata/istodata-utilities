@@ -1,0 +1,21 @@
+{
+  "generation": "b128b117c91b457bb5d5488785e901af",
+  "page_a": "/en/",
+  "page_b": "/en/the-company/",
+  "loop_a": 156,
+  "loop_b": 0,
+  "menu_renders_b": 1,
+  "dropdown_renders_b": 0,
+  "assets_b": 83,
+  "header_sha_b": "318f7e264a2b33357ce48697a14cd097e8b98c99b1e666008d337c8d65ad7f28",
+  "keys": {
+    "417d1ae": {
+      "doc": 33000,
+      "key": "iu_frag_e6de8e9f3a2631febe96dff25cc951b5720cac830b994b4f5d9c7c3b168e19e0"
+    },
+    "c60daee": {
+      "doc": 33000,
+      "key": "iu_frag_6b3590464164936523240be5715b57c4a129a3b23ce111749534d38872717faa"
+    }
+  }
+}

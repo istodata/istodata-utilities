@@ -1,0 +1,89 @@
+{
+    "home": "https:\/\/wordpress-218158-6702910.cloudwaysapps.com",
+    "kit": "2.22.0",
+    "pair": [
+        "4.3.3",
+        "4.3.1"
+    ],
+    "native_cache": "disable",
+    "saved": [
+        {
+            "document": 30,
+            "id": "d7ebc85",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 30,
+            "id": "417d1ae",
+            "type": "template",
+            "ttl": "604800"
+        },
+        {
+            "document": 30,
+            "id": "a1ff108",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 30,
+            "id": "c60daee",
+            "type": "template",
+            "ttl": "604800"
+        },
+        {
+            "document": 30,
+            "id": "e62c115",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 30,
+            "id": "c28398e",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 33000,
+            "id": "d7ebc85",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 33000,
+            "id": "417d1ae",
+            "type": "template",
+            "ttl": "604800"
+        },
+        {
+            "document": 33000,
+            "id": "a1ff108",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 33000,
+            "id": "c60daee",
+            "type": "template",
+            "ttl": "604800"
+        },
+        {
+            "document": 33000,
+            "id": "e62c115",
+            "type": "nav-menu",
+            "ttl": "604800"
+        },
+        {
+            "document": 33000,
+            "id": "c28398e",
+            "type": "nav-menu",
+            "ttl": "604800"
+        }
+    ],
+    "zip_sha256": "744b551044b5209dcc3f02b87ad86e34d95b72b3960d11214f93bc9e76ac1501",
+    "verified_files": 76,
+    "installed_matches_zip": true,
+    "observer_absent": true,
+    "temporary_users_absent": true,
+    "private_sessions_absent": true
+}

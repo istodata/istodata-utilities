@@ -1,0 +1,29 @@
+{
+  "portable_php": "8.5.11 (not in PATH)",
+  "php_lint": [
+    "istodata-utilities.php",
+    "includes/elementor-fragment-cache.php",
+    "includes/elementor-fragment-cache-graph.php",
+    "includes/elementor-fragment-cache-diagnostics.php"
+  ],
+  "passed": [
+    "elementor-compatibility (23 pairs x 4 states x 8 consumers)",
+    "elementor-update-guard (68 scenarios)",
+    "elementor-fragment-graph",
+    "elementor-fragment-context and query-publication guard",
+    "elementor-fragment-assets",
+    "elementor-fragment-bootstrap",
+    "elementor-fragment-poll",
+    "elementor-fragment-replay-order",
+    "elementor-fragment-diagnostics admin-only/throttle/bound",
+    "ivory-source official 5.5.16",
+    "ivory-source official 5.5.18",
+    "ivory-source changed-body negative control",
+    "elementor-compatibility-drift (52 runtime files)"
+  ],
+  "wp_cli_only_fixtures_not_run_as_offline_tests": [
+    "elementor-fragment-admin-control",
+    "elementor-fragment-purge",
+    "elementor-fragment-excerpt"
+  ]
+}

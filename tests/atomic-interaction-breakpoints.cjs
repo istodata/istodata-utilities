@@ -33,16 +33,18 @@ function element(empty = false) {
 }
 function harness({ width = 390, interactions = [interaction()], elements = [element()], enabled = true,
   breakpoints = { mobile: { value: 767, direction: 'max' }, tablet: { value: 1024, direction: 'max' } },
-  alter, deferred = false, loading = false, legacy = false } = {}) {
+  alter, deferred = false, loading = false, legacy = false, lateRender = false } = {}) {
   const listeners = {}, timers = new Map(), subscriptions = new Set(), historical = [], controls = [];
   let timerId = 0, animated = 0, disposed = 0;
+  const frames = [];
   const subscribe = (kind, el, callback) => {
     const record = { kind, el, callback };
     subscriptions.add(record); historical.push(record);
-    return () => { if (subscriptions.delete(record)) disposed++; };
+    return () => { if (subscriptions.delete(record)) { disposed++; if (lateRender && kind === 'scroll') frames.push(() => { el.style.opacity = '1'; }); } };
   };
   const context = {
     console, innerWidth: width,
+    requestAnimationFrame: callback => frames.push(callback),
     setTimeout: callback => { timers.set(++timerId, callback); return timerId; },
     clearTimeout: id => timers.delete(id),
     addEventListener: (type, callback) => (listeners[type] ||= []).push(callback),
@@ -81,7 +83,7 @@ function harness({ width = 390, interactions = [interaction()], elements = [elem
   function start() { vm.runInContext(sources['interactions-pro.js'], context); }
   function trigger(record) { return record.callback(record.el); }
   return { context, elements, listeners, originalAPI, originalMotion, subscriptions, historical, controls,
-    flush, resize, start, trigger, get animated() { return animated; }, get disposed() { return disposed; } };
+    flush, resize, start, trigger, frame: () => { const pending = frames.splice(0); pending.forEach(cb => cb()); }, get animated() { return animated; }, get disposed() { return disposed; } };
 }
 function restored(el, empty = false) {
   assert.equal(el.style.opacity, empty ? '' : '0.8');
@@ -119,6 +121,14 @@ async function test(name, callback) { await callback(); cases++; console.log('PA
       assert.equal(h.subscriptions.size, 0); restored(h.elements[0]);
     });
   }
+  await test('scroll timeline deferred render restores excluded styles and preserves reinitialized elements', async () => {
+    const h = harness({ width: 1400, interactions: [interaction('scrollOn')], lateRender: true });
+    h.start(); await Promise.resolve(); h.resize(390); h.frame(); restored(h.elements[0]);
+    h.resize(1400); h.resize(390); h.resize(1400);
+    const activeOpacity = h.elements[0].style.opacity; h.elements[0].style.transform = 'scale(2)';
+    h.frame(); assert.equal(h.elements[0].style.opacity, activeOpacity); assert.equal(h.elements[0].style.transform, 'scale(2)');
+    h.resize(390); h.frame(); restored(h.elements[0]);
+  });
   await test('custom unordered max/min breakpoints, boundaries, independent exclusions and multiple elements', () => {
     const h = harness({ width: 500, elements: [element(), element(true)],
       interactions: [interaction('hover', ['phone', 'wide']), interaction('click', ['desktop', 'pad'])],

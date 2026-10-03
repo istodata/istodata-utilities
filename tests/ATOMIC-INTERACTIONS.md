@@ -4,13 +4,14 @@ The settings key is `optimizations.elementor_atomic_interaction_breakpoints`.
 It is OFF when absent and OFF in activation defaults. The existing Elementor
 settings whitelist sanitizes it to a boolean and preserves it when saving other tabs.
 The PHP loader only attaches the plugin's JS before an enqueued, not-yet-printed
-`elementor-interactions-pro`, on stable Elementor 4.3.x versions from 4.3.2 and
-Pro 4.3.x versions from 4.3.0. Patch updates in that range are allowed automatically;
-4.4 and later, earlier versions, and prereleases are rejected. This policy accepts
-patch compatibility without claiming each future patch has been tested.
+`elementor-interactions-pro`, only for the explicitly approved Elementor 4.3.2 /
+Pro 4.3.0 and 4.3.3 / 4.3.1 pairs in `includes/elementor-compatibility.php`. The 2026-10-01 policy
+supersedes the earlier open-ended 4.3.x patch acceptance. New patches, earlier
+versions and prereleases are rejected until review and a Kit compatibility release.
 The enqueue priority is 1000; footer priority 1 handles late enqueues. No vendor
 runtime is shipped or loaded by the plugin. API guards remain in place for every
-allowed version. A new minor series requires a fresh review.
+allowed version. Every new core or Pro version requires review, an updated
+registry declaration and a Kit release, even if feature code does not change.
 
 ## Reproducible local runtime checks
 
@@ -55,8 +56,8 @@ php -l tests/atomic-interaction-breakpoints.php
 php tests/atomic-interaction-breakpoints.php
 ```
 
-The isolated PHP checks cover OFF, missing plugins, patch updates to either or
-both plugins, the 4.4 boundary, older versions, malformed/prerelease versions, missing
+The isolated PHP checks cover OFF, missing plugins, rejection of unapproved patch
+updates to either or both plugins, the 4.4 boundary, older versions, malformed/prerelease versions, missing
 handle, already-printed handle, admin context, supported versions, late enqueue,
 failed attachment retry, hook priorities, payload order and duplicate guards.
 They require PHP; they are not a WordPress settings-page/browser acceptance test.
@@ -103,3 +104,20 @@ builders must explicitly exclude them. The plugin runtime uses only its new
 After local acceptance, coordinate installation, switch OFF WPCode 11756 while
 switching ON this option, clean caches and verify the real frontend. Rollback is
 OFF in Kit and re-enable the existing snippet. Until then leave it unchanged.
+
+## Full Kit acceptance update, 2026-10-01
+
+The old historical acceptance notes above describe the initial development run.
+Current version remains 2.21.2; no release was created. Exact 4.3.3/4.3.1 was
+accepted in the local unreleased registry after the full Kit staging checks in
+`../docs/archive/2026-10-01-elementor/docs/elementor-kit-acceptance-staging.md`. Native Motion OFF reproduces the
+exclusion bug; ON retains desktop effects and restores excluded mobile/tablet
+baselines, including a queued scroll timeline final render. Restoration after
+that frame excludes nodes recollected by the new initializer.
+
+Both actual vendor-bundle VM suites pass 17 cases; PHP loader passes 24 cases.
+Candidate fixtures are private official extracted files, checksum-pinned by a
+manifest; set `IU_ATOMIC_CANDIDATE_FIXTURES` to that directory or use the temporary
+`iu-candidate-433-431` directory. Run `node tests/atomic-interaction-candidate.cjs`.
+No vendor packages/fixtures/tests are included in the 74-entry manual test ZIP.
+Browser custom-breakpoint/cross-browser exhaustiveness is not claimed.

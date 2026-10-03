@@ -1,5 +1,4 @@
-# Development checks and licensed local fixtures do not belong in plugin archives.
-/tests export-ignore
-/AGENTS.md export-ignore
-/.gitignore export-ignore
-/.gitattributes export-ignore
+# Historical acceptance evidence and raw diffs must retain their original bytes.
+# Their whitespace belongs to the recorded output, not the current source style.
+docs/archive/** -text -whitespace
+docs/*.patch -text -whitespace

@@ -2,41 +2,51 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.22.0 - 2026-10-03
+
+- New: Optional Advanced Elements Cache with a default-OFF global switch and per-widget opt-in. A valid hit bypasses the original widget and its descendant loops before rendering, with device/WPML variants, a 24-hour default TTL, lazy creation and no preload.
+- Improve: Allow registered core, Pro and custom Elementor widgets to attempt caching through their native dependencies and concrete privacy/query/asset/replay checks. Containers remain outside root caching; unsupported contexts keep native rendering.
+- New: Protected per-element and site cache purges, source-template and menu-item invalidation, and concurrent-writer protection. Other content dependencies use the selected TTL or manual purge.
+- New: Administrator-only cache status distinguishes saved activation, supported structure and recent frontend hit/miss/bypass observations, with actionable rejection reasons.
+- Fix: Preserve native CSS/JS dependencies, displayed-post and excerpt effects on hits; bypass unreplayable render-time changes. Keep editor, native preview, private contexts and globally disabled caching outside cache operations and observations.
+- Tweak: Use Advanced Element Cache/Advanced Elements Cache labels and clarify that opt-in declares reusable public output across pages and visitors. Shared WP Menu fragments retain the first request's active-page attributes; personalized or page-dependent elements must remain uncached.
+- Improve: Preserve per-widget opt-ins when the global switch is OFF, hide their editor panel, and support reuse between anonymous and authenticated visitors for declared shared public content. Elementor's native Element Cache must be disabled.
+- Improve: Elementor Device Visibility removes hidden widget and container branches before frontend rendering where builder content data is available, avoiding their PHP widget work while preserving existing device semantics.
+- Improve: Centralize Elementor/Pro compatibility declarations and show accepted combinations separately from tested evidence. Every new version, including a patch, requires review and a Kit compatibility update.
+- New: Guard incompatible Elementor/Pro WordPress updates when Atomic Interactions or Advanced Elements Cache is globally enabled, including bulk, AJAX and uploaded-package paths. Keep updates visible and provide a protected explicit override for one specific advertised update; unsupported runtime features bypass with notices.
+- Fix: Restore Atomic interaction styles after Motion scroll-timeline teardown when entering an excluded breakpoint.
+- Tweak: Shorten the Atomic Interactions breakpoint setting description.
+- Cleanup: Archive historical Elementor development tools and exclude generated artifacts and development files from distribution.
+
 ## 2.21.2 - 2026-09-29
 
 - Improve: Simple Repeater displays both configured item limits, or a single required-count hint when Min Items equals Max Items.
 - New: Simple Repeater fields support Min Items (default 0), with ACF validation of populated rows and a visible minimum count in the item editor.
 - Fix: Required Simple Repeater fields now reject empty submissions and blank rows through ACF validation; optional fields can still be cleared completely.
-- Version bump to 2.21.2.
 
 ## 2.21.1 - 2026-09-28
 
 - Fix: Optional Atomic Interactions breakpoint workaround for Elementor #35831, OFF by default; restores initial inline styles and cleans up interactions on breakpoint changes. Allows stable Elementor 4.3.x updates from 4.3.2 and Pro 4.3.x updates from 4.3.0, retaining API guards.
 - Improve: Administrators are informed when the enabled workaround cannot run outside the allowed Elementor version range; 4.4 and later require a fresh review.
-- Version bump to 2.21.1.
 
 ## 2.21.0 - 2026-09-26
 
 - New: Simple Repeater WPML adapter exposes individual titles and descriptions for post and taxonomy translation while preserving existing stored rows and copying numeric values, images and links.
 - Improve: WPML's manual Term translation dialog now edits repeater text per row and rejects stale submissions after the source structure changes.
-- Version bump to 2.21.0.
 
 ## 2.20.11 - 2026-09-17
 
 - New: Taxonomy Links widget - native dropdowns now offer chevron size, closed/open colors, and independent horizontal/vertical offsets.
 - Fix: Taxonomy Links widget - native dropdown chevron offsets now override competing theme transforms in both closed and open states.
-- Version bump to 2.20.11.
 
 ## 2.20.10 - 2026-09-17
 
 - Improve: Taxonomy Links widget - links/buttons can now use independent responsive border radius and font weight settings for normal, hover, and active states.
 - New: Taxonomy Links widget - an optional anchor can now be appended to every term and "All" URL across all display modes.
-- Version bump to 2.20.10.
 
 ## 2.20.9 - 2026-09-12
 
 - New: Simple Repeater Accordion widgets can optionally generate FAQPage structured data from their item titles and descriptions.
-- Version bump to 2.20.9.
 
 ## 2.20.8 - 2026-08-21
 
@@ -44,23 +54,19 @@ All notable changes to this project will be documented in this file.
 - New: Simple Repeater Accordion behavior controls for one open item at a time and opening the first item initially.
 - Improve: Simple Repeater Accordions now animate opening and closing, with title and icon color transitions.
 - Tweak: Simple Repeater Accordion title hover color is now grouped in the Title style section, with separate title and description padding controls.
-- Version bump to 2.20.8.
 
 ## 2.20.7 - 2026-08-21
 
 - Fix: Stale storage-queue jobs older than one hour are now cleared and end the current request flow instead of restarting recursively.
-- Version bump to 2.20.7.
 
 ## 2.20.6 - 2026-08-21
 
 - Fix: Preserve WordPress's confirmation before an uploaded plugin replaces an existing plugin, regardless of whether ISTODATA Kit is active.
 - Tweak: Hide the Elementor Conversion Banner in the WordPress admin.
-- Version bump to 2.20.6.
 
 ## 2.20.5 - 2026-08-20
 
 - Fix: Dashboard -> WooCommerce Status is now removed after WooCommerce registers its widget, with an additional dashboard-page fallback for late loading.
-- Version bump to 2.20.5.
 
 ## 2.20.4 - 2026-08-20
 
@@ -75,7 +81,6 @@ All notable changes to this project will be documented in this file.
 
 ## 2.20.2 - 2026-08-18
 
-- Version bump to 2.20.2.
 - New: ACF Post Gallery field with ordered image selection, preview, removal, and drag-and-drop sorting, plus an Elementor Dynamic Tag with an automatic field selector and fallback to the default WPML language when needed.
 
 ## 2.20.1 - 2026-08-18
@@ -118,14 +123,12 @@ All notable changes to this project will be documented in this file.
 ## 2.19.5 - 2026-07-31
 
 - Improve: WPML Language Switcher - added a Label Source option that displays the first two uppercase characters of each language's native name, such as `ΕΛ`, `EN`, and `ES`.
-- Version bump to 2.19.5.
 
 ## 2.19.4 - 2026-07-17
 
 - New: Added a Dashboard option to remove Elementor's `elementor-manage-dashboard` widget, enabled by default for new and upgraded installations.
 - Improve: GitHub update checks now cache successful release metadata for 24 hours and reuse the last known good response if GitHub is unavailable or rate-limited.
 - Docs: Clarified release branch, title, asset, and no-hardcoded-token rules in `AGENTS.md`.
-- Version bump to 2.19.4.
 
 ## 2.19.3 - 2026-07-06
 
@@ -133,26 +136,22 @@ All notable changes to this project will be documented in this file.
 - Fix: Removed a hardcoded GitHub authorization token from the plugin update check.
 - Docs: Added `AGENTS.md` with the local test zip, changelog, versioning, and GitHub release workflow.
 - Cleanup: Removed obsolete local `.claude` settings from the plugin workspace.
-- Version bump to 2.19.3.
 
 ## 2.19.2 - 2026-05-21
 
 - Fix: Greeklish Permalinks now correctly transliterates uppercase Greek `Ι` through `Π`, including `Κ -> K`.
 
 - Tweak: Admin tabs and storage calculation progress indicators now use the WP7 color `#564be4` instead of the legacy `#0073aa`.
-- Version bump to 2.19.2.
 
 ## 2.19.1 - 2026-04-29
 
 - Tweak: Dashboard - added the ISTODATA favicon to the Support and Storage Space widget titles.
 - Tweak: Dashboard - renamed the Support widget title to "ISTODATA Technical Support" / "ISTODATA Τεχνική Υποστήριξη".
-- Version bump to 2.19.1.
 
 ## 2.19.0 - 2026-04-28
 
 - New: ACF - added an "ISTODATA Simple Repeater" custom field type with configurable Title, Text, Image, and Link subfields, plus add/remove/reorder controls in the post editor.
 - New: Elementor - added a "Simple Repeater" widget that renders the ACF repeater field as grid, accordion, logos, or buttons with basic layout and style controls.
-- Version bump to 2.19.0.
 
 ## 2.18.0 - 2026-04-27
 
@@ -160,7 +159,6 @@ All notable changes to this project will be documented in this file.
 - Improve: Query Posts widget includes style controls for item spacing, alignment, typography, padding, borders, backgrounds, shadows, and normal/hover/active states without rendering as a native `ul`.
 - Fix: Heading Group (Elementor) - the Overline field now accepts safe inline HTML such as `span`, `strong`, `em`, and `br` instead of outputting raw tags as text.
 - Fix: Post Gallery (Elementor/WPML) - translated posts now fall back to the default-language gallery when their local `_isto_gallery_ids` meta is empty, and the plugin declares the gallery meta to WPML as a copied custom field.
-- Version bump to 2.18.0.
 
 ## 2.17.2 - 2026-04-01
 
@@ -189,29 +187,24 @@ All notable changes to this project will be documented in this file.
 - Improve: Social Share (Elementor) - προστέθηκε προαιρετικό label με responsive επιλογές για θέση (`top` / `left`), typography, alignment, color και απόσταση από τα εικονίδια.
 - Improve: Προστέθηκε επιλογή `width` και στην κεφαλίδα του Heading Group.
 - Fix: Post Gallery (admin metabox) - the media modal now preloads previously selected images so adding new ones does not replace the existing gallery selection.
-- Version bump to 2.15.3.
 
 ## 2.15.1 - 2026-03-17
 
 - Improve: Έγιναν βελτιώσεις στο widget Heading Group, προστέθηκε δυνατότητα ρύθμισης πλάτους για το κείμενο και άλλες μικροβελτιώσεις.
-- Version bump to 2.15.1.
 
 ## 2.15.0 - 2026-03-13
 
 - New: Προστέθηκαν νέα custom entrance και exit animations για τον Elementor.
-- Version bump to 2.15.0.
 
 ## 2.14.4 — 2026-01-08
 
 - Change: Dashboard → Support widget — Ανανεώθηκε το κείμενο (ΕΛ/EN) και αφαιρέθηκαν οι εναλλακτικοί τρόποι επικοινωνίας (email/τηλέφωνο). Διατηρήθηκε το CTA.
 - Change: Ενημερώθηκε το URL υποστήριξης σε `https://www.istodata.com/support/` με προ-συμπλήρωση `website`, `email`, `firstname`, `lastname` από τον τρέχοντα χρήστη.
 - Cleanup: Αφαιρέθηκαν αχρησιμοποίητες μεταβλητές στο template του widget.
-- Version bump to 2.14.4.
 
 ## 2.14.3 — 2025-12-29
 
 - Fix: Bugfixes και βελτιστοποιήσεις στο widget Typed (Elementor).
-- Version bump to 2.14.3.
 
 ## 2.14.2 — 2025-12-24
 
@@ -219,13 +212,11 @@ All notable changes to this project will be documented in this file.
 - Change: Αφαιρέθηκε η επιλογή «Καμπύλη κίνησης». Η προεπιλογή easing είναι πλέον `ease-in-out`.
 - Tweak: Αναδιάταξη πεδίων εικονιδίου — «Κάθετη μετατόπιση (px)» πάνω από «Περιστροφή (°)» για πιο φυσική ροή.
 - Styles: Ενημέρωση `assets/css/typed.css` για υποστήριξη hover κίνησης μέσω CSS variables.
-- Version bump to 2.14.2.
 
 ## 2.14.1 — 2025-12-24
 
 - Fix: Typed (Elementor) — Η επιλογή «Εξαίρεση από το Delay JS» τώρα εξαιρεί και το inline init script (με μοναδικό marker), ώστε σε συνδυασμό με το WP Rocket να φορτώνει άμεσα σε above‑the‑fold περιεχόμενο.
 - Fix: Typed (Editor UX) — Σταθεροποιήθηκε η προεπισκόπηση στον Elementor editor: περιορίζεται στο πρώτο string και δεν κάνει loop, ώστε αλλαγές όπως η «Καθυστέρηση Διαγραφής (ms)» να μην επανέρχονται οπτικά κατά την εναλλαγή items.
-- Version bump to 2.14.1.
 
 ## 2.14.0 — 2025-12-23
 
@@ -234,14 +225,12 @@ All notable changes to this project will be documented in this file.
 - Performance: Εκκίνηση μέσω IntersectionObserver με ρυθμιζόμενο threshold ώστε να ξεκινά όταν γίνει ορατό.
 - Compatibility: Προαιρετική εξαίρεση από WP Rocket Delay JS για above‑the‑fold περιεχόμενο.
 - Styles: Νέο `assets/css/typed.css` και ομαλοποίηση SVG στα εικονίδια για σωστό scaling με CSS.
-- Version bump to 2.14.0.
 
 ## 2.13.1 — 2025-12-22
 
 - New: Elementor → “Αφαίρεση Elementor AI και Notes από τη σελίδα του προφίλ”. Προστέθηκε επιλογή κάτω από τα “Βελτιστοποιήσεις” που κρύβει τα σχετικά sections από τις σελίδες `profile.php` και `user-edit.php`.
 - Implemented best‑effort inline admin JS: κρύβει headings “Elementor AI/Notes” και ρητά το row του checkbox `elementor_enable_ai` (αν υπάρχει στο markup της έκδοσης Elementor).
 - Persistence: Προστέθηκε το κλειδί `elementor_remove_profile_ai_notes` στη whitelist `iu_elem_opt_keys()` ώστε να αποθηκεύεται σωστά και να διατηρείται κατά την αποθήκευση άλλων καρτελών.
-- Version bump to 2.13.1.
 
 ## 2.13.0 — 2025-12-20
 
@@ -249,14 +238,12 @@ All notable changes to this project will be documented in this file.
 - Accordion: νέα ρύθμιση “Accordion: Κύλιση στο ενεργό” (Elementor → Βελτιστοποιήσεις). Υλοποίηση σε εξωτερικό αρχείο `assets/js/accordion-scroll.js` με vanilla JS, υποστήριξη off‑canvas, smooth scroll, offsets και delay.
 - Mobile animations: νέα επιλογή “Mobile Animations: Έλεγχος ανά στοιχείο (Elementor)” (εμφανίζεται μόνο με ενεργό WP Rocket). Προσθέτει διακόπτη σε όλα τα elements και containers (Advanced tab) για απενεργοποίηση entrance animation μόνο στο κινητό. Εφαρμόζει αυτόματα την κλάση `iu-no-mobile-anim` και inject CSS μόνο σε mobile breakpoint. Μετονομάστηκε η global επιλογή για σαφέστερη διάκριση: “Mobile Animations: Καθολική απενεργοποίηση (όλα τα elements)”.
 - UI: Η επιλογή εξαίρεσης WP Rocket για Typed εμφανίζεται μόνο όταν είναι ενεργό το Typed.js και το WP Rocket. Το φίλτρο εξαιρέσεων εφαρμόζεται μόνο όταν είναι ενεργό το WP Rocket.
-- Version bump to 2.13.0.
 
 ## 2.12.6 — 2025-12-18
 
 - Social Share (Elementor): Μετατροπή των πεδίων εικονιδίων σε Elementor ICONS control (όπως το Social Icons). Κανονικοποίηση SVG για σωστό scaling και ενιαίο χρωματισμό μέσω CSS. Αφαιρέθηκαν τα legacy MEDIA/SVG πεδία.
 - Google Map (Advanced): Παραμένει PNG‑only για custom marker. Αφαιρέθηκαν δοκιμαστικά tweaks προεπισκόπησης στον editor — αποδεχόμαστε την προεπιλεγμένη συμπεριφορά του Elementor.
 - CSS: Βελτιώσεις σε `assets/css/social-share.css` για `width/height:100%` και ισχυρό `currentColor` στα SVG.
-- Version bump to 2.12.6.
 
 ## 2.12.5 — 2025-12-16
 
@@ -264,21 +251,18 @@ All notable changes to this project will be documented in this file.
 - New: Support widget CTAs — added primary button “Αίτημα Υποστήριξης” / “Support Request” and secondary “Προβολή Οδηγού Διαχείρισης” / “View Documentation” (if URL is set), displayed side-by-side.
 - Tweak: Added a subtle divider above the CTA buttons for visual separation.
 - Tweak: Ticket URL now uses the current site’s domain in the `website` query param instead of a static `www.istodata.com`.
-- Version bump to 2.12.5.
 
 ## 2.12.4 — 2025-12-16
 
 - New: WordPress → “Μεταφορά jQuery στο footer” — μεταφέρει τα `jquery`, `jquery-core` (και `jquery-migrate` αν υπάρχει) στο footer και μετακινεί επίσης όλα τα scripts που εξαρτώνται από jQuery, ώστε να μην την «τραβούν» πίσω στο head.
 - Tweak: Επιπλέον εγγύηση μεταφοράς στο footer ακόμη κι αν έχει ήδη τρέξει το `wp_default_scripts` (αναγκαστική αλλαγή group στο enqueue phase).
 - Compatibility: Συμβατό με την επιλογή “Απενεργοποίηση jQuery Migrate”.
-- Version bump to 2.12.4.
 
 ## 2.12.3 — 2025-12-15
 
 - New: WordPress → “Αφαίρεση WP Rocket Options” — κρύβει/αφαιρεί το metabox “WP Rocket Options” (`rocket_post_exclude`) από όλα τα public post types και κρύβει το toggle στα Screen Options. Η επιλογή εμφανίζεται μόνο όταν είναι ενεργό το WP Rocket.
 - New: Elementor → “Απενεργοποίηση Animations στα κινητά” — εισάγει inline JS+CSS μόνο σε κινητά για να απενεργοποιεί τα entrance animations του Elementor. Εξαιρείται ρητά από WP Rocket (Delay/Minify inline) και το breakpoint είναι παραμετρικό μέσω φίλτρου `iu_elementor_mobile_breakpoint`.
 - Tweak: Δηλώνουμε τα φίλτρα/εξαιρέσεις του WP Rocket μόνο όταν το WP Rocket είναι ενεργό.
-- Version bump to 2.12.3.
 
 ## 2.12.1 — 2025-12-11
 
@@ -317,7 +301,6 @@ All notable changes to this project will be documented in this file.
 - Fix: Preserve Elementor settings when saving other tabs (WordPress/Πρόσθετες Λειτουργίες) and guard against missing Elementor classes.
 - Tweak: Sync legacy `optimizations[elementor_social_share_widget]` with new `additional[...]` key to avoid mismatches.
 - Tweak: Use IU_PLUGIN_VERSION for asset versioning and update logs.
-- Version bump to 2.9.1.
 
 ## 2.9.0 — 2025-12-09
 
@@ -326,7 +309,6 @@ All notable changes to this project will be documented in this file.
 - Metabox: “Post Gallery” metabox on selected post types with multi-select via media frame, thumbnail preview, drag-and-drop reorder, remove/clear. Saves to `_isto_gallery_ids` (array of attachment IDs).
 - Elementor: Registered Dynamic Tag “Post Gallery” that exposes the saved gallery to the Image Gallery widget (Pro required).
 - Assets: Added `assets/js/iu-gallery-metabox.js` and enqueue only on editor screens for selected post types.
-- Version bump to 2.9.0.
 
 ## 2.8.0 — 2025-12-08
 
@@ -335,7 +317,6 @@ All notable changes to this project will be documented in this file.
 - Google Maps (Advanced): Removed Zoom note from panel, removed API Key placeholder, and updated placeholder text copy.
 - Google Maps (Advanced): Improved loader stability (retry on consent, avoid double init) and removed internal console warnings.
 - Settings UI: Removed Elementor API Key note from Additional → Elementor section as requested.
-- Version bump to 2.8.0.
 
 ## 2.7.0 — 2025-12-03
 
@@ -344,6 +325,5 @@ All notable changes to this project will be documented in this file.
 - Moved and renamed “Χρόνος Ανάγνωσης για Elementor” to “Χρόνος Ανάγνωσης” inside the new Elementor section (still requires Elementor Pro).
 - Kept backward compatibility for Social Share enablement: reads both the old `optimizations[elementor_social_share_widget]` and the new `additional[elementor_social_share_widget]` settings.
 - Added `additional[elementor_social_share_widget]` default key to plugin defaults.
-- Version bump to 2.7.0.
 - Social Share Widget: Added configurable tooltips and title attributes per network with defaults (e.g., "Κοινοποίηση στο Facebook"). Accessible aria-label now mirrors the tooltip text. Visual tooltip can be toggled via the new "Εμφάνιση Tooltip" option.
 

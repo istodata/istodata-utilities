@@ -1,0 +1,332 @@
+{
+  "kind": "candidate-hit",
+  "viewport": {
+    "width": 1440,
+    "height": 1024
+  },
+  "device": "desktop",
+  "page": "/en/the-company/",
+  "consent": "preferences saved before trigger",
+  "cookie_names": [
+    "_GRECAPTCHA",
+    "__cf_bm",
+    "__cf_bm",
+    "__cf_bm",
+    "__cf_bm",
+    "__cf_bm",
+    "__cf_bm",
+    "__cf_bm",
+    "__hssc",
+    "__hssrc",
+    "__hstc",
+    "_fbp",
+    "bcookie",
+    "cmplz_consent_mode",
+    "hubspotutk",
+    "li_gc",
+    "lidc",
+    "wordpress_a7ba76ebf0389dc1c633f326a84243df",
+    "wordpress_logged_in_a7ba76ebf0389dc1c633f326a84243df",
+    "wordpress_sec_a7ba76ebf0389dc1c633f326a84243df",
+    "wp-wpml_current_language"
+  ],
+  "loop_any": 0,
+  "original_template_renders": [],
+  "outer_render": 1,
+  "settings": {
+    "menu_items": [
+      {
+        "_id": "ca21d87",
+        "item_title": "ABOUT US",
+        "item_link": {
+          "url": "https://wordpress-218158-6702910.cloudwaysapps.com/etairia/",
+          "is_external": "",
+          "nofollow": "",
+          "custom_attributes": ""
+        },
+        "index": 0,
+        "__dynamic__": null,
+        "item_dropdown_content": "no",
+        "item_icon": {
+          "value": "",
+          "library": ""
+        },
+        "item_icon_active": null,
+        "element_id": ""
+      },
+      {
+        "item_title": "PRODUCTS & SOLUTIONS",
+        "_id": "e72a59d",
+        "item_dropdown_content": "yes",
+        "index": 1,
+        "__dynamic__": null,
+        "item_link": {
+          "url": "",
+          "is_external": "",
+          "nofollow": "",
+          "custom_attributes": ""
+        },
+        "item_icon": {
+          "value": "",
+          "library": ""
+        },
+        "item_icon_active": null,
+        "element_id": ""
+      },
+      {
+        "item_title": "INDUSTRIES",
+        "_id": "e5044db",
+        "item_dropdown_content": "yes",
+        "index": 2,
+        "__dynamic__": null,
+        "item_link": {
+          "url": "",
+          "is_external": "",
+          "nofollow": "",
+          "custom_attributes": ""
+        },
+        "item_icon": {
+          "value": "",
+          "library": ""
+        },
+        "item_icon_active": null,
+        "element_id": ""
+      },
+      {
+        "_id": "3a2d522",
+        "item_title": "LIBRARY",
+        "item_dropdown_content": "yes",
+        "index": 3,
+        "__dynamic__": null,
+        "item_link": {
+          "url": "",
+          "is_external": "",
+          "nofollow": "",
+          "custom_attributes": ""
+        },
+        "item_icon": {
+          "value": "",
+          "library": ""
+        },
+        "item_icon_active": null,
+        "element_id": ""
+      }
+    ],
+    "item_position_horizontal": "end",
+    "open_animation": "fadeIn",
+    "content_width": "full_width",
+    "item_layout": "horizontal",
+    "open_on": "hover",
+    "horizontal_scroll": "disable",
+    "breakpoint_selector": "tablet",
+    "menu_item_title_distance_from_content": {
+      "unit": "px",
+      "size": 0,
+      "sizes": []
+    },
+    "menu_item_title_distance_from_content_laptop": {
+      "unit": "px",
+      "size": "",
+      "sizes": []
+    },
+    "menu_item_title_distance_from_content_tablet": {
+      "unit": "px",
+      "size": "",
+      "sizes": []
+    },
+    "menu_item_title_distance_from_content_mobile": {
+      "unit": "px",
+      "size": "",
+      "sizes": []
+    }
+  },
+  "unique_root": true,
+  "unique_template": true,
+  "unique_visible_button": true,
+  "handler_registered": true,
+  "clickState": {
+    "expanded": "true",
+    "visible": true,
+    "trace": [
+      {
+        "type": "mouseover",
+        "time": 8533.09999999404,
+        "expanded": "false",
+        "target": "Icon_ionic-ios-arrow-down"
+      },
+      {
+        "type": "mouseenter",
+        "time": 8547.299999982119,
+        "expanded": "true",
+        "target": "e-n-menu-title-6532"
+      },
+      {
+        "type": "mouseenter",
+        "time": 8547.299999982119,
+        "expanded": "true",
+        "target": "e-n-menu-dropdown-icon-6532"
+      },
+      {
+        "type": "mouseenter",
+        "time": 8547.299999982119,
+        "expanded": "true",
+        "target": "e-n-menu-dropdown-icon-closed"
+      },
+      {
+        "type": "mouseenter",
+        "time": 8547.299999982119,
+        "expanded": "true",
+        "target": "svg350"
+      },
+      {
+        "type": "mouseenter",
+        "time": 8547.299999982119,
+        "expanded": "true",
+        "target": "Icon_ionic-ios-arrow-down"
+      },
+      {
+        "type": "mousemove",
+        "time": 8547.399999976158,
+        "expanded": "true",
+        "target": "Icon_ionic-ios-arrow-down"
+      },
+      {
+        "type": "mouseover",
+        "time": 8557.5,
+        "expanded": "true",
+        "target": "Icon_ionic-ios-arrow-down"
+      },
+      {
+        "type": "mouseenter",
+        "time": 8557.59999999404,
+        "expanded": "true",
+        "target": "e-n-menu-dropdown-icon-opened"
+      },
+      {
+        "type": "mouseenter",
+        "time": 8557.59999999404,
+        "expanded": "true",
+        "target": "svg350"
+      },
+      {
+        "type": "mouseenter",
+        "time": 8557.59999999404,
+        "expanded": "true",
+        "target": "Icon_ionic-ios-arrow-down"
+      },
+      {
+        "type": "mousedown",
+        "time": 8559.799999982119,
+        "expanded": "true",
+        "target": "Icon_ionic-ios-arrow-down"
+      },
+      {
+        "type": "click",
+        "time": 8588.799999982119,
+        "expanded": "true",
+        "target": "Icon_ionic-ios-arrow-down"
+      }
+    ]
+  },
+  "openState": {
+    "expanded": "true",
+    "visible": true,
+    "bounds": {
+      "x": 76.5,
+      "y": 161.5,
+      "width": 1287,
+      "height": 773
+    },
+    "visible_links": 22
+  },
+  "resources": [
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/conditionals/popup.min.css?ver=4.3.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/modules/motion-fx.min.css?ver=4.3.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/modules/sticky.min.css?ver=4.3.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-loop-carousel.min.css?ver=4.3.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-loop-common.min.css?ver=4.3.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-nested-carousel.min.css?ver=4.3.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-posts.min.css?ver=4.3.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/elements-handlers.min.js?ver=4.3.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/frontend.min.js?ver=4.3.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/notes/notes-app-initiator.min.js?ver=4.3.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/notes/notes.min.js?ver=4.3.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/lib/smartmenus/jquery.smartmenus.min.js?ver=1.2.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/lib/sticky/jquery.sticky.min.js?ver=4.3.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/common.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/conditionals/e-swiper.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/theme-light.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-counter.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-divider.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-heading.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-image.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-social-icons.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-video.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/app-loader.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/chunks/accordion.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/chunks/background-slideshow.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/chunks/background-video.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/chunks/counter.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/chunks/nested-tabs.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/chunks/text-editor.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/chunks/video.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/common-modules.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/common.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/dev-tools.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/frontend-modules.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/vendors-redux.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/web-cli.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/animations/styles/fadeIn.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/animations/styles/fadeInRight.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/animations/styles/fadeInUp.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/backbone/backbone.marionette.min.js?ver=2.4.5.e1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/backbone/backbone.radio.min.js?ver=1.0.4",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/dialog/dialog.min.js?ver=4.9.4",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css?ver=5.54.0",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/all.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/brands.min.css?ver=5.15.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/fontawesome.min.css?ver=5.15.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/regular.min.css?ver=5.15.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/solid.min.css?ver=5.15.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/v4-shims.min.css?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/js/v4-shims.min.js?ver=4.3.3",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/jquery-numerator/jquery-numerator.min.js?ver=0.2.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/swiper/v8/css/swiper.min.css?ver=8.4.5",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/swiper/v8/swiper.min.js?ver=8.4.5",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/search-filter-elementor/assets/v2/js/search-filter-elementor.js?ver=1.4.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/themes/hello-elementor/assets/css/reset.css?ver=3.5.1",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-apple-webkit.min.css?ver=1790949139",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-frontend.min.css?ver=1790949139",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-loop-grid.min.css?ver=1790949139",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-mega-menu.min.css?ver=1790949139",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css?ver=1790949139",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-accordion.min.css?ver=1790949139",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-base.min.css?ver=1790949139",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-var-10.min.css?ver=1790949139",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css?ver=1790949139",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-nested-tabs.min.css?ver=1790949139",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-10.css?ver=1790949140",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-32910.css?ver=1790949318",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-32912.css?ver=1790949290",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-32977.css?ver=1790949334",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-32998.css?ver=1790949277",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-33000.css?ver=1790949276",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-33004.css?ver=1790949335",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-33034.css?ver=1790949331",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-33637.css?ver=1790949804",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-38403.css?ver=1790949141",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6416.css?ver=1790949139",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6461.css?ver=1790949139",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/custom-icons/metrica-6/style.css?ver=1.0.0",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/poppins.css?ver=1749657637",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/roboto.css?ver=1749657503",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/robotoslab.css?ver=1749657498",
+    "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/sourcesanspro.css?ver=1749657496"
+  ],
+  "href": "https://wordpress-218158-6702910.cloudwaysapps.com/solution/topografia/",
+  "navigation": 200,
+  "errors": [],
+  "failed_assets": []
+}

@@ -1,0 +1,1226 @@
+--- a/assets/js/elementor-fragment-diagnostics.js
++++ b/assets/js/elementor-fragment-diagnostics.js
+@@ -0,0 +1,22 @@
++(function ($) {
++    'use strict';
++    $(document).on('click', '.iu-fragment-diagnostic', function () {
++        var button = $(this);
++        var output = button.parent().find('.iu-fragment-diagnostic-result');
++        var panel = window.elementor && elementor.getPanelView().getCurrentPageView();
++        var id = panel && panel.model && panel.model.get('id');
++        var documentId = window.elementor && elementor.config.document.id;
++        if (!id || !documentId) { output.text(iuFragmentDiagnostics.error); return; }
++        button.prop('disabled', true);
++        output.text(iuFragmentDiagnostics.loading);
++        wp.ajax.post('iu_fragment_diagnostics', {
++            nonce: iuFragmentDiagnostics.nonce, document_id: documentId, element_id: id
++        }).done(function (result) {
++            output.text(result.message);
++        }).fail(function () {
++            output.text(iuFragmentDiagnostics.error);
++        }).always(function () {
++            button.prop('disabled', false);
++        });
++    });
++})(jQuery);
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1,7 +1,12 @@
+ # Changelog
+
+ 
+
+-All notable changes to this project will be documented in this file.
+
+-
+
++All notable changes to this project will be documented in this file.
++
++## Unreleased
++
++- Improve: Review Ivory Search query callbacks by their verified source and non-search behavior instead of a plugin version alone; bypass uncertain search contexts.
++- New: Administrator-only Advanced Elements Cache status distinguishes saved activation, static safety review and recent frontend hit/miss/bypass observations, with actionable rejection reasons.
++
+ ## 2.22.0 - 2026-10-02
+ 
+ - Cleanup: Archive historical Elementor prototypes and staging evidence, and exclude generated test artifacts from Git.
+--- a/includes/elementor-fragment-cache-diagnostics.php
++++ b/includes/elementor-fragment-cache-diagnostics.php
+@@ -0,0 +1,187 @@
++<?php
++/** Administrator-only, bounded observation and on-demand saved-element review. */
++if (!defined('ABSPATH')) exit;
++
++final class IU_Elementor_Fragment_Diagnostics {
++    const OPTION = 'iu_fragment_diagnostics';
++    private static $pending = array();
++
++    public static function boot() {
++        add_action('iu_elementor_fragment_result', array(__CLASS__, 'result'), 10, 2);
++        add_action('shutdown', array(__CLASS__, 'flush'));
++        add_action('wp_ajax_iu_fragment_diagnostics', array(__CLASS__, 'ajax'));
++        add_action('elementor/editor/after_enqueue_scripts', array(__CLASS__, 'editor_script'));
++    }
++
++    public static function add_control($element) {
++        if (!function_exists('current_user_can') || !current_user_can('manage_options')) return;
++        $element->add_control('iu_fragment_cache_diagnostics', array(
++            'type' => \Elementor\Controls_Manager::RAW_HTML,
++            'raw' => '<button type="button" class="elementor-button iu-fragment-diagnostic">' .
++                esc_html__('Έλεγχος κατάστασης cache', 'istodata-utilities') . '</button><p class="iu-fragment-diagnostic-result" role="status" style="overflow-wrap:anywhere;line-height:1.4;margin-top:8px"></p>',
++            'render_type' => 'none',
++        ));
++    }
++
++    public static function editor_script() {
++        if (!current_user_can('manage_options')) return;
++        wp_enqueue_script('iu-fragment-diagnostics', plugins_url('../assets/js/elementor-fragment-diagnostics.js', __FILE__),
++            array('jquery', 'wp-util', 'elementor-editor'), IU_PLUGIN_VERSION, true);
++        wp_localize_script('iu-fragment-diagnostics', 'iuFragmentDiagnostics', array(
++            'nonce' => wp_create_nonce('iu_fragment_diagnostics'),
++            'loading' => __('Έλεγχος αποθηκευμένου στοιχείου…', 'istodata-utilities'),
++            'error' => __('Ο έλεγχος δεν ολοκληρώθηκε. Αποθηκεύστε το στοιχείο και δοκιμάστε ξανά.', 'istodata-utilities'),
++        ));
++    }
++
++    public static function request_bypass($nodes, $document_id, $reason) {
++        if (!self::can_observe()) return;
++        $budget = 2500;
++        $walk = function ($nodes) use (&$walk, &$budget, $document_id, $reason) {
++            foreach ((array) $nodes as $node) {
++                if (--$budget < 0 || !is_array($node)) return;
++                if (($node['settings']['iu_fragment_cache'] ?? '') === 'yes') self::record($document_id, $node['id'] ?? '', 'bypass', array('reason' => $reason));
++                if (!empty($node['elements'])) $walk($node['elements']);
++            }
++        };
++        $walk($nodes);
++    }
++
++    private static function can_observe() {
++        return !(defined('WP_CLI') && WP_CLI) && function_exists('current_user_can') &&
++            current_user_can('manage_options') && function_exists('is_admin') && !is_admin() && !(defined('REST_REQUEST') && REST_REQUEST) &&
++            !(defined('DOING_AJAX') && DOING_AJAX);
++    }
++
++    public static function record($document_id, $element_id, $state, $detail = array()) {
++        if (!self::can_observe() || !(int) $document_id || !is_string($element_id) ||
++            !preg_match('/^[a-zA-Z0-9_-]{1,64}$/D', $element_id)) return;
++        $language = defined('ICL_LANGUAGE_CODE') ? (string) ICL_LANGUAGE_CODE : get_locale();
++        $device = function_exists('iu_request_is_phone') && iu_request_is_phone() ? 'phone' : 'desktop/tablet';
++        $key = (int) $document_id . ':' . $element_id . ':' . $language . ':' . $device;
++        self::$pending[$key] = array('document_id' => (int) $document_id, 'element_id' => $element_id,
++            'state' => $state, 'detail' => $detail, 'language' => $language, 'device' => $device, 'observed_at' => time());
++    }
++
++    public static function result($result, $build) {
++        self::record($build['document_id'] ?? 0, $build['element_id'] ?? '',
++            in_array($result, array('hit', 'stale-hit'), true) ? $result : ($result === 'stored' ? 'miss-stored' : 'bypass'),
++            array('reason' => $result));
++    }
++
++    public static function flush() {
++        if (!self::$pending || !self::can_observe()) return;
++        $rows = get_option(self::OPTION, array());
++        if (!is_array($rows)) $rows = array();
++        $changed = false;
++        foreach (self::$pending as $key => $row) {
++            $old = $rows[$key] ?? array();
++            if (($old['state'] ?? '') === $row['state'] && ($old['detail'] ?? array()) === $row['detail'] &&
++                (int) ($old['observed_at'] ?? 0) > time() - 300) continue;
++            $rows[$key] = $row;
++            $changed = true;
++        }
++        if (!$changed) return;
++        uasort($rows, function ($a, $b) { return (int) ($b['observed_at'] ?? 0) <=> (int) ($a['observed_at'] ?? 0); });
++        update_option(self::OPTION, array_slice($rows, 0, 50, true), false);
++    }
++
++    public static function reason($detail) {
++        $reason = $detail['reason'] ?? 'unsupported-element';
++        $messages = array(
++            'global-off' => 'Ο γενικός διακόπτης Advanced Elements Cache είναι OFF.',
++            'incompatible-elementor' => 'Ο συνδυασμός Elementor / Pro δεν έχει εγκριθεί για αυτή τη δυνατότητα.',
++            'native-element-cache' => 'Η ενσωματωμένη Elementor Element Cache δεν είναι απενεργοποιημένη.',
++            'editor-preview' => 'Editor και preview παρακάμπτουν πάντα την cache.',
++            'unsupported-request' => 'Αυτή η αίτηση δεν είναι ασφαλές κανονικό frontend context.',
++            'private-cookies' => 'Μη αναγνωρισμένες ή ιδιωτικές cookies απαιτούν κανονική απόδοση.',
++            'request-query' => 'Οι παράμετροι της αίτησης δεν επιτρέπουν κοινή cache.',
++            'language-context' => 'Η γλώσσα δεν έχει προσδιοριστεί με ασφάλεια.',
++            'builder-order' => 'Μεταγενέστερο builder hook δεν επιτρέπει ασφαλή αντικατάσταση.',
++            'query-context' => 'Query αναζήτησης ή Ivory search settings απαιτούν κανονική εκτέλεση.',
++            'key-context' => 'Το context ή το excerpt profile δεν επιτρέπει ασφαλές κοινό cache key.',
++            'concurrent-miss' => 'Άλλη αίτηση δημιουργεί το fragment. Η αναμονή έληξε και έγινε κανονική απόδοση.',
++            'replay-context' => 'Το context ή οι εξαρτήσεις άλλαξαν πριν από την επιστροφή του fragment.',
++            'generation-changed' => 'Έγινε ακύρωση της cache πριν ολοκληρωθεί η αίτηση.',
++            'volatile-markup' => 'Το αποτέλεσμα περιέχει ιδιωτικό ή μεταβαλλόμενο περιεχόμενο.',
++        );
++        if (isset($messages[$reason])) return __($messages[$reason], 'istodata-utilities');
++        if (strpos($reason, 'unknown-hook:') === 0) {
++            $callback = $detail['callback'] ?? 'unreviewed callback';
++            return sprintf(__('Μη ελεγμένο hook %1$s (%2$s). Σε context με αυτόν τον hook δεν χρησιμοποιείται cache.', 'istodata-utilities'),
++                $detail['hook'] ?? substr($reason, 13), $callback);
++        }
++        return sprintf(__('Δεν αποδείχθηκε ασφαλής κοινή cache για αυτό το στοιχείο (%s).', 'istodata-utilities'), $reason);
++    }
++
++    public static function status($document_id, $element_id) {
++        if (!current_user_can('manage_options') || !current_user_can('edit_post', $document_id)) return array('message' => __('Δεν επιτρέπεται.', 'istodata-utilities'));
++        $data = json_decode((string) get_post_meta($document_id, '_elementor_data', true), true);
++        $node = null; $budget = 2500;
++        $walk = function ($nodes) use (&$walk, &$node, &$budget, $element_id) {
++            foreach ((array) $nodes as $item) {
++                if (--$budget < 0 || !is_array($item)) return;
++                if (($item['id'] ?? '') === $element_id) { $node = $item; return; }
++                if (!empty($item['elements'])) $walk($item['elements']);
++                if ($node) return;
++            }
++        };
++        $walk($data);
++        if (!$node) return array('message' => __('Το στοιχείο δεν βρέθηκε στο αποθηκευμένο document. Αποθηκεύστε τις αλλαγές πρώτα.', 'istodata-utilities'));
++        $configured = ($node['settings']['iu_fragment_cache'] ?? '') === 'yes';
++        $global = iu_elementor_fragment_enabled();
++        $detail = array(); $review = 'not-checked';
++        if (!$global) $detail = array('reason' => 'global-off');
++        elseif (!iu_elementor_feature_supported('fragment')) $detail = array('reason' => 'incompatible-elementor');
++        elseif (get_option('elementor_element_cache_ttl') !== 'disable') $detail = array('reason' => 'native-element-cache');
++        elseif ($configured) {
++            $policy = IU_Elementor_Fragment_Graph::inspect($node);
++            $review = $policy ? 'reviewed' : 'blocked';
++            if (!$policy) $detail = IU_Elementor_Fragment_Graph::rejection();
++        }
++        $message = sprintf(__('Αποθηκευμένη επιλογή: %1$s. Γενικός διακόπτης: %2$s.', 'istodata-utilities'), $configured ? 'ON' : 'OFF', $global ? 'ON' : 'OFF');
++        if ($review !== 'not-checked') $message .= ' ' . __('Στατικός έλεγχος στο context της επιθεώρησης. Οι frontend αιτήσεις μπορεί να έχουν διαφορετικούς hooks· η ένδειξη δεν αποτελεί frontend hit ή bypass.', 'istodata-utilities');
++        if ($detail) $message .= ' ' . self::reason($detail);
++        elseif (!$configured) $message .= ' ' . __('Το στοιχείο δεν έχει ενεργοποιημένη cache.', 'istodata-utilities');
++        else $message .= ' ' . __('Ο στατικός έλεγχος πέρασε στο παρόν context. Δεν αποδεικνύει frontend HIT.', 'istodata-utilities');
++        if (($node['widgetType'] ?? '') === 'mega-menu' || ($node['widgetType'] ?? '') === 'nav-menu') {
++            $message .= ' ' . __('Προσοχή: η πλοήγηση μπορεί να αλλάζει ανά τρέχουσα σελίδα. Προτιμήστε ανεξάρτητα dropdown περιεχόμενα.', 'istodata-utilities');
++        }
++        $observed = array();
++        foreach ((array) get_option(self::OPTION, array()) as $row) {
++            if (!is_array($row) || ($row['document_id'] ?? 0) !== (int) $document_id || ($row['element_id'] ?? '') !== $element_id) continue;
++            $observed[] = $row;
++            $message .= ' ' . sprintf(__('Τελευταία παρατήρηση διαχειριστή: %1$s, %2$s / %3$s, %4$s.', 'istodata-utilities'),
++                $row['state'], $row['language'], $row['device'], wp_date('Y-m-d H:i:s', $row['observed_at']));
++            if ($row['state'] === 'bypass') $message .= ' ' . self::reason($row['detail']);
++            if (count($observed) >= 4) break;
++        }
++        if (!$observed) $message .= ' ' . __('Δεν υπάρχει ακόμη καταγεγραμμένη frontend αίτηση διαχειριστή. Ανώνυμες αιτήσεις δεν καταγράφονται.', 'istodata-utilities');
++        return array('configured' => $configured, 'global' => $global, 'static_review' => $review, 'detail' => $detail, 'observed' => $observed, 'message' => $message);
++    }
++
++    public static function ajax() {
++        if (!current_user_can('manage_options')) wp_send_json_error(array('message' => __('Δεν επιτρέπεται.', 'istodata-utilities')), 403);
++        check_ajax_referer('iu_fragment_diagnostics', 'nonce');
++        $document_id = absint($_POST['document_id'] ?? 0);
++        if (!$document_id || !current_user_can('edit_post', $document_id)) wp_send_json_error(array('message' => __('Δεν επιτρέπεται.', 'istodata-utilities')), 403);
++        wp_send_json_success(self::status($document_id, sanitize_key(wp_unslash($_POST['element_id'] ?? ''))));
++    }
++
++    public static function admin_panel() {
++        echo '<h2>' . esc_html__('Κατάσταση επιλεγμένου στοιχείου', 'istodata-utilities') . '</h2><form method="get">';
++        echo '<input type="hidden" name="page" value="iu-elementor-fragments">';
++        wp_nonce_field('iu_fragment_diagnostics', 'iu_status_nonce');
++        echo '<label>Document ID <input type="number" min="1" name="document_id" required></label> ';
++        echo '<label>Element ID <input type="text" name="element_id" required maxlength="64"></label> ';
++        submit_button(__('Έλεγχος κατάστασης', 'istodata-utilities'), 'secondary', 'submit', false);
++        echo '</form>';
++        if (!empty($_GET['document_id']) && !empty($_GET['element_id']) && isset($_GET['iu_status_nonce']) &&
++            is_string($_GET['iu_status_nonce']) && wp_verify_nonce(wp_unslash($_GET['iu_status_nonce']), 'iu_fragment_diagnostics')) {
++            $report = self::status(absint($_GET['document_id']), sanitize_key(wp_unslash($_GET['element_id'])));
++            echo '<p role="status">' . esc_html($report['message']) . '</p>';
++        }
++        echo '<p>' . esc_html__('Ο έλεγχος αφορά το αποθηκευμένο στοιχείο. Δεν εκτελεί widgets ή loop queries. Οι παρατηρήσεις είναι ιστορικές, όχι εγγύηση για την επόμενη αίτηση.', 'istodata-utilities') . '</p>';
++    }
++}
++IU_Elementor_Fragment_Diagnostics::boot();
+--- a/includes/elementor-fragment-cache-graph.php
++++ b/includes/elementor-fragment-cache-graph.php
+@@ -12,6 +12,11 @@
+     private $menus = array();
+     private $budget = 2500;
+     private $failure = '';
++    private static $last_rejection = array();
++    private static $source_checks = array();
++
++    public static function rejection() { return self::$last_rejection; }
++    public static function clear_rejection() { self::$last_rejection = array(); }
+ 
+     public static function prototype_supported($type, $prototype) {
+         if (!iu_elementor_feature_supported('fragment')) return false;
+@@ -39,12 +44,17 @@
+     }
+ 
+     public static function inspect($node) {
++        self::$last_rejection = array();
+         $complex = in_array($node['widgetType'] ?? '', array('mega-menu', 'loop-grid', 'posts', 'template'), true);
+         if ((!$complex && !in_array($node['widgetType'] ?? '', array('heading', 'image', 'button', 'icon', 'divider', 'spacer'), true)) ||
+             !iu_elementor_feature_supported('fragment', null, $complex) ||
+-            !class_exists('Elementor\\Plugin') || !\Elementor\Plugin::$instance) return null;
++            !class_exists('Elementor\\Plugin') || !\Elementor\Plugin::$instance) {
++            self::$last_rejection = array('reason' => 'unsupported-root-or-elementor');
++            return null;
++        }
+         $policy = new self();
+         if (!$policy->walk(array($node), false) || !$policy->hooks_safe()) {
++            self::$last_rejection['reason'] = $policy->failure ?: 'unknown-hook';
+             do_action('iu_elementor_fragment_graph_rejected', $policy->failure ?: 'unknown-hook', $node);
+             return null;
+         }
+@@ -187,7 +197,10 @@
+         foreach ($hooks as $hook) {
+             foreach (($GLOBALS['wp_filter'][$hook]->callbacks ?? array()) as $group) {
+                 foreach ($group as $callback) {
+-                    if (!$this->callback_safe($callback['function'], $hook)) return $this->fail('unknown-hook:' . $hook);
++                    if (!$this->callback_safe($callback['function'], $hook)) {
++                        self::$last_rejection = array('hook' => $hook, 'callback' => self::callback_name($callback['function']));
++                        return $this->fail('unknown-hook:' . $hook);
++                    }
+                 }
+             }
+         }
+@@ -209,7 +222,7 @@
+                 str_replace('\\', '/', ELEMENTOR_PATH . 'modules/interactions/interactions-frontend-handler.php');
+         }
+         if (in_array($name, array('IU_Elementor_Fragment_Cache::filter', 'IU_Elementor_Fragment_Cache::begin',
+-            'IU_Elementor_Fragment_Cache::finish', 'IU_Elementor_Fragment_Cache::query_results',
++            'IU_Elementor_Fragment_Cache::finish', 'IU_Elementor_Fragment_Cache::query_results', 'IU_Elementor_Fragment_Cache::guard_queries',
+             'iu_elementor_filter_builder_content_by_device'), true)) return true;
+         if (in_array($name, array('ElementorPro\\Modules\\DisplayConditions\\Module::before_element_render',
+             'ElementorPro\\Modules\\DisplayConditions\\Module::after_element_render',
+@@ -228,7 +241,19 @@
+             defined('Search_Filter_Elementor_Extension::VERSION') && \Search_Filter_Elementor_Extension::VERSION === '1.4.1') return true;
+         if (in_array($name, array('Search_Filter::archive_query_init_later', 'Search_Filter::custom_query_init'), true) &&
+             defined('SEARCH_FILTER_VERSION') && SEARCH_FILTER_VERSION === '2.5.17') return true;
+-        if (in_array($name, array('IS_Public::pre_get_posts', 'IS_Public::posts_join', 'IS_Public::posts_distinct_request'), true) && defined('IS_VERSION') && IS_VERSION === '5.5.16') return true;
++        if (isset(self::ivory_contracts()[$name])) {
++            $contract = self::ivory_contracts()[$name];
++            if ($hook !== $contract[0] || !$this->reviewed_source($callback, 'add-search-to-menu/public/class-is-public.php', $contract[1])) return false;
++            // Reviewed Elementor graphs exclude search/relative query settings;
++            // request guards exclude search/AJAX. These Ivory methods do nothing
++            // without search terms or Ivory query markers. Do not call them here.
++            if ($name !== 'IS_Public::wp_nav_menu_items') return true;
++            if (!is_object($callback[0]) || !isset($callback[0]->opt) || !is_array($callback[0]->opt)) return false;
++            $options = $callback[0]->opt;
++            if (isset($options['menus'][''])) return false;
++            foreach (array_keys($this->menus) as $slug) if (isset($options['menu_name'][$slug])) return false;
++            return true;
++        }
+         if ($name === 'ACF::posts_where' && defined('ACF_VERSION') && ACF_VERSION === '6.8.8') return true;
+         if ($name === 'WP_Rocket\\Engine\\Media\\Lazyload\\Subscriber::maybe_disable_core_lazyload' &&
+             defined('WP_ROCKET_VERSION') && WP_ROCKET_VERSION === '3.23.2.2') {
+@@ -260,12 +285,6 @@
+                     $post_type->rewrite['slug'] !== trim($post_type->rewrite['slug'], '/')) return false;
+             }
+             $this->signature['remove-cpt-base'] = $callback[0]->rcptb_selected;
+-            return true;
+-        }
+-        if ($name === 'IS_Public::wp_nav_menu_items' && defined('IS_VERSION') && IS_VERSION === '5.5.16') {
+-            $options = array_merge((array) get_option('is_settings', array()), (array) get_option('is_menu_search', array()));
+-            if (isset($options['menus'][''])) return false;
+-            foreach (array_keys($this->menus) as $slug) if (isset($options['menu_name'][$slug])) return false;
+             return true;
+         }
+         try {
+@@ -307,6 +326,49 @@
+         return false;
+     }
+ 
++    private static function callback_name($callback) {
++        if ($callback instanceof Closure) return 'anonymous callback';
++        $name = is_array($callback) ? (is_object($callback[0]) ? get_class($callback[0]) : $callback[0]) . '::' . $callback[1] : $callback;
++        return is_string($name) && preg_match('/^[a-zA-Z_][a-zA-Z0-9_\\\\:]*(?:[a-zA-Z0-9_])$/D', $name) ? $name : 'unreviewed callback';
++    }
++
++    private static function ivory_contracts() {
++        // Normalized method tokens reviewed against the identical official
++        // source in both previously inspected packages; no plugin version gate.
++        return array(
++            'IS_Public::pre_get_posts' => array('pre_get_posts', '99dd3d26ef3e3b798f5809bb4dacb8a29afcef65087e986521c946e857e45dd1'),
++            'IS_Public::posts_join' => array('posts_join', '3ac24ba5ae28e96ea368e6617edc6fc5f6b2f68f6a8e050642138c3d9200731d'),
++            'IS_Public::posts_distinct_request' => array('posts_distinct_request', '79a67a1b061c5628f2c19b2714326d183aaa0de7ffb9b230d51897745bbec75e'),
++            'IS_Public::wp_nav_menu_items' => array('wp_nav_menu_items', '749320160f4be487df95b458635bf8ef30b67992f2cfef81e82293208c3e1b43'),
++        );
++    }
++
++    private function reviewed_source($callback, $relative_path, $expected) {
++        if (!is_array($callback) || !defined('WP_PLUGIN_DIR')) return false;
++        try {
++            $ref = new ReflectionMethod($callback[0], $callback[1]);
++            $file = $ref->getFileName();
++            if (!$file || realpath($file) !== realpath(WP_PLUGIN_DIR . '/' . $relative_path) || !is_readable($file)) return false;
++            $identity = $file . ':' . $ref->getStartLine() . ':' . $ref->getEndLine() . ':' . $expected;
++            if (!isset(self::$source_checks[$identity])) {
++                $lines = file($file);
++                if (!is_array($lines)) return false;
++                $code = implode('', array_slice($lines, $ref->getStartLine() - 1, $ref->getEndLine() - $ref->getStartLine() + 1));
++                $normalized = '';
++                foreach (token_get_all('<?php ' . $code) as $token) {
++                    if (is_array($token)) {
++                        if (in_array($token[0], array(T_OPEN_TAG, T_WHITESPACE, T_COMMENT, T_DOC_COMMENT), true)) continue;
++                        $normalized .= $token[1];
++                    } else $normalized .= $token;
++                }
++                self::$source_checks[$identity] = hash_equals($expected, hash('sha256', $normalized));
++            }
++            if (!self::$source_checks[$identity]) return false;
++            $this->signature['source-contracts'][self::callback_name($callback)] = $expected;
++            return true;
++        } catch (ReflectionException $exception) { return false; }
++    }
++
+     private function wpml_wrapper_safe($callback, $hook) {
+         if (!defined('ICL_SITEPRESS_VERSION') || ICL_SITEPRESS_VERSION !== '4.9.7') return false;
+         $expected = array('elementor/frontend/builder_content_data' => 'WPML\\PB\\Elementor\\V4\\Hooks::translateContentIds',
+--- a/includes/elementor-fragment-cache.php
++++ b/includes/elementor-fragment-cache.php
+@@ -5,7 +5,8 @@
+ }
+
+ require_once __DIR__ . '/elementor-compatibility.php';
+
+ require_once __DIR__ . '/elementor-fragment-cache-graph.php';
+
+-require_once __DIR__ . '/elementor-fragment-cache-excerpt.php';
+
++require_once __DIR__ . '/elementor-fragment-cache-excerpt.php';
++require_once __DIR__ . '/elementor-fragment-cache-diagnostics.php';
+ 
+
+ final class IU_Elementor_Fragment_Cache {
+
+     const FORMAT = 13;
+
+@@ -14,7 +15,8 @@
+     const INDEX_PREFIX = 'iu_fragment_entry_';
+
+     const EPOCH = 'iu_elementor_fragment_epoch';
+
+     private static $capture = array();
+
+-    private static $policies = array();
+
++    private static $policies = array();
++    private static $request_failure = '';
+ 
+
+     public static function boot() {
+
+         if (did_action('elementor/init')) {
+
+@@ -27,7 +29,8 @@
+         add_filter('elementor/frontend/builder_content_data', array(__CLASS__, 'filter'), PHP_INT_MAX, 2);
+
+         add_action('elementor/frontend/widget/before_render', array(__CLASS__, 'begin'), 0);
+
+         add_action('elementor/frontend/widget/after_render', array(__CLASS__, 'finish'), PHP_INT_MAX);
+
+-        add_action('elementor/query/query_results', array(__CLASS__, 'query_results'), 0, 2);
+
++        add_action('elementor/query/query_results', array(__CLASS__, 'query_results'), 0, 2);
++        add_action('pre_get_posts', array(__CLASS__, 'guard_queries'), PHP_INT_MAX);
+         add_action('updated_post_meta', array(__CLASS__, 'meta_changed'), 10, 4);
+
+         add_action('added_post_meta', array(__CLASS__, 'meta_changed'), 10, 4);
+
+         add_action('deleted_post_meta', array(__CLASS__, 'meta_changed'), 10, 4);
+@@ -73,7 +76,8 @@
+             'options' => array('3600' => '1 ώρα', '21600' => '6 ώρες', '86400' => '24 ώρες', '604800' => '7 ημέρες'),
+
+             'default' => '86400', 'condition' => array('iu_fragment_cache' => 'yes'),
+
+         ));
+
+-        $element->end_controls_section();
+
++        IU_Elementor_Fragment_Diagnostics::add_control($element);
++        $element->end_controls_section();
+     }
+
+ 
+
+     public static function proxy($manager) {
+
+@@ -95,23 +99,23 @@
+     }
+
+ 
+
+     private static function request_ok() {
+
+-        if (!iu_elementor_fragment_enabled() || !self::versions_supported()) {
+-            return false;
+-        }
++        self::$request_failure = '';
++        if (!iu_elementor_fragment_enabled()) return self::reject_request('global-off');
++        if (!self::versions_supported()) return self::reject_request('incompatible-elementor');
+         // Elementor's zero-argument preview check uses the current post. Nested
+         // templates can change that post while the preview request stays active.
+         // Never let a query-allow filter reopen caching in an editor iframe.
+-        if (isset($_GET['elementor-preview'])) return false;
++        if (isset($_GET['elementor-preview'])) return self::reject_request('editor-preview');
+         $plugin = class_exists('Elementor\\Plugin') ? \Elementor\Plugin::$instance : null;
+
+-        if ($plugin && (($plugin->editor && $plugin->editor->is_edit_mode()) ||
+
+-            ($plugin->preview && $plugin->preview->is_preview_mode()))) {
+
+-            return false;
+
++        if ($plugin && (($plugin->editor && $plugin->editor->is_edit_mode()) ||
++            ($plugin->preview && $plugin->preview->is_preview_mode()))) {
++            return self::reject_request('editor-preview');
+         }
+
+         $query_module = 'ElementorPro\\Modules\\QueryControl\\Module';
+
+         if (class_exists($query_module) && (!is_callable(array($query_module, 'get_avoid_list_ids')) ||
+
+             !is_callable(array($query_module, 'add_to_avoid_list')) ||
+
+-            !is_array($query_module::get_avoid_list_ids()))) {
+
+-            return false;
+
++            !is_array($query_module::get_avoid_list_ids()))) {
++            return self::reject_request('query-replay-api');
+         }
+
+         $cookies = $_COOKIE;
+
+         if (isset($cookies['wp-wpml_current_language']) && defined('ICL_LANGUAGE_CODE') &&
+
+@@ -119,7 +123,8 @@
+             hash_equals((string) ICL_LANGUAGE_CODE, (string) $cookies['wp-wpml_current_language'])) {
+
+             unset($cookies['wp-wpml_current_language']);
+
+         }
+
+-        if (!self::cookies_safe($cookies) || is_admin() || !empty($_POST) ||
+
++        if (!self::cookies_safe($cookies)) return self::reject_request('private-cookies');
++        if (is_admin() || !empty($_POST) ||
+             ($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET' ||
+
+             !empty($_SERVER['HTTP_AUTHORIZATION']) || !empty($_SERVER['PHP_AUTH_USER']) ||
+
+             empty($_SERVER['HTTP_USER_AGENT']) || empty($_SERVER['REQUEST_URI']) ||
+
+@@ -129,17 +134,19 @@
+             (function_exists('is_customize_preview') && is_customize_preview()) ||
+
+             is_feed() || is_search() ||
+
+             (function_exists('is_404') && is_404()) ||
+
+-            (function_exists('iu_elementor_device_visibility_is_preview') && iu_elementor_device_visibility_is_preview())) {
+
+-            return false;
+
+-        }
+
+-        if ($_GET && !apply_filters('iu_elementor_fragment_allow_query', false, array_keys($_GET))) {
+
+-            return false;
+
++            (function_exists('iu_elementor_device_visibility_is_preview') && iu_elementor_device_visibility_is_preview())) {
++            return self::reject_request('unsupported-request');
++        }
+
++        if ($_GET && !apply_filters('iu_elementor_fragment_allow_query', false, array_keys($_GET))) {
++            return self::reject_request('request-query');
+         }
+
+         $other = get_option('elementor_element_cache_ttl');
+
+         // In this renderer a missing option also enables Elementor's native
+
+         // document cache. Only an explicit disable is safe for our proxy data.
+
+-        return $other === 'disable';
+
+-    }
+
++        return $other === 'disable' ? true : self::reject_request('native-element-cache');
++    }
++
++    private static function reject_request($reason) { self::$request_failure = $reason; return false; }
+ 
+
+     private static function cookies_safe($cookies) {
+
+         $user = get_current_user_id();
+
+@@ -170,7 +177,8 @@
+         return (defined('ICL_SITEPRESS_VERSION') || defined('WPML_PLUGIN_PATH')) ? null : 'site:' . get_locale();
+
+     }
+
+ 
+
+-    private static function eligible($node, $document_id) {
+
++    private static function eligible($node, $document_id) {
++        IU_Elementor_Fragment_Graph::clear_rejection();
+         unset(self::$policies[$document_id . ':' . ($node['id'] ?? '')]);
+
+         if (($node['elType'] ?? '') !== 'widget' ||
+
+             ($node['settings']['iu_fragment_cache'] ?? '') !== 'yes' ||
+
+@@ -273,10 +281,15 @@
+     }
+
+ 
+
+     public static function filter($nodes, $document_id) {
+
+-        if (!iu_elementor_fragment_enabled()) return $nodes;
+
++        if (!iu_elementor_fragment_enabled()) {
++            IU_Elementor_Fragment_Diagnostics::request_bypass($nodes, $document_id, 'global-off');
++            return $nodes;
++        }
+         $language = self::language();
+
+         $request_ok = self::request_ok() && self::builder_tail_safe();
+
+-        do_action('iu_elementor_fragment_gate', $language, $request_ok, $document_id, $nodes);
+
++        do_action('iu_elementor_fragment_gate', $language, $request_ok, $document_id, $nodes);
++        if (!$language || !$request_ok) IU_Elementor_Fragment_Diagnostics::request_bypass($nodes, $document_id,
++            !$language ? 'language-context' : (self::$request_failure ?: 'builder-order'));
+         return is_array($nodes) && $language && $request_ok
+
+             ? self::walk($nodes, (int) $document_id, $language) : $nodes;
+
+     }
+
+@@ -309,7 +322,9 @@
+             }
+
+             $eligible = self::eligible($node, $document_id);
+
+             if (($node['settings']['iu_fragment_cache'] ?? '') === 'yes') {
+
+-                do_action('iu_elementor_fragment_node', $node['id'] ?? '', $eligible, $document_id);
+
++                do_action('iu_elementor_fragment_node', $node['id'] ?? '', $eligible, $document_id);
++                if (!$eligible) IU_Elementor_Fragment_Diagnostics::record($document_id, $node['id'] ?? '', 'bypass',
++                    IU_Elementor_Fragment_Graph::rejection() ?: array('reason' => 'unsupported-element'));
+             }
+
+             if ($eligible) {
+
+                 $prior = self::displayed();
+
+@@ -347,10 +362,13 @@
+                                 break;
+
+                             }
+
+                         } while (microtime(true) < $until);
+
+-                        if (($node['widgetType'] ?? '') === 'iu-fragment-proxy') {
+
+-                            continue;
+
+-                        }
+
+-                    }
+
++                        if (($node['widgetType'] ?? '') === 'iu-fragment-proxy') {
++                            continue;
++                        }
++                        IU_Elementor_Fragment_Diagnostics::record($document_id, $node['id'], 'bypass', array('reason' => 'concurrent-miss'));
++                    }
++                } else {
++                    IU_Elementor_Fragment_Diagnostics::record($document_id, $node['id'], 'bypass', array('reason' => 'key-context'));
+                 }
+
+             }
+
+             if (isset($node['elements']) && is_array($node['elements'])) {
+
+@@ -437,10 +455,13 @@
+             self::excerpt_structure(IU_Elementor_Fragment_Excerpt::profile()) === self::excerpt_structure($payload['excerpt_prior']) &&
+
+             (int) get_the_ID() === $payload['post_context'] && self::replay($payload['entry'])) {
+
+             echo $payload['entry']['html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+-            do_action('iu_elementor_fragment_result', !empty($payload['stale']) ? 'stale-hit' : 'hit', array('element_id' => $payload['node']['id']));
+
++            do_action('iu_elementor_fragment_result', !empty($payload['stale']) ? 'stale-hit' : 'hit',
++                array('element_id' => $payload['node']['id'], 'document_id' => $payload['entry']['generation']['document_id'] ?? 0));
+             return;
+
+         }
+
+-        $original = \Elementor\Plugin::$instance->elements_manager->create_element_instance($payload['node']);
+
++        do_action('iu_elementor_fragment_result', 'replay-context',
++            array('element_id' => $payload['node']['id'], 'document_id' => $payload['entry']['generation']['document_id'] ?? 0));
++        $original = \Elementor\Plugin::$instance->elements_manager->create_element_instance($payload['node']);
+         if ($original) {
+
+             $original->print_element();
+
+         }
+
+@@ -564,7 +585,8 @@
+         ob_start();
+
+     }
+
+ 
+
+-    public static function query_results($query, $widget) {
+
++    public static function query_results($query, $widget) {
++        self::guard_queries($query);
+         foreach (self::$capture as &$frame) {
+
+             if (empty($frame['build']['independent_query'])) continue;
+
+             foreach ((array) $query->posts as $post) {
+
+@@ -575,7 +597,17 @@
+         unset($frame);
+
+     }
+
+ 
+
+-    public static function finish($element) {
+
++    public static function guard_queries($query) {
++        if (!self::$capture || !is_object($query)) return;
++        $vars = $query->query_vars ?? array();
++        if ((is_callable(array($query, 'is_search')) && $query->is_search()) || !empty($vars['s']) ||
++            isset($vars['_is_includes']) || isset($vars['_is_settings']) || isset($vars['_is_excludes'])) {
++            foreach (self::$capture as &$frame) $frame['unsafe_query'] = true;
++            unset($frame);
++        }
++    }
++
++    public static function finish($element) {
+         if (!self::$capture || end(self::$capture)['id'] !== $element->get_id()) {
+
+             return;
+
+         }
+
+@@ -611,7 +643,8 @@
+             $reason = 'inline-script-side-effect';
+
+         }
+
+         global $wpdb;
+
+-        if (!$reason && (!iu_elementor_fragment_enabled() || !self::generation_current($start['build']['generation']))) $reason = 'generation-changed';
+
++        if (!$reason && !empty($start['unsafe_query'])) $reason = 'query-context';
++        if (!$reason && (!iu_elementor_fragment_enabled() || !self::generation_current($start['build']['generation']))) $reason = 'generation-changed';
+         $owner = !$reason ? $wpdb->get_var($wpdb->prepare(
+
+             "SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", $start['build']['lock'][0])) : null;
+
+         if (!$reason && ($owner !== $start['build']['lock'][1] ||
+
+@@ -671,7 +704,7 @@
+     }
+ 
+
+     public static function admin_menu() {
+
+-        add_management_page('Elementor Fragment Cache', 'Elementor Fragment Cache', 'manage_options',
+
++        add_management_page('Advanced Elements Cache', 'Advanced Elements Cache', 'manage_options',
+             'iu-elementor-fragments', array(__CLASS__, 'admin_page'));
+
+     }
+
+ 
+
+@@ -709,9 +742,10 @@
+         if (!current_user_can('manage_options')) {
+
+             return;
+
+         }
+
+-        echo '<div class="wrap"><h1>Elementor Fragment Cache</h1><p>' .
+
++        echo '<div class="wrap"><h1>Advanced Elements Cache</h1><p>' .
+             esc_html__('Η εκκαθάριση ανανεώνει το fragment στην επόμενη αίτηση. Εκκαθαρίστε χωριστά τυχόν full-page/CDN cache.', 'istodata-utilities') . '</p>';
+
+-        echo '<p>' . esc_html(iu_elementor_compatibility_description('fragment')) . '</p>';
+
++        echo '<p>' . esc_html(iu_elementor_compatibility_description('fragment')) . '</p>';
++        IU_Elementor_Fragment_Diagnostics::admin_panel();
+         global $wpdb;
+
+         $pattern = $wpdb->esc_like(self::INDEX_PREFIX) . '%';
+
+         $names = $wpdb->get_col($wpdb->prepare(
+
+--- /dev/null
++++ b/tests/fragment-cache-hook-diagnostics.cjs
+@@ -0,0 +1,40 @@
++const {chromium}=require('C:/Users/pe/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
++const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict');
++const BASE='https://wordpress-218158-6702910.cloudwaysapps.com';
++(async()=>{
++const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
++try {
++const ctx=await browser.newContext({viewport:{width:1440,height:1024}});
++const s=JSON.parse(fs.readFileSync(path.join(os.tmpdir(),'iu-fragment-access-sessions.json'))).site_manager;
++await ctx.addCookies(['','auth_','secure_'].map(p=>({name:s[p+'name'],value:s[p+'value'],url:BASE})));
++const page=await ctx.newPage();
++await page.goto(BASE+'/wp-admin/post.php?post=30&action=elementor',{waitUntil:'domcontentloaded',timeout:180000});
++await page.waitForFunction(()=>{try{return !!elementor.getContainer('417d1ae')&&!!window.$e;}catch{return false;}},{timeout:180000});
++await page.evaluate(async()=>{const c=elementor.getContainer('417d1ae');await $e.run('panel/editor/open',{model:c.model,view:c.view});});
++await page.locator('.elementor-panel-navigation-tab[data-tab="advanced"]').click();
++await page.getByText('Advanced Element Cache',{exact:true}).click();
++const probe=await browser.newContext();await probe.addCookies(['','auth_','secure_'].map(p=>({name:s[p+'name'],value:s[p+'value'],url:BASE})));
++const unknown=await probe.request.get(BASE+'/?iu_kit_fragment_test=cross-page-20261001&iu_kit_mode=unknown&iu_kit_generation=diagnostic-unknown&iu_kit_request='+Date.now(),{timeout:180000});
++const marker=JSON.parse((await unknown.text()).match(/IU_CROSS_PAGE (.+?) -->/)[1]);assert.equal(marker.loop_any,150);assert(!marker.events.length);assert.equal(marker.reject['417d1ae'],'unknown-hook:pre_get_posts');await probe.close();
++await page.locator('.iu-fragment-diagnostic').click();
++await page.waitForFunction(()=>document.querySelector('.iu-fragment-diagnostic-result')?.textContent.includes('Αποθηκευμένη επιλογή'),{timeout:120000});
++assert.equal(await page.locator('.iu-fragment-diagnostic-result').evaluate(el=>getComputedStyle(el).overflowWrap),'anywhere');
++const message=await page.locator('.iu-fragment-diagnostic-result').innerText();console.log(message);
++assert(message.includes('ON')&&message.includes('Τελευταία παρατήρηση διαχειριστή')&&message.includes('iu_unreviewed_acceptance_query'));assert(!/\/home\/|Stack trace|wp-content\/plugins/.test(message));
++const report=await page.evaluate(async()=>{
++const post=async(data)=>{let r=await fetch(ajaxurl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data)});return {status:r.status,json:await r.json()};};
++let data={action:'iu_fragment_diagnostics',nonce:iuFragmentDiagnostics.nonce,document_id:'30',element_id:'417d1ae'};
++return {valid:await post(data),invalid:await post({...data,nonce:'invalid'})};
++});
++assert(report.valid.json.success);assert.equal(report.invalid.status,403);
++await page.screenshot({path:'docs/fragment-cache-hook-diagnostics.png'});
++fs.writeFileSync('docs/fragment-cache-hook-diagnostics-ui.json',JSON.stringify({message,report:report.valid.json.data,invalid_nonce_status:403,native_button:true,no_save:true},null,2)+'\n');
++const anon=await browser.newContext();let denied=await anon.request.post(BASE+'/wp-admin/admin-ajax.php',{form:{action:'iu_fragment_diagnostics',document_id:'30',element_id:'417d1ae'}});assert(!((await denied.text()).includes('Αποθηκευμένη επιλογή')));await anon.close();
++await page.goto(BASE+'/wp-admin/tools.php?page=iu-elementor-fragments',{waitUntil:'domcontentloaded',timeout:90000});
++await page.locator('input[type=number][name=document_id]').fill('30');await page.locator('input[type=text][name=element_id]').fill('417d1ae');
++await Promise.all([page.waitForNavigation({waitUntil:'domcontentloaded'}),page.getByRole('button',{name:'Έλεγχος κατάστασης',exact:true}).click()]);
++assert((await page.locator('p[role=status]').innerText()).includes('Αποθηκευμένη επιλογή'));
++console.log('PASS native Elementor diagnostic button, Tools status, nonce rejection, anonymous denial; no save');
++}finally{await browser.close();}
++})().catch(e=>{console.error(e.stack);process.exit(1)});
++
+--- /dev/null
++++ b/tests/fragment-cache-hook-harness.php
+@@ -0,0 +1,141 @@
++<?php
++/**
++ * Plugin Name: IU Fragment Access Acceptance Harness
++ * Version: 0.1.0
++ * Description: Staging-only observation of saved Kit opt-ins.
++ */
++if (!defined('ABSPATH')) exit;
++if (!defined('SAVEQUERIES')) define('SAVEQUERIES', true);
++if (($_SERVER['HTTP_HOST'] ?? '') === 'wordpress-218158-6702910.cloudwaysapps.com') {
++    add_action('shutdown',function(){
++        if ((defined('DOING_AJAX') && DOING_AJAX) || (defined('REST_REQUEST') && REST_REQUEST)) return;
++        if (($_GET['iu_admin_check'] ?? '') !== '1') return;
++        echo '<!-- IU_ADMIN_CONTEXT '.wp_json_encode(array(
++            'user_id'=>get_current_user_id(),'roles'=>wp_get_current_user()->roles,'manage_options'=>current_user_can('manage_options'),
++            'admin_bar'=>is_admin_bar_showing(),'kit_menu_callback'=>has_action('admin_menu','iu_add_admin_menu'),
++            'registered'=>isset($GLOBALS['_registered_pages']['settings_page_istodata-utilities']),
++            'admin_menu_ran'=>did_action('admin_menu'),'kit_loaded'=>defined('IU_PLUGIN_VERSION'),
++            'parent'=>is_admin()?get_admin_page_parent():null,'hook'=>is_admin()?get_plugin_page_hookname('istodata-utilities',get_admin_page_parent()):null,
++            'no_priv'=>$GLOBALS['_wp_submenu_nopriv'] ?? array(),
++            'menus'=>array_map(function($m){return $m[2];},$GLOBALS['submenu']['options-general.php'] ?? array()),
++            'admin_hooks'=>array_map(function($g){return array_map(function($c){$f=$c['function'];return is_string($f)?$f:(is_array($f)?(is_object($f[0])?get_class($f[0]):$f[0]).'::'.$f[1]:'closure');},$g);},$GLOBALS['wp_filter']['admin_menu']->callbacks ?? array()))).' -->';
++    });
++}
++function iu_cross_probe_enabled() {
++    return ($_SERVER['HTTP_HOST'] ?? '') === 'wordpress-218158-6702910.cloudwaysapps.com' &&
++        ((($_GET['iu_kit_fragment_test'] ?? '') === 'cross-page-20261001' && !is_admin()) ||
++        ($_SERVER['HTTP_X_IU_PREVIEW_PROBE'] ?? '') === 'native-preview-20261001');
++}
++function iu_unreviewed_acceptance_query($query) {}
++function iu_cross_media() {
++    return array('count'=>wp_increase_content_media_count(0), 'priority'=>wp_high_priority_element_flag(),
++        'content'=>doing_filter('the_content'), 'loop'=>in_the_loop(), 'main'=>is_main_query());
++}
++add_action('plugins_loaded', function () {
++    if (!iu_cross_probe_enabled()) return;
++    $GLOBALS['iu_cross'] = array('target'=>0,'nested'=>0,'loop'=>0,'loop_any'=>0,'grids'=>array(),'events'=>array(),'keys'=>array(),'reject'=>array(),'template_renders'=>array());
++    $GLOBALS['iu_cross']['gates']=array();
++    $GLOBALS['iu_cross']['query_profile']=array();
++    add_filter('posts_results',function($posts,$q){if($q->is_main_query())$GLOBALS['iu_cross']['main_results']=array('ids'=>array_map(function($p){return $p->ID;},$posts),'found'=>$q->found_posts);return $posts;},PHP_INT_MAX,2);
++    if (($_GET['iu_kit_mode'] ?? '') === 'unknown') add_action('pre_get_posts','iu_unreviewed_acceptance_query',10);
++    add_action('pre_get_posts',function($q){
++        if($q->is_main_query()) $GLOBALS['iu_cross']['main_preget']=array('search'=>$q->is_search(),'id'=>$q->query_vars['id']??null,'s'=>$q->query_vars['s']??null,'ivory'=>isset($q->query_vars['_is_includes'])||isset($q->query_vars['_is_settings']), 'post_type'=>$q->query_vars['post_type']??null);
++        if (empty($GLOBALS['iu_cross']['inside'])) return;
++        $v=$q->query_vars;
++        $GLOBALS['iu_cross']['query_profile'][]=array('post_type'=>$v['post_type']??'', 's'=>$v['s']??'', 'search'=>$q->is_search(), 'ivory'=>isset($v['_is_includes'])||isset($v['_is_settings']));
++    },PHP_INT_MAX);
++
++    $GLOBALS['iu_cross']['operations']=array();
++    $GLOBALS['iu_cross']['rendered_widgets']=0;
++    add_action('iu_elementor_fragment_gate',function($language,$ok,$doc,$nodes){
++        $p=\Elementor\Plugin::$instance;
++        $optins=array();$walk=function($nodes)use(&$walk,&$optins){foreach((array)$nodes as$n){
++            if(($n['settings']['iu_fragment_cache']??'')==='yes')$optins[]=$n['id'];
++            if(!empty($n['elements']))$walk($n['elements']);
++        }};$walk($nodes);
++        $GLOBALS['iu_cross']['gates'][]=array('document'=>(int)$doc,'eligible'=>$ok,
++            'request_context_ok'=>(new ReflectionMethod('IU_Elementor_Fragment_Cache','request_ok'))->invoke(null),
++            'query_allowed'=>apply_filters('iu_elementor_fragment_allow_query',false,array_keys($_GET)),
++            'preview'=>$p->preview&&$p->preview->is_preview_mode(),
++            'preview_request'=>$p->preview&&isset($_GET['elementor-preview'])&&$p->preview->is_preview_mode((int)$_GET['elementor-preview']),
++            'editor'=>$p->editor&&$p->editor->is_edit_mode(),'admin'=>is_admin(),
++            'preview_parameter'=>isset($_GET['elementor-preview']),'optins'=>$optins,
++            'operations_before'=>count($GLOBALS['iu_cross']['operations']));
++    },10,4);
++    add_action('all',function($hook){
++        if(preg_match('/^(pre_transient_|pre_set_transient_|set_transient_|pre_option_|add_option_|update_option_).*iu_frag_/',$hook))
++            $GLOBALS['iu_cross']['operations'][]=$hook;
++    });
++    add_action('iu_elementor_fragment_node',function(){ $GLOBALS['iu_cross']['operations'][]='walk-node'; });
++    add_filter('iu_elementor_fragment_allow_query', function ($allowed, $keys) {
++        return count(array_diff($keys, array('iu_kit_fragment_test','iu_kit_request','iu_kit_generation','iu_kit_mode','iu_kit_delay','elementor-preview','elementor_library','ver'))) === 0;
++    },10,2);
++    add_filter('iu_elementor_fragment_key_context', function ($context) {
++        $context['generation']=sanitize_key($_GET['iu_kit_generation'] ?? 'default'); return $context;
++    });
++    add_filter('iu_elementor_fragment_graph_callback_allowed', function ($allowed,$callback) {
++        return $allowed || ($callback instanceof Closure && (new ReflectionFunction($callback))->getFileName() === __FILE__);
++    },10,2);
++    add_filter('elementor/frontend/builder_content_data', function ($nodes,$doc) {
++        $GLOBALS['iu_cross']['docs'][]=(int)$doc;
++        if (($_GET['iu_kit_mode'] ?? '') !== 'baseline') return $nodes;
++        $walk=function($nodes) use (&$walk) {
++            foreach ($nodes as &$node) {
++                if (($node['widgetType'] ?? '') === 'template' && in_array($node['id'],array('417d1ae','c60daee'),true)) {
++                    $node['settings']['iu_fragment_cache']='';
++                    $node['settings']['iu_fragment_cache_ttl']='86400';
++                    $GLOBALS['iu_cross']['injected'][]=$node['id'];
++                }
++                if (!empty($node['elements'])) $node['elements']=$walk($node['elements']);
++            }
++            unset($node); return $nodes;
++        }; return $walk($nodes);
++    },PHP_INT_MAX-1,2);
++    add_action('elementor/frontend/widget/before_render',function($widget) {
++        $GLOBALS['iu_cross']['rendered_widgets']++;
++        if ($widget->get_id()==='26fa46c6') { $GLOBALS['iu_cross']['target']++; $GLOBALS['iu_cross']['inside']=true; }
++        if (in_array($widget->get_id(),array('417d1ae','c60daee'),true)) $GLOBALS['iu_cross']['template_renders'][]=$widget->get_id();
++        if ($widget->get_name()==='loop-grid' && !empty($GLOBALS['iu_cross']['inside'])) $GLOBALS['iu_cross']['grids'][$widget->get_id()]=array('before'=>iu_cross_media());
++        if (in_array($widget->get_id(),array('417d1ae','c60daee'),true) && is_array($widget->get_data('_iu_fragment_build'))) {
++            $delay=min(20,absint($_GET['iu_kit_delay'] ?? 0));
++            if ($delay) {
++                set_transient('iu_access_signal_' . sanitize_key($_GET['iu_kit_generation'] ?? ''), $widget->get_data('_iu_fragment_build')['key'], 120);
++                sleep($delay);
++            }
++        }
++    },-10);
++    add_action('elementor/frontend/widget/after_render',function($widget) {
++        if ($widget->get_name()==='loop-grid' && !empty($GLOBALS['iu_cross']['inside'])) $GLOBALS['iu_cross']['grids'][$widget->get_id()]['after']=iu_cross_media();
++        if ($widget->get_id()==='26fa46c6') {
++            $GLOBALS['iu_cross']['inside']=false;
++            $GLOBALS['iu_cross']['displayed']=\ElementorPro\Modules\QueryControl\Module::get_avoid_list_ids();
++            $GLOBALS['iu_cross']['excerpt']=IU_Elementor_Fragment_Excerpt::profile();
++        }
++    },PHP_INT_MAX);
++    add_action('elementor/frontend/before_get_builder_content',function($document) {
++        if (!empty($GLOBALS['iu_cross']['inside']) && (int)$document->get_post()->ID===1635) $GLOBALS['iu_cross']['loop']++;
++        if (!empty($GLOBALS['iu_cross']['inside']) && strpos(get_class($document),'LoopBuilder\\Documents\\Loop') !== false) $GLOBALS['iu_cross']['loop_any']++;
++    });
++    add_action('elementor/frontend/before_render',function() {
++        if (!empty($GLOBALS['iu_cross']['inside'])) $GLOBALS['iu_cross']['nested']++;
++    });
++    add_action('iu_elementor_fragment_result',function($result,$build) {
++        $GLOBALS['iu_cross']['events'][]=array('id'=>$build['element_id'] ?? '', 'result'=>$result);
++    },10,2);
++    add_action('iu_elementor_fragment_before_substitution',function($node,$doc,$key) {
++        $GLOBALS['iu_cross']['keys'][$node['id']]=array('doc'=>$doc,'key'=>$key);
++    },10,3);
++    add_action('iu_elementor_fragment_graph_rejected',function($reason,$node) {
++        $GLOBALS['iu_cross']['reject'][$node['id']]=$reason;
++    },10,2);
++    add_action('shutdown',function(){
++        $GLOBALS['iu_cross']['elementor_preview']=\Elementor\Plugin::$instance->preview->is_preview_mode();
++        if ((defined('DOING_AJAX') && DOING_AJAX) || (defined('REST_REQUEST') && REST_REQUEST)) return;
++        $q=$GLOBALS['wp_query'];
++        $GLOBALS['iu_cross']['search_main']=array('search'=>$q->is_search(),'ivory'=>isset($q->query_vars['_is_settings']),'ids'=>array_map(function($p){return $p->ID;},(array)$q->posts),'found'=>$q->found_posts);
++        $GLOBALS['iu_cross']['request_ok']=(new ReflectionMethod('IU_Elementor_Fragment_Cache','request_ok'))->invoke(null);
++        echo '\n<!-- IU_CROSS_PAGE '.wp_json_encode(array_merge($GLOBALS['iu_cross'], array('user_id'=>get_current_user_id(),'optin_scans'=>count(array_filter($GLOBALS['wpdb']->queries ?? array(), function ($q) { return strpos($q[0], 'SELECT m.meta_id, m.meta_value') !== false; }))))).' -->';
++    },PHP_INT_MAX);
++    // Actual full Kit owns module registration; this harness observes it.
++},0);
++
+--- /dev/null
++++ b/tests/fragment-cache-hook-menu-en.cjs
+@@ -0,0 +1,31 @@
++const {chromium}=require('C:/Users/pe/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
++const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),{randomUUID}=require('node:crypto');
++const BASE='https://wordpress-218158-6702910.cloudwaysapps.com';
++const query=`iu_kit_fragment_test=cross-page-20261001&iu_kit_generation=${randomUUID()}`;
++(async()=>{
++ const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
++ try{
++ const guest=await browser.newContext();const warm=await guest.request.get(BASE+'/en/?'+query+'&iu_kit_request='+randomUUID(),{timeout:180000});
++ const wm=JSON.parse((await warm.text()).match(/IU_CROSS_PAGE (.+?) -->/)[1]);assert.equal(wm.loop_any,156);assert.equal(wm.target,1);await guest.close();
++ const context=await browser.newContext({viewport:{width:1440,height:1024}});
++ const s=JSON.parse(fs.readFileSync(path.join(os.tmpdir(),'iu-fragment-access-sessions.json'))).site_manager;
++ await context.addCookies(['','auth_','secure_'].map(prefix=>({name:s[prefix+'name'],value:s[prefix+'value'],url:BASE})));
++ const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
++ const response=await page.goto(BASE+'/en/the-company/?'+query+'&iu_kit_request='+randomUUID(),{waitUntil:'load',timeout:180000});
++ const marker=JSON.parse((await response.text()).match(/IU_CROSS_PAGE (.+?) -->/)[1]);assert.equal(marker.loop_any,0);assert.equal(marker.target,1);assert.deepEqual(marker.template_renders,[]);
++ const preferences=page.locator('#cmplz-cookiebanner-container .cmplz-view-preferences');
++ if(await preferences.isVisible()){await preferences.click();await page.locator('#cmplz-cookiebanner-container .cmplz-save-preferences').click();}
++ const widget=page.locator('[data-id="26fa46c6"]');
++ const contentId=await widget.locator('[data-id="417d1ae"]').evaluate(el=>el.closest('[id^="e-n-menu-content-"]').id);
++ const content=widget.locator('#'+contentId),button=widget.locator('[aria-controls="'+contentId+'"]');
++ console.log('Heavy dropdown control',contentId,await button.getAttribute('id'));
++ await button.click();await page.waitForTimeout(700);assert.equal(await button.getAttribute('aria-expanded'),'true');
++ const bounds=await content.boundingBox();assert(bounds&&bounds.height>100);await page.screenshot({path:'docs/fragment-cache-hook-menu-en.png'});
++ const destination=content.locator('a[href^="'+BASE+'/"]:visible').first();
++ console.log('Visible destination',await destination.getAttribute('href'),'target',await destination.getAttribute('target'));
++ const navigation=page.waitForNavigation({waitUntil:'commit',timeout:90000});await destination.click({noWaitAfter:true});const next=await navigation;assert.equal(next.status(),200);assert.deepEqual(errors,[]);
++ fs.writeFileSync('docs/fragment-cache-hook-menu-en.json',JSON.stringify({anonymous_warm_loops:156,manager_hit_loops:0,central_menu_renders:1,dropdown_renders:0,opened:true,bounds,navigation_status:200,frontend_errors:errors},null,2)+'\n');
++ console.log('PASS actual logged-in menu: anonymous warm, zero loops on hit, open and navigation 200, no frontend JS errors');
++ }finally{await browser.close();}
++})().catch(e=>{console.error(e.message);process.exit(1)});
++
+--- /dev/null
++++ b/tests/fragment-cache-hook-menu.cjs
+@@ -0,0 +1,27 @@
++const {chromium}=require('C:/Users/pe/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
++const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),{randomUUID}=require('node:crypto');
++const BASE='https://wordpress-218158-6702910.cloudwaysapps.com';
++const query=`iu_kit_fragment_test=cross-page-20261001&iu_kit_generation=${randomUUID()}`;
++(async()=>{
++ const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
++ try{
++ const guest=await browser.newContext();const warm=await guest.request.get(BASE+'/?'+query+'&iu_kit_request='+randomUUID(),{timeout:180000});
++ const wm=JSON.parse((await warm.text()).match(/IU_CROSS_PAGE (.+?) -->/)[1]);assert.equal(wm.loop,150);assert.equal(wm.target,1);await guest.close();
++ const context=await browser.newContext({viewport:{width:1440,height:1024}});
++ const s=JSON.parse(fs.readFileSync(path.join(os.tmpdir(),'iu-fragment-access-sessions.json'))).site_manager;
++ await context.addCookies(['','auth_','secure_'].map(prefix=>({name:s[prefix+'name'],value:s[prefix+'value'],url:BASE})));
++ const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
++ const response=await page.goto(BASE+'/techniki-ypostirixi/?'+query+'&iu_kit_request='+randomUUID(),{waitUntil:'load',timeout:180000});
++ const marker=JSON.parse((await response.text()).match(/IU_CROSS_PAGE (.+?) -->/)[1]);assert.equal(marker.loop,0);assert.equal(marker.target,1);assert.deepEqual(marker.template_renders,[]);
++ const preferences=page.locator('#cmplz-cookiebanner-container .cmplz-view-preferences');
++ if(await preferences.isVisible()){await preferences.click();await page.locator('#cmplz-cookiebanner-container .cmplz-save-preferences').click();}
++ const widget=page.locator('[data-id="26fa46c6"]'),title=widget.locator('#e-n-menu-title-6532'),button=widget.locator('#e-n-menu-dropdown-icon-6532'),content=widget.locator('#e-n-menu-content-6532');
++ await page.waitForFunction(()=>!!window.jQuery?._data(document.querySelector('#e-n-menu-title-6532'),'events')?.mouseover);
++ await title.locator('.e-n-menu-title-container').hover();await page.waitForTimeout(700);assert.equal(await button.getAttribute('aria-expanded'),'true');
++ const bounds=await content.boundingBox();assert(bounds&&bounds.height>100);await page.screenshot({path:'docs/fragment-cache-hook-menu.png'});
++ const destination=content.locator('a[href^="'+BASE+'/"]').first();
++ const navigation=page.waitForNavigation({waitUntil:'commit',timeout:90000});await destination.click({noWaitAfter:true});const next=await navigation;assert.equal(next.status(),200);assert.deepEqual(errors,[]);
++ fs.writeFileSync('docs/fragment-cache-hook-menu.json',JSON.stringify({anonymous_warm_loops:150,manager_hit_loops:0,central_menu_renders:1,dropdown_renders:0,opened:true,bounds,navigation_status:200,frontend_errors:errors},null,2)+'\n');
++ console.log('PASS actual logged-in menu: anonymous warm, zero loops on hit, open and navigation 200, no frontend JS errors');
++ }finally{await browser.close();}
++})().catch(e=>{console.error(e.message);process.exit(1)});
+--- /dev/null
++++ b/tests/fragment-cache-hook-mobile.cjs
+@@ -0,0 +1,16 @@
++const {chromium}=require('C:/Users/pe/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
++const fs=require('node:fs'),assert=require('node:assert/strict'),{randomUUID}=require('node:crypto');
++const BASE='https://wordpress-218158-6702910.cloudwaysapps.com';
++(async()=>{const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});const out=[];
++try{for(const lang of ['el','en']){
++ const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 Version/17.0 Mobile/15E148 Safari/604.1'});
++ const page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
++ const r=await page.goto(BASE+(lang==='en'?'/en/':'/')+'?iu_kit_fragment_test=cross-page-20261001&iu_kit_generation='+randomUUID()+'&iu_kit_request='+randomUUID(),{waitUntil:'load',timeout:180000});
++ const d=JSON.parse((await r.text()).match(/IU_CROSS_PAGE (.+?) -->/)[1]);assert.equal(d.loop_any,0);assert.equal(d.target,0);assert.deepEqual(d.events,[]);
++ const prefs=page.locator('.cmplz-view-preferences');if(await prefs.isVisible()){await prefs.click();await page.locator('.cmplz-save-preferences').click();}
++ const open=page.locator('.elementor-location-header a[href^="#elementor-action"]:visible').nth(1);assert(await open.isVisible(),'Phone popup menu launcher absent');await open.click();
++ const modal=page.locator('.elementor-popup-modal:visible');await modal.waitFor({state:'visible',timeout:90000});
++ const link=modal.locator('a[href^="'+BASE+'/"]:visible').first();assert(await link.isVisible());const nav=page.waitForNavigation({waitUntil:'commit',timeout:90000});await link.click({noWaitAfter:true});assert.equal((await nav).status(),200);assert.deepEqual(errors,[]);
++ out.push({language:lang,phone_menu_open:true,navigation:200,heavy_widget_loops_cache_operations:0,errors});await ctx.close();
++}fs.writeFileSync('docs/fragment-cache-hook-mobile-ui.json',JSON.stringify(out,null,2)+'\n');console.log('PASS actual phone menu opening/navigation el/en; heavy desktop subtree absent');
++}finally{await browser.close();}})().catch(e=>{console.error(e.stack);process.exit(1)});
+--- /dev/null
++++ b/tests/fragment-cache-hook-origin.py
+@@ -0,0 +1,24 @@
++from pathlib import Path
++from hashlib import sha256
++import runpy,uuid,json,re
++m=runpy.run_path('tests/fragment-cache-access-check.py');fetch=m['fetch'];out=[]
++for path,dest in [('/','/techniki-ypostirixi/'),('/en/','/en/the-company/')]:
++ for builder,consumer in [('anonymous','site_manager'),('site_manager','anonymous'),('subscriber','anonymous')]:
++  gen=uuid.uuid4().hex;miss=fetch(builder,gen,path);hit=fetch(consumer,gen,dest);base=fetch(consumer,gen,dest,'baseline')
++  md,hd,bd=[x['data'] for x in [miss,hit,base]]
++  assert [e['result'] for e in md['events']]==['stored','stored'],md
++  assert [e['result'] for e in hd['events']]==['hit','hit'],hd
++  assert md['keys']==hd['keys'];assert hd['loop_any']==0 and not hd['template_renders'] and hd['target']==1
++  assert miss['fragments']==hit['fragments']==base['fragments'];assert hit['assets']==base['assets']
++  assert hd['excerpt']==bd['excerpt'] and hd['displayed']==bd['displayed']
++  assert md['query_profile'] and all(not q['search'] and not q['s'] and not q['ivory'] for q in md['query_profile']),md['query_profile']
++  assert len(hd['query_profile'])<len(md['query_profile'])
++  assert not re.search('iuFragmentDiagnostics|iu-fragment-diagnostic-result|fragment-diagnostics.js',hit['html'])
++  out.append({'language':'en' if '/en/'==path else 'el','builder':builder,'consumer':consumer,'miss_loops':md['loop_any'],'hit_loops':0,'root_renders':1,'dropdown_renders':0,'queries_miss':len(md['query_profile']),'queries_hit':len(hd['query_profile']),'html_assets_excerpt_displayed_equal':True,'same_key_cross_page_user':True,'public_diagnostics_absent':True,'sha256':{k:sha256(v.encode()).hexdigest()for k,v in hit['fragments'].items()}})
++ua='Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 Version/17.0 Mobile/15E148 Safari/604.1'
++for role in ['anonymous','site_manager']:
++ r=fetch(role,uuid.uuid4().hex,ua=ua);d=r['data'];assert not d['keys'] and not d['events'] and not d['loop_any']
++ out.append({'device':'phone','role':role,'heavy_keys_events_loops':0})
++r=fetch('site_manager',uuid.uuid4().hex,mode='unknown');d=r['data'];assert d['reject'] and all(v=='unknown-hook:pre_get_posts' for v in d['reject'].values());assert not d['events'] and d['loop_any']==150
++out.append({'unsafe_hook_bypass':True,'normal_loops':150,'reject':d['reject']})
++Path('docs/fragment-cache-hook-origin.json').write_text(json.dumps(out,indent=2)+'\n');print('PASS real origin cross-page/user/lang fragments, asset/query effects, device bypass and unknown-hook rejection')
+--- /dev/null
++++ b/tests/fragment-cache-hook-preview.cjs
+@@ -0,0 +1,46 @@
++const {chromium}=require('C:/Users/pe/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
++const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict');
++const BASE='https://wordpress-218158-6702910.cloudwaysapps.com';
++(async()=>{
++ const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
++ try {
++  const context=await browser.newContext({viewport:{width:1440,height:1024},extraHTTPHeaders:{'X-IU-Preview-Probe':'native-preview-20261001'}});
++  const s=JSON.parse(fs.readFileSync(path.join(os.tmpdir(),'iu-fragment-access-sessions.json'))).site_manager;
++  await context.addCookies(['','auth_','secure_'].map(p=>({name:s[p+'name'],value:s[p+'value'],url:BASE})));
++  const page=await context.newPage(),captures=[];
++  page.on('response',async r=>{
++   if(!r.request().isNavigationRequest()||!r.url().startsWith(BASE))return;
++   try{const html=await r.text(),match=html.match(/IU_CROSS_PAGE (.+?) -->/);
++    if(match)captures.push({url:r.url(),status:r.status(),data:JSON.parse(match[1]),has_menu:html.includes('data-id="26fa46c6"')});
++   }catch{}
++  });
++  await page.goto(BASE+'/wp-admin/post.php?post=2&action=elementor',{waitUntil:'domcontentloaded',timeout:180000});
++  await page.waitForFunction(()=>!!window.elementor?.getContainer,{timeout:180000});
++  await page.waitForTimeout(5000);
++  let pagePreview=page.frames().find(f=>f.url().includes('elementor-preview=2'));
++  if(!pagePreview){
++   console.log('Waiting for native iframe',page.url(),page.frames().map(f=>f.url()));
++   pagePreview=await page.waitForEvent('framenavigated',{predicate:f=>f.url().includes('elementor-preview=2'),timeout:180000});
++  }
++  assert(pagePreview,'Native page editor iframe absent');
++  await pagePreview.locator('[data-id="26fa46c6"]').waitFor({state:'attached',timeout:120000});
++  const rendered=await context.request.get(pagePreview.url(),{timeout:180000});
++  const renderedHTML=await rendered.text(),renderedMatch=renderedHTML.match(/IU_CROSS_PAGE (.+?) -->/);assert(renderedMatch);
++  captures.push({url:pagePreview.url(),status:rendered.status(),data:JSON.parse(renderedMatch[1]),has_menu:renderedHTML.includes('data-id="26fa46c6"')});
++  console.log(JSON.stringify(captures.map(x=>({url:x.url,widgets:x.data.rendered_widgets,loops:x.data.loop_any,gates:x.data.gates.filter(g=>g.document===30),gate_count:x.data.gates.length,ops:x.data.operations})),null,2));
++  const tested=captures.filter(x=>x.url.includes('elementor-preview=2'));
++  assert(tested.length>=2,'Both native page iframe and direct preview required');
++  for(const c of tested){
++   assert(c.has_menu&&c.data.rendered_widgets>0,'Normal preview render absent');
++   const gates=c.data.gates.filter(g=>g.preview_request&&g.document===30&&g.optins.includes('417d1ae')&&g.optins.includes('c60daee'));
++   assert(gates.length,'Active preview and saved opted-in nodes must reach early gate');
++   assert(gates.every(g=>g.query_allowed&&!g.request_context_ok),'Preview must reject request context even with permissive query filter');
++   assert(c.data.gates.every(g=>!g.eligible),'Eligible cache gate in preview');
++   assert(gates.every(g=>g.operations_before===0));
++   assert.deepEqual(c.data.operations,[]);assert.deepEqual(c.data.keys,[]);assert.deepEqual(c.data.events,[]);
++  }
++  await page.screenshot({path:'docs/fragment-cache-hook-preview.png'});
++  fs.writeFileSync('docs/fragment-cache-hook-preview.json',JSON.stringify({requests:captures,native_iframe_verified:true,no_document_save:true},null,2)+'\n');
++  console.log('PASS actual native iframe and direct preview: active preview at early gate, normal render, zero cache operations, opt-ins preserved');
++ } finally {await browser.close();}
++})().catch(e=>{console.error(e.message);process.exit(1)});
+--- /dev/null
++++ b/tests/fragment-cache-hook-search.py
+@@ -0,0 +1,12 @@
++from pathlib import Path
++import runpy,json,sys,uuid,re
++m=runpy.run_path('tests/fragment-cache-access-check.py');phase=sys.argv[1];out=[]
++for lang,base in [('el','/'),('en','/en/')]:
++ for term in ['Leica','Metrica']:
++  r=m['fetch']('anonymous',uuid.uuid4().hex,base+'?s='+term+'&id=6361')
++  d=r['data'];assert d['main_preget']['search'] and d['main_preget']['ivory'],d['search_main']
++  assert not d['events'] and not d['keys'],'Search cache should bypass'
++  out.append({'language':lang,'term':term,'query':d['main_preget'],'results':d['main_results'],'no_cache':True})
++p=Path('docs/fragment-cache-hook-search-'+phase+'.json')
++if phase=='after':assert out==json.loads(Path('docs/fragment-cache-hook-search-before.json').read_text()),'Search result behavior changed'
++p.write_text(json.dumps(out,indent=2)+'\n');print('PASS real origin Ivory search '+phase)
+--- /dev/null
++++ b/tests/elementor-fragment-ivory-source.php
+@@ -0,0 +1,29 @@
++<?php
++/** Pass the official plugin directory; vendor sources stay outside this repository. */
++define('ABSPATH', __DIR__.'/');
++define('WP_PLUGIN_DIR', dirname($argv[1]));
++define('IS_VERSION', 'deliberately-not-an-approved-version');
++function add_action(){} function add_filter(){} function get_option($k,$d=false){return $d;}
++function apply_filters($hook,$value){return $value;}
++require $argv[1].'/public/class-is-public.php';
++require dirname(__DIR__).'/includes/elementor-fragment-cache-graph.php';
++$graph=new IU_Elementor_Fragment_Graph;
++$check=new ReflectionMethod($graph,'callback_safe');
++$object=new IS_Public;
++if(($argv[2]??'')==='reject'){
++if($check->invoke($graph,[$object,'pre_get_posts'],'pre_get_posts'))throw new RuntimeException('Changed source accepted');
++echo "PASS changed method source rejected despite callback name and origin\n";exit;
++}
++foreach(['pre_get_posts','posts_join','posts_distinct_request','wp_nav_menu_items']as$method){
++$hook=$method==='posts_distinct_request'?'posts_distinct_request':$method;
++if(!$check->invoke($graph,[$object,$method],$hook))throw new RuntimeException('Actual source rejected: '.$method);
++if($check->invoke($graph,[$object,$method],'wrong_hook'))throw new RuntimeException('Wrong hook accepted');
++}
++$query=new class {public $query_vars=['post_type'=>'post','s'=>''];function is_search(){return false;}};
++$before=get_object_vars($query);$object->pre_get_posts($query);
++if(get_object_vars($query)!==$before)throw new RuntimeException('Non-search query changed');
++function is_admin(){return false;}
++if($object->posts_join('JOIN ORIGINAL',$query)!=='JOIN ORIGINAL'||$object->posts_distinct_request('ORIGINAL',$query)!=='ORIGINAL')throw new RuntimeException('Non-search SQL changed');
++$object->opt=['menus'=>[''=>true]];
++if($check->invoke($graph,[$object,'wp_nav_menu_items'],'wp_nav_menu_items'))throw new RuntimeException('Search injection accepted');
++echo "PASS actual Ivory method source, version independent, wrong-hook rejection, non-search no-op and menu-injection rejection\n";
+--- /dev/null
++++ b/tests/elementor-fragment-diagnostics.php
+@@ -0,0 +1,24 @@
++<?php
++/** Bounded admin observations and on-demand reasons, without rendering. */
++define('ABSPATH',__DIR__.'/');
++function add_action(){}function add_filter(){}function __($s){return $s;}
++function current_user_can(){return $GLOBALS['admin']??false;}function is_admin(){return false;}
++function get_locale(){return 'el';}function get_option($k,$d=[]){return $GLOBALS['options'][$k]??$d;}
++function update_option($k,$v,$autoload){if($autoload!==false)throw new RuntimeException('Autoload');$GLOBALS['options'][$k]=$v;$GLOBALS['writes']=($GLOBALS['writes']??0)+1;}
++function get_post_meta(){return json_encode([['id'=>'item','widgetType'=>'heading','settings'=>['iu_fragment_cache'=>'yes']]]);}
++function iu_elementor_fragment_enabled(){return $GLOBALS['global']??true;}
++function iu_elementor_feature_supported(){return true;}function wp_date($f,$t){return date($f,$t);}
++class IU_Elementor_Fragment_Graph {static function inspect(){return false;}static function rejection(){return ['reason'=>'unknown-hook:pre_get_posts','hook'=>'pre_get_posts','callback'=>'Unreviewed_Search::filter'];}}
++require dirname(__DIR__).'/includes/elementor-fragment-cache-diagnostics.php';
++IU_Elementor_Fragment_Diagnostics::record(30,'item','hit');IU_Elementor_Fragment_Diagnostics::flush();
++if(!empty($GLOBALS['options']))throw new RuntimeException('Anonymous telemetry');
++$GLOBALS['admin']=true;$GLOBALS['options']['elementor_element_cache_ttl']='disable';
++$r=IU_Elementor_Fragment_Diagnostics::status(30,'item');
++if($r['static_review']!=='blocked'||strpos($r['message'],'Unreviewed_Search::filter')===false||!empty($r['observed']))throw new RuntimeException('Reason or static status');
++IU_Elementor_Fragment_Diagnostics::record(30,'item','hit');IU_Elementor_Fragment_Diagnostics::flush();
++IU_Elementor_Fragment_Diagnostics::flush();if($GLOBALS['writes']!==1)throw new RuntimeException('Repeated write spam');
++for($i=0;$i<75;$i++)IU_Elementor_Fragment_Diagnostics::record(30,'item'.$i,'bypass');
++IU_Elementor_Fragment_Diagnostics::flush();if(count($GLOBALS['options']['iu_fragment_diagnostics'])!==50)throw new RuntimeException('Unbounded observation');
++$GLOBALS['global']=false;$r=IU_Elementor_Fragment_Diagnostics::status(30,'item');
++if($r['detail']['reason']!=='global-off'||!$r['configured'])throw new RuntimeException('Configured vs global');
++echo "PASS admin-only diagnostics, named hook rejection, configured/global distinction, throttle and 50-row bound\n";
+--- a/tests/elementor-fragment-context.php
++++ b/tests/elementor-fragment-context.php
+@@ -148,3 +148,13 @@
+ $GLOBALS['live_language'] = 'en';
+ if ($language->invoke(null) !== null) throw new RuntimeException('Switched/inconsistent WPML context cached');
+ echo "wpml-context-consistency: OK\n";
++$capture = new ReflectionProperty('IU_Elementor_Fragment_Cache', 'capture');
++foreach (array(array(), array('s'=>'term'), array('_is_settings'=>array()), array('_is_includes'=>array())) as $vars) {
++    $capture->setValue(null, array(array('id'=>'capture')));
++    $query = new class { public $query_vars; public function is_search() { return false; } };
++    $query->query_vars = $vars;
++    IU_Elementor_Fragment_Cache::guard_queries($query);
++    if (!empty($capture->getValue()[0]['unsafe_query']) !== (bool) $vars || $query->query_vars !== $vars) throw new RuntimeException('Query safety observation changed query or missed search markers');
++}
++$capture->setValue(null, array());
++echo "ivory-query-context-publication-guard: OK\n";
+--- a/tests/README.md
++++ b/tests/README.md
+@@ -15,6 +15,7 @@
+ php tests/elementor-fragment-context.php
+ php tests/elementor-fragment-graph.php
+ php tests/elementor-fragment-assets.php
++php tests/elementor-fragment-diagnostics.php
+ php tests/elementor-fragment-poll.php
+ php tests/elementor-fragment-replay-order.php
+ php tests/elementor-fragment-purge.php
+@@ -25,6 +26,11 @@
+ 
+ Atomic browser tests require explicitly provisioned vendor fixtures; see
+ `ATOMIC-INTERACTIONS.md`. Licensed fixtures remain ignored and excluded from ZIPs.
++
++`elementor-fragment-ivory-source.php` takes the path to an extracted official
++Ivory plugin directory. Test both inspected packages and a changed-source
++negative control (`reject` as the second argument); vendor sources stay outside
++the repository. `fragment-cache-hook-search.py` is an origin staging check.
+ 
+ ## Current staging acceptance tools
+ 

@@ -1,6 +1,7 @@
 <?php
 // Isolated WordPress loader/notice checks. Each case uses a new PHP process (static guards).
 $version_cases = array(
+    'accepted-common' => array('4.3.3', '4.3.1'),
     'elementor-patch' => array('4.3.3', '4.3.0'),
     'pro-patch' => array('4.3.2', '4.3.1'),
     'both-patch' => array('4.3.8', '4.3.5'),
@@ -17,7 +18,7 @@ $version_cases = array(
     'invalid-type' => array(4.3, '4.3.0'),
     'major' => array('5.0.0', '5.0.0'),
 );
-$allowed_cases = array('supported', 'late', 'elementor-patch', 'pro-patch', 'both-patch', 'large-patch');
+$allowed_cases = array('supported', 'late', 'accepted-common');
 $rejected_cases = array_merge(array('missing'), array_diff(array_keys($version_cases), $allowed_cases));
 if (!isset($argv[1])) {
     foreach (array_merge(array('off', 'missing', 'no-handle', 'done', 'admin', 'supported', 'late', 'retry'), array_keys($version_cases)) as $case) {
@@ -74,5 +75,5 @@ if ($expected) {
 ob_start();
 iu_atomic_interaction_breakpoints_notice();
 $notice = ob_get_clean();
-check(($notice !== '') === in_array($case, $rejected_cases, true), 'Only enabled version outside the accepted range produces notice');
+check(($notice !== '') === in_array($case, $rejected_cases, true), 'Enabled unapproved versions, including new patches, produce notice');
 echo 'PASS: PHP loader ' . $case . PHP_EOL;

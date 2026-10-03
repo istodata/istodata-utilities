@@ -1,0 +1,159 @@
+[
+  {
+    "language": "el",
+    "builder": "anonymous",
+    "consumer": "site_manager",
+    "miss_loops": 150,
+    "hit_loops": 0,
+    "root_renders": 1,
+    "dropdown_renders": 0,
+    "queries_miss": 46,
+    "queries_hit": 7,
+    "html_assets_excerpt_displayed_equal": true,
+    "same_key_cross_page_user": true,
+    "public_diagnostics_absent": true,
+    "live_central_navigation_matches_current_page_baseline": true,
+    "sha256": {
+      "417d1ae": "f0dbc2aef77d8a6cb6fbf6eec5fee8d9fb748ff2a49c82061e06e0f8b7d300f7",
+      "c60daee": "b024f41b59306a826186d87c86f2be866d6d0f0db3e43236d59b3a686e469e87"
+    }
+  },
+  {
+    "language": "el",
+    "builder": "site_manager",
+    "consumer": "anonymous",
+    "miss_loops": 150,
+    "hit_loops": 0,
+    "root_renders": 1,
+    "dropdown_renders": 0,
+    "queries_miss": 46,
+    "queries_hit": 7,
+    "html_assets_excerpt_displayed_equal": true,
+    "same_key_cross_page_user": true,
+    "public_diagnostics_absent": true,
+    "live_central_navigation_matches_current_page_baseline": true,
+    "sha256": {
+      "417d1ae": "f0dbc2aef77d8a6cb6fbf6eec5fee8d9fb748ff2a49c82061e06e0f8b7d300f7",
+      "c60daee": "b024f41b59306a826186d87c86f2be866d6d0f0db3e43236d59b3a686e469e87"
+    }
+  },
+  {
+    "language": "el",
+    "builder": "subscriber",
+    "consumer": "anonymous",
+    "miss_loops": 150,
+    "hit_loops": 0,
+    "root_renders": 1,
+    "dropdown_renders": 0,
+    "queries_miss": 46,
+    "queries_hit": 7,
+    "html_assets_excerpt_displayed_equal": true,
+    "same_key_cross_page_user": true,
+    "public_diagnostics_absent": true,
+    "live_central_navigation_matches_current_page_baseline": true,
+    "sha256": {
+      "417d1ae": "f0dbc2aef77d8a6cb6fbf6eec5fee8d9fb748ff2a49c82061e06e0f8b7d300f7",
+      "c60daee": "b024f41b59306a826186d87c86f2be866d6d0f0db3e43236d59b3a686e469e87"
+    }
+  },
+  {
+    "language": "en",
+    "builder": "anonymous",
+    "consumer": "site_manager",
+    "miss_loops": 156,
+    "hit_loops": 0,
+    "root_renders": 1,
+    "dropdown_renders": 0,
+    "queries_miss": 48,
+    "queries_hit": 7,
+    "html_assets_excerpt_displayed_equal": true,
+    "same_key_cross_page_user": true,
+    "public_diagnostics_absent": true,
+    "live_central_navigation_matches_current_page_baseline": true,
+    "sha256": {
+      "417d1ae": "e525ae57e5282abb7bd1b0b0408460b58fe090cb609b41aa0068d20416627f5e",
+      "c60daee": "f7fa434332999932f7c4415a9b6ae02c6a141c0739fa55a0df07b79b61902067"
+    }
+  },
+  {
+    "language": "en",
+    "builder": "site_manager",
+    "consumer": "anonymous",
+    "miss_loops": 156,
+    "hit_loops": 0,
+    "root_renders": 1,
+    "dropdown_renders": 0,
+    "queries_miss": 48,
+    "queries_hit": 7,
+    "html_assets_excerpt_displayed_equal": true,
+    "same_key_cross_page_user": true,
+    "public_diagnostics_absent": true,
+    "live_central_navigation_matches_current_page_baseline": true,
+    "sha256": {
+      "417d1ae": "e525ae57e5282abb7bd1b0b0408460b58fe090cb609b41aa0068d20416627f5e",
+      "c60daee": "f7fa434332999932f7c4415a9b6ae02c6a141c0739fa55a0df07b79b61902067"
+    }
+  },
+  {
+    "language": "en",
+    "builder": "subscriber",
+    "consumer": "anonymous",
+    "miss_loops": 156,
+    "hit_loops": 0,
+    "root_renders": 1,
+    "dropdown_renders": 0,
+    "queries_miss": 48,
+    "queries_hit": 7,
+    "html_assets_excerpt_displayed_equal": true,
+    "same_key_cross_page_user": true,
+    "public_diagnostics_absent": true,
+    "live_central_navigation_matches_current_page_baseline": true,
+    "sha256": {
+      "417d1ae": "e525ae57e5282abb7bd1b0b0408460b58fe090cb609b41aa0068d20416627f5e",
+      "c60daee": "f7fa434332999932f7c4415a9b6ae02c6a141c0739fa55a0df07b79b61902067"
+    }
+  },
+  {
+    "device": "phone",
+    "role": "anonymous",
+    "heavy_keys_events_loops": 0
+  },
+  {
+    "device": "phone",
+    "role": "site_manager",
+    "heavy_keys_events_loops": 0
+  },
+  {
+    "unknown_noop_query_hook_admitted": true,
+    "miss_loops": 150,
+    "hit_loops": 0
+  },
+  {
+    "negative_control": "token",
+    "not_published": true,
+    "results": [
+      {
+        "id": "417d1ae",
+        "result": "volatile-markup"
+      },
+      {
+        "id": "c60daee",
+        "result": "volatile-markup"
+      }
+    ]
+  },
+  {
+    "negative_control": "permission",
+    "not_published": true,
+    "results": [
+      {
+        "id": "417d1ae",
+        "result": "query-context"
+      },
+      {
+        "id": "c60daee",
+        "result": "query-context"
+      }
+    ]
+  }
+]

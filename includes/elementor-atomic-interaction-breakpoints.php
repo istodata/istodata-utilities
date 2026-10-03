@@ -3,16 +3,10 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+require_once __DIR__ . '/elementor-compatibility.php';
 
 function iu_atomic_interaction_breakpoints_supported() {
-    // Accept stable patch updates within 4.3, from the tested baseline onward.
-    // API preflight remains mandatory; a new minor series needs a fresh review.
-    return defined('ELEMENTOR_VERSION') && defined('ELEMENTOR_PRO_VERSION')
-        && is_string(ELEMENTOR_VERSION) && is_string(ELEMENTOR_PRO_VERSION)
-        && preg_match('/\A4\.3\.[0-9]+\z/', ELEMENTOR_VERSION) === 1
-        && preg_match('/\A4\.3\.[0-9]+\z/', ELEMENTOR_PRO_VERSION) === 1
-        && version_compare(ELEMENTOR_VERSION, '4.3.2', '>=')
-        && version_compare(ELEMENTOR_PRO_VERSION, '4.3.0', '>=');
+    return iu_elementor_feature_supported('atomic');
 }
 
 function iu_init_atomic_interaction_breakpoints() {
@@ -49,6 +43,6 @@ function iu_atomic_interaction_breakpoints_notice() {
         return;
     }
     echo '<div class="notice notice-warning"><p>';
-    echo esc_html('ISTODATA Kit: Η διόρθωση breakpoints στα Atomic Interactions είναι ενεργοποιημένη, αλλά δεν εφαρμόζεται στις εγκατεστημένες εκδόσεις. Επιτρέπονται σταθερές εκδόσεις Elementor 4.3.x από 4.3.2 και Elementor Pro 4.3.x από 4.3.0, με ελέγχους APIs. Οι εκδόσεις 4.4 και νεότερες χρειάζονται επανέλεγχο. Ελέγξτε την επίσημη λύση του #35831 και απενεργοποιήστε την επιλογή όταν δεν χρειάζεται.');
+    echo esc_html('ISTODATA Kit: Η διόρθωση breakpoints στα Atomic Interactions είναι ενεργοποιημένη, αλλά δεν εφαρμόζεται στις εγκατεστημένες εκδόσεις. ' . iu_elementor_compatibility_description('atomic') . ' Ελέγξτε την επίσημη λύση του #35831 και απενεργοποιήστε την επιλογή όταν δεν χρειάζεται.');
     echo ' <a href="https://github.com/elementor/elementor/issues/35831" target="_blank" rel="noopener noreferrer">#35831</a></p></div>';
 }

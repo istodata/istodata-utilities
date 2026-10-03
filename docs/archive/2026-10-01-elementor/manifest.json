@@ -1,0 +1,455 @@
+{
+  "date": "2026-10-02",
+  "files": [
+    {
+      "action": "moved",
+      "original": "docs/elementor-compatibility.patch",
+      "archived": "docs/archive/2026-10-01-elementor/docs/elementor-compatibility.patch",
+      "sha256": "557ae613a0baca8bb115f74d71a09bc35266e2572f4d499b99af34df737d7c3c"
+    },
+    {
+      "action": "moved",
+      "original": "docs/elementor-fragment-cache-investigation.md",
+      "archived": "docs/archive/2026-10-01-elementor/docs/elementor-fragment-cache-investigation.md",
+      "sha256": "d36d7f40a2c7f634cc0f90cd22884cc118ba61834d63707331bfe134d2457617"
+    },
+    {
+      "action": "moved",
+      "original": "docs/elementor-fragment-cache.patch",
+      "archived": "docs/archive/2026-10-01-elementor/docs/elementor-fragment-cache.patch",
+      "sha256": "b32ed504447effdb998204b925743b6f99771a170bcee2950696523e1494ba1a"
+    },
+    {
+      "action": "moved",
+      "original": "docs/elementor-kit-acceptance-staging.md",
+      "archived": "docs/archive/2026-10-01-elementor/docs/elementor-kit-acceptance-staging.md",
+      "sha256": "4bb6907873d70fc7d3ad7d3ad706f99f2e62c8c757c30d3326364f5609e649e7"
+    },
+    {
+      "action": "moved",
+      "original": "docs/fragment-cache-builder-order-staging.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/fragment-cache-builder-order-staging.json",
+      "sha256": "59f665bac631d501de827dc75486c2c733810ec60a45ec29bd2848aa9262225b"
+    },
+    {
+      "action": "moved",
+      "original": "docs/fragment-cache-cross-page-en-staging.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/fragment-cache-cross-page-en-staging.json",
+      "sha256": "35d4e6d9522f6c7386cbd595a391715f4943102342868f91f2aac33461055ee7"
+    },
+    {
+      "action": "moved",
+      "original": "docs/fragment-cache-cross-page-staging.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/fragment-cache-cross-page-staging.json",
+      "sha256": "7c9e71e8b757bc56a7b22244b132bbc0894d064d156f4f547322d84b622b989a"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-acceptance-ajax-block.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-acceptance-ajax-block.png",
+      "sha256": "60f39c2fff45c7e86d60f795e89a65a40aa522f4f351660112fcb7933c10babc"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-acceptance-cross-page-el.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-acceptance-cross-page-el.json",
+      "sha256": "d657add8d4c121c2dd9fad345ff7aea45703d80ecd6dcbffe7d1e4492b6809bb"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-acceptance-editor.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-acceptance-editor.png",
+      "sha256": "872018bfd6d9270ffd895a3b0aadf6d2f27287cc1e3f3d8227d6a15ebdc0747e"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-acceptance-final-bypass.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-acceptance-final-bypass.png",
+      "sha256": "f24914e1c533c6adfccaaafd2c4108c52666e41f5f7c60afa99f687063319b5b"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-acceptance-final-http.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-acceptance-final-http.json",
+      "sha256": "4a90ed621a504c57874d9ae5a680aa9f38f47312c58ee2660935932c08cd95d6"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-acceptance-final-state.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-acceptance-final-state.json",
+      "sha256": "30f333857cd1dbe93a137be4ff31c5486f89274401680ecf0f19ed77010addf1"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-acceptance-live-updater.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-acceptance-live-updater.json",
+      "sha256": "a5be09ccb542a091ac3e23a299fccfdd56c80520a4cc1731012cf554fcc1a2b8"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-acceptance-zip-verification.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-acceptance-zip-verification.json",
+      "sha256": "9873d3712bd0bc73cc8c61ece1abd48e795b9526909f77008ee14cd14266604e"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-atomic-mobile.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-atomic-mobile.png",
+      "sha256": "9c944b4f284bdf1603cea1a975f5685fe250238d1f1ce914b87250034919bde7"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-atomic-off-mobile.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-atomic-off-mobile.png",
+      "sha256": "446db1d5fe58bfefae2a45cf9c46ddd01b36bc4d81d6424e4abd14b7f737c80f"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-atomic-on-mobile.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-atomic-on-mobile.png",
+      "sha256": "1f907d84179b6cbf6166ca0752d8cb189d6bac39a1d9c371070be21f931b1cc8"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-canonical-menu.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-canonical-menu.png",
+      "sha256": "14cb0c86792a2a03a36ded13a5aa0109648a038fd513f6301d1888cf74589546"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-cross-page-el.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-cross-page-el.json",
+      "sha256": "47828955a2bb525c178ae7d769c15d6c75034069bb02433cd070b5925c349b50"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-cross-page-en.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-cross-page-en.json",
+      "sha256": "c78dcc21bcdfa30c860cf1d77501d9125c248e61b44636478021fc53ee00e353"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-device.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-device.json",
+      "sha256": "80f553ff018f12aca2cf32285ca08dce3e35b474bd4d0cde61b4067de8d6825c"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-english-editor.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-english-editor.png",
+      "sha256": "f33d144201f5b73aeb5b15b65e8931f420706e6b6f4b8a50ab598b64027a309b"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-english-menu.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-english-menu.png",
+      "sha256": "1b0df81c69db42093d4cbfbd9d3f6582a376dc5cf550b0f70de482b6e202ea72"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-final-public.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-final-public.json",
+      "sha256": "290326bd3ee5e5941cb277c6bc07e6a78060a468fb584e01aa37eb8976118133"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-final-state.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-final-state.json",
+      "sha256": "e314fd971760ce4f4f3a44ba853d4809d889800774d3e18ab2a524874d7736d5"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-final-zip.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-final-zip.json",
+      "sha256": "ef0ef34b2b0a11df6ec2d0c49afc112c4282db53562a960574f528a91774ee7b"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-menu-hit.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-menu-hit.png",
+      "sha256": "88434ba1051651d296811c5b3b0bbc730e60d6d91ade962426174f6c5a6835fa"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-mobile-menu.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-mobile-menu.png",
+      "sha256": "3320363275717823e3b29428506237e4e66ff77203e966a0621a00dbd6a71a50"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-purge.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-purge.png",
+      "sha256": "c3c17bcd3e3269807f6699320e651d95e7bb42763a676f2fbf9c8fb7376ff07a"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-candidate-vendor-manifest.json",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-candidate-vendor-manifest.json",
+      "sha256": "1059655f6142af8a6400190facb95aa2b44b37e56b82095974de36d13381ae23"
+    },
+    {
+      "action": "moved",
+      "original": "docs/kit-resume-baseline-menu.png",
+      "archived": "docs/archive/2026-10-01-elementor/docs/kit-resume-baseline-menu.png",
+      "sha256": "4c23f58338ec3aaa4d8bbe8c3669ba66a0e58045c4c396c8d0b67482a99ff599"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-kit-acceptance-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-kit-acceptance-check.py",
+      "sha256": "f1ca0d4ce1dc0ea7d0646925171f4f09e94d791ffdd68e6a2237389f06e14beb"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-kit-acceptance-harness.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-kit-acceptance-harness.php",
+      "sha256": "633a221af6a5a747bf72e8299c6350bdda4920ace3b26f36dcc2a9573fd9111e"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-kit-acceptance-purge.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-kit-acceptance-purge.py",
+      "sha256": "452147622349207ef3886d87ef0874c3fb54aeadd7df602fafd3dac444766ca0"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-kit-atomic-fixture.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-kit-atomic-fixture.php",
+      "sha256": "d21d663723f9e106e5d01657026b085cf6d46b2ce3990b1df6d872d947b048f4"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-kit-candidate-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-kit-candidate-check.py",
+      "sha256": "25217d767248d883db24f40f68827273f32bb39448f8916670a10fa55e296bd8"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-kit-candidate-cleanup.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-kit-candidate-cleanup.php",
+      "sha256": "2216f88a770fd0ee802ca2bca54f3f00cb0c87270f6acf12565f74210c128447"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-kit-candidate-device.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-kit-candidate-device.py",
+      "sha256": "77e4102ebc0f79f62b4ac8d6ded0d9bab7e8ddfdd35fc4bd65bb7647068fac6a"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-kit-candidate-public.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-kit-candidate-public.py",
+      "sha256": "43707ccf45bb341bc1212c48673bed5770cfda121b9e452c22ea464ca8b979ad"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-kit-candidate-purge.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-kit-candidate-purge.py",
+      "sha256": "62b0c2b986863500c0e1346aaec137af550191a6fe775d7eb72675565d29f978"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-kit-final-state.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-kit-final-state.php",
+      "sha256": "3b689763e8899af3f5f666c89067ab7e9586c8fa288b076ca109e01af32eadda"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-kit-live-updater.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-kit-live-updater.php",
+      "sha256": "b457d63470694dde4de53fdf73168a6c0f372a0574af189bfd3feb5e4cd09d1f"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-kit-resume-upgrade.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-kit-resume-upgrade.php",
+      "sha256": "140d420a9a4371561bac7a54fe24665d2833fbb1aeeee3d8af74856b1f0470c7"
+    },
+    {
+      "action": "moved",
+      "original": "tests/elementor-staging-candidate.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/elementor-staging-candidate.php",
+      "sha256": "48ce0320b19fc21316773b6e128c9d1ea75cc092c946e2f92397da46511cab26"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-baseline.png",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-baseline.png",
+      "sha256": "33176f44635ae4f062b6e15681ffb6c1bb6940c0478444a42422b3aa00490e82"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-audit-fingerprints.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-audit-fingerprints.php",
+      "sha256": "1e4b80225c55ac7e86a917ccd32b285cc096651f4c0cf0ff9d4395bae04fe3cd"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-baseline-browser.cjs",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-baseline-browser.cjs",
+      "sha256": "d376a1adda6664c4d2a30314ce1346b4d71ec473c31d2aae34b514a483728ba3"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-browser-check.cjs",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-browser-check.cjs",
+      "sha256": "ae4be52dcaecac8cbdd7e89408da1e01fa4126d5baf73b835bffd72e2777d74f"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-callback-audit.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-callback-audit.php",
+      "sha256": "e3c837e6716684ad19b38ccf846dbb7ae30396aaf2a1d9928bbb332faf420986"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-cleanup.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-cleanup.php",
+      "sha256": "1e65bca6a8cb538d6769181596d3bf4427b1114d780588c07d4357ea4743ff86"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-contention-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-contention-check.py",
+      "sha256": "72fbb678dd793ff6d65ffd13217d9e7f558fd3a7225dc32c89a365275cc60fa0"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-context-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-context-check.py",
+      "sha256": "acdc83f7d5fbde3ccd616fb469e5fd05358418652aa5f3e4c8a3854cfd25d892"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-cross-page-audit.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-cross-page-audit.php",
+      "sha256": "573170009827dbc367a068db216a7071353c78e54808f0074b4504de97096b8e"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-cross-page-browser.cjs",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-cross-page-browser.cjs",
+      "sha256": "6f6e0ef9eb996c6b5ff40c3144d2293cd790e2afcbd75ec9a0b9c5a309722c06"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-cross-page-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-cross-page-check.py",
+      "sha256": "b835b5d95497bb0f7581a487a2d6c01f3aa2afc9022716ef36a762d35e55cae2"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-cross-page-contention.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-cross-page-contention.py",
+      "sha256": "9b51e5c36c67873e7d50af6bc85280db60cda5f6ac13a79be52f2eda4faaaff7"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-cross-page-harness.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-cross-page-harness.php",
+      "sha256": "9b98770e4a30a0db0358334d057dda9395c81d04bbd3daed88994eb4e958dd1b"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-cross-page-purge.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-cross-page-purge.py",
+      "sha256": "add39431e3f9caa500ceef15f71e705cf48c5ee8148ff0c1e5f5034d8b5781c6"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-cross-page-stale.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-cross-page-stale.py",
+      "sha256": "1686e44768929007dfe09bcb3649b30807e38d0dbca722f7a182408e3a873eee"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-dependencies-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-dependencies-check.py",
+      "sha256": "bf1954066d2787fb660848c24f2462978f3dfc9cadc1c13dac8c1fbced77ad93"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-graph-audit.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-graph-audit.php",
+      "sha256": "b82ccef280a06d5c507ce571f9e81764d7f5a1c97b1fcef47f1fdf981107d03c"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-kit-staging-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-kit-staging-check.py",
+      "sha256": "680d366784c3b04b72eaa9b24f829481eef47545a17f157777709adb059ad398"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-kit-staging-harness.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-kit-staging-harness.php",
+      "sha256": "3f36c3d114a98fc9f9baf70e380206f5cb6f6431689587f26f2e83e81794c18a"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-mobile-browser-check.cjs",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-mobile-browser-check.cjs",
+      "sha256": "368d723d5dc8bb0d98ca3221678c709fe4a93e305fbe02c713e6d3e98c094775"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-normalized-device-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-normalized-device-check.py",
+      "sha256": "8723ad5cdc99a40c2bb7d818c6d667f69d66d02e3e47ae96d369005e6af76ce2"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-purge-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-purge-check.py",
+      "sha256": "27587efeba30b184a9fe9b16b967560301c3d679736acd1d34b0c1436735a6cd"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-side-effects-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-side-effects-check.py",
+      "sha256": "04beb69ea3b8e63fce046b9858d7d37e42b26bcea0ca8972b167e02f9b417543"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-staging-probe.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-staging-probe.php",
+      "sha256": "dc23fc1890ba24e22076592a011dbbf23aa2a8193fa2ef55313ee2ee1f568268"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-stale-fixture.php",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-stale-fixture.php",
+      "sha256": "bebf564e2ae11f57a5356010e7a35ba60c333c75c9abbe3132656dff6fd21014"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-style-placement.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-style-placement.py",
+      "sha256": "98a790823498174b879333bbdf098e1326a50e05dcdef2c903877de8b9655390"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-cache-variants-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-variants-check.py",
+      "sha256": "85207539b83516b11a0163e5775c5a9014e73ea00d64e9cad3e3754f4719ade7"
+    },
+    {
+      "action": "moved",
+      "original": "tests/fragment-consent-baseline.png",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-consent-baseline.png",
+      "sha256": "345575dae4f8503de89502c074ce7b860439af2874b6c7fc5182176cc04ba7bd"
+    },
+    {
+      "action": "copied_shared_helper",
+      "original": "tests/fragment-cache-staging-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-staging-check.py",
+      "sha256": "def3b6089752c7ab3b83678457fe6366fddc8e3702315822945fb05a97d5fa5d"
+    },
+    {
+      "action": "copied_shared_helper",
+      "original": "tests/fragment-cache-assets-check.py",
+      "archived": "docs/archive/2026-10-01-elementor/tests/fragment-cache-assets-check.py",
+      "sha256": "65d9434b2cd0e1d32953aae85a3259c1fef12f269c67192fffd3d7cbde804ae5"
+    }
+  ]
+}

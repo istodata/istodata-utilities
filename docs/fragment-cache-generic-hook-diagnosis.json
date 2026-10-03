@@ -1,0 +1,728 @@
+{
+  "events": [
+    {
+      "id": "d7ebc85",
+      "result": "render-hook-side-effect"
+    },
+    {
+      "id": "417d1ae",
+      "result": "render-hook-side-effect"
+    },
+    {
+      "id": "a1ff108",
+      "result": "stored"
+    },
+    {
+      "id": "c60daee",
+      "result": "stored"
+    },
+    {
+      "id": "e62c115",
+      "result": "stored"
+    },
+    {
+      "id": "c28398e",
+      "result": "stored"
+    },
+    {
+      "id": "iu-core-proof",
+      "result": "stored"
+    },
+    {
+      "id": "iu-custom-proof",
+      "result": "stored"
+    }
+  ],
+  "hook_changes": {
+    "d7ebc85": [],
+    "417d1ae": {
+      "widget_text": {
+        "before": {
+          "10": [
+            "balanceTags",
+            "do_shortcode"
+          ]
+        },
+        "after": {
+          "0": [
+            "icl_sw_filters_widget_text"
+          ],
+          "10": [
+            "balanceTags",
+            "do_shortcode"
+          ]
+        }
+      },
+      "elementor/widgets/register": {
+        "before": {
+          "10": [
+            "1900init_widgets",
+            "spl_object_id:2137",
+            "2144register_elementor_widgets",
+            "5246register_widgets",
+            "5437init_widgets",
+            "5446init_widgets",
+            "IU_Elementor_Fragment_Cache::proxy",
+            "spl_object_id:8569",
+            "spl_object_id:8570",
+            "spl_object_id:8571",
+            "spl_object_id:8572",
+            "spl_object_id:8573",
+            "spl_object_id:8574",
+            "spl_object_id:8575",
+            "spl_object_id:8576",
+            "spl_object_id:8577",
+            "8595register_widgets",
+            "8624register_widgets",
+            "8781registerWidgets",
+            "486init_widgets",
+            "9302init_widgets",
+            "9339init_widgets",
+            "9345init_widgets",
+            "9361init_widgets",
+            "9381init_widgets",
+            "9384init_widgets",
+            "9387init_widgets",
+            "9395init_widgets",
+            "9409init_widgets",
+            "9412init_widgets",
+            "9414init_widgets",
+            "9421init_widgets",
+            "9423init_widgets",
+            "9422init_widgets",
+            "9425init_widgets",
+            "9432init_widgets",
+            "9449init_widgets",
+            "9452init_widgets",
+            "9457init_widgets",
+            "9459init_widgets",
+            "9460init_widgets",
+            "9461init_widgets",
+            "9491init_widgets",
+            "9492init_widgets",
+            "9493init_widgets",
+            "9494init_widgets",
+            "9495init_widgets",
+            "9504init_widgets",
+            "9511init_widgets",
+            "9523init_widgets",
+            "9526init_widgets",
+            "9527init_widgets",
+            "9531init_widgets",
+            "9573init_widgets",
+            "3200init_widgets",
+            "3201init_widgets",
+            "3204init_widgets",
+            "9735init_widgets",
+            "9738init_widgets",
+            "9739init_widgets",
+            "9756init_widgets",
+            "9805init_widgets",
+            "9820init_widgets",
+            "9827init_widgets",
+            "9830init_widgets",
+            "9835init_widgets",
+            "9838init_widgets",
+            "9840init_widgets",
+            "9847init_widgets",
+            "9851init_widgets",
+            "9856init_widgets",
+            "9857init_widgets",
+            "9858init_widgets",
+            "9860init_widgets",
+            "9912init_widgets",
+            "9913init_widgets",
+            "9947init_widgets",
+            "9960init_widgets",
+            "9961init_widgets",
+            "9965init_widgets",
+            "9966init_widgets",
+            "10246init_widgets",
+            "10325init_widgets",
+            "10327init_widgets",
+            "10328init_widgets",
+            "10329init_widgets",
+            "10330init_widgets",
+            "10331init_widgets",
+            "10332init_widgets",
+            "10333init_widgets",
+            "10334init_widgets",
+            "10335init_widgets",
+            "10336init_widgets",
+            "10337init_widgets",
+            "10338init_widgets",
+            "10339init_widgets",
+            "10373init_widgets",
+            "10375init_widgets",
+            "10384init_widgets",
+            "10385init_widgets",
+            "10386init_widgets",
+            "10387init_widgets",
+            "10388init_widgets",
+            "10389init_widgets",
+            "10393init_widgets",
+            "10397init_widgets",
+            "10399init_widgets",
+            "10400init_widgets",
+            "10403init_widgets",
+            "10404init_widgets",
+            "10405init_widgets",
+            "10409init_widgets",
+            "10412init_widgets",
+            "10414init_widgets",
+            "10415init_widgets",
+            "10422init_widgets",
+            "10421init_widgets"
+          ]
+        },
+        "after": {
+          "10": [
+            "1900init_widgets",
+            "spl_object_id:2137",
+            "2144register_elementor_widgets",
+            "5246register_widgets",
+            "5437init_widgets",
+            "5446init_widgets",
+            "IU_Elementor_Fragment_Cache::proxy",
+            "spl_object_id:8569",
+            "spl_object_id:8570",
+            "spl_object_id:8571",
+            "spl_object_id:8572",
+            "spl_object_id:8573",
+            "spl_object_id:8574",
+            "spl_object_id:8575",
+            "spl_object_id:8576",
+            "spl_object_id:8577",
+            "8595register_widgets",
+            "8624register_widgets",
+            "8781registerWidgets",
+            "486init_widgets",
+            "9302init_widgets",
+            "9339init_widgets",
+            "9345init_widgets",
+            "9361init_widgets",
+            "9381init_widgets",
+            "9384init_widgets",
+            "9387init_widgets",
+            "9395init_widgets",
+            "9409init_widgets",
+            "9412init_widgets",
+            "9414init_widgets",
+            "9421init_widgets",
+            "9423init_widgets",
+            "9422init_widgets",
+            "9425init_widgets",
+            "9432init_widgets",
+            "9449init_widgets",
+            "9452init_widgets",
+            "9457init_widgets",
+            "9459init_widgets",
+            "9460init_widgets",
+            "9461init_widgets",
+            "9491init_widgets",
+            "9492init_widgets",
+            "9493init_widgets",
+            "9494init_widgets",
+            "9495init_widgets",
+            "9504init_widgets",
+            "9511init_widgets",
+            "9523init_widgets",
+            "9526init_widgets",
+            "9527init_widgets",
+            "9531init_widgets",
+            "9573init_widgets",
+            "3200init_widgets",
+            "3201init_widgets",
+            "3204init_widgets",
+            "9735init_widgets",
+            "9738init_widgets",
+            "9739init_widgets",
+            "9756init_widgets",
+            "9805init_widgets",
+            "9820init_widgets",
+            "9827init_widgets",
+            "9830init_widgets",
+            "9835init_widgets",
+            "9838init_widgets",
+            "9840init_widgets",
+            "9847init_widgets",
+            "9851init_widgets",
+            "9856init_widgets",
+            "9857init_widgets",
+            "9858init_widgets",
+            "9860init_widgets",
+            "9912init_widgets",
+            "9913init_widgets",
+            "9947init_widgets",
+            "9960init_widgets",
+            "9961init_widgets",
+            "9965init_widgets",
+            "9966init_widgets",
+            "10246init_widgets",
+            "10325init_widgets",
+            "10327init_widgets",
+            "10328init_widgets",
+            "10329init_widgets",
+            "10330init_widgets",
+            "10331init_widgets",
+            "10332init_widgets",
+            "10333init_widgets",
+            "10334init_widgets",
+            "10335init_widgets",
+            "10336init_widgets",
+            "10337init_widgets",
+            "10338init_widgets",
+            "10339init_widgets",
+            "10373init_widgets",
+            "10375init_widgets",
+            "10384init_widgets",
+            "10385init_widgets",
+            "10386init_widgets",
+            "10387init_widgets",
+            "10388init_widgets",
+            "10389init_widgets",
+            "10393init_widgets",
+            "10397init_widgets",
+            "10399init_widgets",
+            "10400init_widgets",
+            "10403init_widgets",
+            "10404init_widgets",
+            "10405init_widgets",
+            "10409init_widgets",
+            "10412init_widgets",
+            "10414init_widgets",
+            "10415init_widgets",
+            "10422init_widgets",
+            "10421init_widgets",
+            "12031init_widgets",
+            "12040init_widgets"
+          ]
+        }
+      },
+      "elementor/frontend/builder_content_data": {
+        "before": {
+          "10": [
+            "8783translate_global_widget_ids",
+            "8783translate_product_ids",
+            "8783translate_ids_in_widget_fields",
+            "8826convert",
+            "spl_object_id:8833",
+            "8935convertDisplayConditions",
+            "9947filter_content_data"
+          ],
+          "9223372036854775805": [
+            "spl_object_id:2139"
+          ],
+          "9223372036854775806": [
+            "spl_object_id:4351"
+          ],
+          "9223372036854775807": [
+            "iu_elementor_filter_builder_content_by_device",
+            "IU_Elementor_Fragment_Cache::filter"
+          ]
+        },
+        "after": {
+          "10": [
+            "8783translate_global_widget_ids",
+            "8783translate_product_ids",
+            "8783translate_ids_in_widget_fields",
+            "8826convert",
+            "spl_object_id:8833",
+            "8935convertDisplayConditions",
+            "9947filter_content_data",
+            "12031filter_content_data",
+            "12040filter_content_data"
+          ],
+          "9223372036854775805": [
+            "spl_object_id:2139"
+          ],
+          "9223372036854775806": [
+            "spl_object_id:4351"
+          ],
+          "9223372036854775807": [
+            "iu_elementor_filter_builder_content_by_device",
+            "IU_Elementor_Fragment_Cache::filter"
+          ]
+        }
+      },
+      "elementor/widget/render_content": {
+        "before": {
+          "10": [
+            "5246filter_posts_render"
+          ],
+          "9223372036854775807": [
+            "8837restoreWidgetTextFilter"
+          ]
+        },
+        "after": {
+          "10": [
+            "5246filter_posts_render"
+          ]
+        }
+      },
+      "elementor/editor/localize_settings": {
+        "before": {
+          "10": [
+            "5407localize_settings",
+            "9234localize_settings",
+            "9238localize_settings",
+            "9421add_v4_promotions_data",
+            "spl_object_id:9483",
+            "spl_object_id:9528",
+            "9783add_custom_icons_url",
+            "spl_object_id:9955"
+          ],
+          "11": [
+            "spl_object_id:5403",
+            "spl_object_id:9508"
+          ],
+          "1000": [
+            "8595promote_pro_widgets"
+          ]
+        },
+        "after": {
+          "10": [
+            "5407localize_settings",
+            "9234localize_settings",
+            "9238localize_settings",
+            "9421add_v4_promotions_data",
+            "spl_object_id:9483",
+            "spl_object_id:9528",
+            "9783add_custom_icons_url",
+            "spl_object_id:9955",
+            "spl_object_id:12033",
+            "spl_object_id:12047"
+          ],
+          "11": [
+            "spl_object_id:5403",
+            "spl_object_id:9508"
+          ],
+          "1000": [
+            "8595promote_pro_widgets"
+          ]
+        }
+      },
+      "elementor/editor/init": {
+        "before": {
+          "10": [
+            "5407on_elementor_editor_init",
+            "spl_object_id:8933",
+            "9227on_elementor_editor_init",
+            "9231on_elementor_editor_init",
+            "9296add_templates",
+            "spl_object_id:9386",
+            "9739on_elementor_editor_init",
+            "9913on_elementor_editor_init",
+            "spl_object_id:9951"
+          ]
+        },
+        "after": {
+          "10": [
+            "5407on_elementor_editor_init",
+            "spl_object_id:8933",
+            "9227on_elementor_editor_init",
+            "9231on_elementor_editor_init",
+            "9296add_templates",
+            "spl_object_id:9386",
+            "9739on_elementor_editor_init",
+            "9913on_elementor_editor_init",
+            "spl_object_id:9951",
+            "spl_object_id:12057",
+            "spl_object_id:12035"
+          ]
+        }
+      },
+      "elementor/finder/categories": {
+        "before": {
+          "10": [
+            "8640add_hello_theme_finder_entry",
+            "spl_object_id:9458",
+            "9757add_finder_item",
+            "9781add_finder_item",
+            "9805add_finder_items",
+            "9913add_finder_items",
+            "9947add_finder_items"
+          ],
+          "11": [
+            "spl_object_id:5430"
+          ]
+        },
+        "after": {
+          "10": [
+            "8640add_hello_theme_finder_entry",
+            "spl_object_id:9458",
+            "9757add_finder_item",
+            "9781add_finder_item",
+            "9805add_finder_items",
+            "9913add_finder_items",
+            "9947add_finder_items",
+            "12031add_finder_items",
+            "12040add_finder_items"
+          ],
+          "11": [
+            "spl_object_id:5430"
+          ]
+        }
+      },
+      "elementor/documents/register": {
+        "before": {
+          "0": [
+            "9234register_default_types"
+          ],
+          "10": [
+            "9238register_document",
+            "9297register_documents",
+            "spl_object_id:9466",
+            "spl_object_id:9506",
+            "9739register_documents",
+            "9805register_documents",
+            "9924register_documents",
+            "spl_object_id:10348"
+          ],
+          "11": [
+            "spl_object_id:9948",
+            "spl_object_id:10407"
+          ]
+        },
+        "after": {
+          "0": [
+            "9234register_default_types"
+          ],
+          "10": [
+            "9238register_document",
+            "9297register_documents",
+            "spl_object_id:9466",
+            "spl_object_id:9506",
+            "9739register_documents",
+            "9805register_documents",
+            "9924register_documents",
+            "spl_object_id:10348"
+          ],
+          "11": [
+            "spl_object_id:9948",
+            "spl_object_id:10407",
+            "spl_object_id:12039",
+            "spl_object_id:12037"
+          ]
+        }
+      },
+      "elementor/frontend/after_register_styles": {
+        "before": {
+          "10": [
+            "9256register_styles",
+            "9387register_styles",
+            "9412register_styles",
+            "9414register_styles",
+            "9460register_styles",
+            "9461register_styles",
+            "9805register_frontend_styles",
+            "9820register_frontend_styles",
+            "9947register_styles",
+            "9960register_styles",
+            "9961register_styles",
+            "9965register_styles",
+            "9966register_styles",
+            "10325register_styles",
+            "10327register_styles",
+            "10328register_styles",
+            "10329register_styles",
+            "10330register_styles",
+            "10331register_styles",
+            "10332register_styles",
+            "10333register_styles",
+            "10334register_styles",
+            "10335register_styles",
+            "10336register_styles",
+            "10337register_styles",
+            "10338register_styles",
+            "10373register_styles",
+            "10385register_frontend_styles",
+            "10386register_styles",
+            "10387register_styles",
+            "10388register_styles",
+            "10393register_styles",
+            "10397register_styles",
+            "10399register_styles",
+            "10400register_styles",
+            "10409register_styles"
+          ]
+        },
+        "after": {
+          "10": [
+            "9256register_styles",
+            "9387register_styles",
+            "9412register_styles",
+            "9414register_styles",
+            "9460register_styles",
+            "9461register_styles",
+            "9805register_frontend_styles",
+            "9820register_frontend_styles",
+            "9947register_styles",
+            "9960register_styles",
+            "9961register_styles",
+            "9965register_styles",
+            "9966register_styles",
+            "10325register_styles",
+            "10327register_styles",
+            "10328register_styles",
+            "10329register_styles",
+            "10330register_styles",
+            "10331register_styles",
+            "10332register_styles",
+            "10333register_styles",
+            "10334register_styles",
+            "10335register_styles",
+            "10336register_styles",
+            "10337register_styles",
+            "10338register_styles",
+            "10373register_styles",
+            "10385register_frontend_styles",
+            "10386register_styles",
+            "10387register_styles",
+            "10388register_styles",
+            "10393register_styles",
+            "10397register_styles",
+            "10399register_styles",
+            "10400register_styles",
+            "10409register_styles",
+            "12031register_styles",
+            "12040register_styles"
+          ]
+        }
+      },
+      "elementor/css-file/post/enqueue": {
+        "before": {
+          "10": [
+            "9293after_enqueue_post_css",
+            "spl_object_id:9954"
+          ]
+        },
+        "after": {
+          "10": [
+            "9293after_enqueue_post_css",
+            "spl_object_id:9954",
+            "spl_object_id:12028",
+            "spl_object_id:12049"
+          ]
+        }
+      },
+      "manage_elementor_library_posts_columns": {
+        "before": {
+          "10": [
+            "9919admin_columns_headers",
+            "spl_object_id:9950"
+          ]
+        },
+        "after": {
+          "10": [
+            "9919admin_columns_headers",
+            "spl_object_id:9950",
+            "spl_object_id:12043",
+            "spl_object_id:14569"
+          ]
+        }
+      },
+      "elementor/template-library/create_new_dialog_fields": {
+        "before": {
+          "10": [
+            "9913print_location_field",
+            "9913print_post_type_field",
+            "9947add_posts_type_to_template_popup"
+          ],
+          "12": [
+            "9947add_taxonomies_type_to_template_popup"
+          ]
+        },
+        "after": {
+          "10": [
+            "9913print_location_field",
+            "9913print_post_type_field",
+            "9947add_posts_type_to_template_popup",
+            "12031add_posts_type_to_template_popup",
+            "12040add_posts_type_to_template_popup"
+          ],
+          "12": [
+            "9947add_taxonomies_type_to_template_popup",
+            "12031add_taxonomies_type_to_template_popup",
+            "12040add_taxonomies_type_to_template_popup"
+          ]
+        }
+      },
+      "elementor-pro/modules/loop-builder/documents/loop/query_settings": {
+        "before": {
+          "12": [
+            "9947add_taxonomies_type_to_loop_settings_query"
+          ]
+        },
+        "after": {
+          "12": [
+            "9947add_taxonomies_type_to_loop_settings_query",
+            "12031add_taxonomies_type_to_loop_settings_query",
+            "12040add_taxonomies_type_to_loop_settings_query"
+          ]
+        }
+      },
+      "elementor/css-file/dynamic/should_enqueue": {
+        "before": {
+          "10": [
+            "spl_object_id:9952"
+          ]
+        },
+        "after": {
+          "10": [
+            "spl_object_id:9952",
+            "spl_object_id:12030",
+            "spl_object_id:12019"
+          ]
+        }
+      },
+      "elementor/widget/loop-grid/skins_init": {
+        "before": {
+          "12": [
+            "spl_object_id:9956"
+          ]
+        },
+        "after": {
+          "12": [
+            "spl_object_id:9956",
+            "spl_object_id:12045",
+            "spl_object_id:12051"
+          ]
+        }
+      },
+      "elementor/widget/loop-carousel/skins_init": {
+        "before": {
+          "12": [
+            "spl_object_id:9958"
+          ]
+        },
+        "after": {
+          "12": [
+            "spl_object_id:9958",
+            "spl_object_id:12016",
+            "spl_object_id:12044"
+          ]
+        }
+      },
+      "elementor/element/container/_section_transform/after_section_start": {
+        "before": {
+          "10": [
+            "spl_object_id:15053"
+          ]
+        },
+        "after": {
+          "10": [
+            "spl_object_id:15053",
+            "spl_object_id:12069"
+          ]
+        }
+      }
+    },
+    "a1ff108": [],
+    "c60daee": [],
+    "e62c115": [],
+    "c28398e": [],
+    "iu-core-proof": [],
+    "iu-custom-proof": []
+  }
+}

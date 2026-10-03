@@ -1,0 +1,47 @@
+[
+  {
+    "language": "el",
+    "builder": "anonymous",
+    "consumer": "site_manager",
+    "miss_events": [
+      {
+        "id": "26fa46c6",
+        "result": "stored"
+      }
+    ],
+    "hit_events": [
+      {
+        "id": "26fa46c6",
+        "result": "hit"
+      }
+    ],
+    "miss_root_renders": 1,
+    "hit_root_renders": 0,
+    "miss_loops": 150,
+    "hit_loops": 0,
+    "hit_original_templates": [],
+    "bytes": 473940,
+    "keys_equal": true,
+    "stored_hit_equal": true,
+    "source_normal_equal": true,
+    "consumer_normal_equal": false,
+    "normal_cross_page_equal": false,
+    "assets_equal": true,
+    "sha256": "6da07a58bd784165612e922c26432ccfa0f4d65eac3556d9a0a2e84b36b88f79",
+    "page_state_attrs": {
+      "source": [],
+      "consumer": [
+        "<li class=\"menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-4647 current_page_item menu-item-7739\">",
+        "<a href=\"https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/\" aria-current=\"page\" class=\"elementor-item elementor-item-active\">",
+        "<li class=\"menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-4647 current_page_item menu-item-7739\">",
+        "<a href=\"https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/\" aria-current=\"page\" class=\"elementor-item elementor-item-active\" tabindex=\"-1\">",
+        "<li class=\"menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-4647 current_page_item menu-item-7739\">",
+        "<a href=\"https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/\" aria-current=\"page\" class=\"elementor-item elementor-item-active\">",
+        "<li class=\"menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-4647 current_page_item menu-item-7739\">",
+        "<a href=\"https://wordpress-218158-6702910.cloudwaysapps.com/techniki-ypostirixi/\" aria-current=\"page\" class=\"elementor-item elementor-item-active\" tabindex=\"-1\">"
+      ]
+    },
+    "consumer_equal_except_current_page_attributes": true,
+    "normal_cross_page_equal_except_current_page_attributes": true
+  }
+]

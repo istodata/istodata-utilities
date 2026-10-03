@@ -1,0 +1,59 @@
+{
+    "pair": {
+        "core": "4.3.3",
+        "pro": "4.3.1"
+    },
+    "kit": "2.21.2",
+    "features": {
+        "atomic": true,
+        "fragment": true
+    },
+    "native_cache": "disable",
+    "saved": [
+        {
+            "document": 30,
+            "element": "26fa46c6",
+            "cache": null,
+            "ttl": "86400"
+        },
+        {
+            "document": 30,
+            "element": "417d1ae",
+            "cache": "yes",
+            "ttl": "86400"
+        },
+        {
+            "document": 30,
+            "element": "c60daee",
+            "cache": "yes",
+            "ttl": "86400"
+        },
+        {
+            "document": 33000,
+            "element": "26fa46c6",
+            "cache": null,
+            "ttl": "86400"
+        },
+        {
+            "document": 33000,
+            "element": "417d1ae",
+            "cache": "yes",
+            "ttl": "86400"
+        },
+        {
+            "document": 33000,
+            "element": "c60daee",
+            "cache": "yes",
+            "ttl": "86400"
+        }
+    ],
+    "fragment_only_future_update_blocked": {
+        "on": true,
+        "off": false
+    },
+    "cleanup": {
+        "temporary_users_absent": true,
+        "observer_absent": true,
+        "private_session_file_absent": true
+    }
+}

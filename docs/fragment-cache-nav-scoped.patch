@@ -1,0 +1,46 @@
+--- a/includes/elementor-fragment-cache.php
++++ b/includes/elementor-fragment-cache.php
+@@ -37,9 +37,10 @@
+         add_action('update_option_istodata_utilities_settings', array(__CLASS__, 'settings_changed'), 10, 2);
+         foreach (array('after_switch_theme', 'upgrader_process_complete', 'update_option_permalink_structure',
+             'update_option_home', 'update_option_siteurl', 'update_option_elementor_active_kit',
+-            'update_option_icl_sitepress_settings', 'wp_update_nav_menu', 'deleted_nav_menu') as $hook) {
++            'update_option_icl_sitepress_settings', 'wp_update_nav_menu', 'wp_update_nav_menu_item', 'deleted_nav_menu') as $hook) {
+             add_action($hook, array(__CLASS__, 'invalidate'), 10, 0);
+         }
++        add_action('before_delete_post', array(__CLASS__, 'menu_item_deleted'), 10, 2);
+         add_action('admin_menu', array(__CLASS__, 'admin_menu'));
+         add_action('admin_post_iu_fragment_purge', array(__CLASS__, 'purge'));
+         add_action('admin_bar_menu', array(__CLASS__, 'admin_bar'), 100);
+@@ -697,6 +698,10 @@
+         }
+     }
+ 
++    public static function menu_item_deleted($post_id, $post) {
++        if (is_object($post) && $post->post_type === 'nav_menu_item') self::invalidate();
++    }
++
+     public static function invalidate() {
+         // Default-off sites do not acquire an epoch until their first stored fragment.
+         if (get_option(self::EPOCH, false) !== false) {
+--- a/includes/elementor-fragment-cache-graph.php
++++ b/includes/elementor-fragment-cache-graph.php
+@@ -43,7 +43,7 @@
+ 
+     public static function inspect($node) {
+         self::$last_rejection = array();
+-        $complex = in_array($node['widgetType'] ?? '', array('mega-menu', 'loop-grid', 'posts', 'template'), true);
++        $complex = in_array($node['widgetType'] ?? '', array('mega-menu', 'loop-grid', 'posts', 'template', 'nav-menu'), true);
+         if ((!$complex && !in_array($node['widgetType'] ?? '', array('heading', 'image', 'button', 'icon', 'divider', 'spacer'), true)) ||
+             !iu_elementor_feature_supported('fragment', null, $complex) ||
+             !class_exists('Elementor\\Plugin') || !\Elementor\Plugin::$instance) {
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -4,6 +4,7 @@
+ 
+ ## Unreleased
+ 
++- Fix: Honor Advanced Elements Cache opt-in on Elementor WP Menu widgets with early widget bypass and menu-item update/deletion invalidation. Shared menu HTML retains the active-page attributes of its first request.
+ - Improve: Advanced Elements Cache uses the administrator's per-element opt-in as a declaration of shared output across pages and visitors, without blanket third-party version or callback allowlists. Preserve device/language variants and explicit private, preview, query and replay exclusions.
+ - New: Administrator-only Advanced Elements Cache status distinguishes saved activation, supported structure and recent frontend hit/miss/bypass observations, with actionable rejection reasons.
+ - Fix: Keep native preview and globally disabled cache from writing frontend cache observations.

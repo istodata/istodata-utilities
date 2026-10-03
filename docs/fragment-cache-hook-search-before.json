@@ -1,0 +1,150 @@
+[
+  {
+    "language": "el",
+    "term": "Leica",
+    "query": {
+      "search": true,
+      "id": "6361",
+      "s": "Leica",
+      "ivory": true,
+      "post_type": [
+        "post",
+        "page",
+        "case_study",
+        "job",
+        "partner",
+        "product",
+        "solution"
+      ]
+    },
+    "results": {
+      "ids": [
+        39554,
+        38940,
+        38859,
+        38613,
+        37977,
+        37301,
+        37273,
+        37220,
+        37180,
+        34976,
+        34524,
+        34319
+      ],
+      "found": 150
+    },
+    "no_cache": true
+  },
+  {
+    "language": "el",
+    "term": "Metrica",
+    "query": {
+      "search": true,
+      "id": "6361",
+      "s": "Metrica",
+      "ivory": true,
+      "post_type": [
+        "post",
+        "page",
+        "case_study",
+        "job",
+        "partner",
+        "product",
+        "solution"
+      ]
+    },
+    "results": {
+      "ids": [
+        38889,
+        38808,
+        38698,
+        38637,
+        38549,
+        38287,
+        38237,
+        37393,
+        37042,
+        37033,
+        36934,
+        36899
+      ],
+      "found": 353
+    },
+    "no_cache": true
+  },
+  {
+    "language": "en",
+    "term": "Leica",
+    "query": {
+      "search": true,
+      "id": "6361",
+      "s": "Leica",
+      "ivory": true,
+      "post_type": [
+        "post",
+        "page",
+        "case_study",
+        "job",
+        "partner",
+        "product",
+        "solution"
+      ]
+    },
+    "results": {
+      "ids": [
+        39382,
+        37998,
+        30241,
+        30334,
+        29595,
+        29599,
+        29602,
+        29876,
+        30193,
+        30200,
+        30206,
+        30210
+      ],
+      "found": 41
+    },
+    "no_cache": true
+  },
+  {
+    "language": "en",
+    "term": "Metrica",
+    "query": {
+      "search": true,
+      "id": "6361",
+      "s": "Metrica",
+      "ivory": true,
+      "post_type": [
+        "post",
+        "page",
+        "case_study",
+        "job",
+        "partner",
+        "product",
+        "solution"
+      ]
+    },
+    "results": {
+      "ids": [
+        39372,
+        39378,
+        39375,
+        36964,
+        36932,
+        36858,
+        29871,
+        40055,
+        39660,
+        39347,
+        39447,
+        39344
+      ],
+      "found": 114
+    },
+    "no_cache": true
+  }
+]
