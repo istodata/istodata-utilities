@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.22.1 - 2026-10-03
+
+- Tweak: Remove the permanent ISTODATA Elementor Compatibility menu from Tools and network settings. Keep its protected override screen accessible from blocked-update notices; compatibility information remains in Kit settings.
+- Docs: Explicitly apply test ZIP exclusions and archive checks to release ZIPs, excluding tests, docs, development archives and Git metadata.
+
 ## 2.22.0 - 2026-10-03
 
 - New: Optional Advanced Elements Cache with a default-OFF global switch and per-widget opt-in. A valid hit bypasses the original widget and its descendant loops before rendering, with device/WPML variants, a 24-hour default TTL, lazy creation and no preload.

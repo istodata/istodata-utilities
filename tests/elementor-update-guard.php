@@ -12,14 +12,28 @@ register_shutdown_function(function () {
     }
     rmdir(WP_PLUGIN_DIR);
 });
-$hooks = array(); $site_id = 1; $multisite = false; $super = true; $cron = false;
+$hooks = array(); $site_id = 1; $multisite = false; $network_admin = false; $super = true; $cron = false;
+$submenu = array(); $registered_screens = array();
 $caps = array('update_plugins' => true, 'manage_options' => true, 'manage_network_plugins' => true);
 $sites = array(); $site_options = array(); $network_plugins = array(); $stack = array();
 $updates = (object) array('response' => array());
 function add_filter($hook, $fn, $priority = 10, $args = 1) { $GLOBALS['hooks'][$hook][] = array($fn, $priority, $args); }
 function add_action($hook, $fn, $priority = 10, $args = 1) { add_filter($hook, $fn, $priority, $args); }
 function is_multisite() { return $GLOBALS['multisite']; }
-function is_network_admin() { return false; }
+function is_network_admin() { return $GLOBALS['network_admin']; }
+function add_submenu_page($parent, $title, $label, $cap, $slug, $callback) {
+    $GLOBALS['submenu'][$parent][] = array($label, $cap, $slug);
+    $GLOBALS['registered_screens'][$parent . '?page=' . $slug] = $callback;
+}
+function add_management_page($title, $label, $cap, $slug, $callback) {
+    add_submenu_page('tools.php', $title, $label, $cap, $slug, $callback);
+}
+function remove_submenu_page($parent, $slug) {
+    foreach ($GLOBALS['submenu'][$parent] ?? array() as $i => $item) {
+        if ($item[2] === $slug) { unset($GLOBALS['submenu'][$parent][$i]); return $item; }
+    }
+    return false;
+}
 function is_super_admin() { return $GLOBALS['super']; }
 function wp_doing_cron() { return $GLOBALS['cron']; }
 function get_current_blog_id() { return $GLOBALS['site_id']; }
@@ -241,4 +255,24 @@ check($updates->response[$plugin] === $item, 'Update stays visible');
 unset($item->plugin);
 ob_start(); $hooks['in_plugin_update_message-' . $plugin][0][0](array(), $item); $row_html = ob_get_clean();
 check(strpos($row_html, 'η ενημέρωση μπλοκάρεται') !== false, 'Plugin-row callback binds its own plugin identity');
+// Hide only navigation: blocked-update links must still reach the protected forms.
+foreach (array(false, true) as $network) {
+    $multisite = $network; $network_admin = $network;
+    $parent = $network ? 'settings.php' : 'tools.php';
+    $submenu[$parent] = array(array('Other tool', 'manage_options', 'other-tool'));
+    IU_Elementor_Update_Guard::menu();
+    check(count($submenu[$parent]) === 1 && $submenu[$parent][0][2] === 'other-tool', 'Remove only Kit compatibility navigation');
+    $callback = $registered_screens[$parent . '?page=iu-elementor-compatibility'] ?? null;
+    check(is_callable($callback), 'Hidden compatibility callback remains registered');
+    activation(true, false); installed('4.3.2', '4.3.0');
+    $item = update_item($plugin, '4.4.0');
+    ob_start(); IU_Elementor_Update_Guard::update_message($plugin, $item); $row = ob_get_clean();
+    check(strpos($row, $parent . '?page=iu-elementor-compatibility') !== false, 'Blocked update retains compatibility link');
+    ob_start(); call_user_func($callback); $screen = ob_get_clean();
+    check(strpos($screen, 'iu_elementor_update_override') !== false && strpos($screen, '_wpnonce') !== false, 'Linked screen retains protected override form');
+    $cap = $network ? 'manage_network_plugins' : 'manage_options'; $caps[$cap] = false;
+    ob_start(); call_user_func($callback); $denied = ob_get_clean();
+    check($denied === '', 'Hidden screen still checks capabilities');
+    $caps[$cap] = true;
+}
 echo 'PASS updater: ' . (count($matrix) * 4) . " activation/target scenarios × automatic/manual/extracted/upload gates; new-patch rejection, override, sequential updates, global activation, multisite and UI\n";

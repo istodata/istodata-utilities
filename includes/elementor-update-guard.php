@@ -217,10 +217,14 @@ final class IU_Elementor_Update_Guard {
         if (is_network_admin()) {
             add_submenu_page('settings.php', 'ISTODATA Elementor Compatibility', 'ISTODATA Elementor Compatibility',
                 'manage_network_plugins', 'iu-elementor-compatibility', array(__CLASS__, 'page'));
+            remove_submenu_page('settings.php', 'iu-elementor-compatibility');
         } elseif (!is_multisite()) {
             add_management_page('ISTODATA Elementor Compatibility', 'ISTODATA Elementor Compatibility',
                 'manage_options', 'iu-elementor-compatibility', array(__CLASS__, 'page'));
+            remove_submenu_page('tools.php', 'iu-elementor-compatibility');
         }
+        // Keep the registered, capability-protected screen and existing URLs for
+        // blocked-update links; compatibility information already lives in Kit settings.
     }
 
     public static function update_message($plugin, $response) {

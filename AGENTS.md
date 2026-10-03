@@ -55,10 +55,14 @@ When creating a manual test zip for upload through WordPress Admin -> Plugins ->
 - Zip entry paths must use forward slashes. Do not ship archives whose entries contain Windows backslashes.
 - Save the zip in `H:\Το Drive μου\Development\ISTODATA PLUGINS`.
 - Exclude development and temporary files:
+  - `tests/` and test fixtures
+  - `docs/` and historical development archives
   - `.git/`
-  - `.github/` unless explicitly needed for distribution
+  - `.github/` and other Git metadata, including `.gitignore` and `.gitattributes`
   - `.claude/`
-  - existing `.zip` files
+  - `.agents/` and `.codex/`
+  - development instructions such as `AGENTS.md`
+  - all other `.zip` files, including test, staging and release archives
   - `test-download.zip`
   - `*.Zone.Identifier`
   - OS metadata and temp files
@@ -74,7 +78,7 @@ Required zip verification checklist:
 - `istodata-utilities/istodata-utilities/istodata-utilities.php` does not exist.
 - No zip entries contain Windows backslashes (`\`).
 - No entries start with a version/test folder such as `istodata-utilities-v2.19.2-20260706-test/`.
-- No `.git/`, `.github/`, `.claude/`, `*.Zone.Identifier`, or nested `.zip` entries are included.
+- No `tests/`, `docs/`, test fixtures, historical development archives, Git metadata, `.claude/`, `.agents/`, `.codex/`, `AGENTS.md`, `*.Zone.Identifier`, or nested `.zip` entries are included.
 
 Report the verification results and the exact absolute zip path to the user.
 
@@ -86,7 +90,7 @@ Only do this after the user confirms the WordPress manual test is OK and asks fo
 2. Make sure release work is based on the GitHub default branch `main`, not the old local `master` branch.
 3. Update the plugin header version and `IU_PLUGIN_VERSION`.
 4. Move `CHANGELOG.md` entries from `Unreleased` to the release heading.
-5. Create a clean release zip in the parent plugin directory.
+5. Create a clean release zip in the parent plugin directory using the same exclusions and archive verification checklist as **Local Test Zip** above.
 6. Create tag `vX.Y.Z`.
 7. Create the GitHub release with title `ISTODATA Kit vX.Y.Z`.
 8. Upload the asset as `istodata-utilities.zip`.

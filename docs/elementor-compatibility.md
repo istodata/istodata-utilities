@@ -1,6 +1,6 @@
 # Elementor compatibility and WordPress updater gate
 
-ISTODATA Kit 2.22.0, 2026-10-03. Registry:
+ISTODATA Kit 2.22.1, 2026-10-03. Registry:
 `includes/elementor-compatibility.php`.
 
 ## Accepted versus tested
@@ -13,7 +13,7 @@ ISTODATA Kit 2.22.0, 2026-10-03. Registry:
 
 The registry has one common accepted pair: **4.3.3/4.3.1**.
 Actual acceptance is recorded separately in `archive/2026-10-01-elementor/docs/elementor-kit-acceptance-staging.md`.
-Tools → ISTODATA Elementor Compatibility derives this from the same registry.
+Compatibility descriptions in Kit settings derive this from the same registry.
 No wider range or new patch is inferred. The former fragment widening filter was
 removed. API/class/source-path/hook/shape guards remain; JS checks APIs while PHP
 uses the registry to decide attachment.
@@ -83,7 +83,10 @@ eventually reach an explicitly accepted pair. Disable the affected feature for t
 transition, or explicitly override each blocked step. With disjoint installed/target policies, selecting a feature or newly reviewed
 compatibility is required; a supported final pair does not approve intermediate steps.
 
-The compatibility page exposes one POST form per blocked available update.
+The compatibility screen exposes one POST form per blocked available update.
+It has no permanent menu entry in Tools or network settings. Blocked-update
+notices and plugin update rows link to the existing protected screen and URLs;
+removing the submenu leaves the registered callback and permission checks intact.
 The administrator must explicitly acknowledge the specific update. Authorization
 requires `update_plugins` AND `manage_options`, a WordPress nonce tied to a
 fingerprint of plugin, target version, package URL and installed core/Pro pair;
