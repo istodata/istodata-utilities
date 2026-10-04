@@ -14,9 +14,16 @@ Each element defaults OFF; default TTL is 24 hours. Creation is lazy on a real
 request, with no preload or scheduled generation.
 
 Opt-in declares that this element's output can be reused as-is across pages and
-anonymous/authenticated visitors. The administrator must exclude personalized,
-permission-dependent, page-dependent, cart, geolocation and external changing
-content. Static inspection does not prove independence from arbitrary callbacks.
+anonymous/authenticated visitors and ordinary URL query parameters. Query strings
+do not by themselves bypass caching or create a distinct fragment. This includes
+tracking parameters (utm/gclid), pagination, sorting and custom parameters.
+Keep elements OFF when their output should follow the current page or these
+parameters. With ON, the first eligible request's HTML is intentionally reused
+as-is, including current-page menu attributes, even if that first request has
+parameters. This is the administrator's shared-output tradeoff, not a widget or
+vendor prohibition. Personalized, permission-dependent, cart, geolocation and
+other private content cannot be made public by opting in. Static inspection does
+not prove independence from arbitrary callbacks.
 Misses run the normal widget and hooks; hits intentionally skip that widget,
 its descendant loops and their render/query hooks. Integrations requiring those
 side effects on every request must remain uncached. No wizard or callback whitelist.
@@ -47,8 +54,27 @@ nor repairs native language links.
 
 ## Concrete exclusions and replay
 
-Editor/native preview, admin, search, non-GET, REST/AJAX/CLI/customizer and unsupported
-query parameters bypass. Validated WordPress login cookies can share fragments.
+Editor/native preview, admin, feed, non-GET and REST/AJAX/CLI/customizer
+requests bypass. These are actual request modes, not generic query exclusions.
+The explicit `elementor-preview` parameter also bypasses before initialization
+and after nested templates change the current post. The former
+`iu_elementor_fragment_allow_query` filter is no longer used; no allow filter is
+needed. Site integrations using `iu_elementor_fragment_key_context` can still
+add their own context or return a non-array to bypass; the Kit itself does not
+derive that context from the URL. Validated WordPress login cookies can share fragments.
+
+Search and 404 requests are not excluded at the request gate. Neither flag is
+added to the key, but replay-relevant media/excerpt state can still produce a
+different key or a concrete safety rejection. Reuse is therefore conditional,
+not guaranteed merely by removing the request exclusion. Keep elements OFF when
+their output must follow the current search or 404 state. A search request does not itself
+make a public, independent header/footer fragment unsafe; concrete search-sensitive
+queries executed inside a captured widget retain their publication guards.
+On the reviewed metrica staging 404, different native image-loading context and
+a Pro loop's postdata leak prevent shared ordinary-page hits. Existing technical
+variants and concrete replay guards retain native output/status; no blanket 404
+exclusion or special site rule is added. This is an accepted reuse limitation,
+not a guarantee of zero widget/loop work on every 404.
 Known session/private/cart cookies, mismatched language cookies, Authorization
 headers and active PHP session data bypass. Other cookies are covered by the
 administrator's shared-output declaration, not a blanket cookie whitelist.

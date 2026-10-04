@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.22.2 - 2026-10-04
+
+- Improve: Advanced Elements Cache can reuse opted-in fragments on requests with URL parameters and search results, without a blanket query/search/404 bypass. Existing device/language variants, editor/preview exclusions and concrete privacy/query/replay safeguards remain active.
+- Tweak: Clarify that opt-in reuses the stored output as-is across pages, visitors and URL parameters, including current-page navigation attributes. Keep elements OFF when their output should follow the current request.
+- Docs: Document that differing native media context or unreplayable postdata effects can still prevent shared fragment reuse on 404 pages; native rendering remains the fallback.
+
 ## 2.22.1 - 2026-10-03
 
 - Tweak: Remove the permanent ISTODATA Elementor Compatibility menu from Tools and network settings. Keep its protected override screen accessible from blocked-update notices; compatibility information remains in Kit settings.

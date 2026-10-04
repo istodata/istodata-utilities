@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.22.1
+Version: 2.22.2
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.22.1');
+define('IU_PLUGIN_VERSION', '2.22.2');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -1402,7 +1402,7 @@ function iu_settings_page() {
                                 <label><input type="checkbox" name="istodata_utilities_settings[optimizations][elementor_fragment_cache]" value="1"
                                              <?php checked(!empty($settings['optimizations']['elementor_fragment_cache'])); ?> />
                                        Advanced Elements Cache</label>
-                                <p class="description">Προαιρετική cache ανά Elementor element, με ξεχωριστή ενεργοποίηση από το panel Advanced Element Cache. Εφαρμόζει τις ρυθμίσεις ορατότητας συσκευών και διαχωρίζει την cache ανά συσκευή και γλώσσα. Μην ενεργοποιείτε για στοιχεία που αλλάζουν ανά σελίδα ή επισκέπτη. Απαιτεί απενεργοποιημένη την Elementor Element Cache. Η απενεργοποίηση διατηρεί τις επιλογές ανά element.</p>
+                                <p class="description">Προαιρετική cache ανά Elementor element, με ξεχωριστή ενεργοποίηση από το panel Advanced Element Cache. Εφαρμόζει τις ρυθμίσεις ορατότητας συσκευών και διαχωρίζει την cache ανά συσκευή και γλώσσα. Οι παράμετροι URL χρησιμοποιούν την ίδια cache. Μην ενεργοποιείτε για στοιχεία που αλλάζουν ανά σελίδα, επισκέπτη ή παραμέτρους URL. Απαιτεί απενεργοποιημένη την Elementor Element Cache. Η απενεργοποίηση διατηρεί τις επιλογές ανά element.</p>
                                 <details><summary>Συμβατότητα Elementor / Pro</summary><p class="description"><?php echo esc_html(iu_elementor_compatibility_description('fragment')); ?></p></details>
                             </td>
                         </tr>

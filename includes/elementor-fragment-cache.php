@@ -69,7 +69,7 @@ final class IU_Elementor_Fragment_Cache {
             'label' => __('Cache this element', 'istodata-utilities'),
             'type' => \Elementor\Controls_Manager::SWITCHER,
             'return_value' => 'yes', 'default' => '',
-            'description' => __('Εφαρμόζει τις ρυθμίσεις ορατότητας συσκευών. Μην ενεργοποιείτε για στοιχεία που αλλάζουν ανά σελίδα ή επισκέπτη.', 'istodata-utilities'),
+            'description' => __('Εφαρμόζει τις ρυθμίσεις ορατότητας συσκευών. Οι παράμετροι URL χρησιμοποιούν την ίδια cache. Μην ενεργοποιείτε για στοιχεία που αλλάζουν ανά σελίδα, επισκέπτη ή παραμέτρους URL.', 'istodata-utilities'),
         ));
         $element->add_control('iu_fragment_cache_ttl', array(
             'label' => __('Διάρκεια', 'istodata-utilities'),
@@ -105,7 +105,7 @@ final class IU_Elementor_Fragment_Cache {
         if (!self::versions_supported()) return self::reject_request('incompatible-elementor');
         // Elementor's zero-argument preview check uses the current post. Nested
         // templates can change that post while the preview request stays active.
-        // Never let a query-allow filter reopen caching in an editor iframe.
+        // Keep this explicit mode check even before Elementor initializes.
         if (isset($_GET['elementor-preview'])) return self::reject_request('editor-preview');
         $plugin = class_exists('Elementor\\Plugin') ? \Elementor\Plugin::$instance : null;
         if ($plugin && (($plugin->editor && $plugin->editor->is_edit_mode()) ||
@@ -135,14 +135,12 @@ final class IU_Elementor_Fragment_Cache {
             (defined('DOING_AJAX') && DOING_AJAX) ||
             (defined('WP_CLI') && WP_CLI) || is_preview() ||
             (function_exists('is_customize_preview') && is_customize_preview()) ||
-            is_feed() || is_search() ||
-            (function_exists('is_404') && is_404()) ||
+            is_feed() ||
             (function_exists('iu_elementor_device_visibility_is_preview') && iu_elementor_device_visibility_is_preview())) {
             return self::reject_request('unsupported-request');
         }
-        if ($_GET && !apply_filters('iu_elementor_fragment_allow_query', false, array_keys($_GET))) {
-            return self::reject_request('request-query');
-        }
+        // Opt-in declares shared output regardless of ordinary URL parameters.
+        // Actual request modes and privacy guards above remain authoritative.
         $other = get_option('elementor_element_cache_ttl');
         // In this renderer a missing option also enables Elementor's native
         // document cache. Only an explicit disable is safe for our proxy data.

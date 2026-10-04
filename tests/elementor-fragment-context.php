@@ -23,9 +23,10 @@ function get_current_user_id() { return $GLOBALS['logged'] ? 23 : 0; }
 function wp_validate_auth_cookie($value, $scheme) { return $value === 'valid-session' ? 23 : false; }
 define('LOGGED_IN_COOKIE', 'wordpress_logged_in_test');
 function is_preview() { return $GLOBALS['preview']; }
-function is_customize_preview() { return false; }
-function is_feed() { return false; }
-function is_search() { return false; }
+function is_customize_preview() { return $GLOBALS['customizer'] ?? false; }
+function is_feed() { return $GLOBALS['feed'] ?? false; }
+function is_search() { return $GLOBALS['search'] ?? false; }
+function is_404() { return $GLOBALS['not_found'] ?? false; }
 function wp_is_mobile() { return true; }
 function get_option($name) {
     if ($name === 'istodata_utilities_settings') return array('optimizations' => array('elementor_fragment_cache' => $GLOBALS['global_on'] ?? true));
@@ -33,7 +34,7 @@ function get_option($name) {
 }
 function apply_filters($name, $default, ...$args) {
     if ($name === 'wpml_current_language') return $GLOBALS['live_language'] ?? null;
-    if ($name === 'iu_elementor_fragment_allow_query') return $GLOBALS['allow_query'] ?? $default;
+    if ($name === 'iu_elementor_fragment_allow_query') throw new RuntimeException('Obsolete allow-query filter invoked');
     return $name === 'iu_elementor_fragment_prototype_supported' ? ($args[0] === 'heading') : $default;
 }
 $include = getenv('IU_FRAGMENT_INCLUDE') ?: dirname(__DIR__) . '/includes/elementor-fragment-cache.php';
@@ -46,14 +47,12 @@ function expect_request($want, $name) {
     }
 }
 expect_request(true, 'anonymous clean');
-$GLOBALS['allow_query'] = true;
 $_GET = array('elementor-preview' => '30');
 expect_request(false, 'preview request before initialization or nested post switch');
 $_GET = array('elementor-preview' => '');
 expect_request(false, 'empty preview parameter fails closed');
 $_GET = array();
-expect_request(true, 'ordinary frontend with allowed query filter');
-unset($GLOBALS['allow_query']);
+expect_request(true, 'ordinary frontend without allow filter');
 $global_on = false;
 expect_request(false, 'global OFF');
 $global_on = true;
@@ -90,7 +89,20 @@ $preview = true;
 expect_request(false, 'preview');
 $preview = false;
 $_GET = array('unknown' => '1');
-expect_request(false, 'query context');
+expect_request(true, 'ordinary query context shares opted-in output');
+foreach (array('search', 'not_found') as $mode) {
+    $GLOBALS[$mode] = true;
+    expect_request(true, $mode . ' request shares opted-in output');
+    $GLOBALS[$mode] = false;
+}
+foreach (array('feed', 'customizer') as $mode) {
+    $GLOBALS[$mode] = true;
+    expect_request(false, $mode . ' mode despite ordinary query');
+    $GLOBALS[$mode] = false;
+}
+$_POST = array('submitted' => 'yes');
+expect_request(false, 'POST body');
+$_POST = array();
 $_GET = array();
 $_SERVER['REQUEST_METHOD'] = 'HEAD';
 expect_request(false, 'non-GET method');
@@ -107,6 +119,14 @@ eval('namespace Elementor; class Plugin { public static $instance; } class Widge
         public function get_script_depends() { return array(); }
     }; }
 });
+foreach (array('editor' => 'is_edit_mode', 'preview' => 'is_preview_mode') as $property => $check) {
+    \Elementor\Plugin::$instance->$property = new class {
+        public function is_edit_mode() { return true; }
+        public function is_preview_mode() { return true; }
+    };
+    expect_request(false, 'Elementor ' . $property . ' mode without URL parameter');
+    \Elementor\Plugin::$instance->$property = null;
+}
 $eligible = new ReflectionMethod('IU_Elementor_Fragment_Cache', 'eligible');
 $node = array('id' => 'test', 'elType' => 'widget', 'widgetType' => 'heading',
     'settings' => array('iu_fragment_cache' => 'yes'));
