@@ -3,4 +3,14 @@
     <custom-fields>
         <custom-field action="copy">_isto_gallery_ids</custom-field>
     </custom-fields>
+    <elementor-widgets>
+        <widget name="iu_query_posts">
+            <conditions>
+                <condition key="widgetType">iu_query_posts</condition>
+            </conditions>
+            <fields>
+                <field type="Query Posts: Extra Link URL" editor_type="LINK" key_of="extra_link_url">url</field>
+            </fields>
+        </widget>
+    </elementor-widgets>
 </wpml-config>

@@ -81,7 +81,7 @@ final class IU_Elementor_Fragment_Cache {
             'label' => __('Διάρκεια', 'istodata-utilities'),
             'type' => \Elementor\Controls_Manager::SELECT,
             'options' => array('3600' => '1 ώρα', '21600' => '6 ώρες', '86400' => '24 ώρες', '604800' => '7 ημέρες'),
-            'default' => '86400', 'condition' => array('iu_fragment_cache' => 'yes'),
+            'default' => '604800', 'condition' => array('iu_fragment_cache' => 'yes'),
         ));
         IU_Elementor_Fragment_Diagnostics::add_control($element);
         $element->end_controls_section();
@@ -358,9 +358,9 @@ final class IU_Elementor_Fragment_Cache {
                     }
                     $lock = self::lock($key);
                     if ($lock) {
-                        $ttl = (int) ($node['settings']['iu_fragment_cache_ttl'] ?? 86400);
+                        $ttl = (int) ($node['settings']['iu_fragment_cache_ttl'] ?? 604800);
                         $node['_iu_fragment_build'] = array('key' => $key, 'lock' => $lock,
-                            'ttl' => in_array($ttl, array(3600, 21600, 86400, 604800), true) ? $ttl : 86400,
+                            'ttl' => in_array($ttl, array(3600, 21600, 86400, 604800), true) ? $ttl : 604800,
                             'document_id' => $document_id, 'element_id' => $node['id'], 'prior' => $prior,
                             'generation' => self::generation($document_id, $node['id']),
                             'post_context' => (int) get_the_ID(),

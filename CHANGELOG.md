@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.22.4 - 2026-10-04
+
+- Fix: Register the Query Posts widget's Extra Link URL with WPML for link translation.
+- Tweak: Set the default Advanced Elements Cache duration to 7 days. Preserve explicitly saved per-element durations.
+
 ## 2.22.3 - 2026-10-04
 
 - Fix: Advanced Elements Cache limits cold-fragment waiting to one second in total per request, avoiding accumulated waits across multiple elements. Waiting stops promptly when a producer releases its lock or its ownership or cache generation changes; safe stale fragments or native rendering remain available.

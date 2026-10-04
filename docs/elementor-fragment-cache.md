@@ -10,7 +10,7 @@ Global switch defaults OFF. Saved per-element opt-ins and TTL survive OFF saves;
 Native preview also performs no observation writes.
 OFF hides the editor panel and performs no fragment lookup, capture or observation
 writes. Global ON is the sole fragment criterion for Elementor update protection.
-Each element defaults OFF; default TTL is 24 hours. Creation is lazy on a real
+Each element defaults OFF; default TTL is 7 days. Creation is lazy on a real
 request, with no preload or scheduled generation.
 
 Opt-in declares that this element's output can be reused as-is across pages and
@@ -126,7 +126,7 @@ Without a qualifying stale fragment, timeout retains
 native rendering rather than publishing an unlocked fragment.
 
 Public posts/Brands/taxonomy/external content are not exhaustively dependency
-tracked. Such edits may remain stale until TTL (24 hours by default) or manual
+tracked. Such edits may remain stale until TTL (7 days by default) or manual
 purge. Administrator must purge after dependent content changes when immediate
 freshness is required. No universal invalidation claim.
 

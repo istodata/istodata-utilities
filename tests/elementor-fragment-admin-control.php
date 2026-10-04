@@ -16,7 +16,7 @@ class IU_Fragment_Control_Dummy {
 $widget = new IU_Fragment_Control_Dummy('widget');
 IU_Elementor_Fragment_Cache::add_controls($widget);
 if (($widget->added['iu_fragment_cache']['default'] ?? null) !== '' ||
-    ($widget->added['iu_fragment_cache_ttl']['default'] ?? null) !== '86400') {
+    ($widget->added['iu_fragment_cache_ttl']['default'] ?? null) !== '604800') {
     throw new RuntimeException('Widget opt-in defaults are incorrect');
 }
 $container = new IU_Fragment_Control_Dummy('container');
