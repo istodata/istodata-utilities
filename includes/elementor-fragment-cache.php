@@ -14,9 +14,14 @@ final class IU_Elementor_Fragment_Cache {
     const MAX_BYTES = 2097152;
     const INDEX_PREFIX = 'iu_fragment_entry_';
     const EPOCH = 'iu_elementor_fragment_epoch';
+    const COLD_WAIT_BUDGET = 1.0;
     private static $capture = array();
     private static $policies = array();
     private static $request_failure = '';
+    private static $owned_locks = array();
+    private static $wait_spent = 0.0;
+    private static $wait_budget = null;
+    private static $waiting = false;
 
     public static function boot() {
         if (did_action('elementor/init')) {
@@ -29,6 +34,7 @@ final class IU_Elementor_Fragment_Cache {
         add_filter('elementor/frontend/builder_content_data', array(__CLASS__, 'filter'), PHP_INT_MAX, 2);
         add_action('elementor/frontend/widget/before_render', array(__CLASS__, 'begin'), 0);
         add_action('elementor/frontend/widget/after_render', array(__CLASS__, 'finish'), PHP_INT_MAX);
+        add_action('shutdown', array(__CLASS__, 'cleanup_locks'), 0);
         add_action('elementor/query/query_results', array(__CLASS__, 'query_results'), 0, 2);
         add_action('pre_get_posts', array(__CLASS__, 'guard_queries'), PHP_INT_MAX);
         add_action('updated_post_meta', array(__CLASS__, 'meta_changed'), 10, 4);
@@ -324,6 +330,9 @@ final class IU_Elementor_Fragment_Cache {
             if (!is_array($node)) {
                 continue;
             }
+            // A repeated builder pass must not inherit a previous reservation.
+            // The old token remains tracked for cleanup, never for a second writer.
+            unset($node['_iu_fragment_build']);
             // An opted-in descendant cannot execute beneath a device-hidden
             // ancestor, including native visibility and older Kit integrations.
             // Branches with no opt-in retain their existing renderer behavior.
@@ -363,20 +372,13 @@ final class IU_Elementor_Fragment_Cache {
                             $node = self::replacement($node, $entry, $prior, true);
                             continue;
                         }
-                        $wait = max(0, min(45, (float) apply_filters('iu_elementor_fragment_cold_wait_seconds', 45)));
-                        $until = microtime(true) + $wait;
-                        do {
-                            usleep(100000);
-                            $entry = self::fresh_entry($key);
-                            if (self::valid_entry($entry)) {
-                                $node = self::replacement($node, $entry, $prior);
-                                break;
-                            }
-                        } while (microtime(true) < $until);
-                        if (($node['widgetType'] ?? '') === 'iu-fragment-proxy') {
+                        $reason = '';
+                        $entry = self::wait_for_entry($key, self::generation($document_id, $node['id']), $reason);
+                        if (self::valid_entry($entry)) {
+                            $node = self::replacement($node, $entry, $prior, $entry['fresh_until'] <= time());
                             continue;
                         }
-                        IU_Elementor_Fragment_Diagnostics::record($document_id, $node['id'], 'bypass', array('reason' => 'concurrent-miss'));
+                        IU_Elementor_Fragment_Diagnostics::record($document_id, $node['id'], 'bypass', array('reason' => $reason ?: 'concurrent-miss'));
                     }
                 } else {
                     IU_Elementor_Fragment_Diagnostics::record($document_id, $node['id'], 'bypass', array('reason' => 'key-context'));
@@ -425,18 +427,21 @@ final class IU_Elementor_Fragment_Cache {
     }
 
     private static function lock($key) {
-        $name = 'iu_frag_lock_' . substr(hash('sha256', $key), 0, 32);
+        $name = self::lock_name($key);
+        if (isset(self::$owned_locks[$name])) return null;
         $token = time() . ':' . wp_generate_uuid4();
         if (add_option($name, $token, '', false)) {
-            return array($name, $token);
+            return self::$owned_locks[$name] = array($name, $token);
         }
-        $old = get_option($name);
-        if (is_string($old) && (int) $old < time() - 120) {
+        // Read the shared owner, not a request-local option cached before release.
+        $old = self::lock_owner($name);
+        if ($old === null || (is_string($old) && (int) $old <= time() - 120)) {
             global $wpdb;
-            $wpdb->delete($wpdb->options, array('option_name' => $name, 'option_value' => $old), array('%s', '%s'));
+            if ($old !== null) $wpdb->delete($wpdb->options, array('option_name' => $name, 'option_value' => $old), array('%s', '%s'));
             wp_cache_delete($name, 'options');
+            wp_cache_delete('notoptions', 'options');
             if (add_option($name, $token, '', false)) {
-                return array($name, $token);
+                return self::$owned_locks[$name] = array($name, $token);
             }
         }
         return null;
@@ -447,6 +452,75 @@ final class IU_Elementor_Fragment_Cache {
         // A stale builder must not remove a newer owner's lock.
         $wpdb->delete($wpdb->options, array('option_name' => $lock[0], 'option_value' => $lock[1]), array('%s', '%s'));
         wp_cache_delete($lock[0], 'options');
+        if ((self::$owned_locks[$lock[0]] ?? null) === $lock) unset(self::$owned_locks[$lock[0]]);
+    }
+
+    private static function lock_name($key) {
+        return 'iu_frag_lock_' . substr(hash('sha256', $key), 0, 32);
+    }
+
+    private static function lock_owner($name) {
+        global $wpdb;
+        $owner = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", $name));
+        return !empty($wpdb->last_error) ? false : $owner;
+    }
+
+    public static function cleanup_locks() {
+        // Best effort: shutdown cannot recover a worker killed by the OS. The
+        // existing lease remains its recovery bound. Never publish during cleanup.
+        foreach (self::$owned_locks as $lock) {
+            try { self::unlock($lock); } catch (\Throwable $error) {
+                // A failed cleanup leaves the existing logical lease to recover.
+            }
+        }
+    }
+
+    private static function wait_clock() {
+        return function_exists('hrtime') ? hrtime(true) / 1000000000 : microtime(true);
+    }
+
+    private static function wait_for_entry($key, $generation, &$reason) {
+        $name = self::lock_name($key);
+        if (isset(self::$owned_locks[$name])) { $reason = 'self-lock'; return null; }
+        // A holder must not wait on another holder; this also avoids reservation
+        // cycles before render. Reentrant polling callbacks must not wait either.
+        if (self::$owned_locks || self::$waiting) { $reason = 'owned-locks'; return null; }
+        $start = self::wait_clock();
+        self::$waiting = true;
+        try {
+            if (self::$wait_budget === null) {
+                // Preserve the existing lowering filter, with a hard request-wide
+                // ceiling. A zero budget performs no sleep and no polling.
+                self::$wait_budget = max(0, min(self::COLD_WAIT_BUDGET,
+                    (float) apply_filters('iu_elementor_fragment_cold_wait_seconds', self::COLD_WAIT_BUDGET)));
+            }
+            if (self::$wait_spent >= self::$wait_budget) { $reason = 'wait-budget'; return null; }
+            $owner = self::lock_owner($name);
+            while (true) {
+                if (self::$wait_spent + self::wait_clock() - $start >= self::$wait_budget) { $reason = 'wait-budget'; return null; }
+                if (self::$owned_locks) { $reason = 'owned-locks'; return null; }
+                if (!self::generation_current($generation)) { $reason = 'generation-changed'; return null; }
+                $entry = self::fresh_entry($key);
+                if (self::valid_entry($entry)) { $reason = 'published'; return $entry; }
+                $current = self::lock_owner($name);
+                if (!is_string($owner) || $current !== $owner || (int) $owner <= time() - 120) {
+                    // Publication can race the preceding read and then unlock.
+                    // One last fresh read catches it, without waiting for a new owner.
+                    $entry = self::fresh_entry($key);
+                    if (self::valid_entry($entry) && self::generation_current($generation)) { $reason = 'published'; return $entry; }
+                    $reason = $current === false ? 'lock-unknown' : ($current === null ? 'owner-released' : ($current !== $owner ? 'owner-replaced' : 'lock-expired'));
+                    return null;
+                }
+                $remaining = self::$wait_budget - self::$wait_spent - (self::wait_clock() - $start);
+                if ($remaining <= 0) { $reason = 'wait-budget'; return null; }
+                usleep((int) min(50000, $remaining * 1000000));
+            }
+        } finally {
+            $elapsed = max(0, self::wait_clock() - $start);
+            self::$wait_spent += $elapsed;
+            self::$waiting = false;
+            do_action('iu_elementor_fragment_wait', $key, $reason, $elapsed, self::$wait_spent);
+        }
     }
 
     private static function replacement($node, $entry, $prior, $stale = false) {
@@ -529,6 +603,7 @@ final class IU_Elementor_Fragment_Cache {
         foreach (array(self::EPOCH => $generation['site'],
             'iu_fragment_epoch_' . md5($generation['document_id'] . ':' . $generation['element_id']) => $generation['element']) as $name => $expected) {
             $value = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", $name));
+            if (!empty($wpdb->last_error)) return false;
             if ((string) ($value === null ? '0' : $value) !== $expected) return false;
         }
         return true;

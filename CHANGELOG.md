@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.22.3 - 2026-10-04
+
+- Fix: Advanced Elements Cache limits cold-fragment waiting to one second in total per request, avoiding accumulated waits across multiple elements. Waiting stops promptly when a producer releases its lock or its ownership or cache generation changes; safe stale fragments or native rendering remain available.
+- Fix: Prevent fragment requests from waiting on their own reservations or while holding other locks. Release unused reservations at normal request shutdown and preserve newer owners when an earlier producer finishes or aborts.
+
 ## 2.22.2 - 2026-10-04
 
 - Improve: Advanced Elements Cache can reuse opted-in fragments on requests with URL parameters and search results, without a blanket query/search/404 bypass. Existing device/language variants, editor/preview exclusions and concrete privacy/query/replay safeguards remain active.
