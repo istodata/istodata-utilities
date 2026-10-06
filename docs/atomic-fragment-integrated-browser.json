@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-05",
+  "environment": "metrica staging",
+  "pair": {"core": "4.3.3", "pro": "4.3.1"},
+  "evidence_kind": "Recorded observations from native browser/editor checks; not a new automated browser run",
+  "fixture_document": 40144,
+  "editor": {
+    "native_atomic_general_panel": true,
+    "cache_section": "Advanced Element Cache",
+    "duration_display": "7 ημέρες",
+    "off_on_save_draft_roundtrip": true,
+    "saved_ttl": "604800",
+    "typed_boolean_persisted": true,
+    "native_loop_editable": true,
+    "preview_cache_hit_observed": false,
+    "limitation": "Editor AJAX/REST render queries were not fully instrumented"
+  },
+  "public": {
+    "desktop_width": 1168,
+    "mobile_viewport": {"width": 390, "height": 844},
+    "desktop_heading_color": "rgb(18, 52, 86)",
+    "mobile_heading_color": "rgb(101, 67, 33)",
+    "correct_titles": 3,
+    "cached_title_navigation": "/blog-digital-twins-poly-perissotera-apo-ena-3d-montelo/",
+    "destination_heading_correct": true,
+    "new_frontend_js_errors": 0,
+    "viewport_reset": true,
+    "limitation": "Native three-column narrow-screen wrapping preserved; cached pagination/AJAX unsupported"
+  },
+  "cleanup": "Disposable fixture removed; installed runtime restored; no production changes"
+}

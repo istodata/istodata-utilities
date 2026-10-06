@@ -243,13 +243,7 @@ final class IU_Elementor_Update_Guard {
             echo '<div class="notice notice-warning"><p>' . esc_html('ISTODATA Kit: η ενεργή λειτουργία παρακάμπτεται στις εγκατεστημένες εκδόσεις. ' .
                 iu_elementor_compatibility_description($feature)) . '</p></div>';
         }
-        foreach (self::plugins() as $plugin => $key) {
-            $item = self::available($plugin);
-            if (!$item) continue;
-            $decision = self::decision($plugin, $item->new_version ?? null);
-            if ($decision['blocked']) echo '<div class="notice notice-warning"><p>' . esc_html(self::reason($decision)) .
-                ' <a href="' . esc_url(self::page_url()) . '">Συμβατότητα / ρητή παράκαμψη</a></p></div>';
-        }
+        // Available-update warnings belong only to the affected plugin's update row.
     }
 
     public static function page() {

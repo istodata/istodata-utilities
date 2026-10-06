@@ -48,6 +48,9 @@ final class IU_Elementor_Fragment_Graph {
             if (!is_array($node) || --$this->budget < 0) return $this->fail('graph-budget');
             $type = $node['widgetType'] ?? $node['elType'] ?? '';
             $settings = $node['settings'] ?? array();
+            // Typed Atomic values need their own resolver/context policy. An
+            // opaque Atomic subtree cannot inherit the Classic settings check.
+            if (class_exists('IU_Elementor_Fragment_Atomic') && IU_Elementor_Fragment_Atomic::node($node)) return $this->fail('atomic-descendant');
             // A hit skips nested document collection. Interactions are outside
             // this fragment policy and must retain the native render pipeline.
             if (!empty($node['interactions'])) return $this->fail('atomic-interactions');

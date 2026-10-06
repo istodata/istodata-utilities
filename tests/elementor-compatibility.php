@@ -1,7 +1,7 @@
 <?php
 /** Isolated policy/runtime regressions; no WordPress/server mutation. */
 if (!isset($argv[1])) {
-    foreach (array('atomic', 'fragment', 'core-only', 'core-patch', 'pro-patch', 'both-patch', 'future', 'missing') as $case) {
+    foreach (array('atomic', 'fragment', 'core-only', 'core-patch', 'pro-patch', 'both-patch', 'accepted-new', 'future', 'missing') as $case) {
         passthru(escapeshellarg(PHP_BINARY) . ' -n ' . escapeshellarg(__FILE__) . ' ' . escapeshellarg($case), $status);
         if ($status) exit($status);
     }
@@ -12,7 +12,7 @@ define('IU_PLUGIN_PATH', dirname(__DIR__) . '/');
 $pairs = array('atomic' => array('4.3.2', '4.3.0'), 'fragment' => array('4.2.3', '4.2.2'),
     'core-only' => array('4.2.3', null), 'core-patch' => array('4.3.3', '4.3.0'),
     'pro-patch' => array('4.3.2', '4.3.1'), 'both-patch' => array('4.3.3', '4.3.1'),
-    'future' => array('4.4.0', '4.4.0'), 'missing' => array(null, null));
+    'accepted-new' => array('4.3.4', '4.3.1'), 'future' => array('4.4.0', '4.4.0'), 'missing' => array(null, null));
 [$core, $pro] = $pairs[$argv[1]];
 if ($core !== null) define('ELEMENTOR_VERSION', $core);
 if ($pro !== null) define('ELEMENTOR_PRO_VERSION', $pro);
@@ -38,7 +38,7 @@ require IU_PLUGIN_PATH . 'includes/elementor-fragment-cache.php';
 $targets = array(
     array('4.3.2', '4.3.0', true, false), array('4.3.100', '4.3.100', false, false),
     array('4.3.3', '4.3.0', false, false), array('4.3.2', '4.3.1', false, false),
-    array('4.3.3', '4.3.1', true, true), array('4.3.4', '4.3.1', false, false), array('4.3.3', '4.3.2', false, false),
+    array('4.3.3', '4.3.1', true, true), array('4.3.4', '4.3.1', true, true), array('4.3.5', '4.3.1', false, false), array('4.3.3', '4.3.2', false, false),
     array('4.2.3', '4.2.2', false, true), array('4.2.3', null, false, true),
     array('4.3.1', '4.3.0', false, false), array('4.3.2', '4.2.2', false, false),
     array('4.2.3', '4.3.0', false, false), array('4.3.2', null, false, false),
@@ -66,9 +66,9 @@ foreach (iu_elementor_compatibility_registry() as $entry) foreach ($entry['accep
 expect(!iu_elementor_version_matches('4.3.3', array('series' => '4.3', 'min' => '4.3.2')), 'Legacy open-ended rule must fail closed');
 expect(iu_elementor_common_pair(array('atomic', 'fragment')) === array('core' => '4.3.3', 'pro' => '4.3.1'), 'Derive tested common pair');
 expect(iu_elementor_common_pair(array('atomic')) === array('core' => '4.3.2', 'pro' => '4.3.0'), 'Derive Atomic baseline from registry');
-expect(iu_atomic_interaction_breakpoints_supported() === in_array($argv[1], array('atomic', 'both-patch'), true), 'Atomic runtime consumes registry');
+expect(iu_atomic_interaction_breakpoints_supported() === in_array($argv[1], array('atomic', 'both-patch', 'accepted-new'), true), 'Atomic runtime consumes registry');
 $method = new ReflectionMethod('IU_Elementor_Fragment_Cache', 'versions_supported');
-$fragment_supported = in_array($argv[1], array('fragment', 'core-only', 'both-patch'), true);
+$fragment_supported = in_array($argv[1], array('fragment', 'core-only', 'both-patch', 'accepted-new'), true);
 expect($method->invoke(null) === $fragment_supported, 'Fragment runtime cannot be widened by legacy filter');
 if (!$fragment_supported) {
     $data = array(array('id' => 'x', 'elType' => 'widget', 'widgetType' => 'template',
@@ -84,7 +84,7 @@ require IU_PLUGIN_PATH . 'includes/elementor-update-guard.php';
 ob_start(); IU_Elementor_Update_Guard::notices(); $notice = ob_get_clean();
 expect((strpos($notice, 'η ενεργή λειτουργία παρακάμπτεται') !== false) === !$fragment_supported, 'Fragment unsupported runtime notice');
 ob_start(); iu_atomic_interaction_breakpoints_notice(); $notice = ob_get_clean();
-expect(($notice !== '') === !in_array($argv[1], array('atomic', 'both-patch'), true), 'Atomic unsupported runtime notice');
+expect(($notice !== '') === !in_array($argv[1], array('atomic', 'both-patch', 'accepted-new'), true), 'Atomic unsupported runtime notice');
 $authorized = false;
 ob_start(); IU_Elementor_Update_Guard::notices(); iu_atomic_interaction_breakpoints_notice(); $notice = ob_get_clean();
 expect($notice === '', 'Runtime notices restricted to administrators');

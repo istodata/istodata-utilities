@@ -39,6 +39,7 @@ $widget = new class {
     public function get_script_depends() { return array('root-script'); }
     public function get_data($key) {
         return array('key' => 'entry', 'lock' => array('test-lock', $GLOBALS['lock_token']), 'prior' => array(),
+            'dependencies' => $GLOBALS['test_dependencies'] ?? array(),
             'generation' => array('document_id' => 1, 'element_id' => 'heading', 'site' => '0', 'element' => '0'),
             'post_context' => 7, 'excerpt_prior' => array(), 'ttl' => 86400, 'document_id' => 1, 'element_id' => 'heading');
     }
@@ -55,6 +56,29 @@ if ($html !== '<h2>Public heading</h2>' || $GLOBALS['entry']['styles'] !== array
     throw new RuntimeException('Already-queued root dependency was lost');
 }
 echo "already-queued-root-assets: OK\n";
+$GLOBALS['test_dependencies'] = array('styles' => array('widget-nested-tabs', 'widget-posts'),
+    'scripts' => array('child-script'));
+$styles->registered += array('widget-nested-tabs' => true, 'widget-posts' => true, 'unrelated' => true);
+$scripts->registered += array('child-script' => true, 'unrelated-script' => true);
+$styles->queue = array('unrelated', 'widget-heading');
+$scripts->queue = array('unrelated-script', 'root-script');
+ob_start();
+IU_Elementor_Fragment_Cache::begin($widget);
+$styles->queue = array_merge($styles->queue, array('elementor-post-7767', 'widget-nested-tabs', 'elementor-post-7778', 'widget-posts'));
+$scripts->queue[] = 'child-script';
+echo '<nav>Public menu</nav>';
+IU_Elementor_Fragment_Cache::finish($widget);
+ob_end_clean();
+if ($GLOBALS['entry']['styles'] !== array('widget-heading', 'elementor-post-7767', 'widget-nested-tabs', 'elementor-post-7778', 'widget-posts') ||
+    $GLOBALS['entry']['scripts'] !== array('root-script', 'child-script')) {
+    throw new RuntimeException('Native enqueue order or unrelated-page exclusion lost');
+}
+$old = $GLOBALS['entry']; $old['format'] = 15;
+$valid = new ReflectionMethod('IU_Elementor_Fragment_Cache', 'valid_entry');
+if ($valid->invoke(null, $old)) throw new RuntimeException('Old unordered manifest accepted');
+unset($GLOBALS['test_dependencies']);
+$styles->queue = array('widget-heading'); $scripts->queue = array('root-script');
+echo "native-template-widget-order-and-old-manifest-rejection: OK\n";
 unset($GLOBALS['entry']);
 $GLOBALS['lock_owner'] = time() . ':new-owner';
 ob_start();

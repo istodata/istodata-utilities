@@ -1,0 +1,1020 @@
+{
+  "pair": {
+    "core": "4.3.4",
+    "pro": "4.3.1"
+  },
+  "package_sha256": "315ce86a540e2f881293f11dd997f081ae09accfadec744c9542ab1c0fc92334",
+  "installed_version": "2.23.0",
+  "atomic": {
+    "requests": [
+      {
+        "builder_filter": 0,
+        "originals": [
+          {
+            "id": "iuaploop",
+            "type": "e-collection-loop"
+          },
+          {
+            "id": "iuaplayout",
+            "type": "e-collection-loop-layout"
+          },
+          {
+            "id": "iuapitem",
+            "type": "e-collection-loop-item"
+          },
+          {
+            "id": "iuapitem",
+            "type": "e-collection-loop-item"
+          },
+          {
+            "id": "iuapitem",
+            "type": "e-collection-loop-item"
+          }
+        ],
+        "queries": 1,
+        "selected": "native",
+        "avoid_before": [],
+        "avoid_after": [],
+        "versions": {
+          "core": "4.3.4",
+          "pro": "4.3.1"
+        },
+        "language": "el",
+        "mobile": false,
+        "authenticated": false,
+        "request": "1abf03a4e31e0bde0df1f23e",
+        "html_sha256": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835",
+        "item_count": 3,
+        "assets": [
+          "https://wordpress-218158-6702910.cloudwaysapps.com/",
+          "//js-eu1.hs-scripts.com",
+          "https://fonts.gstatic.com",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/all.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/v4-shims.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/sitepress-multilingual-cms/templates/language-switchers/legacy-list-horizontal/style.min.css?ver=1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/complianz-gdpr-premium/assets/css/cookieblocker.min.css?ver=1790775047",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/pojo-accessibility/assets/build/skip-link.css?ver=4.1.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/search-filter-pro/public/assets/css/search-filter.min.css?ver=2.5.17",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/metform/public/assets/lib/cute-alert/style.css?ver=4.2.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/metform/public/assets/css/text-editor.css?ver=4.2.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/themes/hello-elementor/assets/css/reset.css?ver=3.5.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-frontend.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6416.css?ver=1791298599",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6461.css?ver=1791298599",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-heading.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/animations/styles/fadeIn.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-mega-menu.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-social-icons.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-apple-webkit.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-image.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-divider.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/modules/sticky.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/modules/motion-fx.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/fontawesome.min.css?ver=5.15.3",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/solid.min.css?ver=5.15.3",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/brands.min.css?ver=5.15.3",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/regular.min.css?ver=5.15.3",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css?ver=5.54.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-base.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-var-10.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-10.css?ver=1791298599",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/swiper/v8/css/swiper.min.css?ver=8.4.5",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/conditionals/e-swiper.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-loop-common.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-loop-carousel.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-nested-carousel.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-accordion.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-2.css?ver=1791298601",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/base-desktop.css?ver=6ac50c299d83b",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/local-40164-frontend-desktop.css?ver=6ac50c29a15c8",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/base-mobile.css?ver=6ac50c299d83b",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/local-40164-frontend-mobile.css?ver=6ac50c29a15c8",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-30.css?ver=1791298603",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-286.css?ver=1791298604",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-38403.css?ver=1791298604",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/add-search-to-menu/public/css/ivory-search.min.css?ver=5.5.18",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/sourcesanspro.css?ver=1749657496",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/robotoslab.css?ver=1749657498",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/roboto.css?ver=1749657503",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/poppins.css?ver=1749657637",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/custom-icons/metrica-6/style.css?ver=1.0.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/sitepress-multilingual-cms/res/js/cookies/language-cookie.js?ver=497000",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/js/v4-shims.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/search-filter-elementor/assets/v2/js/search-filter-elementor.js?ver=1.4.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/animations/styles/fadeInUp.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/conditionals/popup.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/add-search-to-menu/public/css/ivory-ajax-search.min.css?ver=5.5.18",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/animations/styles/fadeInRight.min.css?ver=4.3.4",
+          "https://js-eu1.hs-scripts.com/26249078.js?integration=WordPress&#038;ver=11.3.75",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/mailoptin/src/core/src/assets/js/mailoptin.min.js?ver=1.2.78.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/metform/public/assets/lib/cute-alert/cute-alert.js?ver=4.2.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/frontend-modules.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/jquery/ui/core.min.js?ver=1.14.2",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/lib/smartmenus/jquery.smartmenus.min.js?ver=1.2.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/lib/sticky/jquery.sticky.min.js?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/imagesloaded.min.js?ver=5.0.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/swiper/v8/swiper.min.js?ver=8.4.5",
+          "https://www.google.com/recaptcha/api.js?render=6LfXE4EUAAAAAHGSf-NI1rk18NumKCo-ZWysXDDI&#038;ver=3.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/contact-form-7/modules/recaptcha/index.js?ver=6.1.7",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/add-search-to-menu/public/js/ivory-search.min.js?ver=5.5.18",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/complianz-gdpr-premium/cookiebanner/js/complianz.min.js?ver=1790775048",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/packages/frontend-handlers/frontend-handlers.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/collection-loop-pagination-handler.min.js?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/add-search-to-menu/public/js/ivory-ajax-search.min.js?ver=5.5.18",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/dist/hooks.min.js?ver=f0f188028580e8dc1255",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/dist/i18n.min.js?ver=1dfe7db3940c23ea9216",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/frontend.min.js?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/elements-handlers.min.js?ver=4.3.1"
+        ],
+        "generated_css": [
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-frontend.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-frontend.min.css",
+            "bytes": 54847,
+            "sha256": "2a35f5001c5afeff0abd519bdfd3311b29f853feb211bb291550623a3111cab1"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6416.css?ver=1791298599",
+            "path": "/wp-content/uploads/elementor/css/post-6416.css",
+            "bytes": 1321,
+            "sha256": "9f67dda6deed5dd233efcb509addfeb408041b9bdf0b1266778637a9eeb53459"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6461.css?ver=1791298599",
+            "path": "/wp-content/uploads/elementor/css/post-6461.css",
+            "bytes": 6970,
+            "sha256": "27fc236d0c9844508470193e850d1e6789a79e728f8f7711a474444bb98234c6"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css",
+            "bytes": 10282,
+            "sha256": "f51419f1b17202f30b2a9e82a6ffbf2d290abb3c40dc016483d11276072f0ac3"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css",
+            "bytes": 27320,
+            "sha256": "a391a0ae393c9c0521596e9700207265bb07920920145e2c307d5399f7d7b4b6"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-mega-menu.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-pro-widget-mega-menu.min.css",
+            "bytes": 19875,
+            "sha256": "1354fb60a49c3f758d1167e92c1c7911f9716ad739ad5fa56f8af7eabe8c7641"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-apple-webkit.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-apple-webkit.min.css",
+            "bytes": 6713,
+            "sha256": "cf502b45ef8bcae37a65822f78546f6cc7db74faf8f48850bf8a860262817fe6"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-base.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-widget-contact-buttons-base.min.css",
+            "bytes": 20150,
+            "sha256": "16310d571c80d2c3c6297c2deffb4bc26fb2f91b2b9b75339d54a999df06bdb2"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-var-10.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-widget-contact-buttons-var-10.min.css",
+            "bytes": 9583,
+            "sha256": "6be4b89a21ae3dce0c4769fd2bd4d460c2e42581f9fbc93e4bf040e522db5a36"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-10.css?ver=1791298599",
+            "path": "/wp-content/uploads/elementor/css/post-10.css",
+            "bytes": 13869,
+            "sha256": "dc747285ab4dd7665199a4a2c10448ed654f5f99e305ac3af14d522502374fc3"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-accordion.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-widget-accordion.min.css",
+            "bytes": 1744,
+            "sha256": "52a2bbb2d85e878d1062c65b13320cc2fa46e5fa2cb470fe9213dfdb06066eaa"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-2.css?ver=1791298601",
+            "path": "/wp-content/uploads/elementor/css/post-2.css",
+            "bytes": 105472,
+            "sha256": "165b0be93ff314df9a4b293f96ebbce684a8feedb5decb7d34a6e0a2e2e38154"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/base-desktop.css?ver=6ac50c299d83b",
+            "path": "/wp-content/uploads/elementor/css/base-desktop.css",
+            "bytes": 8064,
+            "sha256": "57fbe32cd26fa33d2eab1ffa8a264e5f4181bb359ed2a5618e9fdd51b0fe73a4"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/local-40164-frontend-desktop.css?ver=6ac50c29a15c8",
+            "path": "/wp-content/uploads/elementor/css/local-40164-frontend-desktop.css",
+            "bytes": 37,
+            "sha256": "662cea03c9aaaea33cc008fee85b1b86490e11132a4073f2979559c4c57cccf5"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/base-mobile.css?ver=6ac50c299d83b",
+            "path": "/wp-content/uploads/elementor/css/base-mobile.css",
+            "bytes": 87,
+            "sha256": "6d2c0fc112d7a76682334131ec4d0d618fadb44d42849933f88ae954ddd9d0d5"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/local-40164-frontend-mobile.css?ver=6ac50c29a15c8",
+            "path": "/wp-content/uploads/elementor/css/local-40164-frontend-mobile.css",
+            "bytes": 62,
+            "sha256": "e5e99d40531566ee39a827c69bee519a434541bd45ff3e385d88014845d40ff4"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-30.css?ver=1791298603",
+            "path": "/wp-content/uploads/elementor/css/post-30.css",
+            "bytes": 50222,
+            "sha256": "1a827a6f33b80710ca1ecf94c10570dc6af849955d7011e2160077a0d44738eb"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-286.css?ver=1791298604",
+            "path": "/wp-content/uploads/elementor/css/post-286.css",
+            "bytes": 32958,
+            "sha256": "708045e386b6846d3884718684d2177e8a95f486dc74c0d2eaee9d3558939236"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-38403.css?ver=1791298604",
+            "path": "/wp-content/uploads/elementor/css/post-38403.css",
+            "bytes": 874,
+            "sha256": "1d22c6b3e5defe6610a3ec464c46a0e0150d1141743d5fe24a73d1edddf27df9"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/sourcesanspro.css?ver=1749657496",
+            "path": "/wp-content/uploads/elementor/google-fonts/css/sourcesanspro.css",
+            "bytes": 36862,
+            "sha256": "9650af87a090c3838ba09d19e4a7a45f8e979f0f5cdb0d5d5c1adcbe59e65aa9"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/robotoslab.css?ver=1749657498",
+            "path": "/wp-content/uploads/elementor/google-fonts/css/robotoslab.css",
+            "bytes": 26586,
+            "sha256": "b03c7b6f8d183b382a4cb40a84135f7c6060359232019b155c3524ae1e376be0"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/roboto.css?ver=1749657503",
+            "path": "/wp-content/uploads/elementor/google-fonts/css/roboto.css",
+            "bytes": 111618,
+            "sha256": "2d35ebe34ad578fe2e85787e9615d62244a167416ae7d209090dcd58e924d0a8"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/poppins.css?ver=1749657637",
+            "path": "/wp-content/uploads/elementor/google-fonts/css/poppins.css",
+            "bytes": 25277,
+            "sha256": "90dd1f98d691abc60f8a0764962f4b86a2f42c022fbc833cc07d496ad0b19138"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/custom-icons/metrica-6/style.css?ver=1.0.0",
+            "path": "/wp-content/uploads/elementor/custom-icons/metrica-6/style.css",
+            "bytes": 1395,
+            "sha256": "56841f96f84f96d4e5c5424b51623b94c12cd696bcb30d8a10e62b77d1ecc1fb"
+          }
+        ],
+        "inline_sha256": [
+          "c020ae6bbac969039528759e72b85b11d65ba3859e1cc1334af65eae025d74da",
+          "bb30c393cf6568d2b6f27fe621805573d9976bdb20e597ceff6b467c77c6b67f",
+          "aeb820fc710a35b521c6bd647632d3ac70c03d51509d1cd04b1b3fd316343ab2",
+          "809423b8081b1e0447d21cb676fa9b5db07d6da8aed17ee5cfec2b12fb1dbb40",
+          "a5339cc6e490b2cb7ff2c494899e5273a58b4313de8632f0a5803bfdc1638c83",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "856f52aaea9f805df2d17a87229aad90f1c0b37a33c43020c0ae2c6d0362d961",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "37fa652c65354aabd9f4910c80da871371b2aabbd0fc3d72f34a61a37ccb5e58",
+          "bbef38023ef0a1e4ee870c131ae091024129fd619e95db75130501bbf5790bdc",
+          "6b4b7dd4d92a7142387f1fc76b2484da65a22304a8062e04f46d81767fc9b972",
+          "e8ba48f0bc317dc974311aa99cee640edc793137fe98abfebdbbf3c98cb665fd",
+          "8bf80fde24d88dab97aeda8c04573e60824a5e346dd5389d1d1650295c3299e2",
+          "5e95c948d7e92790fd0ad5101445cfd46bbd7ef2fd8cd00ea8e3972fd2855306",
+          "9b91f4a638d617ca666aefb21d8535266fadeccdaf9ea3f660903fbd029ba62f",
+          "79f582eea8aaa52568233ea97b95dcb72efc56a169c70dc36d3cdc64b67cfe28",
+          "18cf9bcbee084b33585433b824d4f179815e0b148044e5179b06c5640cfff2ba",
+          "0bb2cf8bd279302ead680feba2dc0137d8a2004e6171af0efaa2529b0f50c240",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bae666b97bad333edd96d0d99cf29f70646dabe4f9224753abdb24aaf6cdb56f",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "48c5800c87c902b3e032d7f68717b70fd4a0db57af7dad22d76312dc4046fcba",
+          "8a99db62333b0b93f3af497007d3bfcc538760585388632f97fb4e9a08386442",
+          "573753300e465826678d8eb4bf50eab77ce816a75f2541b9ef5332e6facba4f9",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "7396ff75aa389aadaf1be546f86be2f6b64f79b5bd7f0e3d682c4e19d246f60e",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "96adfbf5f0f5d4edfa4fadd48a7d0982c77cc69e5dfe9974a4d137f685b4e5d3",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "b40e8920c4d5896e7083d1be9940797cae822aac4cb4f65b6188391bb7a83d03",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "27423670ed18d436e137cd30954ee3be5dff02ad55d795731db07bb259495998",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "d942115eca43ea5075d45fff99e267a13f032600ba8da665a74d9de3ac877036",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "3867c57c7aff80c8c9036ff8784ffbe693cbb4e4a26c58831fba6977fafa0096",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "7f54285e918d144cde265a980925f10d8af596e0937ef795b78447c24260ab5c",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "c2ff6df28bea9c7e1ac95692e3a2eb68b33be87031c45f96ebe5319876d9ea82",
+          "abf057132bb652774397cc7248c6701e592caa2293ea531cdf0994cf9277d8cc",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "f5c22807f066428ca6f2d00e603bd5221a1c946181aadb8ec9c089b3e6150843",
+          "e7787025604b3f27acb6411a3a0ec94246cb23d067f2cbb2df3d01a489421be2",
+          "a11a6fdc17a8a0d6c624ad963f167e258085b7ec14707073bb71b0c89b0c26ad",
+          "967a996e899f228c878abd6d32815f2f688bc76575bf2cd124444259fc9ceb9e",
+          "b101f7256bd9a707b3da3efc9fc9baec8850c91b15bda603291491c6e8693cda"
+        ]
+      },
+      {
+        "builder_filter": 0,
+        "originals": [
+          {
+            "id": "iuaploop",
+            "type": "e-collection-loop"
+          },
+          {
+            "id": "iuaplayout",
+            "type": "e-collection-loop-layout"
+          },
+          {
+            "id": "iuapitem",
+            "type": "e-collection-loop-item"
+          },
+          {
+            "id": "iuapitem",
+            "type": "e-collection-loop-item"
+          },
+          {
+            "id": "iuapitem",
+            "type": "e-collection-loop-item"
+          }
+        ],
+        "queries": 1,
+        "selected": "miss",
+        "avoid_before": [],
+        "fragment_key": "iu_frag_1095b69cd1add534bdcd9f1d65edc37c2e075865a4721862831452bbc3ce4fcc",
+        "engine_result": "stored",
+        "avoid_after": [],
+        "versions": {
+          "core": "4.3.4",
+          "pro": "4.3.1"
+        },
+        "language": "el",
+        "mobile": false,
+        "authenticated": false,
+        "request": "fd48270db1c55de58155f522",
+        "html_sha256": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835",
+        "item_count": 3,
+        "assets": [
+          "https://wordpress-218158-6702910.cloudwaysapps.com/",
+          "//js-eu1.hs-scripts.com",
+          "https://fonts.gstatic.com",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/all.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/v4-shims.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/sitepress-multilingual-cms/templates/language-switchers/legacy-list-horizontal/style.min.css?ver=1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/complianz-gdpr-premium/assets/css/cookieblocker.min.css?ver=1790775047",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/pojo-accessibility/assets/build/skip-link.css?ver=4.1.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/search-filter-pro/public/assets/css/search-filter.min.css?ver=2.5.17",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/metform/public/assets/lib/cute-alert/style.css?ver=4.2.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/metform/public/assets/css/text-editor.css?ver=4.2.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/themes/hello-elementor/assets/css/reset.css?ver=3.5.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-frontend.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6416.css?ver=1791298599",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6461.css?ver=1791298599",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-heading.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/animations/styles/fadeIn.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-mega-menu.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-social-icons.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-apple-webkit.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-image.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-divider.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/modules/sticky.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/modules/motion-fx.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/fontawesome.min.css?ver=5.15.3",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/solid.min.css?ver=5.15.3",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/brands.min.css?ver=5.15.3",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/regular.min.css?ver=5.15.3",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css?ver=5.54.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-base.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-var-10.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-10.css?ver=1791298599",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/swiper/v8/css/swiper.min.css?ver=8.4.5",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/conditionals/e-swiper.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-loop-common.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-loop-carousel.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-nested-carousel.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-accordion.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-2.css?ver=1791298601",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/base-desktop.css?ver=6ac50c299d83b",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/local-40164-frontend-desktop.css?ver=6ac50c29a15c8",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/base-mobile.css?ver=6ac50c299d83b",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/local-40164-frontend-mobile.css?ver=6ac50c29a15c8",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-30.css?ver=1791298603",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-286.css?ver=1791298604",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-38403.css?ver=1791298604",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/add-search-to-menu/public/css/ivory-search.min.css?ver=5.5.18",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/sourcesanspro.css?ver=1749657496",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/robotoslab.css?ver=1749657498",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/roboto.css?ver=1749657503",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/poppins.css?ver=1749657637",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/custom-icons/metrica-6/style.css?ver=1.0.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/sitepress-multilingual-cms/res/js/cookies/language-cookie.js?ver=497000",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/js/v4-shims.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/search-filter-elementor/assets/v2/js/search-filter-elementor.js?ver=1.4.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/animations/styles/fadeInUp.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/conditionals/popup.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/add-search-to-menu/public/css/ivory-ajax-search.min.css?ver=5.5.18",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/animations/styles/fadeInRight.min.css?ver=4.3.4",
+          "https://js-eu1.hs-scripts.com/26249078.js?integration=WordPress&#038;ver=11.3.75",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/mailoptin/src/core/src/assets/js/mailoptin.min.js?ver=1.2.78.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/metform/public/assets/lib/cute-alert/cute-alert.js?ver=4.2.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/frontend-modules.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/jquery/ui/core.min.js?ver=1.14.2",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/lib/smartmenus/jquery.smartmenus.min.js?ver=1.2.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/lib/sticky/jquery.sticky.min.js?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/imagesloaded.min.js?ver=5.0.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/swiper/v8/swiper.min.js?ver=8.4.5",
+          "https://www.google.com/recaptcha/api.js?render=6LfXE4EUAAAAAHGSf-NI1rk18NumKCo-ZWysXDDI&#038;ver=3.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/contact-form-7/modules/recaptcha/index.js?ver=6.1.7",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/add-search-to-menu/public/js/ivory-search.min.js?ver=5.5.18",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/complianz-gdpr-premium/cookiebanner/js/complianz.min.js?ver=1790775048",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/packages/frontend-handlers/frontend-handlers.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/collection-loop-pagination-handler.min.js?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/add-search-to-menu/public/js/ivory-ajax-search.min.js?ver=5.5.18",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/dist/hooks.min.js?ver=f0f188028580e8dc1255",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/dist/i18n.min.js?ver=1dfe7db3940c23ea9216",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/frontend.min.js?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/elements-handlers.min.js?ver=4.3.1"
+        ],
+        "generated_css": [
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-frontend.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-frontend.min.css",
+            "bytes": 54847,
+            "sha256": "2a35f5001c5afeff0abd519bdfd3311b29f853feb211bb291550623a3111cab1"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6416.css?ver=1791298599",
+            "path": "/wp-content/uploads/elementor/css/post-6416.css",
+            "bytes": 1321,
+            "sha256": "9f67dda6deed5dd233efcb509addfeb408041b9bdf0b1266778637a9eeb53459"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6461.css?ver=1791298599",
+            "path": "/wp-content/uploads/elementor/css/post-6461.css",
+            "bytes": 6970,
+            "sha256": "27fc236d0c9844508470193e850d1e6789a79e728f8f7711a474444bb98234c6"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css",
+            "bytes": 10282,
+            "sha256": "f51419f1b17202f30b2a9e82a6ffbf2d290abb3c40dc016483d11276072f0ac3"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css",
+            "bytes": 27320,
+            "sha256": "a391a0ae393c9c0521596e9700207265bb07920920145e2c307d5399f7d7b4b6"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-mega-menu.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-pro-widget-mega-menu.min.css",
+            "bytes": 19875,
+            "sha256": "1354fb60a49c3f758d1167e92c1c7911f9716ad739ad5fa56f8af7eabe8c7641"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-apple-webkit.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-apple-webkit.min.css",
+            "bytes": 6713,
+            "sha256": "cf502b45ef8bcae37a65822f78546f6cc7db74faf8f48850bf8a860262817fe6"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-base.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-widget-contact-buttons-base.min.css",
+            "bytes": 20150,
+            "sha256": "16310d571c80d2c3c6297c2deffb4bc26fb2f91b2b9b75339d54a999df06bdb2"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-var-10.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-widget-contact-buttons-var-10.min.css",
+            "bytes": 9583,
+            "sha256": "6be4b89a21ae3dce0c4769fd2bd4d460c2e42581f9fbc93e4bf040e522db5a36"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-10.css?ver=1791298599",
+            "path": "/wp-content/uploads/elementor/css/post-10.css",
+            "bytes": 13869,
+            "sha256": "dc747285ab4dd7665199a4a2c10448ed654f5f99e305ac3af14d522502374fc3"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-accordion.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-widget-accordion.min.css",
+            "bytes": 1744,
+            "sha256": "52a2bbb2d85e878d1062c65b13320cc2fa46e5fa2cb470fe9213dfdb06066eaa"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-2.css?ver=1791298601",
+            "path": "/wp-content/uploads/elementor/css/post-2.css",
+            "bytes": 105472,
+            "sha256": "165b0be93ff314df9a4b293f96ebbce684a8feedb5decb7d34a6e0a2e2e38154"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/base-desktop.css?ver=6ac50c299d83b",
+            "path": "/wp-content/uploads/elementor/css/base-desktop.css",
+            "bytes": 8064,
+            "sha256": "57fbe32cd26fa33d2eab1ffa8a264e5f4181bb359ed2a5618e9fdd51b0fe73a4"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/local-40164-frontend-desktop.css?ver=6ac50c29a15c8",
+            "path": "/wp-content/uploads/elementor/css/local-40164-frontend-desktop.css",
+            "bytes": 37,
+            "sha256": "662cea03c9aaaea33cc008fee85b1b86490e11132a4073f2979559c4c57cccf5"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/base-mobile.css?ver=6ac50c299d83b",
+            "path": "/wp-content/uploads/elementor/css/base-mobile.css",
+            "bytes": 87,
+            "sha256": "6d2c0fc112d7a76682334131ec4d0d618fadb44d42849933f88ae954ddd9d0d5"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/local-40164-frontend-mobile.css?ver=6ac50c29a15c8",
+            "path": "/wp-content/uploads/elementor/css/local-40164-frontend-mobile.css",
+            "bytes": 62,
+            "sha256": "e5e99d40531566ee39a827c69bee519a434541bd45ff3e385d88014845d40ff4"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-30.css?ver=1791298603",
+            "path": "/wp-content/uploads/elementor/css/post-30.css",
+            "bytes": 50222,
+            "sha256": "1a827a6f33b80710ca1ecf94c10570dc6af849955d7011e2160077a0d44738eb"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-286.css?ver=1791298604",
+            "path": "/wp-content/uploads/elementor/css/post-286.css",
+            "bytes": 32958,
+            "sha256": "708045e386b6846d3884718684d2177e8a95f486dc74c0d2eaee9d3558939236"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-38403.css?ver=1791298604",
+            "path": "/wp-content/uploads/elementor/css/post-38403.css",
+            "bytes": 874,
+            "sha256": "1d22c6b3e5defe6610a3ec464c46a0e0150d1141743d5fe24a73d1edddf27df9"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/sourcesanspro.css?ver=1749657496",
+            "path": "/wp-content/uploads/elementor/google-fonts/css/sourcesanspro.css",
+            "bytes": 36862,
+            "sha256": "9650af87a090c3838ba09d19e4a7a45f8e979f0f5cdb0d5d5c1adcbe59e65aa9"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/robotoslab.css?ver=1749657498",
+            "path": "/wp-content/uploads/elementor/google-fonts/css/robotoslab.css",
+            "bytes": 26586,
+            "sha256": "b03c7b6f8d183b382a4cb40a84135f7c6060359232019b155c3524ae1e376be0"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/roboto.css?ver=1749657503",
+            "path": "/wp-content/uploads/elementor/google-fonts/css/roboto.css",
+            "bytes": 111618,
+            "sha256": "2d35ebe34ad578fe2e85787e9615d62244a167416ae7d209090dcd58e924d0a8"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/poppins.css?ver=1749657637",
+            "path": "/wp-content/uploads/elementor/google-fonts/css/poppins.css",
+            "bytes": 25277,
+            "sha256": "90dd1f98d691abc60f8a0764962f4b86a2f42c022fbc833cc07d496ad0b19138"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/custom-icons/metrica-6/style.css?ver=1.0.0",
+            "path": "/wp-content/uploads/elementor/custom-icons/metrica-6/style.css",
+            "bytes": 1395,
+            "sha256": "56841f96f84f96d4e5c5424b51623b94c12cd696bcb30d8a10e62b77d1ecc1fb"
+          }
+        ],
+        "inline_sha256": [
+          "c020ae6bbac969039528759e72b85b11d65ba3859e1cc1334af65eae025d74da",
+          "bb30c393cf6568d2b6f27fe621805573d9976bdb20e597ceff6b467c77c6b67f",
+          "aeb820fc710a35b521c6bd647632d3ac70c03d51509d1cd04b1b3fd316343ab2",
+          "809423b8081b1e0447d21cb676fa9b5db07d6da8aed17ee5cfec2b12fb1dbb40",
+          "a5339cc6e490b2cb7ff2c494899e5273a58b4313de8632f0a5803bfdc1638c83",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "856f52aaea9f805df2d17a87229aad90f1c0b37a33c43020c0ae2c6d0362d961",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "37fa652c65354aabd9f4910c80da871371b2aabbd0fc3d72f34a61a37ccb5e58",
+          "bbef38023ef0a1e4ee870c131ae091024129fd619e95db75130501bbf5790bdc",
+          "6b4b7dd4d92a7142387f1fc76b2484da65a22304a8062e04f46d81767fc9b972",
+          "e8ba48f0bc317dc974311aa99cee640edc793137fe98abfebdbbf3c98cb665fd",
+          "8bf80fde24d88dab97aeda8c04573e60824a5e346dd5389d1d1650295c3299e2",
+          "5e95c948d7e92790fd0ad5101445cfd46bbd7ef2fd8cd00ea8e3972fd2855306",
+          "9b91f4a638d617ca666aefb21d8535266fadeccdaf9ea3f660903fbd029ba62f",
+          "79f582eea8aaa52568233ea97b95dcb72efc56a169c70dc36d3cdc64b67cfe28",
+          "18cf9bcbee084b33585433b824d4f179815e0b148044e5179b06c5640cfff2ba",
+          "0bb2cf8bd279302ead680feba2dc0137d8a2004e6171af0efaa2529b0f50c240",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bae666b97bad333edd96d0d99cf29f70646dabe4f9224753abdb24aaf6cdb56f",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "48c5800c87c902b3e032d7f68717b70fd4a0db57af7dad22d76312dc4046fcba",
+          "8a99db62333b0b93f3af497007d3bfcc538760585388632f97fb4e9a08386442",
+          "573753300e465826678d8eb4bf50eab77ce816a75f2541b9ef5332e6facba4f9",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "7396ff75aa389aadaf1be546f86be2f6b64f79b5bd7f0e3d682c4e19d246f60e",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "96adfbf5f0f5d4edfa4fadd48a7d0982c77cc69e5dfe9974a4d137f685b4e5d3",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "b40e8920c4d5896e7083d1be9940797cae822aac4cb4f65b6188391bb7a83d03",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "27423670ed18d436e137cd30954ee3be5dff02ad55d795731db07bb259495998",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "d942115eca43ea5075d45fff99e267a13f032600ba8da665a74d9de3ac877036",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "3867c57c7aff80c8c9036ff8784ffbe693cbb4e4a26c58831fba6977fafa0096",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "7f54285e918d144cde265a980925f10d8af596e0937ef795b78447c24260ab5c",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "c2ff6df28bea9c7e1ac95692e3a2eb68b33be87031c45f96ebe5319876d9ea82",
+          "abf057132bb652774397cc7248c6701e592caa2293ea531cdf0994cf9277d8cc",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "f5c22807f066428ca6f2d00e603bd5221a1c946181aadb8ec9c089b3e6150843",
+          "e7787025604b3f27acb6411a3a0ec94246cb23d067f2cbb2df3d01a489421be2",
+          "a11a6fdc17a8a0d6c624ad963f167e258085b7ec14707073bb71b0c89b0c26ad",
+          "967a996e899f228c878abd6d32815f2f688bc76575bf2cd124444259fc9ceb9e",
+          "b101f7256bd9a707b3da3efc9fc9baec8850c91b15bda603291491c6e8693cda"
+        ]
+      },
+      {
+        "builder_filter": 0,
+        "originals": [],
+        "queries": 0,
+        "selected": "hit",
+        "avoid_before": [],
+        "fragment_key": "iu_frag_1095b69cd1add534bdcd9f1d65edc37c2e075865a4721862831452bbc3ce4fcc",
+        "engine_result": "hit",
+        "avoid_after": [],
+        "versions": {
+          "core": "4.3.4",
+          "pro": "4.3.1"
+        },
+        "language": "el",
+        "mobile": false,
+        "authenticated": false,
+        "request": "fd9cc659f92226d4b4ef8710",
+        "html_sha256": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835",
+        "item_count": 3,
+        "assets": [
+          "https://wordpress-218158-6702910.cloudwaysapps.com/",
+          "//js-eu1.hs-scripts.com",
+          "https://fonts.gstatic.com",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/all.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/v4-shims.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/sitepress-multilingual-cms/templates/language-switchers/legacy-list-horizontal/style.min.css?ver=1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/complianz-gdpr-premium/assets/css/cookieblocker.min.css?ver=1790775047",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/pojo-accessibility/assets/build/skip-link.css?ver=4.1.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/search-filter-pro/public/assets/css/search-filter.min.css?ver=2.5.17",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/metform/public/assets/lib/cute-alert/style.css?ver=4.2.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/metform/public/assets/css/text-editor.css?ver=4.2.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/themes/hello-elementor/assets/css/reset.css?ver=3.5.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-frontend.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6416.css?ver=1791298599",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6461.css?ver=1791298599",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-heading.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/animations/styles/fadeIn.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-mega-menu.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-social-icons.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-apple-webkit.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-image.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/widget-divider.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/modules/sticky.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/modules/motion-fx.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/fontawesome.min.css?ver=5.15.3",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/solid.min.css?ver=5.15.3",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/brands.min.css?ver=5.15.3",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/regular.min.css?ver=5.15.3",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.min.css?ver=5.54.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-base.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-var-10.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-10.css?ver=1791298599",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/swiper/v8/css/swiper.min.css?ver=8.4.5",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/css/conditionals/e-swiper.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-loop-common.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-loop-carousel.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/widget-nested-carousel.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-accordion.min.css?ver=1791298598",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-2.css?ver=1791298601",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/base-desktop.css?ver=6ac50c299d83b",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/local-40164-frontend-desktop.css?ver=6ac50c29a15c8",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/base-mobile.css?ver=6ac50c299d83b",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/local-40164-frontend-mobile.css?ver=6ac50c29a15c8",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-30.css?ver=1791298603",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-286.css?ver=1791298604",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-38403.css?ver=1791298604",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/add-search-to-menu/public/css/ivory-search.min.css?ver=5.5.18",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/sourcesanspro.css?ver=1749657496",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/robotoslab.css?ver=1749657498",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/roboto.css?ver=1749657503",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/poppins.css?ver=1749657637",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/custom-icons/metrica-6/style.css?ver=1.0.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/sitepress-multilingual-cms/res/js/cookies/language-cookie.js?ver=497000",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/font-awesome/js/v4-shims.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/search-filter-elementor/assets/v2/js/search-filter-elementor.js?ver=1.4.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/animations/styles/fadeInUp.min.css?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/css/conditionals/popup.min.css?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/add-search-to-menu/public/css/ivory-ajax-search.min.css?ver=5.5.18",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/animations/styles/fadeInRight.min.css?ver=4.3.4",
+          "https://js-eu1.hs-scripts.com/26249078.js?integration=WordPress&#038;ver=11.3.75",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/mailoptin/src/core/src/assets/js/mailoptin.min.js?ver=1.2.78.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/metform/public/assets/lib/cute-alert/cute-alert.js?ver=4.2.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/frontend-modules.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/jquery/ui/core.min.js?ver=1.14.2",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/lib/smartmenus/jquery.smartmenus.min.js?ver=1.2.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/lib/sticky/jquery.sticky.min.js?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/imagesloaded.min.js?ver=5.0.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/lib/swiper/v8/swiper.min.js?ver=8.4.5",
+          "https://www.google.com/recaptcha/api.js?render=6LfXE4EUAAAAAHGSf-NI1rk18NumKCo-ZWysXDDI&#038;ver=3.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/contact-form-7/modules/recaptcha/index.js?ver=6.1.7",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/add-search-to-menu/public/js/ivory-search.min.js?ver=5.5.18",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/complianz-gdpr-premium/cookiebanner/js/complianz.min.js?ver=1790775048",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor/assets/js/packages/frontend-handlers/frontend-handlers.min.js?ver=4.3.4",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/collection-loop-pagination-handler.min.js?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/add-search-to-menu/public/js/ivory-ajax-search.min.js?ver=5.5.18",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/dist/hooks.min.js?ver=f0f188028580e8dc1255",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-includes/js/dist/i18n.min.js?ver=1dfe7db3940c23ea9216",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/frontend.min.js?ver=4.3.1",
+          "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/plugins/elementor-pro/assets/js/elements-handlers.min.js?ver=4.3.1"
+        ],
+        "generated_css": [
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-frontend.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-frontend.min.css",
+            "bytes": 54847,
+            "sha256": "2a35f5001c5afeff0abd519bdfd3311b29f853feb211bb291550623a3111cab1"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6416.css?ver=1791298599",
+            "path": "/wp-content/uploads/elementor/css/post-6416.css",
+            "bytes": 1321,
+            "sha256": "9f67dda6deed5dd233efcb509addfeb408041b9bdf0b1266778637a9eeb53459"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-6461.css?ver=1791298599",
+            "path": "/wp-content/uploads/elementor/css/post-6461.css",
+            "bytes": 6970,
+            "sha256": "27fc236d0c9844508470193e850d1e6789a79e728f8f7711a474444bb98234c6"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css",
+            "bytes": 10282,
+            "sha256": "f51419f1b17202f30b2a9e82a6ffbf2d290abb3c40dc016483d11276072f0ac3"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css",
+            "bytes": 27320,
+            "sha256": "a391a0ae393c9c0521596e9700207265bb07920920145e2c307d5399f7d7b4b6"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-pro-widget-mega-menu.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-pro-widget-mega-menu.min.css",
+            "bytes": 19875,
+            "sha256": "1354fb60a49c3f758d1167e92c1c7911f9716ad739ad5fa56f8af7eabe8c7641"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-apple-webkit.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-apple-webkit.min.css",
+            "bytes": 6713,
+            "sha256": "cf502b45ef8bcae37a65822f78546f6cc7db74faf8f48850bf8a860262817fe6"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-base.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-widget-contact-buttons-base.min.css",
+            "bytes": 20150,
+            "sha256": "16310d571c80d2c3c6297c2deffb4bc26fb2f91b2b9b75339d54a999df06bdb2"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-contact-buttons-var-10.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-widget-contact-buttons-var-10.min.css",
+            "bytes": 9583,
+            "sha256": "6be4b89a21ae3dce0c4769fd2bd4d460c2e42581f9fbc93e4bf040e522db5a36"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-10.css?ver=1791298599",
+            "path": "/wp-content/uploads/elementor/css/post-10.css",
+            "bytes": 13869,
+            "sha256": "dc747285ab4dd7665199a4a2c10448ed654f5f99e305ac3af14d522502374fc3"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/custom-widget-accordion.min.css?ver=1791298598",
+            "path": "/wp-content/uploads/elementor/css/custom-widget-accordion.min.css",
+            "bytes": 1744,
+            "sha256": "52a2bbb2d85e878d1062c65b13320cc2fa46e5fa2cb470fe9213dfdb06066eaa"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-2.css?ver=1791298601",
+            "path": "/wp-content/uploads/elementor/css/post-2.css",
+            "bytes": 105472,
+            "sha256": "165b0be93ff314df9a4b293f96ebbce684a8feedb5decb7d34a6e0a2e2e38154"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/base-desktop.css?ver=6ac50c299d83b",
+            "path": "/wp-content/uploads/elementor/css/base-desktop.css",
+            "bytes": 8064,
+            "sha256": "57fbe32cd26fa33d2eab1ffa8a264e5f4181bb359ed2a5618e9fdd51b0fe73a4"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/local-40164-frontend-desktop.css?ver=6ac50c29a15c8",
+            "path": "/wp-content/uploads/elementor/css/local-40164-frontend-desktop.css",
+            "bytes": 37,
+            "sha256": "662cea03c9aaaea33cc008fee85b1b86490e11132a4073f2979559c4c57cccf5"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/base-mobile.css?ver=6ac50c299d83b",
+            "path": "/wp-content/uploads/elementor/css/base-mobile.css",
+            "bytes": 87,
+            "sha256": "6d2c0fc112d7a76682334131ec4d0d618fadb44d42849933f88ae954ddd9d0d5"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/local-40164-frontend-mobile.css?ver=6ac50c29a15c8",
+            "path": "/wp-content/uploads/elementor/css/local-40164-frontend-mobile.css",
+            "bytes": 62,
+            "sha256": "e5e99d40531566ee39a827c69bee519a434541bd45ff3e385d88014845d40ff4"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-30.css?ver=1791298603",
+            "path": "/wp-content/uploads/elementor/css/post-30.css",
+            "bytes": 50222,
+            "sha256": "1a827a6f33b80710ca1ecf94c10570dc6af849955d7011e2160077a0d44738eb"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-286.css?ver=1791298604",
+            "path": "/wp-content/uploads/elementor/css/post-286.css",
+            "bytes": 32958,
+            "sha256": "708045e386b6846d3884718684d2177e8a95f486dc74c0d2eaee9d3558939236"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/css/post-38403.css?ver=1791298604",
+            "path": "/wp-content/uploads/elementor/css/post-38403.css",
+            "bytes": 874,
+            "sha256": "1d22c6b3e5defe6610a3ec464c46a0e0150d1141743d5fe24a73d1edddf27df9"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/sourcesanspro.css?ver=1749657496",
+            "path": "/wp-content/uploads/elementor/google-fonts/css/sourcesanspro.css",
+            "bytes": 36862,
+            "sha256": "9650af87a090c3838ba09d19e4a7a45f8e979f0f5cdb0d5d5c1adcbe59e65aa9"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/robotoslab.css?ver=1749657498",
+            "path": "/wp-content/uploads/elementor/google-fonts/css/robotoslab.css",
+            "bytes": 26586,
+            "sha256": "b03c7b6f8d183b382a4cb40a84135f7c6060359232019b155c3524ae1e376be0"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/roboto.css?ver=1749657503",
+            "path": "/wp-content/uploads/elementor/google-fonts/css/roboto.css",
+            "bytes": 111618,
+            "sha256": "2d35ebe34ad578fe2e85787e9615d62244a167416ae7d209090dcd58e924d0a8"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/google-fonts/css/poppins.css?ver=1749657637",
+            "path": "/wp-content/uploads/elementor/google-fonts/css/poppins.css",
+            "bytes": 25277,
+            "sha256": "90dd1f98d691abc60f8a0764962f4b86a2f42c022fbc833cc07d496ad0b19138"
+          },
+          {
+            "url": "https://wordpress-218158-6702910.cloudwaysapps.com/wp-content/uploads/elementor/custom-icons/metrica-6/style.css?ver=1.0.0",
+            "path": "/wp-content/uploads/elementor/custom-icons/metrica-6/style.css",
+            "bytes": 1395,
+            "sha256": "56841f96f84f96d4e5c5424b51623b94c12cd696bcb30d8a10e62b77d1ecc1fb"
+          }
+        ],
+        "inline_sha256": [
+          "c020ae6bbac969039528759e72b85b11d65ba3859e1cc1334af65eae025d74da",
+          "bb30c393cf6568d2b6f27fe621805573d9976bdb20e597ceff6b467c77c6b67f",
+          "aeb820fc710a35b521c6bd647632d3ac70c03d51509d1cd04b1b3fd316343ab2",
+          "809423b8081b1e0447d21cb676fa9b5db07d6da8aed17ee5cfec2b12fb1dbb40",
+          "a5339cc6e490b2cb7ff2c494899e5273a58b4313de8632f0a5803bfdc1638c83",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "856f52aaea9f805df2d17a87229aad90f1c0b37a33c43020c0ae2c6d0362d961",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "37fa652c65354aabd9f4910c80da871371b2aabbd0fc3d72f34a61a37ccb5e58",
+          "bbef38023ef0a1e4ee870c131ae091024129fd619e95db75130501bbf5790bdc",
+          "6b4b7dd4d92a7142387f1fc76b2484da65a22304a8062e04f46d81767fc9b972",
+          "e8ba48f0bc317dc974311aa99cee640edc793137fe98abfebdbbf3c98cb665fd",
+          "8bf80fde24d88dab97aeda8c04573e60824a5e346dd5389d1d1650295c3299e2",
+          "5e95c948d7e92790fd0ad5101445cfd46bbd7ef2fd8cd00ea8e3972fd2855306",
+          "9b91f4a638d617ca666aefb21d8535266fadeccdaf9ea3f660903fbd029ba62f",
+          "79f582eea8aaa52568233ea97b95dcb72efc56a169c70dc36d3cdc64b67cfe28",
+          "18cf9bcbee084b33585433b824d4f179815e0b148044e5179b06c5640cfff2ba",
+          "0bb2cf8bd279302ead680feba2dc0137d8a2004e6171af0efaa2529b0f50c240",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bae666b97bad333edd96d0d99cf29f70646dabe4f9224753abdb24aaf6cdb56f",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "48c5800c87c902b3e032d7f68717b70fd4a0db57af7dad22d76312dc4046fcba",
+          "8a99db62333b0b93f3af497007d3bfcc538760585388632f97fb4e9a08386442",
+          "573753300e465826678d8eb4bf50eab77ce816a75f2541b9ef5332e6facba4f9",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "7396ff75aa389aadaf1be546f86be2f6b64f79b5bd7f0e3d682c4e19d246f60e",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "96adfbf5f0f5d4edfa4fadd48a7d0982c77cc69e5dfe9974a4d137f685b4e5d3",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "b40e8920c4d5896e7083d1be9940797cae822aac4cb4f65b6188391bb7a83d03",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "27423670ed18d436e137cd30954ee3be5dff02ad55d795731db07bb259495998",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "d942115eca43ea5075d45fff99e267a13f032600ba8da665a74d9de3ac877036",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "3867c57c7aff80c8c9036ff8784ffbe693cbb4e4a26c58831fba6977fafa0096",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "7f54285e918d144cde265a980925f10d8af596e0937ef795b78447c24260ab5c",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "c2ff6df28bea9c7e1ac95692e3a2eb68b33be87031c45f96ebe5319876d9ea82",
+          "abf057132bb652774397cc7248c6701e592caa2293ea531cdf0994cf9277d8cc",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "f5c22807f066428ca6f2d00e603bd5221a1c946181aadb8ec9c089b3e6150843",
+          "e7787025604b3f27acb6411a3a0ec94246cb23d067f2cbb2df3d01a489421be2",
+          "a11a6fdc17a8a0d6c624ad963f167e258085b7ec14707073bb71b0c89b0c26ad",
+          "967a996e899f228c878abd6d32815f2f688bc76575bf2cd124444259fc9ceb9e",
+          "b101f7256bd9a707b3da3efc9fc9baec8850c91b15bda603291491c6e8693cda"
+        ]
+      }
+    ],
+    "verified_css_version_changes": [
+      [],
+      []
+    ],
+    "result": "PASS",
+    "fixture_cleanup": "removed",
+    "settings_and_real_documents_unchanged": false
+  },
+  "result": "PASS",
+  "restoration": {
+    "pair": [
+      "4.3.3",
+      "4.3.1"
+    ],
+    "settings_documents_unchanged": true,
+    "cache_metadata_restored": true,
+    "updater_cron_restored": true,
+    "element_cache": "disable",
+    "generated_files_restored": true
+  },
+  "private_backup_directory": "/home/master/applications/manqbfzxjy/tmp/iu-elementor-434-resume-07c9ec670c"
+}

@@ -5,11 +5,12 @@ if (!defined('ABSPATH')) {
 }
 require_once __DIR__ . '/elementor-compatibility.php';
 require_once __DIR__ . '/elementor-fragment-cache-graph.php';
+require_once __DIR__ . '/elementor-fragment-cache-atomic.php';
 require_once __DIR__ . '/elementor-fragment-cache-excerpt.php';
 require_once __DIR__ . '/elementor-fragment-cache-diagnostics.php';
 
 final class IU_Elementor_Fragment_Cache {
-    const FORMAT = 15;
+    const FORMAT = 17;
     const STALE_GRACE = 180;
     const MAX_BYTES = 2097152;
     const INDEX_PREFIX = 'iu_fragment_entry_';
@@ -34,6 +35,9 @@ final class IU_Elementor_Fragment_Cache {
         add_filter('elementor/frontend/builder_content_data', array(__CLASS__, 'filter'), PHP_INT_MAX, 2);
         add_action('elementor/frontend/widget/before_render', array(__CLASS__, 'begin'), 0);
         add_action('elementor/frontend/widget/after_render', array(__CLASS__, 'finish'), PHP_INT_MAX);
+        add_action('elementor/frontend/before_render', array(__CLASS__, 'begin_atomic'), 0);
+        add_action('elementor/frontend/after_render', array(__CLASS__, 'finish_atomic'), PHP_INT_MAX);
+        add_filter('posts_results', array(__CLASS__, 'atomic_posts'), PHP_INT_MAX, 2);
         add_action('shutdown', array(__CLASS__, 'cleanup_locks'), 0);
         add_action('elementor/query/query_results', array(__CLASS__, 'query_results'), 0, 2);
         add_action('pre_get_posts', array(__CLASS__, 'guard_queries'), PHP_INT_MAX);
@@ -190,17 +194,18 @@ final class IU_Elementor_Fragment_Cache {
     private static function eligible($node, $document_id) {
         IU_Elementor_Fragment_Graph::clear_rejection();
         unset(self::$policies[$document_id . ':' . ($node['id'] ?? '')]);
-        if (($node['elType'] ?? '') !== 'widget' ||
-            ($node['settings']['iu_fragment_cache'] ?? '') !== 'yes' ||
-            empty($node['id']) || empty($node['widgetType']) ||
+        $atomic = IU_Elementor_Fragment_Atomic::node($node);
+        if ((!$atomic && (($node['elType'] ?? '') !== 'widget' || empty($node['widgetType']))) ||
+            !IU_Elementor_Fragment_Atomic::opted_in($node) || empty($node['id']) ||
             !empty($node['settings']['__dynamic__'])) {
             return false;
         }
         // Opt-in declares reusable output. Inspect concrete structure and replay
         // requirements, not the site's arbitrary third-party hook implementations.
-        $policy = IU_Elementor_Fragment_Graph::inspect($node);
+        $policy = $atomic ? IU_Elementor_Fragment_Atomic::inspect($node) : IU_Elementor_Fragment_Graph::inspect($node);
         if ($policy) self::$policies[$document_id . ':' . $node['id']] = $policy;
         $accepted = (bool) $policy;
+        if ($atomic && !$accepted) return false;
         return (bool) apply_filters('iu_elementor_fragment_eligible', (bool) $accepted, $node, $document_id);
     }
 
@@ -336,15 +341,21 @@ final class IU_Elementor_Fragment_Cache {
             // An opted-in descendant cannot execute beneath a device-hidden
             // ancestor, including native visibility and older Kit integrations.
             // Branches with no opt-in retain their existing renderer behavior.
-            if (self::hidden_on_device($node['settings'] ?? array()) && self::contains_optin($node)) {
+            $visibility = $node['settings'] ?? array();
+            if (IU_Elementor_Fragment_Atomic::node($node)) {
+                foreach (array('iu_hide_on_phone','iu_hide_on_desktop_tablet') as $control) {
+                    if (IU_Elementor_Fragment_Atomic::value($visibility,$control) === true) $visibility[$control] = 'yes';
+                }
+            }
+            if (self::hidden_on_device($visibility) && self::contains_optin($node)) {
                 unset($nodes[$index]);
                 continue;
             }
             $eligible = self::eligible($node, $document_id);
-            if (($node['settings']['iu_fragment_cache'] ?? '') === 'yes') {
+            if (IU_Elementor_Fragment_Atomic::opted_in($node)) {
                 do_action('iu_elementor_fragment_node', $node['id'] ?? '', $eligible, $document_id);
                 if (!$eligible) IU_Elementor_Fragment_Diagnostics::record($document_id, $node['id'] ?? '', 'bypass',
-                    IU_Elementor_Fragment_Graph::rejection() ?: array('reason' => 'unsupported-element'));
+                    (IU_Elementor_Fragment_Atomic::node($node) ? IU_Elementor_Fragment_Atomic::rejection() : IU_Elementor_Fragment_Graph::rejection()) ?: array('reason' => 'unsupported-element'));
             }
             if ($eligible) {
                 $prior = self::displayed();
@@ -358,7 +369,7 @@ final class IU_Elementor_Fragment_Cache {
                     }
                     $lock = self::lock($key);
                     if ($lock) {
-                        $ttl = (int) ($node['settings']['iu_fragment_cache_ttl'] ?? 604800);
+                        $ttl = (int) (IU_Elementor_Fragment_Atomic::node($node) ? IU_Elementor_Fragment_Atomic::value($node['settings'],'iu_fragment_cache_ttl',604800) : ($node['settings']['iu_fragment_cache_ttl'] ?? 604800));
                         $node['_iu_fragment_build'] = array('key' => $key, 'lock' => $lock,
                             'ttl' => in_array($ttl, array(3600, 21600, 86400, 604800), true) ? $ttl : 604800,
                             'document_id' => $document_id, 'element_id' => $node['id'], 'prior' => $prior,
@@ -394,7 +405,7 @@ final class IU_Elementor_Fragment_Cache {
 
     private static function contains_optin($node) {
         if (!is_array($node)) return false;
-        if (($node['settings']['iu_fragment_cache'] ?? '') === 'yes') return true;
+        if (IU_Elementor_Fragment_Atomic::opted_in($node)) return true;
         foreach ((array) ($node['elements'] ?? array()) as $child) {
             if (self::contains_optin($child)) return true;
         }
@@ -526,6 +537,7 @@ final class IU_Elementor_Fragment_Cache {
     private static function replacement($node, $entry, $prior, $stale = false) {
         do_action('iu_elementor_fragment_cache_selected', $node['id'], $stale);
         $original = $node;
+        $node['elType'] = 'widget';
         $node['widgetType'] = 'iu-fragment-proxy';
         $node['_iu_fragment_payload'] = array('node' => $original, 'entry' => $entry,
             'prior' => $prior, 'excerpt_prior' => IU_Elementor_Fragment_Excerpt::profile(),
@@ -540,13 +552,13 @@ final class IU_Elementor_Fragment_Cache {
         }
         // Replay at the original render position, never during builder traversal:
         // earlier siblings must not see IDs from a widget they have not reached.
-        if (iu_elementor_fragment_enabled() && self::public_ids($payload['entry']['displayed']) &&
+        if (iu_elementor_fragment_enabled() && self::public_ids(array_merge($payload['entry']['displayed'], $payload['entry']['atomic_public_ids'] ?? array())) &&
             self::generation_current($payload['entry']['generation'] ?? null) &&
             (!isset($payload['media_prior']) || self::media_context() === $payload['media_prior']) &&
             (($payload['independent_query'] ?? false) || self::displayed() === $payload['prior']) &&
             self::excerpt_context_ok($payload['entry']) &&
-            (int) get_the_ID() === $payload['post_context'] && self::replay($payload['entry'])) {
-            echo $payload['entry']['html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            (int) get_the_ID() === $payload['post_context'] && self::loop_css_ready($payload['entry']) && self::replay($payload['entry'])) {
+            echo self::loop_css_html($payload['entry']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             do_action('iu_elementor_fragment_result', !empty($payload['stale']) ? 'stale-hit' : 'hit',
                 array('element_id' => $payload['node']['id'], 'document_id' => $payload['entry']['generation']['document_id'] ?? 0));
             return;
@@ -575,6 +587,7 @@ final class IU_Elementor_Fragment_Cache {
             !is_int($entry['stale_until'] ?? null) || $entry['stale_until'] <= time()) {
             return false;
         }
+        if (isset($entry['generation']['atomic']) && !is_array($entry['atomic_public_ids'] ?? null)) return false;
         return true;
     }
 
@@ -591,17 +604,23 @@ final class IU_Elementor_Fragment_Cache {
     }
 
     private static function generation($document_id, $element_id) {
-        return array('document_id' => $document_id, 'element_id' => $element_id,
+        $generation = array('document_id' => $document_id, 'element_id' => $element_id,
             'site' => (string) get_option(self::EPOCH, '0'),
             'element' => (string) get_option('iu_fragment_epoch_' . md5($document_id . ':' . $element_id), '0'));
+        if (!empty(self::$policies[$document_id . ':' . $element_id]['atomic'])) {
+            $generation['atomic'] = (string) get_option(IU_Elementor_Fragment_Atomic::EPOCH,'0');
+        }
+        return $generation;
     }
 
     private static function generation_current($generation) {
         if (!is_array($generation) || !isset($generation['document_id'], $generation['element_id'], $generation['site'], $generation['element'])) return false;
         global $wpdb;
         // Read the database, not this long request's stale options cache.
-        foreach (array(self::EPOCH => $generation['site'],
-            'iu_fragment_epoch_' . md5($generation['document_id'] . ':' . $generation['element_id']) => $generation['element']) as $name => $expected) {
+        $epochs = array(self::EPOCH => $generation['site'],
+            'iu_fragment_epoch_' . md5($generation['document_id'] . ':' . $generation['element_id']) => $generation['element']);
+        if (isset($generation['atomic'])) $epochs[IU_Elementor_Fragment_Atomic::EPOCH] = $generation['atomic'];
+        foreach ($epochs as $name => $expected) {
             $value = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", $name));
             if (!empty($wpdb->last_error)) return false;
             if ((string) ($value === null ? '0' : $value) !== $expected) return false;
@@ -682,6 +701,24 @@ final class IU_Elementor_Fragment_Cache {
     }
 
     public static function begin($element) {
+        if ($element instanceof \Elementor\Modules\AtomicWidgets\Elements\Base\Atomic_Element_Base ||
+            $element instanceof \Elementor\Modules\AtomicWidgets\Elements\Base\Atomic_Widget_Base) {
+            foreach (self::$capture as &$frame) {
+                if (!isset($frame['build']['generation']['atomic'])) continue;
+                foreach (array('styles'=>'get_style_depends','scripts'=>'get_script_depends') as $kind=>$method) {
+                    $items = $element->$method();
+                    if (!is_array($items)) { $frame['unsafe_dependencies'] = true; continue; }
+                    foreach ($items as $item) {
+                        if (!is_string($item) || !preg_match('/^[a-zA-Z0-9_-]+$/',$item)) {
+                            $frame['unsafe_dependencies'] = true;
+                            continue;
+                        }
+                        $frame['dependencies'][$kind][] = $item;
+                    }
+                }
+            }
+            unset($frame);
+        }
         $build = $element->get_data('_iu_fragment_build');
         if (!is_array($build) || empty($build['key'])) {
             return;
@@ -695,6 +732,7 @@ final class IU_Elementor_Fragment_Cache {
             'styles' => wp_styles()->queue, 'scripts' => wp_scripts()->queue,
             'registered_styles' => array_keys(wp_styles()->registered), 'registered_scripts' => array_keys(wp_scripts()->registered),
             'render_hooks' => self::render_hooks(),
+            'loop_css_before' => self::loop_css_state(),
             'style_extra' => self::extras(wp_styles(), array('after')),
             'script_extra' => self::extras(wp_scripts(), array('before', 'after', 'data')),
             'displayed' => self::displayed(), 'post_context' => (int) get_the_ID(),
@@ -702,6 +740,23 @@ final class IU_Elementor_Fragment_Cache {
             'media_prior' => self::media_context(), 'query_ids' => array(),
             'buffer_level' => ob_get_level());
         ob_start();
+    }
+
+    public static function begin_atomic($element) {
+        if ($element instanceof \Elementor\Modules\AtomicWidgets\Elements\Base\Atomic_Element_Base) self::begin($element);
+    }
+
+    public static function finish_atomic($element) {
+        if ($element instanceof \Elementor\Modules\AtomicWidgets\Elements\Base\Atomic_Element_Base) self::finish($element);
+    }
+
+    public static function atomic_posts($posts, $query) {
+        foreach (self::$capture as &$frame) {
+            if (!isset($frame['build']['generation']['atomic'])) continue;
+            foreach ($posts as $post) if (isset($post->ID)) $frame['query_ids'][] = (int) $post->ID;
+        }
+        unset($frame);
+        return $posts;
     }
 
     public static function query_results($query, $widget) {
@@ -739,6 +794,7 @@ final class IU_Elementor_Fragment_Cache {
             return;
         }
         $html = ob_get_clean();
+        $loop_css = self::loop_css_manifest($start['loop_css_before'], self::loop_css_state(), $html);
         $styles = array_values(array_diff(wp_styles()->queue, $start['styles']));
         $scripts = array_values(array_diff(wp_scripts()->queue, $start['scripts']));
         $reason = '';
@@ -767,7 +823,9 @@ final class IU_Elementor_Fragment_Cache {
             $reason = 'asset-queue-side-effect';
         }
         global $wpdb;
+        if (!$reason && $loop_css === null) $reason = 'loop-css-side-effect';
         if (!$reason && !empty($start['unsafe_query'])) $reason = 'query-context';
+        if (!$reason && !empty($start['unsafe_dependencies'])) $reason = 'dependency-manifest';
         if (!$reason && !empty($start['unsafe_interactions'])) $reason = 'atomic-interactions';
         if (!$reason && self::render_hooks() !== $start['render_hooks']) $reason = 'render-hook-side-effect';
         if (!$reason && (int) get_the_ID() !== $start['post_context']) $reason = 'post-context-side-effect';
@@ -789,9 +847,10 @@ final class IU_Elementor_Fragment_Cache {
             $reason = 'lock-expired';
         }
         if (!$reason) {
-            $styles = array_values(array_unique(array_merge($start['dependencies']['styles'], $styles)));
-            $scripts = array_values(array_unique(array_merge($start['dependencies']['scripts'], $scripts)));
+            $styles = self::ordered_assets(wp_styles()->queue, array_merge($start['dependencies']['styles'], $styles));
+            $scripts = self::ordered_assets(wp_scripts()->queue, array_merge($start['dependencies']['scripts'], $scripts));
             $entry = array('format' => self::FORMAT, 'html' => $html, 'styles' => $styles,
+                'loop_css' => $loop_css,
                 'generation' => $start['build']['generation'],
                 'scripts' => $scripts,
                 'excerpt' => $excerpt,
@@ -802,6 +861,11 @@ final class IU_Elementor_Fragment_Cache {
                 'stale_until' => time() + $start['build']['ttl'] + self::STALE_GRACE,
                 'displayed' => !empty($start['build']['independent_query']) ? array_values(array_unique($start['query_ids'])) :
                     array_values(array_diff(self::displayed(), $start['displayed'])));
+            if (isset($start['build']['generation']['atomic'])) {
+                // Atomic's native query does not update the Classic avoid list.
+                $entry['atomic_public_ids'] = array_values(array_unique($start['query_ids']));
+                $entry['displayed'] = array_values(array_diff(self::displayed(), $start['displayed']));
+            }
             if (set_transient($start['build']['key'], $entry, $start['build']['ttl'] + self::STALE_GRACE)) {
                 self::index($start['build']);
             } else {
@@ -916,6 +980,70 @@ final class IU_Elementor_Fragment_Cache {
             }
         }
         echo '</div>';
+    }
+
+    private static function loop_css_state() {
+        $class = 'ElementorPro\\Modules\\LoopBuilder\\Files\\Css\\Loop';
+        if (!class_exists($class)) return array();
+        // Read the exact supported Pro contract; never write its private state.
+        try {
+            if (!is_callable(array($class, 'create')) || !method_exists($class, 'print_all_css')) return null;
+            $property = new \ReflectionProperty($class, 'printed_with_css');
+            if (!$property->isStatic()) return null;
+            if (PHP_VERSION_ID < 80100) $property->setAccessible(true);
+            $state = $property->getValue();
+            if (!is_array($state)) return null;
+            foreach ($state as $handle => $value) {
+                if (!is_string($handle) || !preg_match('/^loop-[1-9][0-9]*$/', $handle) || $value !== true) return null;
+            }
+            return array_keys($state);
+        } catch (\Throwable $error) {
+            return null;
+        }
+    }
+
+    private static function loop_css_manifest($before, $after, $html) {
+        if (!is_array($before) || !is_array($after) || array_diff($before, $after)) return null;
+        preg_match_all('~<style id="(loop-[1-9][0-9]*)">.*?</style>~s', $html, $matches);
+        $printed = array_values(array_diff($after, $before));
+        if (count($matches[1]) !== count(array_unique($matches[1])) ||
+            array_diff($printed, $matches[1]) || array_diff($matches[1], $printed)) return null;
+        return array('before' => $before, 'printed' => $printed);
+    }
+
+    private static function loop_css_ready($entry) {
+        $manifest = $entry['loop_css'] ?? array('before' => array(), 'printed' => array());
+        if (!is_array($manifest) || !is_array($manifest['before'] ?? null) || !is_array($manifest['printed'] ?? null)) return false;
+        if (!$manifest['before'] && !$manifest['printed']) return true;
+        $current = self::loop_css_state();
+        return is_array($current) && !array_diff($manifest['before'], $current) &&
+            self::loop_css_manifest($manifest['before'], array_merge($manifest['before'], $manifest['printed']), $entry['html']) === $manifest;
+    }
+
+    private static function loop_css_html($entry) {
+        if (empty($entry['loop_css']['printed'])) return $entry['html'];
+        // Native public CSS printer marks the style as printed for subsequent
+        // uncached loops, or emits nothing if an earlier sibling already did.
+        // Only cached style slots are replayed; no widget or loop render runs.
+        return preg_replace_callback('~<style id="loop-([1-9][0-9]*)">.*?</style>~s', static function ($match) {
+            $level = ob_get_level();
+            ob_start();
+            try {
+                \ElementorPro\Modules\LoopBuilder\Files\Css\Loop::create((int) $match[1])->print_all_css((int) $match[1]);
+                return ob_get_clean();
+            } finally {
+                while (ob_get_level() > $level) ob_end_clean();
+            }
+        }, $entry['html']);
+    }
+
+    private static function ordered_assets($queue, $required) {
+        // Keep the native miss order, including root dependencies queued before
+        // capture. Dependencies resolved indirectly by WordPress remain available
+        // after the explicit queue; unrelated page assets are not captured.
+        $required = array_values(array_unique($required));
+        $ordered = array_values(array_intersect($queue, $required));
+        return array_values(array_unique(array_merge($ordered, $required)));
     }
 
     public static function purge() {

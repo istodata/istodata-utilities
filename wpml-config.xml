@@ -9,7 +9,8 @@
                 <condition key="widgetType">iu_query_posts</condition>
             </conditions>
             <fields>
-                <field type="Query Posts: Extra Link URL" editor_type="LINK" key_of="extra_link_url">url</field>
+                <field type="Query Posts: Extra Link Text" editor_type="LINE">extra_link_text</field>
+                <field type="Query Posts: Extra Link URL" editor_type="LINK">extra_link_url&gt;url</field>
             </fields>
         </widget>
     </elementor-widgets>

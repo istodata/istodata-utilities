@@ -9,13 +9,28 @@ function iu_elementor_compatibility_registry() {
             'accepted' => array(array(
                 'core' => array('exact' => '4.3.2'),
                 'pro' => array('exact' => '4.3.0'),
-            ), array('core' => array('exact' => '4.3.3'), 'pro' => array('exact' => '4.3.1'))),
+            ), array('core' => array('exact' => '4.3.3'), 'pro' => array('exact' => '4.3.1')),
+                array('core' => array('exact' => '4.3.4'), 'pro' => array('exact' => '4.3.1'))),
             'tested' => array(array('core' => '4.3.2', 'pro' => '4.3.0',
                 'evidence' => 'tests/ATOMIC-INTERACTIONS.md',
                 'scope' => 'Checksum-verified vendor runtime; browser/editor acceptance pending.'),
                 array('core' => '4.3.3', 'pro' => '4.3.1',
                     'evidence' => 'docs/archive/2026-10-01-elementor/docs/elementor-kit-acceptance-staging.md',
-                    'scope' => 'Full Kit/native Motion browser ON/OFF, desktop/mobile/tablet lifecycle; vendor trigger matrix.')),
+                    'scope' => 'Full Kit/native Motion browser ON/OFF, desktop/mobile/tablet lifecycle; vendor trigger matrix.'),
+                array('core' => '4.3.4', 'pro' => '4.3.1',
+                    'evidence' => 'docs/elementor-434-acceptance.md',
+                    'scope' => 'Official vendor source review and unchanged Motion/shared/Pro checksums; 17 actual vendor runtime cases. Prior 4.3.3 browser Motion matrix retained as separate evidence; no new full Motion browser matrix claimed.')),
+        ),
+        'fragment_atomic' => array(
+            'label' => 'Atomic Elements Cache / Device Visibility',
+            'accepted' => array(array('core' => array('exact' => '4.3.3'), 'pro' => array('exact' => '4.3.1')),
+                array('core' => array('exact' => '4.3.4'), 'pro' => array('exact' => '4.3.1'))),
+            'tested' => array(array('core' => '4.3.3', 'pro' => '4.3.1',
+                'evidence' => 'docs/atomic-fragment-integrated.md',
+                'scope' => 'Shared engine: Atomic Loop and standalone Heading early hits with identical HTML/assets; typed editor save, seven-day default, GR/EN and phone variants, visibility, page context, source invalidation and concurrent cold misses. Eligible fragments share login and unrelated URL contexts under the common privacy/editor guards. Conservative public post/literal scope; pagination, custom/current queries, components, interactions and unknown resolvers bypass.'),
+                array('core' => '4.3.4', 'pro' => '4.3.1',
+                    'evidence' => 'docs/elementor-434-acceptance.md',
+                    'scope' => 'Actual staging Atomic Loop: native/miss/hit HTML and ordered CSS/JS parity, zero original loop/widget executions and queries on hits; shared login/ordinary URL, device/language, source invalidation and concurrent misses. Conservative scope and bypasses unchanged.')),
         ),
         'fragment' => array(
             'label' => 'Elementor Fragment Cache',
@@ -24,8 +39,12 @@ function iu_elementor_compatibility_registry() {
                 // Preserve the existing core-only static widget path. Pro adapters require Pro.
                 array('core' => array('exact' => '4.2.3'), 'pro' => null),
                 array('core' => array('exact' => '4.3.3'), 'pro' => array('exact' => '4.3.1')),
+                array('core' => array('exact' => '4.3.4'), 'pro' => array('exact' => '4.3.1')),
             ),
             'tested' => array(
+                array('core' => '4.3.4', 'pro' => '4.3.1',
+                    'evidence' => 'docs/fragment-cache-loop-css-fix.md',
+                    'scope' => 'Actual staging six Classic header fragments: zero cached widgets and heavy header loops on hits; native/miss/hit ordered external and inline CSS/JS parity, one native loop-1635 stylesheet, cross-page reuse with knowingly shared menu active attributes, phone visibility and browser menu/navigation checks.'),
                 array('core' => '4.3.3', 'pro' => '4.3.1',
                     'evidence' => 'docs/archive/2026-10-01-elementor/docs/elementor-kit-acceptance-staging.md',
                     'scope' => 'Full Kit Greek/English save/reload, cross-page HTML/assets/effects, selective purge, UA exclusions; Atomic jointly ON.'),
@@ -98,8 +117,16 @@ function iu_elementor_fragment_enabled() {
 
 function iu_elementor_active_features() {
     $settings = get_option('istodata_utilities_settings', array());
-    return array('atomic' => !empty($settings['optimizations']['elementor_atomic_interaction_breakpoints']),
+    $active = array('atomic' => !empty($settings['optimizations']['elementor_atomic_interaction_breakpoints']),
         'fragment' => iu_elementor_fragment_enabled());
+    $plugin = class_exists('Elementor\\Plugin') ? \Elementor\Plugin::$instance : null;
+    $device = !isset($settings['additional']['elementor_device_visibility']) || !empty($settings['additional']['elementor_device_visibility']);
+    if (($active['fragment'] || $device) && iu_elementor_feature_supported('fragment_atomic') && $plugin && isset($plugin->experiments) &&
+        class_exists('Elementor\\Modules\\AtomicWidgets\\Module') &&
+        $plugin->experiments->is_feature_active(\Elementor\Modules\AtomicWidgets\Module::EXPERIMENT_NAME)) {
+        $active['fragment_atomic'] = true;
+    }
+    return $active;
 }
 
 function iu_elementor_pair_failures($pair, $active) {

@@ -1,0 +1,648 @@
+{
+  "result": "PASS",
+  "requests": [
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_1095b69cd1add534bdcd9f1d65edc37c2e075865a4721862831452bbc3ce4fcc",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "0c3f96af87b5466887bf35ce089d6a1d",
+      "label": "saved-on",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_1095b69cd1add534bdcd9f1d65edc37c2e075865a4721862831452bbc3ce4fcc",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "354ae369f5754cad9d988b29bacf1e93",
+      "label": "saved-on-hit",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_1095b69cd1add534bdcd9f1d65edc37c2e075865a4721862831452bbc3ce4fcc",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "95fde1ad42354d48809592c2826f2b41",
+      "label": "random-url-0",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_1095b69cd1add534bdcd9f1d65edc37c2e075865a4721862831452bbc3ce4fcc",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "b112f5d371934c4f9c5a832d4d7c34c1",
+      "label": "random-url-1",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_1095b69cd1add534bdcd9f1d65edc37c2e075865a4721862831452bbc3ce4fcc",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "7b41ece19ed043d8b0f6b65b77bb331e",
+      "label": "random-url-2",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_1095b69cd1add534bdcd9f1d65edc37c2e075865a4721862831452bbc3ce4fcc",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "9e748a9439a249db87d48f2356c3fb8a",
+      "label": "random-url-3",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_1095b69cd1add534bdcd9f1d65edc37c2e075865a4721862831452bbc3ce4fcc",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "58e566c7feaa4a99860cb9eb019953d1",
+      "label": "random-url-4",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [
+        {
+          "id": "iuaploop",
+          "type": "e-collection-loop"
+        },
+        {
+          "id": "iuaplayout",
+          "type": "e-collection-loop-layout"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        }
+      ],
+      "queries": 1,
+      "selected": "native",
+      "avoid_before": [],
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": true,
+      "request": "4f726eed008f491597d0dd329853c18e",
+      "label": "logged-native",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_1095b69cd1add534bdcd9f1d65edc37c2e075865a4721862831452bbc3ce4fcc",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": true,
+      "request": "7ecb9ecddd5747de87446a333153f924",
+      "label": "logged-shared-hit",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_1095b69cd1add534bdcd9f1d65edc37c2e075865a4721862831452bbc3ce4fcc",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": true,
+      "request": "187f3df3cb1c4a00a6dbc32441e30c74",
+      "label": "logged-random-url",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [
+        {
+          "id": "iuaploop",
+          "type": "e-collection-loop"
+        },
+        {
+          "id": "iuaplayout",
+          "type": "e-collection-loop-layout"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        }
+      ],
+      "queries": 1,
+      "selected": "miss",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_7386aab6ab509dd6466863c74284c32f8fa54086362bf3b56ddc90527b9e632e",
+      "engine_result": "stored",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": true,
+      "request": "a70c2b9b122447458d138a52bb465554",
+      "label": "logged-cold-writer",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_7386aab6ab509dd6466863c74284c32f8fa54086362bf3b56ddc90527b9e632e",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "850dc4f66b674807885890d6bb041c69",
+      "label": "anonymous-after-logged",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [
+        {
+          "id": "iuaploop",
+          "type": "e-collection-loop"
+        },
+        {
+          "id": "iuaplayout",
+          "type": "e-collection-loop-layout"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        }
+      ],
+      "queries": 1,
+      "selected": "miss",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_b026b12bc2c96874b10494a2af1f5f0205b4e43954f2d56bad1d92aff2681521",
+      "engine_result": "stored",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "1a2dd6e1e4fb42eeb48392cd70b3056e",
+      "label": "other-page",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_b026b12bc2c96874b10494a2af1f5f0205b4e43954f2d56bad1d92aff2681521",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "079a86ef4f8b4789880cb85c69c7d197",
+      "label": "other-page-hit",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [
+        {
+          "id": "iuaploop",
+          "type": "e-collection-loop"
+        },
+        {
+          "id": "iuaplayout",
+          "type": "e-collection-loop-layout"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        }
+      ],
+      "queries": 1,
+      "selected": "native",
+      "avoid_before": [],
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "8a1e691b74a64372adb92a9a5f632fdb",
+      "label": "off",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [
+        {
+          "id": "iuaploop",
+          "type": "e-collection-loop"
+        },
+        {
+          "id": "iuaplayout",
+          "type": "e-collection-loop-layout"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        }
+      ],
+      "queries": 1,
+      "selected": "native",
+      "avoid_before": [],
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "0825a653b5924654b3216d986349e4e9",
+      "label": "off-again",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [
+        {
+          "id": "iuaploop",
+          "type": "e-collection-loop"
+        },
+        {
+          "id": "iuaplayout",
+          "type": "e-collection-loop-layout"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        }
+      ],
+      "queries": 1,
+      "selected": "miss",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_83b9afcff9383b1687e783349cd3857dfa6cc5f6abc0723da4674bae16c57f3f",
+      "engine_result": "stored",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "4703511c74e4494295a476e243d343a8",
+      "label": "visibility-desktop",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_83b9afcff9383b1687e783349cd3857dfa6cc5f6abc0723da4674bae16c57f3f",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "d970ddf143e346f09d9f31d33ba5c543",
+      "label": "visibility-desktop-hit",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "native",
+      "avoid_before": [],
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": true,
+      "authenticated": false,
+      "request": "80d0775773e642c697b3e49046d760bf",
+      "label": "hidden-phone",
+      "items": 0,
+      "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [
+        {
+          "id": "iuaploop",
+          "type": "e-collection-loop"
+        },
+        {
+          "id": "iuaplayout",
+          "type": "e-collection-loop-layout"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        }
+      ],
+      "queries": 1,
+      "selected": "miss",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_05e5349c36574a0527ab9fd1f9aea3e5a1f5f720babdd38b55aa472cce20cf32",
+      "engine_result": "stored",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "9c7b6eb6f8cf4220973ff30102b9ae83",
+      "label": "concurrent-1",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_05e5349c36574a0527ab9fd1f9aea3e5a1f5f720babdd38b55aa472cce20cf32",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "751cec5e3af74303802a5c7e0f2e5587",
+      "label": "concurrent-0",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [
+        {
+          "id": "iuaploop",
+          "type": "e-collection-loop"
+        },
+        {
+          "id": "iuaplayout",
+          "type": "e-collection-loop-layout"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        },
+        {
+          "id": "iuapitem",
+          "type": "e-collection-loop-item"
+        }
+      ],
+      "queries": 1,
+      "selected": "miss",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_17302a068922f71b074ba944f167142dc684e7680e30e8ab5a12e62e54adbd87",
+      "engine_result": "stored",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "9f8a2a315a4b48a5a11014579ca0d342",
+      "label": "source-invalidated",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    },
+    {
+      "builder_filter": 0,
+      "originals": [],
+      "queries": 0,
+      "selected": "hit",
+      "avoid_before": [],
+      "fragment_key": "iu_frag_17302a068922f71b074ba944f167142dc684e7680e30e8ab5a12e62e54adbd87",
+      "engine_result": "hit",
+      "avoid_after": [],
+      "versions": {
+        "core": "4.3.4",
+        "pro": "4.3.1"
+      },
+      "language": "el",
+      "mobile": false,
+      "authenticated": false,
+      "request": "ae6d783df80843188ff335cc0e41f0ad",
+      "label": "source-invalidated-hit",
+      "items": 3,
+      "sha": "da57e07d71eac0ec3a02076bd49f443b8ee683ca99ffee10801404f6a80dc835"
+    }
+  ]
+}

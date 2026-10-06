@@ -1,0 +1,66 @@
+{
+  "pair": {
+    "core": "4.3.4",
+    "pro": "4.3.1"
+  },
+  "result": "STOP",
+  "runtime_format": 16,
+  "external_assets": {
+    "native_miss": [],
+    "native_hit": [],
+    "other_page_native_hit": []
+  },
+  "header_loops": {
+    "native": 150,
+    "existing": 150,
+    "miss": 150,
+    "hit-random": 0,
+    "other-page-hit": 0,
+    "other-page-native": 150
+  },
+  "same_page_fragment_html_equal": true,
+  "cross_page_changed_fragments": [
+    "a1ff108",
+    "e62c115"
+  ],
+  "cross_page_changed_attributes": [
+    "current-menu-item",
+    "current_page_item",
+    "elementor-item-active",
+    "aria-current=\"page\""
+  ],
+  "inline_loop_style": {
+    "native": {
+      "count": 1,
+      "sha256": [
+        "fd80f749fd55f5d5a58a7a666fc0502d37c28b5e76212c9156aee8aa8917ba6c"
+      ]
+    },
+    "miss": {
+      "count": 1,
+      "sha256": [
+        "fd80f749fd55f5d5a58a7a666fc0502d37c28b5e76212c9156aee8aa8917ba6c"
+      ]
+    },
+    "hit-random": {
+      "count": 2,
+      "sha256": [
+        "fd80f749fd55f5d5a58a7a666fc0502d37c28b5e76212c9156aee8aa8917ba6c",
+        "fd80f749fd55f5d5a58a7a666fc0502d37c28b5e76212c9156aee8aa8917ba6c"
+      ]
+    }
+  },
+  "restoration": {
+    "pair": [
+      "4.3.3",
+      "4.3.1"
+    ],
+    "settings_documents_unchanged": true,
+    "cache_metadata_restored": true,
+    "updater_cron_restored": true,
+    "element_cache": "disable",
+    "generated_files_restored": true
+  },
+  "independent_generated_archive_verification": "tar -df: zero differences",
+  "limits": "Inline finding confirmed offline from captured origin HTML; live assertion failed cross-page HTML. Browser/mobile checks pending."
+}

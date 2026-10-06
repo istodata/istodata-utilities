@@ -40,7 +40,7 @@ final class IU_Elementor_Fragment_Diagnostics {
         $walk = function ($nodes) use (&$walk, &$budget, $document_id, $reason) {
             foreach ((array) $nodes as $node) {
                 if (--$budget < 0 || !is_array($node)) return;
-                if (($node['settings']['iu_fragment_cache'] ?? '') === 'yes') self::record($document_id, $node['id'] ?? '', 'bypass', array('reason' => $reason));
+                if (IU_Elementor_Fragment_Atomic::opted_in($node)) self::record($document_id, $node['id'] ?? '', 'bypass', array('reason' => $reason));
                 if (!empty($node['elements'])) $walk($node['elements']);
             }
         };
@@ -125,16 +125,17 @@ final class IU_Elementor_Fragment_Diagnostics {
         };
         $walk($data);
         if (!$node) return array('message' => __('Το στοιχείο δεν βρέθηκε στο αποθηκευμένο document. Αποθηκεύστε τις αλλαγές πρώτα.', 'istodata-utilities'));
-        $configured = ($node['settings']['iu_fragment_cache'] ?? '') === 'yes';
+        $configured = IU_Elementor_Fragment_Atomic::opted_in($node);
         $global = iu_elementor_fragment_enabled();
         $detail = array(); $review = 'not-checked';
         if (!$global) $detail = array('reason' => 'global-off');
         elseif (!iu_elementor_feature_supported('fragment')) $detail = array('reason' => 'incompatible-elementor');
         elseif (get_option('elementor_element_cache_ttl') !== 'disable') $detail = array('reason' => 'native-element-cache');
         elseif ($configured) {
-            $policy = IU_Elementor_Fragment_Graph::inspect($node);
+            $atomic = IU_Elementor_Fragment_Atomic::node($node);
+            $policy = $atomic ? IU_Elementor_Fragment_Atomic::inspect($node) : IU_Elementor_Fragment_Graph::inspect($node);
             $review = $policy ? 'reviewed' : 'blocked';
-            if (!$policy) $detail = IU_Elementor_Fragment_Graph::rejection();
+            if (!$policy) $detail = $atomic ? IU_Elementor_Fragment_Atomic::rejection() : IU_Elementor_Fragment_Graph::rejection();
         }
         $message = sprintf(__('Αποθηκευμένη επιλογή: %1$s. Γενικός διακόπτης: %2$s.', 'istodata-utilities'), $configured ? 'ON' : 'OFF', $global ? 'ON' : 'OFF');
         if ($review !== 'not-checked') $message .= ' ' . __('Έλεγχος αποθηκευμένης δομής και τεχνικών απαιτήσεων replay, όχι έλεγχος όλων των callbacks.', 'istodata-utilities');

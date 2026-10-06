@@ -1,0 +1,97 @@
+{
+  "pair": {
+    "core": "4.3.4",
+    "pro": "4.3.1"
+  },
+  "format": 17,
+  "classic_result": "PASS",
+  "loop_css": {
+    "native": {
+      "count": 1,
+      "hashes": [
+        "fd80f749fd55f5d5a58a7a666fc0502d37c28b5e76212c9156aee8aa8917ba6c"
+      ]
+    },
+    "miss": {
+      "count": 1,
+      "hashes": [
+        "fd80f749fd55f5d5a58a7a666fc0502d37c28b5e76212c9156aee8aa8917ba6c"
+      ]
+    },
+    "hit-random": {
+      "count": 1,
+      "hashes": [
+        "fd80f749fd55f5d5a58a7a666fc0502d37c28b5e76212c9156aee8aa8917ba6c"
+      ]
+    },
+    "other-page-hit": {
+      "count": 1,
+      "hashes": [
+        "fd80f749fd55f5d5a58a7a666fc0502d37c28b5e76212c9156aee8aa8917ba6c"
+      ]
+    },
+    "other-page-native": {
+      "count": 1,
+      "hashes": [
+        "fd80f749fd55f5d5a58a7a666fc0502d37c28b5e76212c9156aee8aa8917ba6c"
+      ]
+    },
+    "phone": {
+      "count": 1,
+      "hashes": [
+        "fd80f749fd55f5d5a58a7a666fc0502d37c28b5e76212c9156aee8aa8917ba6c"
+      ]
+    }
+  },
+  "header_loop_1635": {
+    "native": 150,
+    "existing": 150,
+    "miss": 150,
+    "hit-random": 0,
+    "other-page-hit": 0,
+    "other-page-native": 150,
+    "phone": 0
+  },
+  "same_page_inline_css_parity": true,
+  "cross_page_inline_css_parity": true,
+  "browser": {
+    "pair": [
+      "4.3.4",
+      "4.3.1"
+    ],
+    "desktop_miss": {
+      "header_loops": 150,
+      "stored": 6,
+      "loop_css_count": 1
+    },
+    "desktop_hit": {
+      "header_loops": 0,
+      "hits": 6,
+      "cached_original_widgets": 0,
+      "loop_css_count": 1
+    },
+    "checks": [
+      "Desktop menu opens on miss and hit",
+      "Positioning tab switches on miss and hit",
+      "Cached menu link navigated to /solution/positioning/",
+      "390px mobile menu opens and closes",
+      "390px mobile search opens and closes"
+    ],
+    "javascript_errors": [],
+    "viewport_reset": true,
+    "limits": "390px browser check is responsive viewport, not an iPhone User-Agent; actual phone server visibility was tested independently by origin request."
+  },
+  "restoration": {
+    "pair": [
+      "4.3.3",
+      "4.3.1"
+    ],
+    "settings_documents_unchanged": true,
+    "cache_metadata_restored": true,
+    "updater_cron_restored": true,
+    "element_cache": "disable",
+    "generated_files_restored": true
+  },
+  "generated_archive_comparison": "tar -df: zero differences",
+  "temporary_observers_removed": true
+}

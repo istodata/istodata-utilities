@@ -472,14 +472,14 @@ if (!class_exists('IU_Query_Posts_Widget')) {
                     $this->add_render_attribute($attr_key, 'aria-current', 'page');
                 }
 
-                echo '<article class="iu-query-posts__item" role="listitem">';
+                echo '<div class="iu-query-posts__item" role="listitem">';
                 echo '<a ' . $this->get_render_attribute_string($attr_key) . '>';
                 echo '<span class="iu-query-posts__title">' . esc_html(get_the_title()) . '</span>';
                 if ($show_date) {
                     echo '<time class="iu-query-posts__date" datetime="' . esc_attr(get_the_date(DATE_W3C)) . '">' . esc_html(get_the_date()) . '</time>';
                 }
                 echo '</a>';
-                echo '</article>';
+                echo '</div>';
             }
 
             if ($this->should_render_extra_link($settings) && isset($settings['extra_link_position']) && $settings['extra_link_position'] === 'last') {
@@ -611,11 +611,11 @@ if (!class_exists('IU_Query_Posts_Widget')) {
             $this->add_render_attribute('extra_link', 'class', 'iu-query-posts__link iu-query-posts__link--extra');
             $this->add_link_attributes('extra_link', $settings['extra_link_url']);
 
-            echo '<article class="iu-query-posts__item iu-query-posts__item--extra" role="listitem">';
+            echo '<div class="iu-query-posts__item iu-query-posts__item--extra" role="listitem">';
             echo '<a ' . $this->get_render_attribute_string('extra_link') . '>';
             echo '<span class="iu-query-posts__title">' . esc_html($settings['extra_link_text']) . '</span>';
             echo '</a>';
-            echo '</article>';
+            echo '</div>';
         }
 
         private function render_editor_notice($message) {

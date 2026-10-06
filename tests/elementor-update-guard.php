@@ -102,7 +102,8 @@ function extracted($plugin, $version) {
 $matrix = array(
     array('4.3.3', '4.3.0', 'elementor-pro/elementor-pro.php', '4.3.1', true, true),
     array('4.3.2', '4.3.1', 'elementor/elementor.php', '4.3.3', true, true),
-    array('4.3.3', '4.3.1', 'elementor/elementor.php', '4.3.4', false, false),
+    array('4.3.3', '4.3.1', 'elementor/elementor.php', '4.3.4', true, true),
+    array('4.3.4', '4.3.1', 'elementor/elementor.php', '4.3.5', false, false),
     array('4.3.3', '4.3.1', 'elementor-pro/elementor-pro.php', '4.3.2', false, false),
     // New patches used to pass the open-ended range; they now require a Kit compatibility release.
     array('4.3.2', '4.3.0', 'elementor/elementor.php', '4.3.3', false, false),
@@ -268,6 +269,9 @@ foreach (array(false, true) as $network) {
     $item = update_item($plugin, '4.4.0');
     ob_start(); IU_Elementor_Update_Guard::update_message($plugin, $item); $row = ob_get_clean();
     check(strpos($row, $parent . '?page=iu-elementor-compatibility') !== false, 'Blocked update retains compatibility link');
+    ob_start(); IU_Elementor_Update_Guard::notices(); $global_notice = ob_get_clean();
+    check(strpos($global_notice, 'η ενημέρωση μπλοκάρεται') === false, 'Blocked available update does not create a global admin banner');
+    check(strpos($row, 'η ενημέρωση μπλοκάρεται') !== false, 'Blocked available update keeps its plugin-row warning');
     ob_start(); call_user_func($callback); $screen = ob_get_clean();
     check(strpos($screen, 'iu_elementor_update_override') !== false && strpos($screen, '_wpnonce') !== false, 'Linked screen retains protected override form');
     $cap = $network ? 'manage_network_plugins' : 'manage_options'; $caps[$cap] = false;

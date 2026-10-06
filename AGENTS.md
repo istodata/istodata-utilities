@@ -19,6 +19,46 @@ Instructions for Codex agents working on the ISTODATA Kit plugin.
 5. Create a local test zip when the user wants to test the plugin manually in WordPress.
 6. Do not create GitHub tags, releases, commits, or pushes unless the user explicitly says the tested change is ready for release.
 
+## Locked Product Decisions — Advanced Elements Cache
+
+Confirmed by the user on 2026-10-06. Read this section before changing cache
+eligibility, variants or acceptance tests. These are product decisions, not
+claims that a particular implementation or Elementor version has passed QA.
+
+- Support both Classic and Atomic elements, including Atomic Loop, within the
+  exact compatibility declarations in `includes/elementor-compatibility.php`.
+  Do not abandon Atomic support or introduce different blanket eligibility
+  rules without a new user decision.
+- Cache is opt-in per element, default OFF, with a default duration of seven
+  days. Preserve explicitly saved durations. Creation is lazy on real requests;
+  no preload. A hit must bypass the original widget and its loops before render.
+- Eligible logged-in frontend requests use fragment cache, including shared
+  reuse with anonymous requests. Login alone is not a bypass reason. Elementor
+  editor and preview remain bypassed; concrete private/session-dependent
+  content and unsafe contexts still require protection.
+- Ordinary unknown URL parameters neither bypass cache nor create a new
+  fragment variant merely because they are present. This applies to Classic
+  and Atomic elements. Preserve explicit handling of parameters that actually
+  change rendering or identify editor/preview/private contexts.
+- When the administrator opts an element into shared caching, they knowingly
+  accept identical cached HTML across pages, including frozen WordPress menu
+  active classes and `aria-current`. This is not a release blocker and must not
+  trigger automatic rejection or a page-specific key solely to preserve menu
+  highlighting. This decision supersedes the earlier choice to preserve the
+  active indication by caching only two dropdowns. It does not authorize
+  sharing private user data or silently removing existing variants required
+  by an element's supported rendering context.
+- Preserve device visibility and separate device/WPML language variants.
+  Hidden elements must not execute or be replayed on the wrong device. Keep
+  native Elementor Element Cache disabled on metrica.
+- Distinguish accepted shared-content behavior from technical failures such
+  as lost/reordered assets, incorrect interactions or unreplayed side effects.
+  Test reports must apply these decisions rather than reopen them implicitly.
+- A later explicit user decision takes precedence. When a locked decision
+  changes, update this section and mark contrary historical findings as
+  superseded; keep technical evidence separate. Do not treat staging approval
+  as authorization for production installation or a release.
+
 ## Changelog
 
 - Add unreleased work under an `## Unreleased` heading at the top of `CHANGELOG.md`.

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.23.0 - 2026-10-06
+
+- Improve: Accept the explicitly reviewed Elementor 4.3.4 / Pro 4.3.1 pair for the Kit cache, device visibility and Atomic Interactions adapters.
+
+- Fix: Replay Classic loop template inline CSS through Elementor Pro's native printer on fragment hits, preserving its once-per-request state for later uncached loops. Bypass fragments when prerequisite loop CSS state cannot be verified.
+- Docs: Record the agreed Classic/Atomic element cache policies in AGENTS.md, including logged-in requests, ordinary URL parameters and knowingly shared menu HTML across pages.
+- Fix: Preserve native CSS/JS enqueue order in element cache hits, including template styles and widget dependencies. Existing fragments are rebuilt lazily with the corrected asset manifest.
+- Fix: Allow eligible Atomic fragments to reuse the same cache for logged-in frontend visitors and unrelated URL parameters, matching Classic elements. Preserve editor/preview and concrete privacy/context bypasses.
+- Fix: Show blocked Elementor update warnings only beneath the affected plugin's update row, without repeating them across the WordPress admin.
+- New: Extend optional Advanced Element Cache and Device Visibility to Atomic elements, including the new Loop, for Elementor 4.3.3 or 4.3.4 / Pro 4.3.1. Cache defaults OFF with a 7-day duration; page/device/language variants and conservative context checks preserve native rendering when reuse is unsafe.
+- Fix: Preserve the Atomic Interactions breakpoint fix's script order with WP Rocket Delay/Defer JS by excluding its Motion/shared/Pro chain and inline config/patch when the supported fix is active.
+- Fix: Use generic list-item wrappers in Query Posts, including the extra link, to avoid the invalid ARIA role on article elements while preserving existing CSS classes and list semantics.
+- Fix: Expose the Query Posts extra link text and URL to WPML's translation editor using the correct simple-widget field paths.
+
 ## 2.22.4 - 2026-10-04
 
 - Fix: Register the Query Posts widget's Extra Link URL with WPML for link translation.

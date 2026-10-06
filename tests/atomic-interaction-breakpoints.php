@@ -41,6 +41,7 @@ $settings = array('optimizations' => array('elementor_atomic_interaction_breakpo
 $enqueued = !in_array($case, array('no-handle', 'late'), true);
 $calls = array();
 $hooks = array();
+$filters = array();
 $allow_inline = $case !== 'retry';
 function get_option($name, $default = array()) { return $GLOBALS['settings']; }
 function is_admin() { return $GLOBALS['case'] === 'admin'; }
@@ -55,6 +56,7 @@ function wp_add_inline_script($handle, $script, $position) {
     return $GLOBALS['allow_inline'];
 }
 function add_action($hook, $callback, $priority = 10) { $GLOBALS['hooks'][] = array($hook, $callback, $priority); }
+function add_filter($hook, $callback, $priority = 10) { $GLOBALS['filters'][$hook] = $callback; }
 function check($condition, $message) { if (!$condition) { throw new RuntimeException($message); } }
 require IU_PLUGIN_PATH . 'includes/elementor-atomic-interaction-breakpoints.php';
 iu_init_atomic_interaction_breakpoints();
@@ -68,6 +70,27 @@ iu_attach_atomic_interaction_breakpoints();
 iu_attach_atomic_interaction_breakpoints();
 $expected = in_array($case, $allowed_cases, true) ? 1 : ($case === 'retry' ? 2 : 0);
 check(count($calls) === $expected, 'OFF/version/admin/handle guards and once-only successful attach');
+check(count($filters) === 5, 'Rocket filters register once');
+$protected = in_array($case, $allowed_cases, true) || in_array($case, array('done', 'retry'), true);
+foreach ($filters as $hook => $callback) {
+    $patterns = $callback(array('existing-pattern'));
+    check($patterns[0] === 'existing-pattern', 'Preserve other Rocket exclusions');
+    $extra = $hook === 'rocket_delay_js_exclusions' ? 5 :
+        (in_array($hook, array('rocket_exclude_defer_js', 'rocket_exclude_js'), true) ? 3 : 2);
+    check(count($patterns) === ($protected ? 1 + $extra : 1), 'Feature/version/page guards: ' . $hook);
+    check($callback($patterns) === $patterns, 'Exclusions remain unique');
+    if ($protected && $hook === 'rocket_delay_js_exclusions') {
+        foreach (array('/elementor/assets/lib/motion/motion.min.js',
+            '/elementor/assets/js/interactions-shared-utils.min.js',
+            '/elementor-pro/assets/js/interactions-pro.min.js') as $url) {
+            check(count(array_filter($patterns, function ($pattern) use ($url) {
+                return strpos($url, $pattern) !== false;
+            })) === 1, 'Vendor chain URL match');
+        }
+        check(in_array('iuAtomicBreakpointFix', $patterns, true)
+            && in_array('ElementorInteractionsConfig', $patterns, true), 'Protect inline patch/config');
+    }
+}
 if ($expected) {
     check($calls[0][2] === 'before', 'Must precede Pro capture');
     check($calls[0][1] === file_get_contents(IU_PLUGIN_PATH . 'assets/js/elementor-atomic-interaction-breakpoints.js'), 'Exact plugin JS payload');

@@ -18,6 +18,46 @@ function iu_init_atomic_interaction_breakpoints() {
     add_action('wp_enqueue_scripts', 'iu_attach_atomic_interaction_breakpoints', 1000);
     add_action('wp_print_footer_scripts', 'iu_attach_atomic_interaction_breakpoints', 1);
     add_action('admin_notices', 'iu_atomic_interaction_breakpoints_notice');
+    add_filter('rocket_delay_js_exclusions', 'iu_atomic_rocket_delay_exclusions');
+    add_filter('rocket_exclude_defer_js', 'iu_atomic_rocket_file_exclusions');
+    add_filter('rocket_exclude_js', 'iu_atomic_rocket_file_exclusions');
+    add_filter('rocket_defer_inline_exclusions', 'iu_atomic_rocket_inline_exclusions');
+    add_filter('rocket_excluded_inline_js_content', 'iu_atomic_rocket_inline_exclusions');
+}
+
+// Protect the entire standalone chain so the inline patch precedes Pro capture.
+function iu_atomic_rocket_exclusions($patterns, $inline = false, $files = false) {
+    $settings = get_option('istodata_utilities_settings', array());
+    if (empty($settings['optimizations']['elementor_atomic_interaction_breakpoints'])
+        || is_admin() || !iu_atomic_interaction_breakpoints_supported()
+        || (!wp_script_is('elementor-interactions-pro', 'enqueued')
+            && !wp_script_is('elementor-interactions-pro', 'done'))) {
+        return $patterns;
+    }
+    $patterns = is_array($patterns) ? $patterns : array();
+    if ($files) {
+        $patterns = array_merge($patterns, array(
+            '/elementor/assets/lib/motion/motion',
+            '/elementor/assets/js/interactions-shared-utils',
+            '/elementor-pro/assets/js/interactions-pro',
+        ));
+    }
+    if ($inline) {
+        $patterns = array_merge($patterns, array('ElementorInteractionsConfig', 'iuAtomicBreakpointFix'));
+    }
+    return array_values(array_unique($patterns));
+}
+
+function iu_atomic_rocket_delay_exclusions($patterns) {
+    return iu_atomic_rocket_exclusions($patterns, true, true);
+}
+
+function iu_atomic_rocket_file_exclusions($patterns) {
+    return iu_atomic_rocket_exclusions($patterns, false, true);
+}
+
+function iu_atomic_rocket_inline_exclusions($patterns) {
+    return iu_atomic_rocket_exclusions($patterns, true, false);
 }
 
 function iu_attach_atomic_interaction_breakpoints() {

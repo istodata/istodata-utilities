@@ -1,0 +1,19 @@
+{
+  "path": "H:\\\u03a4\u03bf Drive \u03bc\u03bf\u03c5\\Development\\ISTODATA PLUGINS\\istodata-utilities.zip",
+  "version": "2.23.0",
+  "build": "Release distribution ZIP",
+  "files": 77,
+  "bytes": 271069,
+  "sha256": "315ce86a540e2f881293f11dd997f081ae09accfadec744c9542ab1c0fc92334",
+  "single_plugin_folder": true,
+  "main_file_correct": true,
+  "forward_slashes": true,
+  "development_files_excluded": true,
+  "atomic_adapter_included": true,
+  "archive_matches_local_sources": true,
+  "crc_check": "PASS",
+  "php": "Portable PHP 8.5.11; not in PATH",
+  "compatibility_tests": "PASS",
+  "vendor_motion_runtime_cases": 17,
+  "full_package_staging": "PASS"
+}

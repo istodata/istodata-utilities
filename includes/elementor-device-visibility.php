@@ -126,7 +126,8 @@ function iu_elementor_prune_hidden_elements($elements, $is_phone) {
         }
 
         $type = isset($element['elType']) ? $element['elType'] : '';
-        if (('widget' === $type || 'container' === $type) &&
+        if (('widget' === $type || 'container' === $type ||
+                (class_exists('IU_Elementor_Fragment_Atomic') && IU_Elementor_Fragment_Atomic::node($element))) &&
             iu_elementor_device_visibility_hides($element['settings'] ?? [], $is_phone)) {
             continue;
         }
@@ -167,9 +168,9 @@ function iu_elementor_device_visibility_hides($settings, $is_phone) {
         return false;
     }
 
-    return $is_phone
-        ? (($settings['iu_hide_on_phone'] ?? null) === 'yes')
-        : (($settings['iu_hide_on_desktop_tablet'] ?? null) === 'yes');
+    $value = $settings[$is_phone ? 'iu_hide_on_phone' : 'iu_hide_on_desktop_tablet'] ?? null;
+    return $value === 'yes' || (is_array($value) && ($value['$$type'] ?? '') === 'boolean' &&
+        empty($value['disabled']) && ($value['value'] ?? null) === true);
 }
 
 /**

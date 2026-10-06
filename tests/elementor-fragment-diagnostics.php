@@ -9,6 +9,7 @@ function get_post_meta(){return json_encode([['id'=>'item','widgetType'=>'headin
 function iu_elementor_fragment_enabled(){return $GLOBALS['global']??true;}
 function iu_elementor_feature_supported(){return true;}function wp_date($f,$t){return date($f,$t);}
 class IU_Elementor_Fragment_Graph {static function inspect(){return false;}static function rejection(){return ['reason'=>'dynamic-context'];}}
+require dirname(__DIR__).'/includes/elementor-fragment-cache-atomic.php';
 require dirname(__DIR__).'/includes/elementor-fragment-cache-diagnostics.php';
 IU_Elementor_Fragment_Diagnostics::record(30,'item','hit');IU_Elementor_Fragment_Diagnostics::flush();
 if(!empty($GLOBALS['options']))throw new RuntimeException('Anonymous telemetry');
