@@ -25,6 +25,7 @@ define('LOGGED_IN_COOKIE', 'wordpress_logged_in_test');
 function is_preview() { return $GLOBALS['preview']; }
 function is_customize_preview() { return $GLOBALS['customizer'] ?? false; }
 function is_feed() { return $GLOBALS['feed'] ?? false; }
+function wp_is_rest_endpoint() { return $GLOBALS['internal_rest'] ?? false; }
 function is_search() { return $GLOBALS['search'] ?? false; }
 function is_404() { return $GLOBALS['not_found'] ?? false; }
 function wp_is_mobile() { return true; }
@@ -47,6 +48,10 @@ function expect_request($want, $name) {
     }
 }
 expect_request(true, 'anonymous clean');
+$GLOBALS['internal_rest'] = true;
+expect_request(false, 'internal REST dispatch without REST_REQUEST constant');
+$GLOBALS['internal_rest'] = false;
+expect_request(true, 'frontend eligibility restored after internal REST dispatch');
 $_GET = array('elementor-preview' => '30');
 expect_request(false, 'preview request before initialization or nested post switch');
 $_GET = array('elementor-preview' => '');

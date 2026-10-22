@@ -142,6 +142,9 @@ final class IU_Elementor_Fragment_Cache {
             !empty($_SERVER['HTTP_AUTHORIZATION']) || !empty($_SERVER['PHP_AUTH_USER']) ||
             empty($_SERVER['HTTP_USER_AGENT']) || empty($_SERVER['REQUEST_URI']) ||
             (defined('REST_REQUEST') && REST_REQUEST) ||
+            // Internal rest_do_request() dispatches do not define REST_REQUEST.
+            // Elementor also suppresses post CSS in this rendering context.
+            (function_exists('wp_is_rest_endpoint') && wp_is_rest_endpoint()) ||
             (defined('DOING_AJAX') && DOING_AJAX) ||
             (defined('WP_CLI') && WP_CLI) || is_preview() ||
             (function_exists('is_customize_preview') && is_customize_preview()) ||

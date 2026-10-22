@@ -3,6 +3,7 @@
 define('ABSPATH',__DIR__.'/');
 function add_action(){}function add_filter(){}function __($s){return $s;}
 function current_user_can(){return $GLOBALS['admin']??false;}function is_admin(){return false;}
+function wp_is_rest_endpoint(){return $GLOBALS['internal_rest']??false;}
 function get_locale(){return 'el';}function get_option($k,$d=[]){return $GLOBALS['options'][$k]??$d;}
 function update_option($k,$v,$autoload){if($autoload!==false)throw new RuntimeException('Autoload');$GLOBALS['options'][$k]=$v;$GLOBALS['writes']=($GLOBALS['writes']??0)+1;}
 function get_post_meta(){return json_encode([['id'=>'item','widgetType'=>'heading','settings'=>['iu_fragment_cache'=>'yes']]]);}
@@ -27,4 +28,7 @@ if($GLOBALS['writes']!==$writes)throw new RuntimeException('Observation write wh
 $GLOBALS['global']=true;$_GET['elementor-preview']='30';
 IU_Elementor_Fragment_Diagnostics::record(30,'preview','bypass');IU_Elementor_Fragment_Diagnostics::flush();
 if($GLOBALS['writes']!==$writes)throw new RuntimeException('Observation write in native preview');
+unset($_GET['elementor-preview']);$GLOBALS['internal_rest']=true;
+IU_Elementor_Fragment_Diagnostics::record(30,'internal-rest','bypass');IU_Elementor_Fragment_Diagnostics::flush();
+if($GLOBALS['writes']!==$writes)throw new RuntimeException('Observation write during internal REST dispatch');
 echo "PASS admin-only diagnostics, structural rejection, configured/global distinction, OFF inactivity, throttle and 50-row bound\n";

@@ -19,7 +19,8 @@ foreach(array(array(true,false,true,true),array(false,true,true,true),array(fals
 }
 check(iu_elementor_feature_supported('fragment_atomic'),'Tested installed pair missing');
 check(iu_elementor_feature_supported('fragment_atomic',array('core'=>'4.3.4','pro'=>'4.3.1')),'Reviewed new pair missing');
-foreach(array(array('4.3.5','4.3.1'),array('4.3.3','4.3.2'),array('4.2.3','4.2.2'),array('4.3.3',null)) as $pair){
+check(iu_elementor_feature_supported('fragment_atomic',array('core'=>'4.3.5','pro'=>'4.3.2')),'Reviewed final pair missing');
+foreach(array(array('4.3.5','4.3.1'),array('4.3.4','4.3.2'),array('4.3.3','4.3.2'),array('4.2.3','4.2.2'),array('4.3.3',null)) as $pair){
     check(!iu_elementor_feature_supported('fragment_atomic',array('core'=>$pair[0],'pro'=>$pair[1])),'Unreviewed pair accepted');
 }
 $GLOBALS['settings']=array('additional'=>array('elementor_device_visibility'=>true));$GLOBALS['experiment']=true;

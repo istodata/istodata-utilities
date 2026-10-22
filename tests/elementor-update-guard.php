@@ -104,6 +104,10 @@ $matrix = array(
     array('4.3.2', '4.3.1', 'elementor/elementor.php', '4.3.3', true, true),
     array('4.3.3', '4.3.1', 'elementor/elementor.php', '4.3.4', true, true),
     array('4.3.4', '4.3.1', 'elementor/elementor.php', '4.3.5', false, false),
+    array('4.3.4', '4.3.1', 'elementor-pro/elementor-pro.php', '4.3.2', false, false),
+    // Only a move completing the reviewed exact pair may pass; intermediates remain gated.
+    array('4.3.5', '4.3.1', 'elementor-pro/elementor-pro.php', '4.3.2', true, true),
+    array('4.3.4', '4.3.2', 'elementor/elementor.php', '4.3.5', true, true),
     array('4.3.3', '4.3.1', 'elementor-pro/elementor-pro.php', '4.3.2', false, false),
     // New patches used to pass the open-ended range; they now require a Kit compatibility release.
     array('4.3.2', '4.3.0', 'elementor/elementor.php', '4.3.3', false, false),

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.23.1 - 2026-10-16
+
+- Improve: Support the explicitly reviewed Elementor 4.3.5 / Pro 4.3.2 pair for Atomic Interactions, Advanced Elements Cache and Device Visibility. Other unlisted combinations remain guarded; existing cache scope and bypasses are preserved.
+- Fix: Bypass element fragment caching and frontend diagnostics during internal WordPress REST dispatches, where REST_REQUEST may be absent and Elementor suppresses post CSS. Resume normal frontend eligibility when dispatch ends.
+
 ## 2.23.0 - 2026-10-06
 
 - Improve: Accept the explicitly reviewed Elementor 4.3.4 / Pro 4.3.1 pair for the Kit cache, device visibility and Atomic Interactions adapters.

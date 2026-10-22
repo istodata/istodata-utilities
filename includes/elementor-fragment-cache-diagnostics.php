@@ -50,6 +50,7 @@ final class IU_Elementor_Fragment_Diagnostics {
     private static function can_observe() {
         return !(defined('WP_CLI') && WP_CLI) && function_exists('current_user_can') &&
             current_user_can('manage_options') && iu_elementor_fragment_enabled() && function_exists('is_admin') && !is_admin() && !(defined('REST_REQUEST') && REST_REQUEST) &&
+            !(function_exists('wp_is_rest_endpoint') && wp_is_rest_endpoint()) &&
             !(defined('DOING_AJAX') && DOING_AJAX) && !isset($_GET['elementor-preview']) &&
             !(function_exists('is_preview') && is_preview());
     }
