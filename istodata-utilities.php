@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.23.3
+Version: 2.23.4
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,11 +11,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.23.3');
+define('IU_PLUGIN_VERSION', '2.23.4');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
-// Load even before Elementor: the updater must enforce configured feature policies.
+// Register per-row compatibility information; WordPress owns update decisions.
 require_once IU_PLUGIN_PATH . 'includes/elementor-update-guard.php';
 IU_Elementor_Update_Guard::boot();
 

@@ -17,7 +17,6 @@ function iu_init_atomic_interaction_breakpoints() {
     $initialized = true;
     add_action('wp_enqueue_scripts', 'iu_attach_atomic_interaction_breakpoints', 1000);
     add_action('wp_print_footer_scripts', 'iu_attach_atomic_interaction_breakpoints', 1);
-    add_action('admin_notices', 'iu_atomic_interaction_breakpoints_notice');
     add_filter('rocket_delay_js_exclusions', 'iu_atomic_rocket_delay_exclusions');
     add_filter('rocket_exclude_defer_js', 'iu_atomic_rocket_file_exclusions');
     add_filter('rocket_exclude_js', 'iu_atomic_rocket_file_exclusions');
@@ -77,15 +76,8 @@ function iu_attach_atomic_interaction_breakpoints() {
 }
 
 function iu_atomic_interaction_breakpoints_notice() {
-    $settings = get_option('istodata_utilities_settings', array());
-    if (empty($settings['optimizations']['elementor_atomic_interaction_breakpoints'])
-        || iu_atomic_interaction_breakpoints_supported() || !current_user_can('manage_options')) {
-        return;
-    }
-    echo '<div class="notice notice-warning"><p>';
-    echo esc_html('ISTODATA Kit: η διόρθωση Atomic Interactions παρακάμπτεται στο εγκατεστημένο ζεύγος.');
+    // Retained callable; the shared notice aggregates affected active features once.
     if (class_exists('IU_Elementor_Update_Guard')) {
-        echo ' <a href="' . esc_url(IU_Elementor_Update_Guard::page_url()) . '">Συμβατότητα / ενημέρωση ζεύγους</a>';
+        IU_Elementor_Update_Guard::notices();
     }
-    echo ' <a href="https://github.com/elementor/elementor/issues/35831" target="_blank" rel="noopener noreferrer">#35831</a></p></div>';
 }

@@ -77,12 +77,43 @@ function iu_elementor_compatibility_registry() {
     );
 }
 
-function iu_elementor_runtime_pair() {
-    if (class_exists('IU_Elementor_Update_Guard', false) && IU_Elementor_Update_Guard::uses_installed_pair()) {
-        return IU_Elementor_Update_Guard::installed_pair();
+function iu_elementor_installed_pair() {
+    if (defined('WP_PLUGIN_DIR') && function_exists('get_file_data')) {
+        $pair = array('core' => null, 'pro' => null);
+        foreach (array('core' => 'elementor/elementor.php', 'pro' => 'elementor-pro/elementor-pro.php') as $key => $plugin) {
+            $file = WP_PLUGIN_DIR . '/' . $plugin;
+            if (is_file($file)) {
+                $data = get_file_data($file, array('Version' => 'Version'), 'plugin');
+                $pair[$key] = $data['Version'];
+            }
+        }
+        return $pair;
     }
     return array('core' => defined('ELEMENTOR_VERSION') ? ELEMENTOR_VERSION : null,
         'pro' => defined('ELEMENTOR_PRO_VERSION') ? ELEMENTOR_PRO_VERSION : null);
+}
+
+function iu_elementor_runtime_pair($refresh = false) {
+    // Read headers once per request; native post-install observation refreshes them
+    // after each step, without blocking updates or trusting stale loaded constants.
+    static $pairs = array();
+    $context = (function_exists('get_current_network_id') ? get_current_network_id() : 0) . ':' .
+        (function_exists('get_current_blog_id') ? get_current_blog_id() : 0);
+    if ($refresh) $pairs = array(); // Plugin files are shared across switched sites.
+    if (!isset($pairs[$context])) {
+        $pair = iu_elementor_installed_pair();
+        // Preserve the shipped "without Pro" static path when Pro is installed
+        // but inactive. Advisories still use the raw installed counterpart.
+        if (defined('WP_PLUGIN_DIR') && function_exists('get_site_option')) {
+            $active = (array) get_option('active_plugins', array());
+            $network = (array) get_site_option('active_sitewide_plugins', array());
+            foreach (array('core' => 'elementor/elementor.php', 'pro' => 'elementor-pro/elementor-pro.php') as $key => $plugin) {
+                if (!in_array($plugin, $active, true) && !isset($network[$plugin])) $pair[$key] = null;
+            }
+        }
+        $pairs[$context] = $pair;
+    }
+    return $pairs[$context];
 }
 
 function iu_elementor_version_matches($version, $rule) {
@@ -124,7 +155,7 @@ function iu_elementor_compatibility_description($feature) {
         '. Ελεγμένοι: ' . implode('; ', $tested) . '. Κάθε νέα έκδοση απαιτεί έλεγχο και ενημέρωση συμβατότητας του Kit.';
 }
 
-/** Global switch alone determines updater protection; no saved-data scan. */
+/** Saved opt-in is preserved when runtime compatibility temporarily bypasses caching. */
 function iu_elementor_fragment_enabled() {
     $settings = get_option('istodata_utilities_settings', array());
     return !empty($settings['optimizations']['elementor_fragment_cache']);
@@ -136,8 +167,9 @@ function iu_elementor_active_features() {
         'fragment' => iu_elementor_fragment_enabled());
     $plugin = class_exists('Elementor\\Plugin') ? \Elementor\Plugin::$instance : null;
     $device = !isset($settings['additional']['elementor_device_visibility']) || !empty($settings['additional']['elementor_device_visibility']);
-    if (($active['fragment'] || $device) && iu_elementor_feature_supported('fragment_atomic') && $plugin && isset($plugin->experiments) &&
-        class_exists('Elementor\\Modules\\AtomicWidgets\\Module') &&
+    if (($active['fragment'] || $device) && $plugin && isset($plugin->experiments) &&
+        is_callable(array($plugin->experiments, 'is_feature_active')) &&
+        defined('Elementor\\Modules\\AtomicWidgets\\Module::EXPERIMENT_NAME') &&
         $plugin->experiments->is_feature_active(\Elementor\Modules\AtomicWidgets\Module::EXPERIMENT_NAME)) {
         $active['fragment_atomic'] = true;
     }

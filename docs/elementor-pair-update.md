@@ -1,5 +1,7 @@
 # Approved Elementor / Pro update flow
 
+> Superseded by the explicit 2026-10-26 product decision: native updates are no longer compatibility-blocked and the special mutation flow is retired. This document records historical 2.23.2 behavior/QA, not the current workflow. See elementor-native-update-policy.md. Historical technical evidence remains valid within its original limits.
+
 The normal WordPress updater checks each installed intermediate pair. Selecting both updates does not authorize an unsupported intermediate pair. ISTODATA Kit therefore provides a separate, explicitly confirmed sequential update form through its compatibility screen.
 
 The form pins the installed pair, available target versions and package URLs. The destination must be accepted by every relevant adapter in the central exact-pair registry. A capability check, user/session nonce, confirmation checkbox and native request lock protect the flow. Request-local authorization is bound to the specific upgrader and step; it does not permit automatic or cron bypasses. Existing single-plugin override controls remain available under advanced details.

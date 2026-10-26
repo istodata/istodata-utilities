@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.23.4 - 2026-10-26
+
+- Improve: Let native WordPress and vendor checks govern Elementor / Pro updates. Replace Kit update blocking and special update forms with concise per-plugin compatibility advice; retire the old mutation endpoints.
+- Improve: Keep affected Kit features bypassed on unsupported installed versions, preserve their saved settings, and restore them automatically when supported. Combine runtime warnings and retain all previously accepted compatibility declarations and paths.
+
 ## 2.23.3 - 2026-10-26
 
 - Fix: Refresh Kit release metadata during an authorized WordPress Updates “Check again” action, with bounded retries and a clear warning when GitHub cannot be refreshed. Preserve routine caching and last-known-good update information.

@@ -98,9 +98,10 @@ if (!$fragment_supported) {
 }
 require IU_PLUGIN_PATH . 'includes/elementor-update-guard.php';
 ob_start(); IU_Elementor_Update_Guard::notices(); $notice = ob_get_clean();
-expect((strpos($notice, 'η ενεργή λειτουργία παρακάμπτεται') !== false) === !$fragment_supported, 'Fragment unsupported runtime notice');
+expect(($notice !== '') === !($fragment_supported && iu_atomic_interaction_breakpoints_supported()), 'One combined unsupported-feature notice');
+expect(substr_count($notice, 'notice-warning') <= 1, 'Runtime features aggregate into one notice');
 ob_start(); iu_atomic_interaction_breakpoints_notice(); $notice = ob_get_clean();
-expect(($notice !== '') === !in_array($argv[1], array('atomic', 'both-patch', 'accepted-new', 'accepted-current'), true), 'Atomic unsupported runtime notice');
+expect($notice === '', 'Legacy Atomic notice does not duplicate shared notice');
 $authorized = false;
 ob_start(); IU_Elementor_Update_Guard::notices(); iu_atomic_interaction_breakpoints_notice(); $notice = ob_get_clean();
 expect($notice === '', 'Runtime notices restricted to administrators');

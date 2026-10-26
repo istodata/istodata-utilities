@@ -149,7 +149,7 @@ Do not add hardcoded GitHub personal access tokens to the distributed plugin. Pu
 
 ## Verification
 
-- `includes/elementor-compatibility.php` is the single source of explicitly accepted Elementor/Pro version pairs and separate tested evidence for Atomic Interactions and Fragment Cache. Runtime guards, adapters, notices, settings UI and updater gates must consume it; never add independent version rules in PHP/JS, an open-ended range or a filter that widens support. The current schema accepts exact versions only.
+- `includes/elementor-compatibility.php` is the single source of explicitly accepted Elementor/Pro version pairs and separate tested evidence for Atomic Interactions and Fragment Cache. Runtime guards, adapters, advisory notices and settings UI must consume it; never add independent version rules in PHP/JS, an open-ended range or a filter that widens support. The current schema accepts exact versions only.
 - Every new Elementor/Pro version, including a patch that does not change feature code, requires review, an explicitly updated compatibility declaration and a Kit release before it can be accepted. Do not infer approval from the minor series, mocked version-policy tests or a daily monitor. Record actually tested core/Pro pairs, evidence and acceptance limits separately from approved pairs.
 - Before changing compatibility or releasing, run `php tests/elementor-compatibility.php`, `php tests/elementor-update-guard.php`, and `node tests/elementor-compatibility-drift.cjs`; inspect runtime files for old/scattered guards. Only fixtures/tests/docs may contain reference version declarations outside the registry.
 - The daily compatibility monitor is read-only. It must not change the registry, install/update/purge, commit/push, bump versions or create a release. Notify only on actionable compatibility evidence or a required user decision.
@@ -157,3 +157,12 @@ Do not add hardcoded GitHub personal access tokens to the distributed plugin. Pu
 - Run `php -l istodata-utilities.php` when PHP is available.
 - If PHP is not available in PATH, say so explicitly.
 - Check the final changed files and report unrelated pre-existing working tree changes without modifying them.
+
+## Compatibility Product Decision — 2026-10-26
+
+- Elementor/Pro manual, bulk, automatic and ZIP updates follow native WordPress/vendor decisions. Kit compatibility must not block them. This supersedes the old compatibility updater gates, override grants and special pair-update workflow; retire their mutation endpoints and forms safely. Preserve the Kit metadata Check again fix.
+- Runtime compatibility remains fail-closed per sensitive Kit feature. An unsupported installed combination bypasses only affected features, preserves saved settings/durations/IDs/output contracts, and automatically restores them when supported. Preserve documented Pro dependencies and core-only limits. All other locked cache decisions remain in force.
+- Available-update advice belongs only in each affected Core/Pro native update row, works even when settings are OFF, and derives from actual installed files, available metadata and release-owned accepted registry declarations. Distinguish accepted target+counterpart, a destination needing both updates (intermediate unverified), and unverified targets with conditional affected-feature bypass. Tested evidence alone does not authorize a target. Do not claim whole-site/plugin safety.
+- Aggregate active unsupported features into one concise runtime notice; no global available-update warnings or special update-management UI. Keep the information screen read-only, with concise status and optional details.
+- Accepted declarations are additive: new compatibility releases must preserve every previously accepted exact pair/core-only path and its working runtime/API adapters. Do not replace an old declaration merely to accept a newer pair. Changes or withdrawal require specific evidence and a new explicit user decision. Preserve saved settings, controls, IDs and markup. Test all existing accepted combinations and affected consumers; report actual QA limits without inventing full browser coverage for older versions.
+- The read-only daily monitor must describe advisory/runtime compatibility, not claim that Kit blocks native updates. Do not change or create an automation merely because this product rule changed.
