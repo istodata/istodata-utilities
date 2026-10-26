@@ -51,10 +51,11 @@ function esc_html($value) { return htmlspecialchars($value, ENT_QUOTES, 'UTF-8')
 function esc_attr($value) { return esc_html($value); }
 function esc_url($value) { return esc_html($value); }
 function submit_button($text) { echo '<button>' . esc_html($text) . '</button>'; }
-class Plugin_Upgrader_Skin {
+class WP_Upgrader_Skin {
     public $options;
     public function __construct($options) { $this->options = $options + array('context' => false); }
 }
+class Plugin_Upgrader_Skin extends WP_Upgrader_Skin {}
 function request_filesystem_credentials($url, $type, $error, $context, $fields, $relaxed) {
     $GLOBALS['credential_form'] = array($url, $fields);
     return false;

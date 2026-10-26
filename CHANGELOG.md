@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.23.2 - 2026-10-26
+
+- Fix: Add an explicitly confirmed, sequential update flow for an approved Elementor / Pro destination when individual intermediate updates are blocked. Recheck packages, versions and installed files per step; stop on partial failure without accepting mixed pairs or claiming automatic rollback.
+- Improve: Keep blocked-update and runtime notices concise, linking to the coordinated update flow and detailed compatibility evidence.
+
 ## 2.23.1 - 2026-10-16
 
 - Improve: Support the explicitly reviewed Elementor 4.3.5 / Pro 4.3.2 pair for Atomic Interactions, Advanced Elements Cache and Device Visibility. Other unlisted combinations remain guarded; existing cache scope and bypasses are preserved.

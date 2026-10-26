@@ -78,6 +78,9 @@ function iu_elementor_compatibility_registry() {
 }
 
 function iu_elementor_runtime_pair() {
+    if (class_exists('IU_Elementor_Update_Guard', false) && IU_Elementor_Update_Guard::uses_installed_pair()) {
+        return IU_Elementor_Update_Guard::installed_pair();
+    }
     return array('core' => defined('ELEMENTOR_VERSION') ? ELEMENTOR_VERSION : null,
         'pro' => defined('ELEMENTOR_PRO_VERSION') ? ELEMENTOR_PRO_VERSION : null);
 }

@@ -30,9 +30,13 @@ function get_option($name, $default = false) {
 }
 function current_user_can($cap) { return $GLOBALS['authorized'] ?? true; }
 function is_network_admin() { return false; }
+function is_multisite() { return false; }
 function get_current_blog_id() { return 1; }
 function get_site_transient($name) { return (object) array('response' => array()); }
 function esc_html($value) { return htmlspecialchars($value, ENT_QUOTES, 'UTF-8'); }
+function esc_url($value) { return esc_html($value); }
+function admin_url($path) { return 'https://example.test/wp-admin/' . $path; }
+function network_admin_url($path) { return admin_url($path); }
 function apply_filters($hook, $value) { return $hook === 'iu_elementor_fragment_versions_supported' ? true : $value; }
 function expect($value, $message) { if (!$value) throw new RuntimeException($message); }
 require IU_PLUGIN_PATH . 'includes/elementor-atomic-interaction-breakpoints.php';

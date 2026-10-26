@@ -83,6 +83,9 @@ function iu_atomic_interaction_breakpoints_notice() {
         return;
     }
     echo '<div class="notice notice-warning"><p>';
-    echo esc_html('ISTODATA Kit: Η διόρθωση breakpoints στα Atomic Interactions είναι ενεργοποιημένη, αλλά δεν εφαρμόζεται στις εγκατεστημένες εκδόσεις. ' . iu_elementor_compatibility_description('atomic') . ' Ελέγξτε την επίσημη λύση του #35831 και απενεργοποιήστε την επιλογή όταν δεν χρειάζεται.');
+    echo esc_html('ISTODATA Kit: η διόρθωση Atomic Interactions παρακάμπτεται στο εγκατεστημένο ζεύγος.');
+    if (class_exists('IU_Elementor_Update_Guard')) {
+        echo ' <a href="' . esc_url(IU_Elementor_Update_Guard::page_url()) . '">Συμβατότητα / ενημέρωση ζεύγους</a>';
+    }
     echo ' <a href="https://github.com/elementor/elementor/issues/35831" target="_blank" rel="noopener noreferrer">#35831</a></p></div>';
 }
