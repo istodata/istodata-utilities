@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.23.2
+Version: 2.23.3
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.23.2');
+define('IU_PLUGIN_VERSION', '2.23.3');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -5149,6 +5149,9 @@ define('IU_PLUGIN_BASENAME', plugin_basename(__FILE__));
 add_filter('pre_set_site_transient_update_plugins', 'iu_check_for_plugin_update');
 add_filter('plugins_api', 'iu_plugin_api_call', 10, 3);
 add_action('upgrader_process_complete', 'iu_purge_update_cache', 10, 2);
+add_action('load-update-core.php', 'iu_manual_plugin_update_check', 1);
+add_action('admin_notices', 'iu_manual_plugin_update_notice');
+add_action('network_admin_notices', 'iu_manual_plugin_update_notice');
 
 add_filter('http_request_args', 'iu_http_request_args', 10, 2);
 
@@ -5180,32 +5183,89 @@ function iu_check_for_plugin_update($transient) {
     return $transient;
 }
 
-// Get remote version information from GitHub
-function iu_get_remote_version() {
-    // Check cache first
+// The native Check again link has no nonce. Trust the authenticated screen hook,
+// capability and network scope, never a public force-check parameter alone.
+function iu_is_manual_plugin_update_check() {
+    global $pagenow;
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    return current_filter() === 'load-update-core.php' && is_admin() && is_user_logged_in() &&
+        $pagenow === 'update-core.php' && $screen && $screen->base === 'update-core' &&
+        $screen->id === (is_network_admin() ? 'update-core-network' : 'update-core') &&
+        current_user_can('update_plugins') &&
+        (!is_multisite() || (is_network_admin() && current_user_can('manage_network_plugins'))) &&
+        !wp_doing_cron() && !wp_doing_ajax() && !(defined('WP_CLI') && WP_CLI) &&
+        !(defined('REST_REQUEST') && REST_REQUEST) &&
+        ($_SERVER['REQUEST_METHOD'] ?? '') === 'GET' && ($_GET['force-check'] ?? null) === '1' &&
+        (!isset($_GET['action']) || $_GET['action'] === 'upgrade-core');
+}
+
+function iu_manual_plugin_update_check() {
+    if (!iu_is_manual_plugin_update_check()) return;
+    iu_get_remote_version(true);
+    // Core may throttle wp_update_plugins() even on this screen. Refresh only
+    // our entry in its existing checked data, preserving other plugins/fields.
+    $updates = get_site_transient('update_plugins');
+    if (is_object($updates) && !empty($updates->checked)) {
+        set_site_transient('update_plugins', iu_check_for_plugin_update($updates));
+    }
+}
+
+function iu_manual_plugin_update_notice() {
+    $status = $GLOBALS['iu_manual_plugin_update_status'] ?? '';
+    if (!in_array($status, array('failed', 'throttled'), true) || !current_user_can('update_plugins')) return;
+    $message = $status === 'throttled' ?
+        'ISTODATA Kit: ο νέος έλεγχος περιορίζεται προσωρινά για προστασία από υπερβολικές κλήσεις. Εμφανίζονται τα τελευταία διαθέσιμα στοιχεία, αν υπάρχουν. Δοκιμάστε αργότερα.' :
+        'ISTODATA Kit: δεν ήταν δυνατή η ανανέωση των στοιχείων από το GitHub. Διατηρούνται τα τελευταία έγκυρα στοιχεία, αν υπάρχουν.';
+    echo '<div class="notice notice-warning"><p>' . esc_html($message) . '</p></div>';
+}
+
+// Get remote version information from GitHub. Both update and plugins-info
+// callbacks share one attempted fetch/result, including errors, per request.
+function iu_get_remote_version($manual_refresh = false) {
+    static $attempted = false, $result = false, $status = '';
+    $manual_refresh = $manual_refresh && iu_is_manual_plugin_update_check();
+    if ($attempted) {
+        if ($manual_refresh) $GLOBALS['iu_manual_plugin_update_status'] = $status;
+        return $result;
+    }
     $cache_key = 'iu_remote_version_' . md5(IU_GITHUB_API_URL);
     $fallback_key = 'iu_remote_version_fallback_' . md5(IU_GITHUB_API_URL);
+    // Network-wide budget on multisite; routine 24h caching stays unchanged.
+    $retry_key = 'iu_remote_version_retry_' . md5(IU_GITHUB_API_URL);
     $cache_data = get_transient($cache_key);
-    
-    if ($cache_data !== false) {
+    if (!$manual_refresh && $cache_data !== false) {
         return $cache_data;
     }
-    
-    // Fetch GitHub release data
-    $request = wp_remote_get(IU_GITHUB_API_URL, array(
-        'timeout' => 15,
-        'sslverify' => true,
-        'user-agent' => 'WordPress/' . get_bloginfo('version') . '; ' . get_site_url(),
-        'headers' => array(
-            'Accept' => 'application/vnd.github.v3+json'
-        )
-    ));
+    $attempted = true;
+    $status = 'throttled';
+    $request = null;
+    if (get_site_transient($retry_key) === false) {
+        // Reserve before I/O, also when there is no last-known-good value.
+        // This bounds ordinary sequential retries; it is not a distributed lock.
+        set_site_transient($retry_key, true, MINUTE_IN_SECONDS);
+        $status = 'failed';
+        $request = wp_remote_get(IU_GITHUB_API_URL, array(
+            'timeout' => 15,
+            'sslverify' => true,
+            'user-agent' => 'WordPress/' . get_bloginfo('version') . '; ' . get_site_url(),
+            'headers' => array('Accept' => 'application/vnd.github.v3+json')
+        ));
+        if (!is_wp_error($request) && in_array(wp_remote_retrieve_response_code($request), array(403, 429), true)) {
+            $retry_after = wp_remote_retrieve_header($request, 'retry-after');
+            $reset = wp_remote_retrieve_header($request, 'x-ratelimit-reset');
+            $retry_delay = is_numeric($retry_after) ? (int) $retry_after :
+                (is_string($retry_after) ? (int) strtotime($retry_after) - time() : 0);
+            $delay = max(MINUTE_IN_SECONDS, $retry_delay,
+                is_numeric($reset) ? (int) $reset - time() : 0);
+            set_site_transient($retry_key, true, min(DAY_IN_SECONDS, $delay));
+        }
+    }
     
     if (!is_wp_error($request) && wp_remote_retrieve_response_code($request) === 200) {
         $body = wp_remote_retrieve_body($request);
         $github_data = json_decode($body);
         
-        if (json_last_error() === JSON_ERROR_NONE && isset($github_data->tag_name)) {
+        if (json_last_error() === JSON_ERROR_NONE && !empty($github_data->tag_name) && is_string($github_data->tag_name)) {
             // Convert GitHub release data to WordPress format
             $version = ltrim($github_data->tag_name, 'v'); // Remove 'v' prefix if present
             
@@ -5213,8 +5273,8 @@ function iu_get_remote_version() {
             $download_url = '';
             if (isset($github_data->assets) && is_array($github_data->assets)) {
                 foreach ($github_data->assets as $asset) {
-                    if (strpos($asset->name, '.zip') !== false) {
-                        $download_url = $asset->browser_download_url;
+                    if (isset($asset->name) && is_string($asset->name) && strpos($asset->name, '.zip') !== false) {
+                        $download_url = $asset->browser_download_url ?? '';
                         break;
                     }
                 }
@@ -5222,9 +5282,14 @@ function iu_get_remote_version() {
             
             // Fallback to source code ZIP if no asset found
             if (empty($download_url)) {
-                $download_url = $github_data->zipball_url;
+                $download_url = $github_data->zipball_url ?? '';
             }
-            
+            if (!preg_match('/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/D', $version) ||
+                !is_string($download_url) || $download_url === '') $github_data = null;
+        } else {
+            $github_data = null;
+        }
+        if ($github_data) {
             $data = (object) array(
                 'new_version' => $version,
                 'name' => 'ISTODATA Kit',
@@ -5234,7 +5299,7 @@ function iu_get_remote_version() {
                 'requires' => '5.0',
                 'tested' => '6.8.1',
                 'requires_php' => '7.4',
-                'last_updated' => $github_data->published_at,
+                'last_updated' => $github_data->published_at ?? '',
                 'description' => 'Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.',
                 'changelog' => isset($github_data->body) ? $github_data->body : 'See GitHub release notes.',
                 'download_url' => $download_url
@@ -5243,18 +5308,20 @@ function iu_get_remote_version() {
             // Cache successful release metadata to reduce GitHub API usage across shared-IP hosting.
             set_transient($cache_key, $data, DAY_IN_SECONDS);
             update_option($fallback_key, $data, false);
-            return $data;
+            $status = 'fresh'; $result = $data;
+            if ($manual_refresh) $GLOBALS['iu_manual_plugin_update_status'] = $status;
+            return $result;
         }
     }
 
     // If GitHub is temporarily unavailable or rate-limited, reuse the last known good release metadata.
-    $fallback_data = get_option($fallback_key, false);
+    $fallback_data = $cache_data !== false ? $cache_data : get_option($fallback_key, false);
+    if ($manual_refresh) $GLOBALS['iu_manual_plugin_update_status'] = $status;
     if ($fallback_data !== false) {
         set_transient($cache_key, $fallback_data, 6 * HOUR_IN_SECONDS);
-        return $fallback_data;
+        $result = $fallback_data;
     }
-
-    return false;
+    return $result;
 }
 
 // Improve HTTP request reliability for GitHub API

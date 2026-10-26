@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.23.3 - 2026-10-26
+
+- Fix: Refresh Kit release metadata during an authorized WordPress Updates “Check again” action, with bounded retries and a clear warning when GitHub cannot be refreshed. Preserve routine caching and last-known-good update information.
+
 ## 2.23.2 - 2026-10-26
 
 - Fix: Add an explicitly confirmed, sequential update flow for an approved Elementor / Pro destination when individual intermediate updates are blocked. Recheck packages, versions and installed files per step; stop on partial failure without accepting mixed pairs or claiming automatic rollback.
