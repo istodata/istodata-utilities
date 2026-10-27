@@ -165,12 +165,20 @@ final class IU_Elementor_Update_Guard {
             return $prefix . $pair . ' — επαληθευμένη συμβατότητα για τις ενεργές λειτουργίες: ' .
                 self::labels($advice['supported']) . ', εντός των δηλωμένων ορίων τους.';
         }
-        $text = $advice['state'] === 'needs_both' ?
-            $prefix . 'για τις ενεργές λειτουργίες απαιτείται και η διαθέσιμη ενημέρωση του άλλου plugin: ' . self::pair_label($advice['destination']) . '. Το ενδιάμεσο ' . $pair . ' δεν είναι επαληθευμένο.' :
-            $prefix . $pair . ' — μη επαληθευμένη συμβατότητα' . ($advice['metadata_known'] ? '.' : ' (λείπουν έγκυρα στοιχεία στόχου).');
-        $text .= ($advice['state'] === 'needs_both' ? ' Στο ενδιάμεσο παρακάμπτονται: ' :
-            ' Μετά την ενημέρωση παρακάμπτονται: ') . self::labels($advice['affected']) .
-            ($advice['state'] === 'needs_both' ? '. Επανέρχονται στον επαληθευμένο τελικό συνδυασμό.' : ', μέχρι συμβατή έκδοση Kit.');
+        if ($advice['state'] === 'needs_both') {
+            // The joint destination differs only in the counterpart's version.
+            $other = $advice['destination']['core'] !== $advice['pair']['core'] ? 'core' : 'pro';
+            $updating = $other === 'core' ? 'pro' : 'core';
+            $names = array('core' => 'Elementor', 'pro' => 'Elementor Pro');
+            $text = $prefix . 'Η ενημέρωση σε ' . $names[$updating] . ' ' . $advice['pair'][$updating] .
+                ' χρειάζεται και ' . $names[$other] . ' ' . $advice['destination'][$other] .
+                ' για τις ενεργές λειτουργίες: ' . self::labels($advice['affected']) .
+                '. Αν ενημερωθεί μόνο το ' . $names[$updating] . ', αυτές παρακάμπτονται προσωρινά.';
+        } else {
+            $text = $prefix . $pair . ' — μη επαληθευμένη συμβατότητα' .
+                ($advice['metadata_known'] ? '.' : ' (λείπουν έγκυρα στοιχεία στόχου).') .
+                ' Μετά την ενημέρωση παρακάμπτονται: ' . self::labels($advice['affected']) . ', μέχρι συμβατή έκδοση Kit.';
+        }
         if ($advice['supported']) $text .= ' Επαληθευμένο για: ' . self::labels($advice['supported']) . '.';
         return $text;
     }

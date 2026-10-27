@@ -95,7 +95,13 @@ foreach (array('elementor/elementor.php'=>'4.3.5','elementor-pro/elementor-pro.p
     $a=IU_Elementor_Update_Guard::advisory($plugin,item($version));check($a['state']==='needs_both','Both native rows explain available final combination');
     check($a['affected'] && $a['destination']===array('core'=>'4.3.5','pro'=>'4.3.2'),'Intermediate not verified, final accepted');
     ob_start();IU_Elementor_Update_Guard::update_message($plugin,item($version));$html=ob_get_clean();
-    check(strpos($html,'Το ενδιάμεσο')!==false && strpos($html,'παρακάμπτονται:')!==false,'Advisory explains only active affected features');
+    $name = $plugin === 'elementor/elementor.php' ? 'Elementor' : 'Elementor Pro';
+    $counterpart = $plugin === 'elementor/elementor.php' ? 'Elementor Pro 4.3.2' : 'Elementor 4.3.5';
+    check(strpos($html,'Η ενημέρωση σε ' . $name . ' ' . $version)!==false &&
+        strpos($html,'χρειάζεται και ' . $counterpart . ' για τις ενεργές λειτουργίες:')!==false,'Each row names its target and required counterpart explicitly');
+    check(strpos($html,'Αν ενημερωθεί μόνο το ' . $name . ', αυτές παρακάμπτονται προσωρινά.')!==false,
+        'Concise conditional consequence concerns affected Kit functions');
+    check(strpos($html,'άλλου plugin')===false && strpos($html,'Το ενδιάμεσο')===false,'No ambiguous counterpart or repeated intermediate-pair wording');
     check(strpos($html,'<p>')===false && strpos($html,'iu-elementor-compatibility-advice')!==false,'Inline native hook does not acquire invalid nested paragraphs/extra icons');
     check(count(preg_split('//u',strip_tags($html),-1,PREG_SPLIT_NO_EMPTY))<800 && strpos($html,'Checksum')===false,'Concise row notice, no technical evidence dump');
 }

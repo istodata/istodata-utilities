@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.23.6 - 2026-10-27
+
+- Improve: Clarify the Elementor / Pro update advice by naming the required counterpart update and explaining the temporary effect on active Kit functions.
+
 ## 2.23.5 - 2026-10-27
 
 - Improve: Show Elementor / Pro update compatibility advice only for active related Kit functions, with the same assessment on Plugins and WordPress Updates. Identify the assessed site in multisite without claiming network-wide coverage.
