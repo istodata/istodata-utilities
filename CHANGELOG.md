@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.23.5 - 2026-10-27
+
+- Improve: Show Elementor / Pro update compatibility advice only for active related Kit functions, with the same assessment on Plugins and WordPress Updates. Identify the assessed site in multisite without claiming network-wide coverage.
+
 ## 2.23.4 - 2026-10-26
 
 - Improve: Let native WordPress and vendor checks govern Elementor / Pro updates. Replace Kit update blocking and special update forms with concise per-plugin compatibility advice; retire the old mutation endpoints.

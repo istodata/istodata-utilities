@@ -1,6 +1,6 @@
 <?php
 /** Native updater passthrough and registry-based advisories; no server mutation. */
-define('ABSPATH', __DIR__ . '/');
+if (!defined('ABSPATH')) define('ABSPATH', __DIR__ . '/');
 define('IU_PLUGIN_PATH', dirname(__DIR__) . '/');
 define('WP_PLUGIN_DIR', sys_get_temp_dir() . '/iu-advisory-' . getmypid());
 mkdir(WP_PLUGIN_DIR); foreach (array('elementor', 'elementor-pro') as $slug) mkdir(WP_PLUGIN_DIR . '/' . $slug);
@@ -27,13 +27,14 @@ function apply_filters($hook, $value, ...$args) {
 function is_multisite() { return $GLOBALS['multisite']; }
 function is_network_admin() { return $GLOBALS['network_admin']; }
 function current_user_can($cap) { return $GLOBALS['authorized']; }
+if (!function_exists('get_current_blog_id')) { function get_current_blog_id() { return $GLOBALS['advisory_blog_id'] ?? 1; } }
 function get_option($key, $default = false) {
     if ($key === 'active_plugins') return $GLOBALS['active_plugins'];
     return $key === 'istodata_utilities_settings' ? $GLOBALS['settings'] : $default;
 }
 function get_site_option($key, $default = false) { return $key === 'active_sitewide_plugins' ? $GLOBALS['network_plugins'] : $default; }
 function update_option() { throw new RuntimeException('Advisory/runtime policy must not change saved settings'); }
-function get_site_transient($key) { return $GLOBALS['updates']; }
+function get_site_transient($key) { return apply_filters('site_transient_' . $key, $GLOBALS['updates']); }
 function esc_html($value) { return htmlspecialchars($value, ENT_QUOTES, 'UTF-8'); }
 function esc_url($value) { return esc_html($value); }
 function admin_url($path) { return 'https://example.test/wp-admin/' . $path; }
@@ -61,7 +62,7 @@ function item($version) { return (object) array('new_version' => $version, 'pack
 require IU_PLUGIN_PATH . 'includes/elementor-update-guard.php';
 IU_Elementor_Update_Guard::boot();
 foreach (array('auto_update_plugin', 'upgrader_pre_download', 'upgrader_source_selection') as $hook) check(!isset($hooks[$hook]), 'No Kit native updater gate: ' . $hook);
-check(!isset($hooks['pre_set_site_transient_update_plugins'], $hooks['site_transient_update_plugins']), 'Advisory never hides updates');
+check(!isset($hooks['pre_set_site_transient_update_plugins']), 'No advisory writes to update metadata');
 $matrix = array(array('4.3.4','4.3.1'), array('4.3.5','4.3.1'), array('4.3.4','4.3.2'), array('4.3.5','4.3.2'), array('4.4.0','4.4.0'), array('4.2.3',null), array(null,null));
 foreach ($matrix as $pair) foreach (array(false,true) as $on) {
     installed(...$pair); $settings['optimizations']['elementor_fragment_cache'] = $on;
@@ -85,22 +86,33 @@ $vendor = new WP_Error('native_vendor_denied'); add_filter('upgrader_pre_downloa
 check(apply_filters('upgrader_pre_download',false) === $vendor,'Native/vendor rejection is not bypassed');
 $settings['optimizations'] = array('elementor_atomic_interaction_breakpoints'=>false,'elementor_fragment_cache'=>false);
 installed('4.3.4','4.3.1'); $updates->response = array('elementor-pro/elementor-pro.php'=>item('4.3.2'), 'elementor/elementor.php'=>item('4.3.5'));
+foreach ($updates->response as $plugin=>$response) {
+    check(IU_Elementor_Update_Guard::advisory($plugin,$response)===null,'All relevant features OFF: no advice');
+    ob_start();IU_Elementor_Update_Guard::update_message($plugin,$response);check(ob_get_clean()==='','OFF means no native row output');
+}
+$settings['optimizations'] = array('elementor_atomic_interaction_breakpoints'=>true,'elementor_fragment_cache'=>true);
 foreach (array('elementor/elementor.php'=>'4.3.5','elementor-pro/elementor-pro.php'=>'4.3.2') as $plugin=>$version) {
     $a=IU_Elementor_Update_Guard::advisory($plugin,item($version));check($a['state']==='needs_both','Both native rows explain available final combination');
     check($a['affected'] && $a['destination']===array('core'=>'4.3.5','pro'=>'4.3.2'),'Intermediate not verified, final accepted');
     ob_start();IU_Elementor_Update_Guard::update_message($plugin,item($version));$html=ob_get_clean();
-    check(strpos($html,'Το ενδιάμεσο')!==false && strpos($html,'εφόσον είναι ενεργές')!==false,'Advisory works before update even with featuresOFF');
+    check(strpos($html,'Το ενδιάμεσο')!==false && strpos($html,'παρακάμπτονται:')!==false,'Advisory explains only active affected features');
     check(strpos($html,'<p>')===false && strpos($html,'iu-elementor-compatibility-advice')!==false,'Inline native hook does not acquire invalid nested paragraphs/extra icons');
     check(count(preg_split('//u',strip_tags($html),-1,PREG_SPLIT_NO_EMPTY))<800 && strpos($html,'Checksum')===false,'Concise row notice, no technical evidence dump');
 }
 installed('4.3.5','4.3.1');$a=IU_Elementor_Update_Guard::advisory('elementor-pro/elementor-pro.php',item('4.3.2'));check($a['state']==='verified'&&!$a['affected'],'Target plus installed counterpart accepted for every relevant feature');
 installed('4.3.1','4.3.0');$updates->response=array();$a=IU_Elementor_Update_Guard::advisory('elementor/elementor.php',item('4.3.2'));check($a['state']==='unverified'&&$a['supported']===array('atomic'),'Per-feature partial support, not blanket failure');
+$settings['optimizations']['elementor_fragment_cache']=false;
+$a=IU_Elementor_Update_Guard::advisory('elementor/elementor.php',item('4.3.2'));
+check($a['state']==='verified'&&$a['supported']===array('atomic')&&!$a['affected'],'Active unaffected Atomic does not inherit inactive fragment warning');
+check(strpos(IU_Elementor_Update_Guard::advisory_text($a),iu_elementor_compatibility_registry()['fragment']['label'])===false,'Verified text names only active features');
+$settings['optimizations']['elementor_fragment_cache']=true;
 installed('4.2.2',null);$a=IU_Elementor_Update_Guard::advisory('elementor/elementor.php',item('4.2.3'));check($a['supported']===array('fragment')&&in_array('atomic',$a['affected'],true),'Only documented core-only feature is accepted');
 installed('4.3.4','4.3.1');foreach(array(null,(object)array(),item('4.9.0'),item('<script>bad</script>')) as $response){$a=IU_Elementor_Update_Guard::advisory('elementor-pro/elementor-pro.php',$response);check($a['state']==='unverified','Unknown/missing target never looks like absent Pro or accepted evidence');}
 $updates->response=array('elementor-pro/elementor-pro.php'=>item('4.3.2'));unset($updates->response['elementor-pro/elementor-pro.php']->package);
 check(IU_Elementor_Update_Guard::advisory('elementor/elementor.php',item('4.3.5'))['state']==='unverified','Missing counterpart package cannot promise an available two-update destination');
 $multisite=$network_admin=true;check(strpos(IU_Elementor_Update_Guard::page_url(),'/network/')!==false,'Preserve network information URL');
-check(IU_Elementor_Update_Guard::advisory('elementor-pro/elementor-pro.php',item('4.3.2'))['state']==='unverified','Network row uses shared actual files regardless per-site settings');
+$a=IU_Elementor_Update_Guard::advisory('elementor-pro/elementor-pro.php',item('4.3.2'));
+check($a['state']==='unverified'&&strpos(IU_Elementor_Update_Guard::advisory_text($a),'όχι συνολικός έλεγχος δικτύου')!==false,'Network row explicitly scopes loaded current-site features, not an inferred network total');
 $multisite=$network_admin=false;
 ob_start();IU_Elementor_Update_Guard::page();$page=ob_get_clean();check(strpos($page,'<form')===false && strpos($page,'admin-post')===false && strpos($page,'ενημέρωση ζεύγους')===false,'Read-only information screen, no hidden mutation UI');
 echo "PASS native update passthrough and verified/needs-both/unverified/partial/core-only/network advisories\n";
