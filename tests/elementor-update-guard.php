@@ -118,7 +118,10 @@ foreach($updates->response as $plugin=>$response){
 installed('4.3.6','4.3.1');
 $a=IU_Elementor_Update_Guard::advisory('elementor-pro/elementor-pro.php',item('4.3.2'));
 check($a['state']==='verified'&&!$a['affected'],'Pro update restores the reviewed4.3.6/4.3.2 combination');
-foreach(array(array('elementor/elementor.php','4.3.7'),array('elementor-pro/elementor-pro.php','4.3.3')) as $unknown){
+installed('4.3.6','4.3.2');
+$a=IU_Elementor_Update_Guard::advisory('elementor-pro/elementor-pro.php',item('4.3.3'));
+check($a['state']==='verified'&&!$a['affected'],'Pro4.3.3 plus Core4.3.6 is accepted');
+foreach(array(array('elementor/elementor.php','4.3.7'),array('elementor-pro/elementor-pro.php','4.3.4')) as $unknown){
     $a=IU_Elementor_Update_Guard::advisory($unknown[0],item($unknown[1]));
     check($a['state']==='unverified'&&$a['affected'],'Next patch or Pro release remains unverified');
 }

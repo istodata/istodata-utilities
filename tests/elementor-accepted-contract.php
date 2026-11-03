@@ -8,9 +8,9 @@ eval('namespace Elementor; class Widget_Base { public function get_data($key) { 
 require IU_PLUGIN_PATH . 'includes/elementor-atomic-interaction-breakpoints.php';
 require IU_PLUGIN_PATH . 'includes/elementor-fragment-cache.php';
 $contract=array(
-    'atomic'=>array(array('4.3.2','4.3.0'),array('4.3.3','4.3.1'),array('4.3.4','4.3.1'),array('4.3.5','4.3.2'),array('4.3.6','4.3.2')),
-    'fragment_atomic'=>array(array('4.3.3','4.3.1'),array('4.3.4','4.3.1'),array('4.3.5','4.3.2'),array('4.3.6','4.3.2')),
-    'fragment'=>array(array('4.2.3','4.2.2'),array('4.2.3',null),array('4.3.3','4.3.1'),array('4.3.4','4.3.1'),array('4.3.5','4.3.2'),array('4.3.6','4.3.2')));
+    'atomic'=>array(array('4.3.2','4.3.0'),array('4.3.3','4.3.1'),array('4.3.4','4.3.1'),array('4.3.5','4.3.2'),array('4.3.6','4.3.2'),array('4.3.6','4.3.3')),
+    'fragment_atomic'=>array(array('4.3.3','4.3.1'),array('4.3.4','4.3.1'),array('4.3.5','4.3.2'),array('4.3.6','4.3.2'),array('4.3.6','4.3.3')),
+    'fragment'=>array(array('4.2.3','4.2.2'),array('4.2.3',null),array('4.3.3','4.3.1'),array('4.3.4','4.3.1'),array('4.3.5','4.3.2'),array('4.3.6','4.3.2'),array('4.3.6','4.3.3')));
 $registry=iu_elementor_compatibility_registry();$all=array();$count=0;
 foreach($contract as $feature=>$pairs)foreach($pairs as $pair){
     $rule=array('core'=>array('exact'=>$pair[0]),'pro'=>$pair[1]===null?null:array('exact'=>$pair[1]));
