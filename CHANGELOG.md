@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.23.9 - 2026-11-03
+
+- Tweak: Hide the WP Rocket 3.24 major release notice in the WordPress admin.
+
 ## 2.23.8 - 2026-11-03
 
 - Improve: Add compatibility for Elementor 4.3.6 / Elementor Pro 4.3.3 for supported Kit features.
