@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.23.7 - 2026-11-03
+
+- Improve: Add compatibility for the exact Elementor 4.3.6 / Elementor Pro 4.3.2 pair for Kit interactions, fragment caching and device visibility, preserving existing supported combinations and safeguards.
+
 ## 2.23.6 - 2026-10-27
 
 - Improve: Clarify the Elementor / Pro update advice by naming the required counterpart update and explaining the temporary effect on active Kit functions.

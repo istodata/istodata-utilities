@@ -2,6 +2,9 @@
 // Isolated WordPress loader/notice checks. Each case uses a new PHP process (static guards).
 $version_cases = array(
     'accepted-common' => array('4.3.3', '4.3.1'),
+    'accepted-434' => array('4.3.4', '4.3.1'), 'accepted-435' => array('4.3.5', '4.3.2'),
+    'accepted-436' => array('4.3.6', '4.3.2'), '436-old-pro' => array('4.3.6', '4.3.1'),
+    'future-patch' => array('4.3.7', '4.3.2'), 'future-pro' => array('4.3.6', '4.3.3'),
     'elementor-patch' => array('4.3.3', '4.3.0'),
     'pro-patch' => array('4.3.2', '4.3.1'),
     'both-patch' => array('4.3.8', '4.3.5'),
@@ -18,7 +21,7 @@ $version_cases = array(
     'invalid-type' => array(4.3, '4.3.0'),
     'major' => array('5.0.0', '5.0.0'),
 );
-$allowed_cases = array('supported', 'late', 'accepted-common');
+$allowed_cases = array('supported', 'late', 'accepted-common', 'accepted-434', 'accepted-435', 'accepted-436');
 $rejected_cases = array_merge(array('missing'), array_diff(array_keys($version_cases), $allowed_cases));
 if (!isset($argv[1])) {
     foreach (array_merge(array('off', 'missing', 'no-handle', 'done', 'admin', 'supported', 'late', 'retry'), array_keys($version_cases)) as $case) {
@@ -61,7 +64,7 @@ function check($condition, $message) { if (!$condition) { throw new RuntimeExcep
 require IU_PLUGIN_PATH . 'includes/elementor-atomic-interaction-breakpoints.php';
 iu_init_atomic_interaction_breakpoints();
 iu_init_atomic_interaction_breakpoints();
-check(count($hooks) === 3, 'Initializer must be idempotent');
+check(count($hooks) === 2, 'Loader registers only its two attach hooks once; shared notice is separate');
 check($hooks[0][2] === 1000 && $hooks[1][2] === 1, 'Enqueue and footer priorities');
 iu_attach_atomic_interaction_breakpoints();
 if ($case === 'late') { check(count($calls) === 0, 'Not enqueued yet'); $enqueued = true; }
@@ -98,5 +101,5 @@ if ($expected) {
 ob_start();
 iu_atomic_interaction_breakpoints_notice();
 $notice = ob_get_clean();
-check(($notice !== '') === in_array($case, $rejected_cases, true), 'Enabled unapproved versions, including new patches, produce notice');
+check($notice === '', 'Legacy Atomic notice stays inert; aggregated runtime bypass notice is covered by compatibility tests');
 echo 'PASS: PHP loader ' . $case . PHP_EOL;

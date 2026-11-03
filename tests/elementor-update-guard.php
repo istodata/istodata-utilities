@@ -105,6 +105,24 @@ foreach (array('elementor/elementor.php'=>'4.3.5','elementor-pro/elementor-pro.p
     check(strpos($html,'<p>')===false && strpos($html,'iu-elementor-compatibility-advice')!==false,'Inline native hook does not acquire invalid nested paragraphs/extra icons');
     check(count(preg_split('//u',strip_tags($html),-1,PREG_SPLIT_NO_EMPTY))<800 && strpos($html,'Checksum')===false,'Concise row notice, no technical evidence dump');
 }
+// New release declaration changes only the reviewed destination, never native updater decisions.
+installed('4.3.5','4.3.2');
+$a=IU_Elementor_Update_Guard::advisory('elementor/elementor.php',item('4.3.6'));
+check($a['state']==='verified'&&!$a['affected'],'4.3.6 plus installed Pro4.3.2 is accepted');
+installed('4.3.4','4.3.1');
+$updates->response=array('elementor/elementor.php'=>item('4.3.6'),'elementor-pro/elementor-pro.php'=>item('4.3.2'));
+foreach($updates->response as $plugin=>$response){
+    $a=IU_Elementor_Update_Guard::advisory($plugin,$response);
+    check($a['state']==='needs_both'&&$a['destination']===array('core'=>'4.3.6','pro'=>'4.3.2'),'Both update rows derive the new exact joint destination');
+}
+installed('4.3.6','4.3.1');
+$a=IU_Elementor_Update_Guard::advisory('elementor-pro/elementor-pro.php',item('4.3.2'));
+check($a['state']==='verified'&&!$a['affected'],'Pro update restores the reviewed4.3.6/4.3.2 combination');
+foreach(array(array('elementor/elementor.php','4.3.7'),array('elementor-pro/elementor-pro.php','4.3.3')) as $unknown){
+    $a=IU_Elementor_Update_Guard::advisory($unknown[0],item($unknown[1]));
+    check($a['state']==='unverified'&&$a['affected'],'Next patch or Pro release remains unverified');
+}
+
 installed('4.3.5','4.3.1');$a=IU_Elementor_Update_Guard::advisory('elementor-pro/elementor-pro.php',item('4.3.2'));check($a['state']==='verified'&&!$a['affected'],'Target plus installed counterpart accepted for every relevant feature');
 installed('4.3.1','4.3.0');$updates->response=array();$a=IU_Elementor_Update_Guard::advisory('elementor/elementor.php',item('4.3.2'));check($a['state']==='unverified'&&$a['supported']===array('atomic'),'Per-feature partial support, not blanket failure');
 $settings['optimizations']['elementor_fragment_cache']=false;

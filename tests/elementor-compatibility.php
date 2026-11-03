@@ -1,7 +1,7 @@
 <?php
 /** Isolated policy/runtime regressions; no WordPress/server mutation. */
 if (!isset($argv[1])) {
-    foreach (array('atomic', 'fragment', 'core-only', 'core-patch', 'pro-patch', 'both-patch', 'accepted-new', 'accepted-current', 'core-first', 'pro-first', 'future', 'missing') as $case) {
+    foreach (array('atomic', 'fragment', 'core-only', 'core-patch', 'pro-patch', 'both-patch', 'accepted-new', 'accepted-current', 'accepted-436', '436-old-pro', 'future-patch', 'future-pro', 'core-first', 'pro-first', 'future', 'missing') as $case) {
         passthru(escapeshellarg(PHP_BINARY) . ' -n ' . escapeshellarg(__FILE__) . ' ' . escapeshellarg($case), $status);
         if ($status) exit($status);
     }
@@ -15,6 +15,8 @@ $pairs = array('atomic' => array('4.3.2', '4.3.0'), 'fragment' => array('4.2.3',
     'accepted-new' => array('4.3.4', '4.3.1'),
     'accepted-current' => array('4.3.5', '4.3.2'), 'core-first' => array('4.3.5', '4.3.1'),
     'pro-first' => array('4.3.4', '4.3.2'),
+    'accepted-436' => array('4.3.6', '4.3.2'), '436-old-pro' => array('4.3.6', '4.3.1'),
+    'future-patch' => array('4.3.7', '4.3.2'), 'future-pro' => array('4.3.6', '4.3.3'),
     'future' => array('4.4.0', '4.4.0'), 'missing' => array(null, null));
 [$core, $pro] = $pairs[$argv[1]];
 if ($core !== null) define('ELEMENTOR_VERSION', $core);
@@ -48,6 +50,8 @@ $targets = array(
     array('4.3.3', '4.3.1', true, true), array('4.3.4', '4.3.1', true, true), array('4.3.5', '4.3.1', false, false), array('4.3.3', '4.3.2', false, false),
     // Only the reviewed final exact pair is accepted; intermediate pairs remain closed.
     array('4.3.5', '4.3.2', true, true), array('4.3.4', '4.3.2', false, false),
+    array('4.3.6', '4.3.2', true, true), array('4.3.6', '4.3.1', false, false),
+    array('4.3.7', '4.3.2', false, false), array('4.3.6', '4.3.3', false, false),
     array('4.2.3', '4.2.2', false, true), array('4.2.3', null, false, true),
     array('4.3.1', '4.3.0', false, false), array('4.3.2', '4.2.2', false, false),
     array('4.2.3', '4.3.0', false, false), array('4.3.2', null, false, false),
@@ -68,6 +72,28 @@ foreach ($targets as [$a, $b, $atomic, $fragment]) {
         expect(in_array('fragment', $failed, true) === ($fragment_on && !$fragment), 'Inactive Fragment must not constrain pair');
     }
 }
+// Frozen additive contract: every previously accepted pair/core-only path plus only 4.3.6/4.3.2.
+$accepted_contract = array(
+    'atomic' => array(array('4.3.2','4.3.0'),array('4.3.3','4.3.1'),array('4.3.4','4.3.1'),array('4.3.5','4.3.2'),array('4.3.6','4.3.2')),
+    'fragment_atomic' => array(array('4.3.3','4.3.1'),array('4.3.4','4.3.1'),array('4.3.5','4.3.2'),array('4.3.6','4.3.2')),
+    'fragment' => array(array('4.2.3','4.2.2'),array('4.2.3',null),array('4.3.3','4.3.1'),array('4.3.4','4.3.1'),array('4.3.5','4.3.2'),array('4.3.6','4.3.2')),
+);
+foreach (iu_elementor_compatibility_registry() as $feature => $entry) {
+    $actual = array_map(static function ($declaration) {
+        return array($declaration['core']['exact'], $declaration['pro']['exact'] ?? null);
+    }, $entry['accepted']);
+    expect($actual === $accepted_contract[$feature], 'Keep the complete accepted contract additive and exact');
+    foreach ($targets as [$a, $b]) {
+        expect(iu_elementor_feature_supported($feature, array('core'=>$a,'pro'=>$b)) === in_array(array($a,$b),$accepted_contract[$feature],true), 'Every feature consumes only its exact accepted contract');
+    }
+    foreach (array('4.3.5','4.3.6') as $reviewed_core) {
+        $evidence = array_filter($entry['tested'], static function ($row) use ($reviewed_core) {
+            return $row['core'] === $reviewed_core && $row['pro'] === '4.3.2';
+        });
+        expect(count($evidence) === 1, 'Keep old/new evidence separate and unique');
+    }
+}
+
 expect(iu_elementor_feature_supported('unknown') === false, 'Unknown features fail closed');
 foreach (array('atomic', 'fragment', 'fragment_atomic') as $feature) {
     $evidence = array_filter(iu_elementor_compatibility_registry()[$feature]['tested'], function ($pair) {
@@ -82,9 +108,9 @@ foreach (iu_elementor_compatibility_registry() as $entry) foreach ($entry['accep
 expect(!iu_elementor_version_matches('4.3.3', array('series' => '4.3', 'min' => '4.3.2')), 'Legacy open-ended rule must fail closed');
 expect(iu_elementor_common_pair(array('atomic', 'fragment')) === array('core' => '4.3.3', 'pro' => '4.3.1'), 'Derive tested common pair');
 expect(iu_elementor_common_pair(array('atomic')) === array('core' => '4.3.2', 'pro' => '4.3.0'), 'Derive Atomic baseline from registry');
-expect(iu_atomic_interaction_breakpoints_supported() === in_array($argv[1], array('atomic', 'both-patch', 'accepted-new', 'accepted-current'), true), 'Atomic runtime consumes registry');
+expect(iu_atomic_interaction_breakpoints_supported() === in_array($argv[1], array('atomic', 'both-patch', 'accepted-new', 'accepted-current', 'accepted-436'), true), 'Atomic runtime consumes registry');
 $method = new ReflectionMethod('IU_Elementor_Fragment_Cache', 'versions_supported');
-$fragment_supported = in_array($argv[1], array('fragment', 'core-only', 'both-patch', 'accepted-new', 'accepted-current'), true);
+$fragment_supported = in_array($argv[1], array('fragment', 'core-only', 'both-patch', 'accepted-new', 'accepted-current', 'accepted-436'), true);
 expect($method->invoke(null) === $fragment_supported, 'Fragment runtime cannot be widened by legacy filter');
 if (!$fragment_supported) {
     $data = array(array('id' => 'x', 'elType' => 'widget', 'widgetType' => 'template',
