@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.24.0
+Version: 2.24.1
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.24.0');
+define('IU_PLUGIN_VERSION', '2.24.1');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -467,7 +467,23 @@ function iu_settings_page() {
         return;
     }
     
-    $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'hosting';
+    $settings = get_option('istodata_utilities_settings', array());
+    $can_view_hosting = empty($settings['hosting']['istodata_hosted']) || iu_is_istodata_user();
+    $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : ($can_view_hosting ? 'hosting' : 'dashboard');
+    if (!$can_view_hosting) {
+        $hosting_actions = array('recalc_storage', 'cleanup_storage', 'trigger_queue', 'clear_update_cache', 'direct_calc');
+        foreach ($hosting_actions as $hosting_action) {
+            if (isset($_GET[$hosting_action])) {
+                wp_die('Δεν έχετε πρόσβαση στις ρυθμίσεις φιλοξενίας.', '', array('response' => 403));
+            }
+        }
+        if (isset($_POST['active_tab']) && sanitize_text_field($_POST['active_tab']) === 'hosting') {
+            wp_die('Δεν έχετε πρόσβαση στις ρυθμίσεις φιλοξενίας.', '', array('response' => 403));
+        }
+        if ($active_tab === 'hosting') {
+            $active_tab = 'dashboard';
+        }
+    }
     
     // Handle storage recalculation via GET request
     if (isset($_GET['recalc_storage']) && $_GET['recalc_storage'] == '1' && wp_verify_nonce($_GET['_wpnonce'], 'iu_recalc_storage')) {
@@ -642,7 +658,9 @@ function iu_settings_page() {
         <h1>ISTODATA Kit</h1>
         
         <h2 class="nav-tab-wrapper">
+            <?php if ($can_view_hosting): ?>
             <a href="?page=istodata-utilities&tab=hosting" class="nav-tab <?php echo $active_tab == 'hosting' ? 'nav-tab-active' : ''; ?>">Φιλοξενία</a>
+            <?php endif; ?>
             <a href="?page=istodata-utilities&tab=dashboard" class="nav-tab <?php echo $active_tab == 'dashboard' ? 'nav-tab-active' : ''; ?>">Πίνακας Ελέγχου</a>
             <a href="?page=istodata-utilities&tab=optimizations" class="nav-tab <?php echo $active_tab == 'optimizations' ? 'nav-tab-active' : ''; ?>">WordPress</a>
             <?php
@@ -1952,6 +1970,40 @@ add_action('wp_enqueue_scripts', function(){
     wp_enqueue_style('iu-no-copy', IU_PLUGIN_URL . 'assets/css/no-copy.css', array(), IU_PLUGIN_VERSION);
     wp_enqueue_script('iu-no-copy', IU_PLUGIN_URL . 'assets/js/no-copy.js', array(), IU_PLUGIN_VERSION, true);
 }, 20);
+
+function iu_is_istodata_user() {
+    $user = wp_get_current_user();
+    return $user->exists() && (bool) preg_match('/@istodata\.com$/i', $user->user_email);
+}
+
+// Show the suspension prominently in the admin without restricting other pages.
+function iu_suspension_admin_applies() {
+    $settings = get_option('istodata_utilities_settings', array());
+    if (empty($settings['hosting']['site_suspended'])) {
+        return false;
+    }
+
+    return is_user_logged_in() && !iu_is_istodata_user();
+}
+
+add_action('load-index.php', function() {
+    if (!iu_suspension_admin_applies()) {
+        return;
+    }
+
+    $message = '<p>Η πρόσβαση στη διαχείριση της ιστοσελίδας έχει ανασταλεί προσωρινά. Επικοινωνήστε με την ISTODATA.</p>';
+    $message .= '<p><a href="' . esc_url(wp_logout_url()) . '">Αποσύνδεση</a></p>';
+    wp_die($message, 'Αναστολή Ιστοσελίδας', array('response' => 403));
+});
+
+function iu_suspension_admin_notice() {
+    if (!iu_suspension_admin_applies()) {
+        return;
+    }
+    echo '<div class="notice notice-error"><p><strong>Η ιστοσελίδα βρίσκεται σε αναστολή.</strong> Επικοινωνήστε με την ISTODATA.</p></div>';
+}
+add_action('admin_notices', 'iu_suspension_admin_notice', 1);
+add_action('network_admin_notices', 'iu_suspension_admin_notice', 1);
 
 // Site suspension check
 add_action('template_redirect', 'iu_check_site_suspension');

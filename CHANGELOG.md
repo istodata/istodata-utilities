@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.24.1 - 2026-11-11
+
+- Improve: Limit the Hosting tab to ISTODATA users when ISTODATA hosting is enabled.
+- Improve: Show an admin suspension message and prominent notice for users outside ISTODATA.
+
 ## 2.24.0 - 2026-11-11
 
 - Improve: Support Elementor / Pro 4.4 stable patches within bounded feature policies, while retaining existing compatible combinations and safety guards.
