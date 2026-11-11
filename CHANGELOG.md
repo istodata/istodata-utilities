@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.24.2 - 2026-11-11
+
+- Improve: Add an option to remove the WoodMart Overview dashboard widget and clarify the Plugins & Themes section.
+
 ## 2.24.1 - 2026-11-11
 
 - Improve: Limit the Hosting tab to ISTODATA users when ISTODATA hosting is enabled.

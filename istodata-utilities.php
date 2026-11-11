@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.24.1
+Version: 2.24.2
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.24.1');
+define('IU_PLUGIN_VERSION', '2.24.2');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -291,6 +291,7 @@ function iu_activate() {
             'remove_elementor_manage_dashboard' => true,
             'remove_qode_news' => false,
             'remove_avada_news' => false,
+            'remove_woodmart_overview' => false,
             'remove_premium_addons_news' => false,
             'remove_rank_math_overview' => false,
             'remove_smash_balloon_feeds' => false,
@@ -971,14 +972,21 @@ function iu_settings_page() {
                 </table>
                 <?php endif; ?>
                 
-                <h3>Plugins</h3>
-                <p>Επιλέξτε τα plugin widgets που θέλετε να αφαιρεθούν από τον πίνακα ελέγχου:</p>
+                <h3>Plugins &amp; Themes</h3>
+                <p>Επιλέξτε τα widgets των plugins και themes που θέλετε να αφαιρεθούν από τον πίνακα ελέγχου:</p>
                 <table class="form-table">
                     <tr>
                         <td>
                             <label><input type="checkbox" name="istodata_utilities_settings[dashboard][remove_avada_news]" value="1" 
                                          <?php checked(isset($settings['dashboard']['remove_avada_news']) ? $settings['dashboard']['remove_avada_news'] : false); ?> />
                                    Avada News</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label><input type="checkbox" name="istodata_utilities_settings[dashboard][remove_woodmart_overview]" value="1"
+                                         <?php checked(isset($settings['dashboard']['remove_woodmart_overview']) ? $settings['dashboard']['remove_woodmart_overview'] : false); ?> />
+                                   WoodMart Overview</label>
                         </td>
                     </tr>
                     <tr>
@@ -3247,6 +3255,12 @@ function iu_dashboard_cleanup() {
         remove_action('wp_dashboard_setup', 'qode_interactive_add_dashboard_widget');
     }
     
+    if (!empty($dashboard['remove_woodmart_overview'])) {
+        foreach (array('normal', 'side', 'column3', 'column4') as $context) {
+            remove_meta_box('woodmart_announcements_widget', 'dashboard', $context);
+        }
+    }
+
     if (!empty($dashboard['remove_avada_news'])) {
         remove_meta_box('fusion_builder_dashboard_widget', 'dashboard', 'normal');
         remove_meta_box('avada_dashboard_widget', 'dashboard', 'normal');
