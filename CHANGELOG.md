@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.24.0 - 2026-11-11
+
+- Improve: Support Elementor / Pro 4.4 stable patches within bounded feature policies, while retaining existing compatible combinations and safety guards.
+- Improve: Distinguish policy-allowed updates from individually tested combinations and report feature-specific incompatibilities.
+
 ## 2.23.9 - 2026-11-03
 
 - Tweak: Hide the WP Rocket 3.24 major release notice in the WordPress admin.

@@ -19,6 +19,14 @@ Instructions for Codex agents working on the ISTODATA Kit plugin.
 5. Create a local test zip when the user wants to test the plugin manually in WordPress.
 6. Do not create GitHub tags, releases, commits, or pushes unless the user explicitly says the tested change is ready for release.
 
+## Workspace Hygiene
+
+- Before work, check the local changes and compare the base with the current remote `main`. Preserve unrelated work; if the remote cannot be verified, report the limit rather than assume it is current.
+- Use a dedicated branch or worktree based on the updated `main` for changes. For a small, isolated task, use the existing checkout only when this will not mix it with unrelated work. Do not create commits or push without authorization.
+- Keep temporary test outputs and bulky evidence in a clearly named task folder outside the plugin workspace. Retain concise, useful documentation and reusable tests in the repository; exclude temporary artifacts from plugin packages.
+- At completion, inventory the task's changes and evidence, preserve anything needed for future verification, and remove only identified disposable artifacts. Never delete or overwrite unrelated or uncertain work. Clean up the task's worktree when no longer needed and safe to do so.
+- After a release, compare and safely synchronize the main checkout with the published `main`, preserving any independent local changes. Report remaining changes, evidence locations and any synchronization or cleanup blockers. This housekeeping does not authorize a release or production changes.
+
 ## Locked Product Decisions — Advanced Elements Cache
 
 Confirmed by the user on 2026-10-06. Read this section before changing cache
@@ -58,6 +66,16 @@ claims that a particular implementation or Elementor version has passed QA.
   changes, update this section and mark contrary historical findings as
   superseded; keep technical evidence separate. Do not treat staging approval
   as authorization for production installation or a release.
+
+## Metrica Staging Authorization
+
+- On 2026-10-15, the user gave standing approval for work on metrica staging
+  (`manqbfzxjy`, `https://wordpress-218158-6702910.cloudwaysapps.com`) and
+  confirmed that its daily Cloudways backups cover this staging work.
+- Do not request the same staging approval again. Verify the target before
+  changes, preserve unrelated work and use scoped snapshots/rollback for tests.
+- This authorization does not cover production, commits/pushes, version bumps,
+  tags or releases. Those retain their separate authorization requirements.
 
 ## Changelog
 
@@ -149,8 +167,8 @@ Do not add hardcoded GitHub personal access tokens to the distributed plugin. Pu
 
 ## Verification
 
-- `includes/elementor-compatibility.php` is the single source of explicitly accepted Elementor/Pro version pairs and separate tested evidence for Atomic Interactions and Fragment Cache. Runtime guards, adapters, advisory notices and settings UI must consume it; never add independent version rules in PHP/JS, an open-ended range or a filter that widens support. The current schema accepts exact versions only.
-- Every new Elementor/Pro version, including a patch that does not change feature code, requires review, an explicitly updated compatibility declaration and a Kit release before it can be accepted. Do not infer approval from the minor series, mocked version-policy tests or a daily monitor. Record actually tested core/Pro pairs, evidence and acceptance limits separately from approved pairs.
+- `includes/elementor-compatibility.php` is the single source of explicitly accepted Elementor/Pro version pairs and separate tested evidence for Atomic Interactions and Fragment Cache. Runtime guards, adapters, advisory notices and settings UI must consume it; never add independent version rules in PHP/JS, an open-ended range or a filter that widens support. The registry accepts exact versions and finite, feature-specific stable patch ranges; known-bad declarations take precedence. Ranges do not imply individual testing.
+- Within a declared finite patch range, stable versions may be allowed by policy without an individual Kit release. This is not a tested-compatibility claim. Keep actual tested pairs and acceptance limits separate, and apply feature-specific known-bad exclusions and runtime guards. Outside those bounds, fail closed for affected features.
 - Before changing compatibility or releasing, run `php tests/elementor-compatibility.php`, `php tests/elementor-update-guard.php`, and `node tests/elementor-compatibility-drift.cjs`; inspect runtime files for old/scattered guards. Only fixtures/tests/docs may contain reference version declarations outside the registry.
 - The daily compatibility monitor is read-only. It must not change the registry, install/update/purge, commit/push, bump versions or create a release. Notify only on actionable compatibility evidence or a required user decision.
 
@@ -162,7 +180,14 @@ Do not add hardcoded GitHub personal access tokens to the distributed plugin. Pu
 
 - Elementor/Pro manual, bulk, automatic and ZIP updates follow native WordPress/vendor decisions. Kit compatibility must not block them. This supersedes the old compatibility updater gates, override grants and special pair-update workflow; retire their mutation endpoints and forms safely. Preserve the Kit metadata Check again fix.
 - Runtime compatibility remains fail-closed per sensitive Kit feature. An unsupported installed combination bypasses only affected features, preserves saved settings/durations/IDs/output contracts, and automatically restores them when supported. Preserve documented Pro dependencies and core-only limits. All other locked cache decisions remain in force.
-- Available-update advice belongs in each Core/Pro native row on both Plugins and WordPress Updates, only when related sensitive Kit functions are active. Evaluate supported/affected functions and any destination needing both updates only for those active functions; all OFF means no Kit advice. This 2026-10-27 decision supersedes the earlier advice-even-OFF rule. Derive advice from actual installed files, available metadata and release-owned accepted registry declarations. Distinguish accepted target+counterpart, a destination needing both updates (intermediate unverified), and unverified targets with affected-feature bypass. Tested evidence alone does not authorize a target. Use one shared evaluation/text, preserve native/vendor checks and notices, and make multisite site/network scope explicit rather than presenting current-site settings as a network-wide assessment. Do not claim whole-site/plugin safety.
+- Available-update advice belongs in each Core/Pro native row on both Plugins and WordPress Updates, only when related sensitive Kit functions are active. Evaluate supported/affected functions and any destination needing both updates only for those active functions; all OFF means no Kit advice. This 2026-10-27 decision supersedes the earlier advice-even-OFF rule. Derive advice from actual installed files, available metadata and release-owned accepted registry declarations. Distinguish accepted target+counterpart, a destination needing both updates (intermediate unverified), and unverified targets with affected-feature bypass. Only release-owned exact declarations or bounded policy ranges authorize a target; tested evidence alone does not authorize a target. Use one shared evaluation/text, preserve native/vendor checks and notices, and make multisite site/network scope explicit rather than presenting current-site settings as a network-wide assessment. Do not claim whole-site/plugin safety.
 - Aggregate active unsupported features into one concise runtime notice; no global available-update warnings or special update-management UI. Keep the information screen read-only, with concise status and optional details.
 - Accepted declarations are additive: new compatibility releases must preserve every previously accepted exact pair/core-only path and its working runtime/API adapters. Do not replace an old declaration merely to accept a newer pair. Changes or withdrawal require specific evidence and a new explicit user decision. Preserve saved settings, controls, IDs and markup. Test all existing accepted combinations and affected consumers; report actual QA limits without inventing full browser coverage for older versions.
 - The read-only daily monitor must describe advisory/runtime compatibility, not claim that Kit blocks native updates. Do not change or create an automation merely because this product rule changed.
+
+## Compatibility Review — Proportionate Scope
+
+- Daily monitoring is read-only and lightweight: check official release notes, relevant vendor/API diffs and actionable issues. Changelog silence alone does not establish compatibility.
+- If the relevant code and dependencies are demonstrably unchanged, use focused local checks and the existing acceptance evidence; do not repeat staging or broad browser matrices by default. State precisely what was and was not tested.
+- If relevant behavior changed or evidence is insufficient, test only the affected paths, locally first and on staging when necessary. Reserve broad matrices for major architectural changes or concrete problems.
+- The 2026-11-10 user decision supersedes prior exact-patch and per-patch release requirements. Preserve old accepted pairs and core-only paths, use explicit bounded stable patch ranges, capability guards and feature-specific known-bad exclusions. Test affected behavior when evidence or relevant changes warrant it; staging/editor testing is not mandatory for each patch. Explain policy allowance versus actual evidence, preserve privacy and cache safeguards, and use a corrective release for confirmed incompatibilities.

@@ -21,7 +21,7 @@ $version_cases = array(
     'invalid-type' => array(4.3, '4.3.0'),
     'major' => array('5.0.0', '5.0.0'),
 );
-$allowed_cases = array('supported', 'late', 'accepted-common', 'accepted-434', 'accepted-435', 'accepted-436');
+$allowed_cases = array('supported', 'late', 'accepted-common', 'accepted-434', 'accepted-435', 'accepted-436', 'future-pro', 'both-patch', 'large-patch', 'both-minor');
 $rejected_cases = array_merge(array('missing'), array_diff(array_keys($version_cases), $allowed_cases));
 if (!isset($argv[1])) {
     foreach (array_merge(array('off', 'missing', 'no-handle', 'done', 'admin', 'supported', 'late', 'retry'), array_keys($version_cases)) as $case) {

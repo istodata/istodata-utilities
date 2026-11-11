@@ -137,7 +137,7 @@ final class IU_Elementor_Update_Guard {
         $state = 'unverified'; $destination = null;
         $known = iu_elementor_version_matches($version, array('exact' => $version));
         if (!$failed) {
-            $state = 'verified';
+            $state = 'policy_allowed';
         } elseif ($known) {
             foreach (self::plugins() as $other => $key) {
                 if ($other === $plugin || $installed[$key] === null) continue;
@@ -161,9 +161,9 @@ final class IU_Elementor_Update_Guard {
         $pair = self::pair_label($advice['pair']);
         $prefix = 'ISTODATA Kit: ' . ($advice['site_id'] === null ? '' :
             'ιστότοπος #' . (int) $advice['site_id'] . ' (όχι συνολικός έλεγχος δικτύου) — ');
-        if ($advice['state'] === 'verified') {
-            return $prefix . $pair . ' — επαληθευμένη συμβατότητα για τις ενεργές λειτουργίες: ' .
-                self::labels($advice['supported']) . ', εντός των δηλωμένων ορίων τους.';
+        if ($advice['state'] === 'policy_allowed') {
+            return $prefix . $pair . ' — επιτρέπεται βάσει πολιτικής για τις ενεργές λειτουργίες: ' .
+                self::labels($advice['supported']) . '. Αυτό δεν σημαίνει ότι ο συγκεκριμένος συνδυασμός έχει δοκιμαστεί.';
         }
         if ($advice['state'] === 'needs_both') {
             // The joint destination differs only in the counterpart's version.
@@ -179,7 +179,7 @@ final class IU_Elementor_Update_Guard {
                 ($advice['metadata_known'] ? '.' : ' (λείπουν έγκυρα στοιχεία στόχου).') .
                 ' Μετά την ενημέρωση παρακάμπτονται: ' . self::labels($advice['affected']) . ', μέχρι συμβατή έκδοση Kit.';
         }
-        if ($advice['supported']) $text .= ' Επαληθευμένο για: ' . self::labels($advice['supported']) . '.';
+        if ($advice['supported']) $text .= ' Επιτρέπεται βάσει πολιτικής για: ' . self::labels($advice['supported']) . '.';
         return $text;
     }
 
@@ -216,8 +216,14 @@ final class IU_Elementor_Update_Guard {
         $failed = iu_elementor_pair_failures($pair, iu_elementor_active_features());
         if (!$failed) return;
         self::$notice_printed = true;
+        $reasons = array();
+        foreach ($failed as $feature) {
+            $reason = iu_elementor_known_bad_reason($feature, $pair);
+            if ($reason !== '') $reasons[] = iu_elementor_compatibility_registry()[$feature]['label'] . ': ' . $reason;
+        }
+        $detail = $reasons ? ' Γνωστή ασυμβατότητα: ' . implode('; ', $reasons) . '.' : '';
         echo '<div class="notice notice-warning"><p>' . esc_html('ISTODATA Kit: στο ' . self::pair_label($pair) .
-            ' παρακάμπτονται οι ενεργές λειτουργίες: ' . self::labels($failed) . '. Οι ρυθμίσεις διατηρούνται και οι λειτουργίες επανέρχονται όταν υποστηρίζονται οι εκδόσεις.') .
+            ' παρακάμπτονται οι ενεργές λειτουργίες: ' . self::labels($failed) . '. Οι ρυθμίσεις διατηρούνται και οι λειτουργίες επανέρχονται όταν υποστηρίζονται οι εκδόσεις.' . $detail) .
             ' ' . self::action_link() . '</p></div>';
     }
 
@@ -231,7 +237,7 @@ final class IU_Elementor_Update_Guard {
         }
         foreach (iu_elementor_compatibility_registry() as $feature => $entry) {
             echo '<p>' . esc_html($entry['label'] . ': ' . (iu_elementor_feature_supported($feature, $pair) ?
-                'επαληθευμένη συμβατότητα εντός των δηλωμένων ορίων.' : 'παράκαμψη εφόσον ενεργοποιηθεί, μέχρι συμβατή έκδοση Kit.')) . '</p>';
+                'επιτρέπεται βάσει πολιτικής· η έκδοση δεν είναι απαραίτητα ελεγμένη.' : 'παράκαμψη εφόσον ενεργοποιηθεί, μέχρι συμβατή έκδοση Kit.')) . '</p>';
         }
         echo '<details><summary>Δηλώσεις και στοιχεία συμβατότητας</summary>';
         foreach (array_keys(iu_elementor_compatibility_registry()) as $feature) echo '<p>' . esc_html(iu_elementor_compatibility_description($feature)) . '</p>';

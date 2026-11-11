@@ -45,17 +45,18 @@ require IU_PLUGIN_PATH . 'includes/elementor-atomic-interaction-breakpoints.php'
 require IU_PLUGIN_PATH . 'includes/elementor-fragment-cache.php';
 
 $targets = array(
-    array('4.3.2', '4.3.0', true, false), array('4.3.100', '4.3.100', false, false),
+    array('4.3.2', '4.3.0', true, false), array('4.3.100', '4.3.100', true, true),
     array('4.3.3', '4.3.0', false, false), array('4.3.2', '4.3.1', false, false),
     array('4.3.3', '4.3.1', true, true), array('4.3.4', '4.3.1', true, true), array('4.3.5', '4.3.1', false, false), array('4.3.3', '4.3.2', false, false),
     // Only the reviewed final exact pair is accepted; intermediate pairs remain closed.
     array('4.3.5', '4.3.2', true, true), array('4.3.4', '4.3.2', false, false),
     array('4.3.6', '4.3.2', true, true), array('4.3.6', '4.3.1', false, false),
-    array('4.3.7', '4.3.2', false, false), array('4.3.6', '4.3.3', true, true), array('4.3.6', '4.3.4', false, false),
+    array('4.3.7', '4.3.2', false, false), array('4.3.6', '4.3.3', true, true), array('4.3.6', '4.3.4', true, true),
     array('4.2.3', '4.2.2', false, true), array('4.2.3', null, false, true),
     array('4.3.1', '4.3.0', false, false), array('4.3.2', '4.2.2', false, false),
     array('4.2.3', '4.3.0', false, false), array('4.3.2', null, false, false),
     array('4.2.4', '4.2.2', false, false), array('4.2.3', '4.2.3', false, false),
+    array('4.4.0', '4.4.0', true, true), array('4.4.1', '4.4.2', true, true), array('4.5.0', '4.4.0', false, false),
     array('4.4.0', '4.3.0', false, false), array('4.3.2', '4.4.0', false, false),
     array('4.3.2-beta1', '4.3.0', false, false), array('4.3.2', '4.3.0-rc1', false, false),
     array('4.3.2.1', '4.3.0', false, false), array(4.3, '4.3.0', false, false),
@@ -83,8 +84,8 @@ foreach (iu_elementor_compatibility_registry() as $feature => $entry) {
         return array($declaration['core']['exact'], $declaration['pro']['exact'] ?? null);
     }, $entry['accepted']);
     expect($actual === $accepted_contract[$feature], 'Keep the complete accepted contract additive and exact');
-    foreach ($targets as [$a, $b]) {
-        expect(iu_elementor_feature_supported($feature, array('core'=>$a,'pro'=>$b)) === in_array(array($a,$b),$accepted_contract[$feature],true), 'Every feature consumes only its exact accepted contract');
+    foreach ($accepted_contract[$feature] as [$a, $b]) {
+        expect(iu_elementor_feature_supported($feature, array('core'=>$a,'pro'=>$b)), 'Every historic accepted pair remains supported');
     }
     foreach (array('4.3.5','4.3.6') as $reviewed_core) {
         $evidence = array_filter($entry['tested'], static function ($row) use ($reviewed_core) {
@@ -97,6 +98,39 @@ foreach (iu_elementor_compatibility_registry() as $feature => $entry) {
     });
     expect(count($review) === 1 && strpos(reset($review)['scope'], 'unverified') !== false, 'Keep 4.3.3 review limits explicit');
 }
+
+
+$policy = array('core'=>'4.4.0','pro'=>'4.4.0');
+expect(iu_elementor_feature_status('atomic', $policy) === 'policy', '4.4 interactions policy allowance');
+expect(iu_elementor_feature_status('fragment', $policy) === 'policy' && iu_elementor_feature_status('fragment_atomic', $policy) === 'policy', '4.4 cache allowed under policy, not labeled individually tested');
+foreach (array('atomic','fragment','fragment_atomic') as $feature) {
+    expect(iu_elementor_feature_status($feature, array('core'=>'4.3.6','pro'=>'4.3.3')) === 'accepted', 'Old pair remains accepted');
+    expect(iu_elementor_feature_status($feature, array('core'=>'4.4.0','pro'=>'4.4.0')) === 'policy', '4.4 initial pair allowed under policy');
+    expect(iu_elementor_feature_status($feature, array('core'=>'4.4.9','pro'=>'4.4.10')) === 'policy', 'Future patches allowed only under policy');
+    foreach (array('4.4.0-rc1','4.5.0','5.0.0','4.4.0.1') as $bad) expect(!iu_elementor_feature_supported($feature,array('core'=>$bad,'pro'=>'4.4.0')), 'Range boundary or prerelease');
+    expect(iu_elementor_feature_status($feature, array('core'=>'4.3.6','pro'=>'4.3.3')) === 'accepted', 'Old pair restores after unsupported transition');
+    $actual440 = array_filter(iu_elementor_compatibility_registry()[$feature]['tested'], static function ($row) { return $row['core'] === '4.4.0' && $row['pro'] === '4.4.0'; });
+    expect(count($actual440) === 1, '4.4 evidence is unique');
+    $scope440 = reset($actual440)['scope'];
+    expect(strpos($scope440, 'not tested') !== false || strpos($scope440, 'no 4.4') !== false, '4.4 evidence records limits');
+    foreach (iu_elementor_compatibility_registry()[$feature]['tested'] as $evidence) expect($evidence['core'] !== '4.4.9', 'Future policy allowance cannot fabricate test evidence');
+}
+$entry = array('accepted'=>array(array('core'=>array('exact'=>'4.3.6'),'pro'=>array('exact'=>'4.3.3'))),
+ 'policy_ranges'=>array(array('core'=>array('min'=>'4.3.6','before'=>'4.4.0'),'pro'=>array('min'=>'4.3.3','before'=>'4.4.0'))),
+ 'known_bad'=>array(array('core'=>array('exact'=>'4.3.6'),'pro'=>array('exact'=>'4.3.3'),'reason'=>'test')));
+expect(iu_elementor_entry_status($entry,array('core'=>'4.3.6','pro'=>'4.3.3')) === 'blocked', 'Known bad overrides exact and range');
+expect(iu_elementor_entry_status($entry,array('core'=>'4.3.7','pro'=>'4.3.4')) === 'policy', 'Unaffected patch remains policy allowed');
+expect(!iu_elementor_version_matches('4.3.9',array('min'=>'4.3.0','before'=>'5.0.0')), 'Cross-major range rejected');
+
+$core_deny = $entry;
+$core_deny['known_bad'] = array(array('core'=>array('exact'=>'4.3.7'),'pro'=>array('any'=>true),'reason'=>'Core issue'));
+foreach (array('4.3.3','4.3.4','4.3.999',null) as $counterpart) expect(iu_elementor_entry_status($core_deny,array('core'=>'4.3.7','pro'=>$counterpart)) === 'blocked', 'Bad core across any counterpart');
+$pro_deny = $entry;
+$pro_deny['known_bad'] = array(array('core'=>array('any'=>true),'pro'=>array('exact'=>'4.3.4'),'reason'=>'Pro issue'));
+foreach (array('4.3.6','4.3.7','4.3.999',null) as $counterpart) expect(iu_elementor_entry_status($pro_deny,array('core'=>$counterpart,'pro'=>'4.3.4')) === 'blocked', 'Bad Pro across any counterpart');
+expect(iu_elementor_entry_status($entry,array('core'=>'4.3.7','pro'=>'4.3.4')) === 'policy', 'Other feature remains unaffected');
+expect(!iu_elementor_pair_matches(array('core'=>'4.3.7','pro'=>'4.3.4'),array('core'=>array('any'=>true),'pro'=>array('exact'=>'4.3.4'))), 'Wildcard cannot grant support');
+
 
 expect(iu_elementor_feature_supported('unknown') === false, 'Unknown features fail closed');
 foreach (array('atomic', 'fragment', 'fragment_atomic') as $feature) {
@@ -112,9 +146,9 @@ foreach (iu_elementor_compatibility_registry() as $entry) foreach ($entry['accep
 expect(!iu_elementor_version_matches('4.3.3', array('series' => '4.3', 'min' => '4.3.2')), 'Legacy open-ended rule must fail closed');
 expect(iu_elementor_common_pair(array('atomic', 'fragment')) === array('core' => '4.3.3', 'pro' => '4.3.1'), 'Derive tested common pair');
 expect(iu_elementor_common_pair(array('atomic')) === array('core' => '4.3.2', 'pro' => '4.3.0'), 'Derive Atomic baseline from registry');
-expect(iu_atomic_interaction_breakpoints_supported() === in_array($argv[1], array('atomic', 'both-patch', 'accepted-new', 'accepted-current', 'accepted-436', 'accepted-433'), true), 'Atomic runtime consumes registry');
+expect(iu_atomic_interaction_breakpoints_supported() === in_array($argv[1], array('atomic', 'both-patch', 'accepted-new', 'accepted-current', 'accepted-436', 'accepted-433', 'future-pro', 'future'), true), 'Atomic runtime consumes registry');
 $method = new ReflectionMethod('IU_Elementor_Fragment_Cache', 'versions_supported');
-$fragment_supported = in_array($argv[1], array('fragment', 'core-only', 'both-patch', 'accepted-new', 'accepted-current', 'accepted-436', 'accepted-433'), true);
+$fragment_supported = in_array($argv[1], array('fragment', 'core-only', 'both-patch', 'accepted-new', 'accepted-current', 'accepted-436', 'accepted-433', 'future-pro', 'future'), true);
 expect($method->invoke(null) === $fragment_supported, 'Fragment runtime cannot be widened by legacy filter');
 if (!$fragment_supported) {
     $data = array(array('id' => 'x', 'elType' => 'widget', 'widgetType' => 'template',

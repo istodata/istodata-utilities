@@ -108,7 +108,7 @@ foreach (array('elementor/elementor.php'=>'4.3.5','elementor-pro/elementor-pro.p
 // New release declaration changes only the reviewed destination, never native updater decisions.
 installed('4.3.5','4.3.2');
 $a=IU_Elementor_Update_Guard::advisory('elementor/elementor.php',item('4.3.6'));
-check($a['state']==='verified'&&!$a['affected'],'4.3.6 plus installed Pro4.3.2 is accepted');
+check($a['state']==='policy_allowed'&&!$a['affected'],'4.3.6 plus installed Pro4.3.2 is accepted');
 installed('4.3.4','4.3.1');
 $updates->response=array('elementor/elementor.php'=>item('4.3.6'),'elementor-pro/elementor-pro.php'=>item('4.3.2'));
 foreach($updates->response as $plugin=>$response){
@@ -117,20 +117,24 @@ foreach($updates->response as $plugin=>$response){
 }
 installed('4.3.6','4.3.1');
 $a=IU_Elementor_Update_Guard::advisory('elementor-pro/elementor-pro.php',item('4.3.2'));
-check($a['state']==='verified'&&!$a['affected'],'Pro update restores the reviewed4.3.6/4.3.2 combination');
+check($a['state']==='policy_allowed'&&!$a['affected'],'Pro update restores the reviewed4.3.6/4.3.2 combination');
 installed('4.3.6','4.3.2');
 $a=IU_Elementor_Update_Guard::advisory('elementor-pro/elementor-pro.php',item('4.3.3'));
-check($a['state']==='verified'&&!$a['affected'],'Pro4.3.3 plus Core4.3.6 is accepted');
+check($a['state']==='policy_allowed'&&!$a['affected'],'Pro4.3.3 plus Core4.3.6 is accepted');
 foreach(array(array('elementor/elementor.php','4.3.7'),array('elementor-pro/elementor-pro.php','4.3.4')) as $unknown){
     $a=IU_Elementor_Update_Guard::advisory($unknown[0],item($unknown[1]));
-    check($a['state']==='unverified'&&$a['affected'],'Next patch or Pro release remains unverified');
+    check($unknown[0]==='elementor/elementor.php' ? ($a['state']==='unverified' && $a['affected']) : ($a['state']==='policy_allowed' && !$a['affected']), 'Patch requires the declared counterpart range');
 }
 
-installed('4.3.5','4.3.1');$a=IU_Elementor_Update_Guard::advisory('elementor-pro/elementor-pro.php',item('4.3.2'));check($a['state']==='verified'&&!$a['affected'],'Target plus installed counterpart accepted for every relevant feature');
+installed('4.4.0','4.4.0');
+$a=IU_Elementor_Update_Guard::advisory('elementor/elementor.php',item('4.4.1'));
+check($a['state']==='policy_allowed' && in_array('atomic',$a['supported'],true) && in_array('fragment',$a['supported'],true), '4.4 patch allowed under policy for active features');
+check(strpos(IU_Elementor_Update_Guard::advisory_text($a),'δεν σημαίνει')!==false, 'Policy advice must not claim testing');
+installed('4.3.5','4.3.1');$a=IU_Elementor_Update_Guard::advisory('elementor-pro/elementor-pro.php',item('4.3.2'));check($a['state']==='policy_allowed'&&!$a['affected'],'Target plus installed counterpart accepted for every relevant feature');
 installed('4.3.1','4.3.0');$updates->response=array();$a=IU_Elementor_Update_Guard::advisory('elementor/elementor.php',item('4.3.2'));check($a['state']==='unverified'&&$a['supported']===array('atomic'),'Per-feature partial support, not blanket failure');
 $settings['optimizations']['elementor_fragment_cache']=false;
 $a=IU_Elementor_Update_Guard::advisory('elementor/elementor.php',item('4.3.2'));
-check($a['state']==='verified'&&$a['supported']===array('atomic')&&!$a['affected'],'Active unaffected Atomic does not inherit inactive fragment warning');
+check($a['state']==='policy_allowed'&&$a['supported']===array('atomic')&&!$a['affected'],'Active unaffected Atomic does not inherit inactive fragment warning');
 check(strpos(IU_Elementor_Update_Guard::advisory_text($a),iu_elementor_compatibility_registry()['fragment']['label'])===false,'Verified text names only active features');
 $settings['optimizations']['elementor_fragment_cache']=true;
 installed('4.2.2',null);$a=IU_Elementor_Update_Guard::advisory('elementor/elementor.php',item('4.2.3'));check($a['supported']===array('fragment')&&in_array('atomic',$a['affected'],true),'Only documented core-only feature is accepted');

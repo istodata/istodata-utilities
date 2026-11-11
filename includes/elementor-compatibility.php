@@ -6,6 +6,8 @@ function iu_elementor_compatibility_registry() {
     return array(
         'atomic' => array(
             'label' => 'Atomic Interactions breakpoints',
+            'policy_ranges' => array(array('core' => array('min' => '4.3.6', 'before' => '4.4.0'), 'pro' => array('min' => '4.3.3', 'before' => '4.4.0')), array('core' => array('min' => '4.4.0', 'before' => '4.5.0'), 'pro' => array('min' => '4.4.0', 'before' => '4.5.0'))),
+            'known_bad' => array(),
             'accepted' => array(array(
                 'core' => array('exact' => '4.3.2'),
                 'pro' => array('exact' => '4.3.0'),
@@ -14,7 +16,7 @@ function iu_elementor_compatibility_registry() {
                 array('core' => array('exact' => '4.3.5'), 'pro' => array('exact' => '4.3.2')),
                 array('core' => array('exact' => '4.3.6'), 'pro' => array('exact' => '4.3.2')),
                 array('core' => array('exact' => '4.3.6'), 'pro' => array('exact' => '4.3.3'))),
-            'tested' => array(array('core' => '4.3.6', 'pro' => '4.3.3', 'evidence' => 'docs/elementor-pro-433-review.md', 'scope' => 'Source parity and prior 4.3.6/4.3.2 QA; no 4.3.3 real WordPress, editor or native/cold/hit test. Conditions/cache stale behavior unverified.'), array('core' => '4.3.6', 'pro' => '4.3.2',
+            'tested' => array(array('core' => '4.4.0', 'pro' => '4.4.0', 'evidence' => 'docs/elementor-440-policy-assessment.md', 'scope' => 'Official source comparison of interactions and frontend-modules versus 4.3.6; no 4.4 interaction browser lifecycle test.'), array('core' => '4.3.6', 'pro' => '4.3.3', 'evidence' => 'docs/elementor-pro-433-review.md', 'scope' => 'Source parity and prior 4.3.6/4.3.2 QA; no 4.3.3 real WordPress, editor or native/cold/hit test. Conditions/cache stale behavior unverified.'), array('core' => '4.3.6', 'pro' => '4.3.2',
                 'evidence' => 'docs/elementor-436-review.md',
                 'scope' => 'Official source review; 17 checksum-verified shared/Pro VM cases with Motion doubles, separate one-trigger real Motion ON/OFF desktop/mobile/resize browser, and native anonymous Rocket ordered excluded chain/canary/no inline animation mutation. No main-world installation-marker or full-trigger Rocket browser PASS; no upstream fix claim.'),
                 array('core' => '4.3.5', 'pro' => '4.3.2',
@@ -32,12 +34,14 @@ function iu_elementor_compatibility_registry() {
         ),
         'fragment_atomic' => array(
             'label' => 'Atomic Elements Cache / Device Visibility',
+            'policy_ranges' => array(array('core' => array('min' => '4.3.6', 'before' => '4.4.0'), 'pro' => array('min' => '4.3.3', 'before' => '4.4.0')), array('core' => array('min' => '4.4.0', 'before' => '4.5.0'), 'pro' => array('min' => '4.4.0', 'before' => '4.5.0'))),
+            'known_bad' => array(),
             'accepted' => array(array('core' => array('exact' => '4.3.3'), 'pro' => array('exact' => '4.3.1')),
                 array('core' => array('exact' => '4.3.4'), 'pro' => array('exact' => '4.3.1')),
                 array('core' => array('exact' => '4.3.5'), 'pro' => array('exact' => '4.3.2')),
                 array('core' => array('exact' => '4.3.6'), 'pro' => array('exact' => '4.3.2')),
                 array('core' => array('exact' => '4.3.6'), 'pro' => array('exact' => '4.3.3'))),
-            'tested' => array(array('core' => '4.3.6', 'pro' => '4.3.3', 'evidence' => 'docs/elementor-pro-433-review.md', 'scope' => 'Source parity and prior 4.3.6/4.3.2 QA; no 4.3.3 real WordPress, editor or native/cold/hit test. Conditions/cache stale behavior unverified.'), array('core' => '4.3.6', 'pro' => '4.3.2',
+            'tested' => array(array('core' => '4.4.0', 'pro' => '4.4.0', 'evidence' => 'docs/elementor-440-policy-assessment.md', 'scope' => 'Dev 6779430: native opt-in save and Atomic Loop/Classic Posts native/cold/hit, HTML and ordered asset URLs/inline parity; active avoid/offset bypass. One published source post; WPML, device and full browser matrix not tested.'), array('core' => '4.3.6', 'pro' => '4.3.3', 'evidence' => 'docs/elementor-pro-433-review.md', 'scope' => 'Source parity and prior 4.3.6/4.3.2 QA; no 4.3.3 real WordPress, editor or native/cold/hit test. Conditions/cache stale behavior unverified.'), array('core' => '4.3.6', 'pro' => '4.3.2',
                 'evidence' => 'docs/elementor-436-review.md',
                 'scope' => 'Staging mixed Classic/Atomic Loop native/cold/hit external/internal CSS with ordered external/generated/inline assets and zero original renders/queries on hits; repeated/new post-ID CSS batches, published frontend style invalidation, native SVG save and mobile hidden-node nonexecution. Actual WPML English translated page/template and distinct keys, not a full cross-language HIT matrix. Existing conservative scope and bypasses retained.'),
                 array('core' => '4.3.5', 'pro' => '4.3.2',
@@ -52,6 +56,8 @@ function iu_elementor_compatibility_registry() {
         ),
         'fragment' => array(
             'label' => 'Elementor Fragment Cache',
+            'policy_ranges' => array(array('core' => array('min' => '4.3.6', 'before' => '4.4.0'), 'pro' => array('min' => '4.3.3', 'before' => '4.4.0')), array('core' => array('min' => '4.4.0', 'before' => '4.5.0'), 'pro' => array('min' => '4.4.0', 'before' => '4.5.0'))),
+            'known_bad' => array(),
             'accepted' => array(
                 array('core' => array('exact' => '4.2.3'), 'pro' => array('exact' => '4.2.2')),
                 // Preserve the existing core-only static widget path. Pro adapters require Pro.
@@ -62,7 +68,7 @@ function iu_elementor_compatibility_registry() {
                 array('core' => array('exact' => '4.3.6'), 'pro' => array('exact' => '4.3.2')),
                 array('core' => array('exact' => '4.3.6'), 'pro' => array('exact' => '4.3.3')),
             ),
-            'tested' => array(array('core' => '4.3.6', 'pro' => '4.3.3', 'evidence' => 'docs/elementor-pro-433-review.md', 'scope' => 'Source parity and prior 4.3.6/4.3.2 QA; no 4.3.3 real WordPress, editor or native/cold/hit test. Conditions/cache stale behavior unverified.'),
+            'tested' => array(array('core' => '4.4.0', 'pro' => '4.4.0', 'evidence' => 'docs/elementor-440-policy-assessment.md', 'scope' => 'Dev 6779430: Classic Posts alongside Atomic Loop native/cold/hit, HTML and ordered asset URLs/inline parity, zero originals on hits. One published source post; WPML and device not tested.'), array('core' => '4.3.6', 'pro' => '4.3.3', 'evidence' => 'docs/elementor-pro-433-review.md', 'scope' => 'Source parity and prior 4.3.6/4.3.2 QA; no 4.3.3 real WordPress, editor or native/cold/hit test. Conditions/cache stale behavior unverified.'),
                 array('core' => '4.3.6', 'pro' => '4.3.2',
                     'evidence' => 'docs/elementor-436-review.md',
                     'scope' => 'Staging mixed Classic/Atomic native/cold/hit HTML/assets and zero original renders/queries on hits, late sibling CSS and native Pro query/excerpt states; published CSS invalidation and native SVG URL normalization passed. Actual English translated page/template and device-key/visibility checks are bounded, not a full cache context or browser matrix. Existing eligibility, privacy/editor bypasses and saved settings remain unchanged.'),
@@ -133,21 +139,58 @@ function iu_elementor_runtime_pair($refresh = false) {
 
 function iu_elementor_version_matches($version, $rule) {
     if ($rule === null) return $version === null;
-    if (!is_string($version) || preg_match('/\A[0-9]+\.[0-9]+\.[0-9]+\z/', $version) !== 1) return false;
-    // Only explicit, release-owned versions are approved. An unbounded rule fails closed.
-    return is_array($rule) && array_keys($rule) === array('exact') && $version === $rule['exact'];
+    if (!is_string($version) || preg_match('/\A[0-9]+\.[0-9]+\.[0-9]+\z/', $version) !== 1 || !is_array($rule)) return false;
+    if (array_keys($rule) === array('exact')) return $version === $rule['exact'];
+    if (array_keys($rule) !== array('min', 'before')) return false;
+    foreach ($rule as $boundary) if (!is_string($boundary) || preg_match('/\A[0-9]+\.[0-9]+\.[0-9]+\z/', $boundary) !== 1) return false;
+    // Range bounds are mandatory and confined to one minor series.
+    $min = explode('.', $rule['min']); $max = explode('.', $rule['before']);
+    if ((int) $min[0] !== (int) $max[0] || (int) $max[1] !== (int) $min[1] + 1 || (int) $max[2] !== 0) return false;
+    return version_compare($rule['min'], $rule['before'], '<') && version_compare($version, $rule['min'], '>=') && version_compare($version, $rule['before'], '<');
+}
+
+function iu_elementor_pair_matches($pair, $rule, $known_bad = false) {
+    if (!isset($rule['core']) || !array_key_exists('pro', $rule)) return false;
+    foreach (array('core', 'pro') as $key) {
+        // Wildcards are permitted only in deny rules; they never grant support.
+        if ($known_bad && $rule[$key] === array('any' => true)) continue;
+        if (!iu_elementor_version_matches($pair[$key] ?? null, $rule[$key])) return false;
+    }
+    return true;
+}
+
+/** Known bad entries override exact approvals and ranges for the affected feature. */
+function iu_elementor_entry_status($entry, $pair) {
+    foreach ($entry['known_bad'] ?? array() as $rule) {
+        if (iu_elementor_pair_matches($pair, $rule, true)) return 'blocked';
+    }
+    foreach ($entry['accepted'] ?? array() as $rule) {
+        if (iu_elementor_pair_matches($pair, $rule)) return 'accepted';
+    }
+    foreach ($entry['policy_ranges'] ?? array() as $rule) {
+        if (iu_elementor_pair_matches($pair, $rule)) return 'policy';
+    }
+    return 'unsupported';
+}
+
+function iu_elementor_known_bad_reason($feature, $pair) {
+    $entry = iu_elementor_compatibility_registry()[$feature] ?? array();
+    foreach ($entry['known_bad'] ?? array() as $rule) {
+        if (iu_elementor_pair_matches($pair, $rule, true)) return (string) ($rule['reason'] ?? 'Γνωστή ασυμβατότητα.');
+    }
+    return '';
+}
+
+function iu_elementor_feature_status($feature, $pair = null, $requires_pro = false) {
+    $registry = iu_elementor_compatibility_registry();
+    if (!isset($registry[$feature])) return 'unsupported';
+    $pair = $pair === null ? iu_elementor_runtime_pair() : $pair;
+    if ($requires_pro && empty($pair['pro'])) return 'unsupported';
+    return iu_elementor_entry_status($registry[$feature], $pair);
 }
 
 function iu_elementor_feature_supported($feature, $pair = null, $requires_pro = false) {
-    $registry = iu_elementor_compatibility_registry();
-    if (!isset($registry[$feature])) return false;
-    $pair = $pair === null ? iu_elementor_runtime_pair() : $pair;
-    if ($requires_pro && empty($pair['pro'])) return false;
-    foreach ($registry[$feature]['accepted'] as $rule) {
-        if (iu_elementor_version_matches($pair['core'] ?? null, $rule['core']) &&
-            iu_elementor_version_matches($pair['pro'] ?? null, $rule['pro'])) return true;
-    }
-    return false;
+    return in_array(iu_elementor_feature_status($feature, $pair, $requires_pro), array('accepted', 'policy'), true);
 }
 
 function iu_elementor_compatibility_description($feature) {
@@ -166,8 +209,15 @@ function iu_elementor_compatibility_description($feature) {
     foreach ($entry['tested'] as $pair) {
         $tested[] = $pair['core'] . ' / ' . ($pair['pro'] ?? 'χωρίς Pro') . ' [' . $pair['scope'] . ']';
     }
+    $ranges = array();
+    foreach ($entry['policy_ranges'] as $pair) {
+        $ranges[] = 'Elementor ' . $pair['core']['min'] . ' έως πριν από ' . $pair['core']['before'] .
+            ' / Pro ' . $pair['pro']['min'] . ' έως πριν από ' . $pair['pro']['before'];
+    }
     return $entry['label'] . ': αποδεκτοί συνδυασμοί ' . implode(' ή ', $accepted) .
-        '. Ελεγμένοι: ' . implode('; ', $tested) . '. Κάθε νέα έκδοση απαιτεί έλεγχο και ενημέρωση συμβατότητας του Kit.';
+        '. Επιτρέπονται βάσει πολιτικής (όχι κατ’ ανάγκη ελεγμένοι): ' . implode(' ή ', $ranges) .
+        '. Στοιχεία δοκιμών: ' . implode('; ', $tested) . '.';
+
 }
 
 /** Saved opt-in is preserved when runtime compatibility temporarily bypasses caching. */

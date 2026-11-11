@@ -1,0 +1,8 @@
+# Minimal QA plan for the new isolated installation
+
+Wait for the user to identify the new Cloudways application and URL. Verify the target, existing versions, normal access, the legitimate Elementor Pro installation/entitlement and the native Elementor cache setting before changes. Report any missing dependency; do not copy credentials or install anything until the environment is identified and its intended setup is clear.
+
+1. Prepare one disposable unpublished Elementor document and the minimum disposable post data. Record owned IDs, test-specific cache keys and original Kit files/settings; use a private test endpoint or other controlled frontend request that does not publish the page. Use a scoped candidate with a reliable finally/rollback and no broad cache or database restores.
+2. Save an untouched Atomic Loop with Kit cache opt-in and inspect the native saved query. In the same real frontend request exercise one eligible Atomic Loop alongside one Classic loop. Compare native, cold and hit HTML, resulting IDs and query/avoid-list side effects; prove the hit skips original loop execution. Exercise active avoid/offset only enough to verify conservative bypass.
+3. Compare assets actually emitted by the fixture and test device/language variants only where enabled and relevant. Confirm private/session content and editor/preview protections remain intact. If Elementor Pro entitlement, frontend access or monitoring is unavailable, stop and report the exact limitation rather than bypass it.
+4. Remove only owned documents, generated files and test cache keys; restore the original Kit candidate and changed settings, verify pre/post health and hashes, and report concrete evidence. No release follows automatically.
