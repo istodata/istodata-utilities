@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.24.3 - 2026-11-17
+
+- Fix: Respect Elementor's custom attribute trust checks when caching Atomic elements after editor permissions change.
+
 ## 2.24.2 - 2026-11-11
 
 - Improve: Add an option to remove the WoodMart Overview dashboard widget and clarify the Plugins & Themes section.

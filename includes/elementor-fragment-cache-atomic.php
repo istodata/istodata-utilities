@@ -138,6 +138,17 @@ final class IU_Elementor_Fragment_Atomic {
                 if (!is_array($tag) || !$loop || !in_array($tag['name'] ?? '',array('post-title','post-url','post-featured-image'),true) ||
                     ($tag['group'] ?? '') !== 'post' || !empty($tag['settings']) || !empty($value['disabled'])) return self::fail('atomic-dynamic-context');
             } elseif (is_array($value)) {
+                // Elementor can render privileged custom attribute names based on
+                // the document editor's current capability. A cached copy must
+                // not survive a later capability change and bypass that decision.
+                $trust = 'Elementor\\Modules\\AtomicWidgets\\Utils\\Custom_Attributes_Trust';
+                if (($value['$$type'] ?? '') === 'attributes' && class_exists($trust)) {
+                    if (!is_array($value['value'] ?? null) || !is_callable(array('Elementor\\Utils', 'is_allowed_custom_attribute_name'))) return self::fail('atomic-attribute-trust');
+                    foreach ($value['value'] as $attribute) {
+                        $name = $attribute['value']['key']['value'] ?? null;
+                        if (!is_string($name) || !\Elementor\Utils::is_allowed_custom_attribute_name($name, false)) return self::fail('atomic-attribute-trust');
+                    }
+                }
                 // Components, action links, variables and custom resolvers are
                 // not equivalent to literal HTML, even if their raw shape is small.
                 if (isset($value['$$type']) && (!is_string($value['$$type']) || !in_array($value['$$type'],
