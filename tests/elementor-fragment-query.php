@@ -1,8 +1,8 @@
 <?php
 /** Offline pipeline regression: real cache/filter/capture/proxy methods, simulated WP/Elementor. */
 define('ABSPATH', __DIR__);
-define('ELEMENTOR_VERSION', '4.2.3');
-define('ELEMENTOR_PRO_VERSION', '4.2.2');
+if (!defined('ELEMENTOR_VERSION')) define('ELEMENTOR_VERSION', '4.2.3');
+if (!defined('ELEMENTOR_PRO_VERSION')) define('ELEMENTOR_PRO_VERSION', '4.2.2');
 $_SERVER = array('REQUEST_METHOD' => 'GET', 'REQUEST_URI' => '/', 'HTTP_HOST' => 'example.test', 'HTTP_USER_AGENT' => 'Desktop Browser');
 $_GET = $_POST = $_COOKIE = $_SESSION = array();
 $options = $transients = $events = array();
@@ -10,8 +10,16 @@ $renders = $loops = 0;
 function add_action() {}
 function add_filter() {}
 function did_action() { return 0; }
+function wp_increase_content_media_count($amount = 1) {
+    return $GLOBALS['fixture_media_count'] = ($GLOBALS['fixture_media_count'] ?? 0) + $amount;
+}
+function wp_high_priority_element_flag() { return true; }
+function doing_filter() { return false; }
+function in_the_loop() { return false; }
+function is_main_query() { return true; }
 function apply_filters($hook, $value) {
     if ($hook === 'iu_elementor_fragment_allow_query') throw new RuntimeException('Allow filter must not be needed');
+    if ($hook === 'iu_elementor_fragment_eligible' && !empty($GLOBALS['force_eligible'])) return true;
     return $value;
 }
 function do_action($hook, ...$args) {
@@ -23,7 +31,11 @@ function is_feed() { return false; }
 function is_search() { return $GLOBALS['search'] ?? false; }
 function is_404() { return $GLOBALS['not_found'] ?? false; }
 function is_ssl() { return false; }
-function get_current_user_id() { return 0; }
+function is_user_logged_in() { return get_current_user_id() !== 0; }
+function get_current_user_id() { return $GLOBALS['user_id'] ?? 0; }
+function wp_validate_auth_cookie($value, $scheme) {
+    return $value === 'valid-wordpress-cookie' ? get_current_user_id() : false;
+}
 function get_locale() { return 'el'; }
 function get_the_ID() { return 7; }
 function wp_is_mobile() { return strpos($_SERVER['HTTP_USER_AGENT'], 'Mobile') !== false; }
@@ -78,6 +90,7 @@ class Query_Widget extends \Elementor\Widget_Base {
         echo '<nav>';
         for ($i = 0; $i < 3; ++$i) { ++$GLOBALS['loops']; echo '<a href="/public/">Public</a>'; }
         echo '</nav>';
+        if (isset($GLOBALS['on_widget_render'])) ($GLOBALS['on_widget_render'])();
         IU_Elementor_Fragment_Cache::finish($this);
     }
 }
@@ -94,13 +107,14 @@ $manager = new class {
 require getenv('IU_FRAGMENT_INCLUDE') ?: dirname(__DIR__) . '/includes/elementor-fragment-cache.php';
 IU_Elementor_Fragment_Cache::proxy($manager);
 $node = array('id' => 'query-fixture', 'elType' => 'widget', 'widgetType' => 'public-query-fixture', 'settings' => array('iu_fragment_cache' => 'yes'));
-function request_fragment($query, $path = '/') {
+function request_fragment($query, $path = '/', $before_render = null) {
     global $node, $manager;
     $_GET = $query;
     $_SERVER['QUERY_STRING'] = http_build_query($query);
     $_SERVER['REQUEST_URI'] = $path . ($query ? '?' . $_SERVER['QUERY_STRING'] : '');
     $GLOBALS['styles']->queue = $GLOBALS['scripts']->queue = array();
     $nodes = IU_Elementor_Fragment_Cache::filter(array($node), 30);
+    if ($before_render) $before_render();
     ob_start(); $manager->create_element_instance($nodes[0])->print_element(); $html = ob_get_clean();
     return array($html, $nodes[0]);
 }
@@ -147,3 +161,25 @@ list($preview_html, $preview_node) = request_fragment(array('elementor-preview' 
 if (isset($preview_node['_iu_fragment_build']) || $preview_node['widgetType'] === 'iu-fragment-proxy' ||
     $renders !== 4 || $loops !== 12 || count($transients) !== $before || $preview_html !== $html) throw new RuntimeException('Explicit preview did not retain uncached pipeline');
 echo "preview-full-pipeline-bypass: OK\n";
+
+$_GET = $_COOKIE = $options = $transients = array();
+$fixture_media_count = 0;
+$_SERVER['HTTP_USER_AGENT'] = 'Desktop Browser';
+$earlier_image = static function () { wp_increase_content_media_count(1); };
+list($media_html,) = request_fragment(array(), '/', $earlier_image);
+if (count($transients) !== 1 || end($events) !== 'stored') throw new RuntimeException('Earlier sibling media state prevented capture');
+$rendered_before = $renders;
+$fixture_media_count = 0;
+list($media_hit_html,) = request_fragment(array(), '/', $earlier_image);
+if ($media_hit_html !== $media_html || $renders !== $rendered_before || end($events) !== 'hit') throw new RuntimeException('Stable render-slot media state did not replay');
+$fixture_media_count = 0;
+request_fragment(array(), '/');
+if ($renders !== $rendered_before + 1 || end($events) !== 'replay-context') throw new RuntimeException('Different render-slot media state did not fall back');
+$transients = array();
+$fixture_media_count = 0;
+$on_widget_render = $earlier_image;
+request_fragment(array(), '/', $earlier_image);
+unset($on_widget_render);
+$fixture_media_count = 0;
+if ($transients || end($events) !== 'media-context-side-effect') throw new RuntimeException('Widget changed media state but was cached');
+echo "Render-slot media context, safe replay and side effects: OK\n";

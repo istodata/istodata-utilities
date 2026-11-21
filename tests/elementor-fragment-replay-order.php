@@ -36,7 +36,7 @@ namespace {
     $entry = array('format' => IU_Elementor_Fragment_Cache::FORMAT, 'html' => 'cached',
         'generation' => array('document_id' => 1, 'element_id' => 'target', 'site' => 'existing-epoch', 'element' => 'existing-epoch'),
         'fresh_until' => time() + 3600, 'stale_until' => time() + 3780,
-        'styles' => array(), 'scripts' => array(), 'excerpt' => array(), 'excerpt_before' => array(), 'displayed' => array(20));
+        'styles' => array(), 'scripts' => array(), 'excerpt' => array(), 'excerpt_before' => array(), 'media_at_render' => null, 'displayed' => array(20));
     $node = array('id' => 'target', 'widgetType' => 'heading');
     $replacement = new \ReflectionMethod('IU_Elementor_Fragment_Cache', 'replacement');
     $proxy = $replacement->invoke(null, $node, $entry, array(10));

@@ -38,7 +38,7 @@ $wpdb = new class {
 $generation = array('document_id'=>1,'element_id'=>'query-fixture','site'=>'0','element'=>'0');
 $entry = array('format'=>IU_Elementor_Fragment_Cache::FORMAT,'html'=>'<nav>shared</nav>',
     'styles'=>array('widget-css'),'scripts'=>array('widget-js'),'excerpt'=>array(),'excerpt_before'=>array(),
-    'preserve_excerpt'=>true,'displayed'=>array(),'generation'=>$generation,'independent_query'=>true,
+    'media_at_render'=>lock_call('media_context'),'preserve_excerpt'=>true,'displayed'=>array(),'generation'=>$generation,'independent_query'=>true,
     'fresh_until'=>time()+60,'stale_until'=>time()+180);
 function lock_wait($key,$generation) {
     $reason='';$method=new ReflectionMethod('IU_Elementor_Fragment_Cache','wait_for_entry');

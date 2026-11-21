@@ -10,7 +10,7 @@ require_once __DIR__ . '/elementor-fragment-cache-excerpt.php';
 require_once __DIR__ . '/elementor-fragment-cache-diagnostics.php';
 
 final class IU_Elementor_Fragment_Cache {
-    const FORMAT = 17;
+    const FORMAT = 18;
     const STALE_GRACE = 180;
     const MAX_BYTES = 2097152;
     const INDEX_PREFIX = 'iu_fragment_entry_';
@@ -109,7 +109,8 @@ final class IU_Elementor_Fragment_Cache {
         });
     }
 
-    private static function request_ok() {
+    private static function request_ok(&$read_only = false) {
+        $read_only = false;
         self::$request_failure = '';
         if (!iu_elementor_fragment_enabled()) return self::reject_request('global-off');
         if (!self::versions_supported()) return self::reject_request('incompatible-elementor');
@@ -136,7 +137,6 @@ final class IU_Elementor_Fragment_Cache {
         }
         if (isset($cookies['wp-wpml_current_language'])) return self::reject_request('language-context');
         if (!empty($_SESSION)) return self::reject_request('session-context');
-        if (!self::cookies_safe($cookies)) return self::reject_request('private-cookies');
         if (is_admin() || !empty($_POST) ||
             ($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET' ||
             !empty($_SERVER['HTTP_AUTHORIZATION']) || !empty($_SERVER['PHP_AUTH_USER']) ||
@@ -152,6 +152,19 @@ final class IU_Elementor_Fragment_Cache {
             (function_exists('iu_elementor_device_visibility_is_preview') && iu_elementor_device_visibility_is_preview())) {
             return self::reject_request('unsupported-request');
         }
+        if (function_exists('WC')) {
+            if (self::woocommerce_action_request()) return self::reject_request('woocommerce-private-context');
+            if (isset($cookies['woocommerce_recently_viewed'])) return self::reject_request('private-cookies');
+            $read_only = self::woocommerce_read_only_page() || self::woocommerce_session($_COOKIE);
+            foreach (self::woocommerce_cookies() as $name) unset($cookies[$name]);
+            // Sourcebuster's page-view tracking is separate from the WooCommerce cart session.
+            $features = \Automattic\WooCommerce\Utilities\FeaturesUtil::class;
+            if (is_string($cookies['sbjs_session'] ?? null) && is_callable(array($features, 'feature_is_enabled')) &&
+                $features::feature_is_enabled('order_attribution')) {
+                unset($cookies['sbjs_session']);
+            }
+        }
+        if (!self::cookies_safe($cookies)) return self::reject_request('private-cookies');
         // Opt-in declares shared output regardless of ordinary URL parameters.
         // Actual request modes and privacy guards above remain authoritative.
         $other = get_option('elementor_element_cache_ttl');
@@ -161,6 +174,40 @@ final class IU_Elementor_Fragment_Cache {
     }
 
     private static function reject_request($reason) { self::$request_failure = $reason; return false; }
+
+    private static function woocommerce_read_only_page() {
+        foreach (array('is_cart', 'is_checkout', 'is_account_page', 'is_wc_endpoint_url') as $check) {
+            if (function_exists($check) && $check()) return true;
+        }
+        return false;
+    }
+
+    private static function woocommerce_action_request() {
+        return (defined('WC_DOING_AJAX') && WC_DOING_AJAX) ||
+            (function_exists('is_wc_endpoint_url') && is_wc_endpoint_url('customer-logout')) ||
+            (bool) array_intersect(array_keys($_GET), array(
+                'wc-ajax', 'wc-api', 'add-to-cart', 'remove_item', 'undo_item', 'order_again', 'session',
+            ));
+    }
+
+    private static function woocommerce_cookies() {
+        $names = array('woocommerce_items_in_cart', 'woocommerce_cart_hash');
+        if (defined('COOKIEHASH')) $names[] = 'wp_woocommerce_session_' . COOKIEHASH;
+        return $names;
+    }
+
+    private static function woocommerce_session($cookies) {
+        if (array_intersect_key($cookies, array_flip(self::woocommerce_cookies()))) return true;
+        $woocommerce = WC();
+        $session = $woocommerce->session ?? null;
+        $cart = $woocommerce->cart ?? null;
+        return ($session && (
+                (is_user_logged_in()
+                    ? (is_callable(array($session, 'get_session_cookie')) && $session->get_session_cookie())
+                    : $session->has_session()) ||
+                $session->get('cart')
+            )) || ($cart && $cart->get_cart_contents());
+    }
 
     private static function cookies_safe($cookies) {
         $user = get_current_user_id();
@@ -194,7 +241,7 @@ final class IU_Elementor_Fragment_Cache {
         return (defined('ICL_SITEPRESS_VERSION') || defined('WPML_PLUGIN_PATH')) ? null : 'site:' . get_locale();
     }
 
-    private static function eligible($node, $document_id) {
+    private static function eligible($node, $document_id, $read_only = false) {
         IU_Elementor_Fragment_Graph::clear_rejection();
         unset(self::$policies[$document_id . ':' . ($node['id'] ?? '')]);
         $atomic = IU_Elementor_Fragment_Atomic::node($node);
@@ -205,10 +252,10 @@ final class IU_Elementor_Fragment_Cache {
         }
         // Opt-in declares reusable output. Inspect concrete structure and replay
         // requirements, not the site's arbitrary third-party hook implementations.
-        $policy = $atomic ? IU_Elementor_Fragment_Atomic::inspect($node) : IU_Elementor_Fragment_Graph::inspect($node);
+        $policy = $atomic ? IU_Elementor_Fragment_Atomic::inspect($node, $read_only) : IU_Elementor_Fragment_Graph::inspect($node);
         if ($policy) self::$policies[$document_id . ':' . $node['id']] = $policy;
         $accepted = (bool) $policy;
-        if ($atomic && !$accepted) return false;
+        if (!$accepted && ($atomic || (IU_Elementor_Fragment_Graph::rejection()['reason'] ?? '') === 'woocommerce-private-element')) return false;
         return (bool) apply_filters('iu_elementor_fragment_eligible', (bool) $accepted, $node, $document_id);
     }
 
@@ -303,7 +350,8 @@ final class IU_Elementor_Fragment_Cache {
             return $nodes;
         }
         $language = self::language();
-        $request_ok = self::request_ok() && self::builder_tail_safe();
+        $read_only = false;
+        $request_ok = self::request_ok($read_only) && self::builder_tail_safe();
         do_action('iu_elementor_fragment_gate', $language, $request_ok, $document_id, $nodes);
         if (self::$capture && is_array($nodes)) {
             $interactions = class_exists('Elementor\\Modules\\Interactions\\Cache\\Interactions_Postmeta')
@@ -316,7 +364,7 @@ final class IU_Elementor_Fragment_Cache {
         if (!$language || !$request_ok) IU_Elementor_Fragment_Diagnostics::request_bypass($nodes, $document_id,
             !$language ? 'language-context' : (self::$request_failure ?: 'builder-order'));
         return is_array($nodes) && $language && $request_ok
-            ? self::walk($nodes, (int) $document_id, $language) : $nodes;
+            ? self::walk($nodes, (int) $document_id, $language, $read_only) : $nodes;
     }
 
     private static function builder_tail_safe() {
@@ -333,7 +381,10 @@ final class IU_Elementor_Fragment_Cache {
         return true;
     }
 
-    private static function walk($nodes, $document_id, $language) {
+    private static function walk($nodes, $document_id, $language, $read_only = false) {
+        // A clean guest can refresh older or authenticated entries for WooCommerce readers.
+        $guest_source = function_exists('WC') && !$read_only && !is_user_logged_in();
+        $require_guest = $read_only || $guest_source;
         foreach ($nodes as $index => &$node) {
             if (!is_array($node)) {
                 continue;
@@ -354,7 +405,7 @@ final class IU_Elementor_Fragment_Cache {
                 unset($nodes[$index]);
                 continue;
             }
-            $eligible = self::eligible($node, $document_id);
+            $eligible = self::eligible($node, $document_id, $read_only);
             if (IU_Elementor_Fragment_Atomic::opted_in($node)) {
                 do_action('iu_elementor_fragment_node', $node['id'] ?? '', $eligible, $document_id);
                 if (!$eligible) IU_Elementor_Fragment_Diagnostics::record($document_id, $node['id'] ?? '', 'bypass',
@@ -366,29 +417,32 @@ final class IU_Elementor_Fragment_Cache {
                 do_action('iu_elementor_fragment_before_substitution', $node, $document_id, $key);
                 if ($key) {
                     $entry = get_transient($key);
-                    if (self::valid_entry($entry) && $entry['fresh_until'] > time()) {
-                        $node = self::replacement($node, $entry, $prior);
+                    if (self::valid_entry($entry, $require_guest) && $entry['fresh_until'] > time()) {
+                        $node = self::replacement($node, $entry, $prior, false, $read_only);
                         continue;
                     }
-                    $lock = self::lock($key);
+                    $lock = $read_only ? null : self::lock($key);
                     if ($lock) {
                         $ttl = (int) (IU_Elementor_Fragment_Atomic::node($node) ? IU_Elementor_Fragment_Atomic::value($node['settings'],'iu_fragment_cache_ttl',604800) : ($node['settings']['iu_fragment_cache_ttl'] ?? 604800));
                         $node['_iu_fragment_build'] = array('key' => $key, 'lock' => $lock,
                             'ttl' => in_array($ttl, array(3600, 21600, 86400, 604800), true) ? $ttl : 604800,
                             'document_id' => $document_id, 'element_id' => $node['id'], 'prior' => $prior,
+                            'woocommerce_guest_source' => $guest_source,
                             'generation' => self::generation($document_id, $node['id']),
                             'post_context' => (int) get_the_ID(),
-                            'independent_query' => self::independent_query($node, $document_id), 'media_prior' => self::media_context(),
+                            'independent_query' => self::independent_query($node, $document_id),
                             'excerpt_prior' => IU_Elementor_Fragment_Excerpt::profile(),
                             'dependencies' => self::$policies[$document_id . ':' . $node['id']]['dependencies'] ?? array('styles' => array(), 'scripts' => array()));
+                    } elseif ($read_only) {
+                        IU_Elementor_Fragment_Diagnostics::record($document_id, $node['id'], 'bypass', array('reason' => 'woocommerce-read-only-miss'));
                     } else {
-                        if (self::valid_entry($entry)) {
-                            $node = self::replacement($node, $entry, $prior, true);
+                        if (self::valid_entry($entry, $require_guest)) {
+                            $node = self::replacement($node, $entry, $prior, $entry['fresh_until'] <= time());
                             continue;
                         }
                         $reason = '';
                         $entry = self::wait_for_entry($key, self::generation($document_id, $node['id']), $reason);
-                        if (self::valid_entry($entry)) {
+                        if (self::valid_entry($entry, $require_guest)) {
                             $node = self::replacement($node, $entry, $prior, $entry['fresh_until'] <= time());
                             continue;
                         }
@@ -399,7 +453,7 @@ final class IU_Elementor_Fragment_Cache {
                 }
             }
             if (isset($node['elements']) && is_array($node['elements'])) {
-                $node['elements'] = self::walk($node['elements'], $document_id, $language);
+                $node['elements'] = self::walk($node['elements'], $document_id, $language, $read_only);
             }
         }
         unset($node);
@@ -537,15 +591,15 @@ final class IU_Elementor_Fragment_Cache {
         }
     }
 
-    private static function replacement($node, $entry, $prior, $stale = false) {
+    private static function replacement($node, $entry, $prior, $stale = false, $fresh_only = false) {
         do_action('iu_elementor_fragment_cache_selected', $node['id'], $stale);
         $original = $node;
         $node['elType'] = 'widget';
         $node['widgetType'] = 'iu-fragment-proxy';
         $node['_iu_fragment_payload'] = array('node' => $original, 'entry' => $entry,
             'prior' => $prior, 'excerpt_prior' => IU_Elementor_Fragment_Excerpt::profile(),
-            'independent_query' => !empty($entry['independent_query']), 'media_prior' => self::media_context(),
-            'post_context' => (int) get_the_ID(), 'stale' => $stale);
+            'independent_query' => !empty($entry['independent_query']),
+            'post_context' => (int) get_the_ID(), 'stale' => $stale, 'fresh_only' => $fresh_only);
         return $node;
     }
 
@@ -555,9 +609,10 @@ final class IU_Elementor_Fragment_Cache {
         }
         // Replay at the original render position, never during builder traversal:
         // earlier siblings must not see IDs from a widget they have not reached.
-        if (iu_elementor_fragment_enabled() && self::public_ids(array_merge($payload['entry']['displayed'], $payload['entry']['atomic_public_ids'] ?? array())) &&
+        if (iu_elementor_fragment_enabled() && (empty($payload['fresh_only']) || $payload['entry']['fresh_until'] > time()) &&
+            self::public_ids(array_merge($payload['entry']['displayed'], $payload['entry']['atomic_public_ids'] ?? array())) &&
             self::generation_current($payload['entry']['generation'] ?? null) &&
-            (!isset($payload['media_prior']) || self::media_context() === $payload['media_prior']) &&
+            self::media_context() === $payload['entry']['media_at_render'] &&
             (($payload['independent_query'] ?? false) || self::displayed() === $payload['prior']) &&
             self::excerpt_context_ok($payload['entry']) &&
             (int) get_the_ID() === $payload['post_context'] && self::loop_css_ready($payload['entry']) && self::replay($payload['entry'])) {
@@ -582,16 +637,19 @@ final class IU_Elementor_Fragment_Cache {
             (isset($entry['excerpt_before']) && self::excerpt_structure($live) === self::excerpt_structure($entry['excerpt_before'])));
     }
 
-    private static function valid_entry($entry) {
+    private static function valid_entry($entry, $require_guest = false) {
         if (!is_array($entry) || ($entry['format'] ?? null) !== self::FORMAT ||
+            ($require_guest && ($entry['woocommerce_guest_source'] ?? false) !== true) ||
             !is_string($entry['html'] ?? null) ||
             !is_array($entry['styles'] ?? null) || !is_array($entry['scripts'] ?? null) ||
-            !is_array($entry['displayed'] ?? null) || !is_array($entry['excerpt'] ?? null) || !is_int($entry['fresh_until'] ?? null) ||
+            !is_array($entry['displayed'] ?? null) || !is_array($entry['excerpt'] ?? null) ||
+            !array_key_exists('media_at_render', $entry) || ($entry['media_at_render'] !== null && !is_array($entry['media_at_render'])) ||
+            !is_int($entry['fresh_until'] ?? null) ||
             !is_int($entry['stale_until'] ?? null) || $entry['stale_until'] <= time()) {
             return false;
         }
         if (isset($entry['generation']['atomic']) && !is_array($entry['atomic_public_ids'] ?? null)) return false;
-        return true;
+        return !$require_guest || !self::private_woocommerce_markup($entry['html']);
     }
 
     private static function public_ids($ids) {
@@ -602,7 +660,15 @@ final class IU_Elementor_Fragment_Cache {
         return true;
     }
 
+    private static function private_woocommerce_markup($html) {
+        return function_exists('WC') && preg_match(
+            '~(?:woocommerce-mini-cart|widget_shopping_cart|elementor-menu-cart__|wc-block-mini-cart|wp-block-woocommerce-cart|wp-block-woocommerce-checkout|woocommerce-cart-form|woocommerce-checkout-payment|woocommerce-MyAccount-content|wc-order-attribution-inputs)~i',
+            $html
+        );
+    }
+
     private static function shared_markup_safe($html) {
+        if (self::private_woocommerce_markup($html)) return false;
         return !preg_match('~(?:nonce|wc-cart-fragments|wp-admin|wp-login|elementor-edit-(?:area|mode|link)|e-loop-first-edit|data-(?:user|session|token)|current_user|user_login|user_email)~i', $html);
     }
 
@@ -812,8 +878,7 @@ final class IU_Elementor_Fragment_Cache {
             $reason = 'intervening-query';
         } elseif ($excerpt === null || $start['excerpt_prior'] === null) {
             $reason = 'excerpt-side-effect';
-        } elseif (isset($start['build']['media_prior']) && ($start['media_prior'] !== $start['build']['media_prior'] ||
-            self::media_context() !== $start['media_prior'])) {
+        } elseif (self::media_context() !== $start['media_prior']) {
             $reason = 'media-context-side-effect';
         } elseif (!self::public_ids(array_values(array_unique($start['query_ids']))) || !self::shared_markup_safe($html)) {
             $reason = 'volatile-markup';
@@ -841,6 +906,9 @@ final class IU_Elementor_Fragment_Cache {
             }
         }
         if (!$reason && !empty($_SESSION)) $reason = 'session-context';
+        if (!$reason && function_exists('WC') && (isset($_COOKIE['woocommerce_recently_viewed']) || self::woocommerce_session($_COOKIE))) {
+            $reason = 'woocommerce-private-context';
+        }
         if (!$reason && IU_Elementor_Fragment_Excerpt::externals($excerpt) !== IU_Elementor_Fragment_Excerpt::externals($start['excerpt_prior'])) $reason = 'excerpt-side-effect';
         if (!$reason && (!iu_elementor_fragment_enabled() || !self::generation_current($start['build']['generation']))) $reason = 'generation-changed';
         $owner = !$reason ? $wpdb->get_var($wpdb->prepare(
@@ -858,12 +926,17 @@ final class IU_Elementor_Fragment_Cache {
                 'scripts' => $scripts,
                 'excerpt' => $excerpt,
                 'excerpt_before' => $start['excerpt_prior'],
+                // Earlier siblings may change media context before this widget starts.
+                'media_at_render' => $start['media_prior'],
                 'preserve_excerpt' => $excerpt === $start['excerpt_prior'],
                 'independent_query' => !empty($start['build']['independent_query']),
                 'fresh_until' => time() + $start['build']['ttl'],
                 'stale_until' => time() + $start['build']['ttl'] + self::STALE_GRACE,
                 'displayed' => !empty($start['build']['independent_query']) ? array_values(array_unique($start['query_ids'])) :
                     array_values(array_diff(self::displayed(), $start['displayed'])));
+            if (!empty($start['build']['woocommerce_guest_source']) && !is_user_logged_in()) {
+                $entry['woocommerce_guest_source'] = true;
+            }
             if (isset($start['build']['generation']['atomic'])) {
                 // Atomic's native query does not update the Classic avoid list.
                 $entry['atomic_public_ids'] = array_values(array_unique($start['query_ids']));

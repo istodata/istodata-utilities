@@ -41,12 +41,20 @@ final class IU_Elementor_Fragment_Graph {
             'independent_query' => true);
     }
 
+    public static function woocommerce_private_widget($type) {
+        return function_exists('WC') && in_array($type, array(
+            'woocommerce-menu-cart', 'woocommerce-cart', 'woocommerce-checkout-page',
+            'woocommerce-my-account', 'woocommerce-purchase-summary',
+        ), true);
+    }
+
     private function fail($reason) { $this->failure = $reason; return false; }
 
     private function walk($nodes, $loop) {
         foreach ($nodes as $node) {
             if (!is_array($node) || --$this->budget < 0) return $this->fail('graph-budget');
             $type = $node['widgetType'] ?? $node['elType'] ?? '';
+            if (self::woocommerce_private_widget($type)) return $this->fail('woocommerce-private-element');
             $settings = $node['settings'] ?? array();
             // Typed Atomic values need their own resolver/context policy. An
             // opaque Atomic subtree cannot inherit the Classic settings check.

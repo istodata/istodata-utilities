@@ -32,7 +32,7 @@ $GLOBALS['external'] = true;
 if ($poll->invoke(null, 'entry') !== $GLOBALS['published']) throw new RuntimeException('External cache publication invisible');
 $valid = new ReflectionMethod('IU_Elementor_Fragment_Cache', 'valid_entry');
 $entry = array('format' => IU_Elementor_Fragment_Cache::FORMAT, 'html' => 'cached',
-    'styles' => array(), 'scripts' => array(), 'excerpt' => array(), 'displayed' => array(),
+    'styles' => array(), 'scripts' => array(), 'excerpt' => array(), 'media_at_render' => null, 'displayed' => array(),
     'fresh_until' => time() - 1, 'stale_until' => time() + 180);
 if (!$valid->invoke(null, $entry)) throw new RuntimeException('Grace entry invalid');
 $entry['stale_until'] = time() - 1;

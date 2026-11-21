@@ -75,9 +75,21 @@ a Pro loop's postdata leak prevent shared ordinary-page hits. Existing technical
 variants and concrete replay guards retain native output/status; no blanket 404
 exclusion or special site rule is added. This is an accepted reuse limitation,
 not a guarantee of zero widget/loop work on every 404.
-Known session/private/cart cookies, mismatched language cookies, Authorization
-headers and active PHP session data bypass. Other cookies are covered by the
-administrator's shared-output declaration, not a blanket cookie whitelist.
+Known private cookies, mismatched language cookies, Authorization headers and
+active PHP session data bypass. The standard WooCommerce session and cart
+cookies permit read-only access on public frontend pages for guests and signed-in
+customers. Existing element opt-ins and language and device variants apply.
+Only fresh fragments captured during a guest visit without a WooCommerce session
+or cart are eligible for these reads. A miss renders normally without reserving
+or publishing the fragment. Cart, checkout and account pages use the same
+read-only mode even without a session. Known private WooCommerce widgets and
+content remain in the native renderer. Cart-changing requests keep the request
+bypass. Public fragments still require matching cache variants, including any
+page context required by Atomic elements. Other cookies are covered by the
+administrator's shared-output declaration. When WooCommerce Order Attribution
+is enabled, its exact `sbjs_session` tracking cookie is ignored by the eligibility
+check and remains available to WooCommerce. Checkout attribution fields render
+natively.
 
 Missing widget registrations, invalid dependency manifests, dynamic user/current-page tags, conditional content,
 private/unpublished templates, relative/search/permission-sensitive queries,

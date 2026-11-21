@@ -75,7 +75,7 @@ final class IU_Elementor_Fragment_Atomic {
     public static function rejection() { return self::$rejection; }
     private static function fail($reason) { self::$rejection = array('reason'=>$reason); return null; }
 
-    public static function inspect($node) {
+    public static function inspect($node, $read_only = false) {
         self::$rejection = array();
         if (!iu_elementor_feature_supported('fragment_atomic')) return self::fail('incompatible-atomic-fragment');
         // Opt-in declares shared output, just as for Classic widgets. Login and
@@ -86,7 +86,7 @@ final class IU_Elementor_Fragment_Atomic {
         $dependencies = array('styles'=>array(), 'scripts'=>array());
         $signature = array(); $budget = 2500;
         if (!self::walk($node, false, $dependencies, $signature, $budget)) return null;
-        add_option(self::EPOCH, '0', '', false); // Lazy: only a real, eligible opt-in request.
+        if (!$read_only) add_option(self::EPOCH, '0', '', false); // Lazy initialization for writers.
         $signature['epoch'] = (string) get_option(self::EPOCH, '0');
         // Start with page-specific variants for Atomic elements. Unknown native
         // or vendor implementations must not inherit Classic cross-page reuse.
@@ -101,6 +101,7 @@ final class IU_Elementor_Fragment_Atomic {
         if (!is_array($node) || --$budget < 0) return self::fail('atomic-graph-budget');
         if (!empty($node['interactions'])) return self::fail('atomic-interactions');
         $type = $node['widgetType'] ?? $node['elType'] ?? '';
+        if (IU_Elementor_Fragment_Graph::woocommerce_private_widget($type)) return self::fail('woocommerce-private-element');
         $settings = $node['settings'] ?? array();
         if (!is_array($settings)) return self::fail('atomic-settings');
         if (!self::safe_values($settings, $loop) || !self::safe_values($node['styles'] ?? array(),false)) return null;
