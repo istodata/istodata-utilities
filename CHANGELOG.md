@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.24.5 - 2026-11-25
+
+- Improve: Skip updates to image dimensions already set to zero when disabling default WordPress image sizes.
+
 ## 2.24.4 - 2026-11-21
 
 - Fix: Cache widgets that preserve media loading state even when an earlier widget changes that state before they render.

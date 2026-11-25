@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.24.4
+Version: 2.24.5
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.24.4');
+define('IU_PLUGIN_VERSION', '2.24.5');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -2276,13 +2276,13 @@ function iu_apply_optimizations() {
     }
     
     if (!empty($optimizations['disable_image_sizes'])) {
-        // Set WordPress default image sizes to 0
-        update_option('thumbnail_size_h', 0);
-        update_option('thumbnail_size_w', 0);
-        update_option('medium_size_h', 0);
-        update_option('medium_size_w', 0);
-        update_option('large_size_h', 0);
-        update_option('large_size_w', 0);
+        // Reapply after Media settings changes, skipping zeros already saved by WordPress.
+        foreach (array('thumbnail_size_h', 'thumbnail_size_w', 'medium_size_h', 'medium_size_w', 'large_size_h', 'large_size_w') as $option) {
+            $value = get_option($option);
+            if ($value !== '0' && $value !== 0) {
+                update_option($option, 0);
+            }
+        }
         
         // Disable default WordPress image sizes via filter (backup method)
         add_filter('intermediate_image_sizes_advanced', function($sizes) {
