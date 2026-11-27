@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.24.6 - 2026-11-27
+
+- Improve: Hide the Elementor Agent Ready promotion and Pro release notice in WordPress admin.
+- Improve: Show the Redis Cache and FluentSMTP Reports dashboard widgets only to ISTODATA administrators.
+
 ## 2.24.5 - 2026-11-25
 
 - Improve: Skip updates to image dimensions already set to zero when disabling default WordPress image sizes.

@@ -2,7 +2,7 @@
 /*
 Plugin Name: ISTODATA Kit
 Description: Εργαλεία διαχείρισης, βελτιστοποιήσεις και πρόσθετες λειτουργίες από την ISTODATA.
-Version: 2.24.5
+Version: 2.24.6
 Author: <a href="https://www.istodata.com/" target="_blank">ISTODATA</a>
 Text Domain: istodata-utilities
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('IU_PLUGIN_VERSION', '2.24.5');
+define('IU_PLUGIN_VERSION', '2.24.6');
 define('IU_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('IU_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -3186,6 +3186,22 @@ function iu_brand_terms_custom_order($args, $taxonomies) {
         $args['order'] = 'ASC';
     }
     return $args;
+}
+
+// Apply the same visibility rule to both WordPress dashboards.
+add_action('wp_dashboard_setup', 'iu_remove_istodata_dashboard_widgets', 999);
+add_action('wp_network_dashboard_setup', 'iu_remove_istodata_dashboard_widgets', 999);
+function iu_remove_istodata_dashboard_widgets() {
+    $screen = get_current_screen();
+    $capability = $screen->in_admin('network') ? 'manage_network_options' : 'manage_options';
+    if (current_user_can($capability) && iu_is_istodata_user()) {
+        return;
+    }
+
+    foreach (array('normal', 'side', 'column3', 'column4') as $context) {
+        remove_meta_box('dashboard_rediscache', $screen, $context);
+        remove_meta_box('fluentsmtp_reports_widget', $screen, $context);
+    }
 }
 
 // Basic dashboard cleanup
